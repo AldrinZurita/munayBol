@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_DB: turismo
+      POSTGRES_USER: turismo
+      POSTGRES_PASSWORD: turismo
+    ports:
+      - "5433:5432" #por si se tiene postgres local
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - turismo-net
+
+  backend:
+    build: ./backend
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      POSTGRES_DB: turismo
+      POSTGRES_USER: turismo
+      POSTGRES_PASSWORD: turismo
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+    depends_on:
+      - db
+    networks:
+      - turismo-net
+
+volumes:
+  postgres_data:
+
+networks:
+  turismo-net:
+    external: true 

@@ -1,0 +1,122 @@
+.inicio-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 16px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.hero {
+  background: linear-gradient(90deg, #1976d2 0%, #64b5f6 100%);
+  color: #fff;
+  border-radius: 16px;
+  padding: 32px 24px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 16px rgba(40, 60, 150, 0.08);
+  text-align: center;
+}
+.hero h1 {
+  font-size: 2.4rem;
+  margin-bottom: 12px;
+}
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 18px;
+}
+.actions {
+  margin-bottom: 24px;
+}
+.option-btn,
+.search-btn {
+  background: #fff;
+  color: #1976d2;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 22px;
+  margin: 0 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(40, 60, 150, 0.08);
+  transition: background 0.2s, color 0.2s;
+}
+.option-btn:hover,
+.search-btn:hover {
+  background: #1976d2;
+  color: #fff;
+}
+.filter-row {
+  margin: 22px 0 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  justify-content: center;
+  color: #333;
+}
+.filter-row label {
+  font-weight: 500;
+}
+.filter-row select {
+  padding: 6px 18px;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+  background: #f6f7fa;
+  font-size: 1rem;
+  margin-right: 12px;
+}
+
+.hotel-list ul {
+  margin-top: 18px;
+  padding-left: 0;
+  list-style: none;
+}
+.hotel-list li {
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+.activo {
+  color: green;
+  font-weight: bold;
+}
+.inactivo {
+  color: red;
+  font-weight: bold;
+}
+
+.about {
+  margin-bottom: 44px;
+  text-align: center;
+}
+.about h2 {
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+}
+.about p {
+  font-size: 1.1rem;
+  color: #444;
+}
+
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: space-around;
+}
+.feature {
+  background: #f6f7fa;
+  border-radius: 12px;
+  padding: 26px 20px;
+  flex: 1 1 220px;
+  min-width: 220px;
+  box-shadow: 0 2px 8px rgba(40, 60, 150, 0.05);
+  text-align: left;
+}
+.feature h3 {
+  color: #1976d2;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+.feature p {
+  font-size: 1rem;
+  color: #333;
+}

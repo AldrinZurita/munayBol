@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Django
+db.sqlite3
+*.pot
+*.pyc
+*.pyo
+*.pyd
+staticfiles/
+media/
+local_settings.py
+
+# Virtualenv
+.env
+.venv/
+env/
+venv/
+
+# IDEs/editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+.DS_Store
+
+# Docker
+*.pid
+postgres_data/
+docker-compose.override.yml
+
+# Node modules
+node_modules/
+
+# Otros
+*.coverage
+*.orig
+dist/
+build/
+*.egg-info/

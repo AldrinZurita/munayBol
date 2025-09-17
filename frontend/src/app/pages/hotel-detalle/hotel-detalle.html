@@ -1,0 +1,31 @@
+<div class="detalles-hotel-container">
+  <div *ngIf="cargandoHotel">Cargando información del hotel...</div>
+  <div *ngIf="errorHotel">{{ errorHotel }}</div>
+  <div *ngIf="hotel">
+    <h2>{{ hotel.nombre }}</h2>
+    <div class="hotel-info">
+      <div><strong>Ubicación:</strong> {{ hotel.ubicacion }}</div>
+      <div><strong>Departamento:</strong> {{ hotel.departamento }}</div>
+      <div><strong>Calificación:</strong> {{ hotel.calificacion }}/10</div>
+      <div><strong>Estado:</strong> <span [ngClass]="{ 'activo': hotel.estado, 'inactivo': !hotel.estado }">{{ hotel.estado ? 'Activo' : 'Inactivo' }}</span></div>
+      <div><strong>Fecha de creación:</strong> {{ hotel.fecha_creacion }}</div>
+    </div>
+  </div>
+
+  <h3>Habitaciones de este hotel</h3>
+  <div *ngIf="cargandoHabitaciones">Cargando habitaciones...</div>
+  <div *ngIf="errorHabitaciones">{{ errorHabitaciones }}</div>
+  <div *ngIf="!cargandoHabitaciones && habitaciones.length === 0 && !errorHabitaciones">No hay habitaciones para este hotel.</div>
+  <div *ngFor="let habitacion of habitaciones" class="habitacion-card">
+    <h4>Habitación {{ habitacion.num }}</h4>
+    <div><strong>Características:</strong> {{ habitacion.caracteristicas }}</div>
+    <div><strong>Precio:</strong> {{ habitacion.precio }} BOB</div>
+    <div><strong>Capacidad:</strong> {{ habitacion.cant_huespedes }} huéspedes</div>
+    <div><strong>Estado:</strong>
+      <span [ngClass]="{ 'disponible': habitacion.disponible, 'nodisponible': !habitacion.disponible }">
+        {{ habitacion.disponible ? 'Disponible' : 'No disponible' }}
+      </span>
+    </div>
+    <div><strong>Fecha de creación:</strong> {{ habitacion.fecha_creacion }}</div>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+<div class="habitaciones-container">
+  <h1>Habitaciones</h1>
+
+  <section class="filtros">
+    <h4>Filtros de búsqueda</h4>
+    <div class="filtro-row">
+      <label for="disponible">Disponibilidad:</label>
+      <select id="disponible" [(ngModel)]="disponibleSeleccionado">
+        <option value="">Todas</option>
+        <option value="true">Disponibles</option>
+        <option value="false">No disponibles</option>
+      </select>
+    </div>
+    <div class="filtro-row">
+      <label for="hotel">Código Hotel:</label>
+      <select id="hotel" [(ngModel)]="hotelSeleccionado">
+        <option value="">Todos</option>
+        <option *ngFor="let id of hoteles" [value]="id">{{ id }}</option>
+      </select>
+    </div>
+    <button class="aplicar-btn" (click)="aplicarFiltros()">Aplicar Filtros</button>
+  </section>
+
+  <section class="lista-habitaciones">
+    <div *ngIf="cargando">Cargando habitaciones...</div>
+    <div *ngIf="error">{{ error }}</div>
+    <div *ngIf="!cargando && habitacionesFiltradas.length === 0 && !error">No hay habitaciones que coincidan con el filtro.</div>
+    <div *ngFor="let habitacion of habitacionesFiltradas" class="habitacion-card">
+      <h3>Habitación {{ habitacion.num }}</h3>
+      <div class="habitacion-info">
+        <div><strong>Hotel:</strong> {{ habitacion.codigo_hotel }}</div>
+        <div><strong>Características:</strong> {{ habitacion.caracteristicas }}</div>
+        <div><strong>Precio:</strong> {{ habitacion.precio }} BOB</div>
+        <div><strong>Capacidad:</strong> {{ habitacion.cant_huespedes }} huéspedes</div>
+        <div><strong>Estado:</strong>
+          <span [ngClass]="{ 'disponible': habitacion.disponible, 'nodisponible': !habitacion.disponible }">
+            {{ habitacion.disponible ? 'Disponible' : 'No disponible' }}
+          </span>
+        </div>
+        <div><strong>Fecha de creación:</strong> {{ habitacion.fecha_creacion }}</div>
+      </div>
+    </div>
+  </section>
+</div>

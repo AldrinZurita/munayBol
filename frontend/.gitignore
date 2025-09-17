@@ -1,0 +1,76 @@
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules/
+npm-debug.log*
+yarn-error.log*
+yarn-debug.log*
+package-lock.json
+yarn.lock
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+
+# Angular
+.angular/
+.angular/cache
+
+# Miscellaneous
+.sass-cache/
+.connect.lock
+/coverage/
+/libpeerconnection.log
+testem.log
+/typings/
+.cache/
+temp/
+tmp/
+*.tsbuildinfo
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.*
+src/environments/*.local.ts
+src/environments/*.prod.ts
+src/environments/*.dev.ts
+
+# Docker
+*.env
+.env.local
+.env.*.local
+
+# Build artifacts
+*.tgz
+
+# OS-specific
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Others
+npm-error.log

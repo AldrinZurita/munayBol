@@ -1,0 +1,63 @@
+.detalles-hotel-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 16px;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: #f4f7fa;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  color: #1976d2;
+  font-weight: 700;
+}
+
+.hotel-info {
+  background: #e3f2fd;
+  border-radius: 12px;
+  padding: 18px 14px;
+  margin-bottom: 34px;
+  box-shadow: 0 2px 8px rgba(40, 60, 150, 0.07);
+  font-size: 1.05rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+  margin-bottom: 18px;
+  color: #183153;
+  font-weight: 600;
+}
+
+.habitacion-card {
+  background: linear-gradient(120deg, #ffffff 0%, #f2f6fd 100%);
+  border-radius: 13px;
+  margin-bottom: 20px;
+  padding: 18px 15px;
+  box-shadow: 0 4px 14px rgba(40, 60, 150, 0.09);
+  border: 1px solid #e5e9f7;
+}
+
+.habitacion-card h4 {
+  margin-bottom: 6px;
+  color: #1976d2;
+  font-size: 1.08rem;
+  font-weight: 600;
+}
+
+.activo {
+  color: #20b16a;
+  font-weight: bold;
+}
+.inactivo {
+  color: #f44336;
+  font-weight: bold;
+}
+.disponible {
+  color: #20b16a;
+  font-weight: bold;
+}
+.nodisponible {
+  color: #f44336;
+  font-weight: bold;
+}
