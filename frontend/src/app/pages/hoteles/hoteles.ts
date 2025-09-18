@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HotelService } from '../../services/hotel';
 import { Hotel } from '../../interfaces/hotel.interface';
 import { FormsModule } from '@angular/forms';
+import { AdminAuthService } from '../../services/admin-auth';
 
 @Component({
   selector: 'app-hoteles',
@@ -19,11 +20,16 @@ export class Hoteles implements OnInit {
   calificacionSeleccionada = '';
   cargando = false;
   error = '';
+  isSuperAdmin = false;
 
-  constructor(private hotelService: HotelService) {}
+  constructor(
+    private hotelService: HotelService,
+    private authService: AdminAuthService
+  ) {}
 
   ngOnInit() {
     this.cargando = true;
+    this.isSuperAdmin = this.authService.isLoggedIn();
     this.hotelService.getHoteles().subscribe({
       next: hoteles => {
         this.hoteles = hoteles;
@@ -43,7 +49,6 @@ export class Hoteles implements OnInit {
   aplicarFiltros() {
     let filtrados = this.hoteles;
 
-    // Filtrar por ciudad/departamento
     if (this.ciudadSeleccionada) {
       const ciudad = this.ciudadSeleccionada.trim().toLowerCase();
       filtrados = filtrados.filter(h =>
@@ -51,7 +56,6 @@ export class Hoteles implements OnInit {
       );
     }
 
-    // Filtrar por calificación
     if (this.calificacionSeleccionada) {
       const calif = parseFloat(this.calificacionSeleccionada);
       filtrados = filtrados.filter(h =>
@@ -64,5 +68,69 @@ export class Hoteles implements OnInit {
 
   onVerDetalles(id_hotel: number) {
     window.location.href = `/hoteles/${id_hotel}`;
+  }
+
+  onAgregarHotel() {
+    const nombre = prompt('Nombre del hotel:');
+    const departamento = prompt('Departamento:');
+    const ubicacion = prompt('Ubicación:');
+    const calificacion = Number(prompt('Calificación (0-10):'));
+    const estado = confirm('¿Hotel activo?');
+    if (nombre && departamento && ubicacion && !isNaN(calificacion)) {
+      const nuevoHotel: Partial<Hotel> = {
+        nombre,
+        departamento,
+        ubicacion,
+        calificacion,
+        estado
+      };
+      this.hotelService.agregarHotel(nuevoHotel).subscribe({
+        next: hotel => {
+          this.hoteles.push(hotel);
+          this.aplicarFiltros();
+          alert('Hotel agregado correctamente');
+        },
+        error: err => alert('Error al agregar hotel')
+      });
+    }
+  }
+
+  onEditarHotel(hotel: Hotel) {
+    const nombre = prompt('Nuevo nombre:', hotel.nombre);
+    const departamento = prompt('Nuevo departamento:', hotel.departamento);
+    const ubicacion = prompt('Nueva ubicación:', hotel.ubicacion);
+    const calificacion = Number(prompt('Nueva calificación (0-10):', hotel.calificacion.toString()));
+    const estado = confirm('¿Hotel activo?');
+    if (nombre && departamento && ubicacion && !isNaN(calificacion)) {
+      const hotelActualizado: Hotel = {
+        ...hotel,
+        nombre,
+        departamento,
+        ubicacion,
+        calificacion,
+        estado
+      };
+      this.hotelService.actualizarHotel(hotelActualizado).subscribe({
+        next: h => {
+          Object.assign(hotel, h);
+          this.aplicarFiltros();
+          alert('Hotel actualizado');
+        },
+        error: err => alert('Error al actualizar hotel')
+      });
+    }
+  }
+
+  onEliminarHotel(hotel: Hotel) {
+    if (confirm('¿Eliminar hotel?')) {
+      this.hotelService.eliminarHotel(hotel.id_hotel).subscribe({
+        next: () => {
+          this.hoteles = this.hoteles.filter(h => h.id_hotel !== hotel.id_hotel);
+          this.aplicarFiltros();
+          alert('Hotel eliminado');
+        },
+        error: err => alert('Error al eliminar hotel')
+      });
+    }
   }
 }

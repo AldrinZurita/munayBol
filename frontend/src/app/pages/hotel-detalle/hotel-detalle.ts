@@ -33,21 +33,21 @@ export class HotelDetalle implements OnInit {
       this.cargandoHotel = true;
       this.cargandoHabitaciones = true;
       this.hotelService.getHotelById(id).subscribe({
-        next: hotel => {
+        next: (hotel: Hotel) => {
           this.hotel = hotel;
           this.cargandoHotel = false;
         },
-        error: err => {
+        error: (err: any) => {
           this.errorHotel = 'No se pudo cargar el hotel';
           this.cargandoHotel = false;
         }
       });
       this.habitacionService.getHabitacionesPorHotel(id).subscribe({
-        next: habitaciones => {
+        next: (habitaciones: Habitacion[]) => {
           this.habitaciones = habitaciones;
           this.cargandoHabitaciones = false;
         },
-        error: err => {
+        error: (err: any) => {
           this.errorHabitaciones = 'No se pudo cargar las habitaciones';
           this.cargandoHabitaciones = false;
         }

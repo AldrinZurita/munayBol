@@ -5,5 +5,11 @@
     <li><a routerLink="/paquetes" routerLinkActive="active">Paquetes Turísticos</a></li>
     <li><a routerLink="/contacto" routerLinkActive="active">Contacto</a></li>
   </ul>
-  <button class="login-btn" routerLink="/login">Iniciar Sesión</button>
+  <ng-container *ngIf="isLoggedIn; else showLogin">
+    <span class="username">{{ username }}</span>
+    <button (click)="logout()" class="logout-btn">Cerrar Sesión</button>
+  </ng-container>
+  <ng-template #showLogin>
+    <button class="login-btn" routerLink="/login">Iniciar Sesión</button>
+  </ng-template>
 </nav>
