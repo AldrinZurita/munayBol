@@ -1,6 +1,8 @@
 <div class="habitaciones-container">
   <h1>Habitaciones</h1>
 
+  <button *ngIf="isSuperAdmin" class="agregar-btn" (click)="onAgregarHabitacion()">Agregar Habitación</button>
+
   <section class="filtros">
     <h4>Filtros de búsqueda</h4>
     <div class="filtro-row">
@@ -39,6 +41,8 @@
         </div>
         <div><strong>Fecha de creación:</strong> {{ habitacion.fecha_creacion }}</div>
       </div>
+      <button *ngIf="isSuperAdmin" class="editar-btn" (click)="onEditarHabitacion(habitacion)">Editar</button>
+      <button *ngIf="isSuperAdmin" class="eliminar-btn" (click)="onEliminarHabitacion(habitacion)">Eliminar</button>
     </div>
   </section>
 </div>
