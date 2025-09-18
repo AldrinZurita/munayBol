@@ -1,0 +1,78 @@
+from rest_framework import viewsets
+from .models import Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias
+from .serializers import UsuarioSerializer, HotelSerializer, LugarTuristicoSerializer, PagoSerializer, HabitacionSerializer, ReservaSerializer, PaqueteSerializer, SugerenciasSerializer
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("Bienvenido a la API MunayBol")
+
+class AdminLoginView(APIView):
+    def post(self, request):
+        correo = request.data.get('correo')
+        contrasenia = request.data.get('contrasenia')
+        try:
+            usuario = Usuario.objects.get(
+                correo=correo,
+                contrasenia=contrasenia,
+                rol='superadmin',
+                estado=True
+            )
+            # Puedes retornar un token si implementas JWT
+            return Response({
+                'ci': usuario.ci,
+                'nombre': usuario.nombre,
+                'correo': usuario.correo,
+                'rol': usuario.rol,
+                'pais': usuario.pais,
+                'pasaporte': usuario.pasaporte,
+                'estado': usuario.estado,
+                'fecha_creacion': usuario.fecha_creacion
+            }, status=status.HTTP_200_OK)
+        except Usuario.DoesNotExist:
+            return Response({'error': 'Credenciales inválidas o usuario no autorizado'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class UsuarioViewSet(viewsets.ModelViewSet):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer
+
+class HotelViewSet(viewsets.ModelViewSet):
+    queryset = Hotel.objects.all()
+    serializer_class = HotelSerializer
+
+class LugarTuristicoViewSet(viewsets.ModelViewSet):
+    queryset = LugarTuristico.objects.all()
+    serializer_class = LugarTuristicoSerializer
+
+class PagoViewSet(viewsets.ModelViewSet):
+    queryset = Pago.objects.all()
+    serializer_class = PagoSerializer
+
+class HabitacionViewSet(viewsets.ModelViewSet):
+    queryset = Habitacion.objects.all()
+    serializer_class = HabitacionSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        codigo_hotel = self.request.query_params.get('codigo_hotel')
+        if codigo_hotel is not None:
+            # Filtra por el id del hotel
+            queryset = queryset.filter(codigo_hotel_id=codigo_hotel)
+        return queryset
+
+class ReservaViewSet(viewsets.ModelViewSet):
+    queryset = Reserva.objects.all()
+    serializer_class = ReservaSerializer
+
+class PaqueteViewSet(viewsets.ModelViewSet):
+    queryset = Paquete.objects.all()
+    serializer_class = PaqueteSerializer
+
+class SugerenciasViewSet(viewsets.ModelViewSet):
+    queryset = Sugerencias.objects.all()
+    serializer_class = SugerenciasSerializer

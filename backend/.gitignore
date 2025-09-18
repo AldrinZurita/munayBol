@@ -1,42 +1,65 @@
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*$py.class
 
-# Django
+# Django SQLite database
 db.sqlite3
-*.pot
-*.pyc
-*.pyo
-*.pyd
-staticfiles/
-media/
-local_settings.py
 
-# Virtualenv
-.env
+# Logs
+*.log
+
+# Django static and media folders
+static/
+media/
+
+# Django migrations (keep init, ignore others)
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# Virtual environments
 .venv/
-env/
 venv/
 
-# IDEs/editors
-.vscode/
-.idea/
-*.swp
-*.swo
-*.bak
-.DS_Store
+# Environment variables
+.env
+.env.*
 
 # Docker
 *.pid
-postgres_data/
+*.seed
+*.bak
+*.swp
+*.tmp
 docker-compose.override.yml
 
-# Node modules
-node_modules/
+# PostgreSQL data volume (never commit your DB data!)
+postgres_data/
 
-# Otros
-*.coverage
-*.orig
-dist/
-build/
-*.egg-info/
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+*.mocha
+*.nyc_output/
+
+# Others
+*.swo
+*.swp
+
+# IDE
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
