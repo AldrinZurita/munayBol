@@ -1,12 +1,13 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status, permissions
 from .models import Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias
-from .serializers import UsuarioSerializer, HotelSerializer, LugarTuristicoSerializer, PagoSerializer, HabitacionSerializer, ReservaSerializer, PaqueteSerializer, SugerenciasSerializer
-
+from .serializers import (
+    UsuarioSerializer, HotelSerializer, LugarTuristicoSerializer, PagoSerializer,
+    HabitacionSerializer, ReservaSerializer, PaqueteSerializer, SugerenciasSerializer
+)
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-
 from django.http import HttpResponse
+from .permissions import IsSuperAdmin
 
 def home(request):
     return HttpResponse("Bienvenido a la API MunayBol")
@@ -22,7 +23,6 @@ class AdminLoginView(APIView):
                 rol='superadmin',
                 estado=True
             )
-            # Puedes retornar un token si implementas JWT
             return Response({
                 'ci': usuario.ci,
                 'nombre': usuario.nombre,
@@ -36,7 +36,6 @@ class AdminLoginView(APIView):
         except Usuario.DoesNotExist:
             return Response({'error': 'Credenciales inválidas o usuario no autorizado'}, status=status.HTTP_401_UNAUTHORIZED)
 
-
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
@@ -44,6 +43,12 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 class HotelViewSet(viewsets.ModelViewSet):
     queryset = Hotel.objects.all()
     serializer_class = HotelSerializer
+
+    def get_permissions(self):
+        # Solo superadmin puede crear, actualizar, eliminar
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsSuperAdmin()]
+        return [permissions.IsAuthenticatedOrReadOnly()]
 
 class LugarTuristicoViewSet(viewsets.ModelViewSet):
     queryset = LugarTuristico.objects.all()
@@ -57,11 +62,15 @@ class HabitacionViewSet(viewsets.ModelViewSet):
     queryset = Habitacion.objects.all()
     serializer_class = HabitacionSerializer
 
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsSuperAdmin()]
+        return [permissions.IsAuthenticatedOrReadOnly()]
+
     def get_queryset(self):
         queryset = super().get_queryset()
         codigo_hotel = self.request.query_params.get('codigo_hotel')
         if codigo_hotel is not None:
-            # Filtra por el id del hotel
             queryset = queryset.filter(codigo_hotel_id=codigo_hotel)
         return queryset
 
