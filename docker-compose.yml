@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   db:
     image: postgres:14
@@ -8,7 +9,7 @@ services:
       POSTGRES_USER: turismo
       POSTGRES_PASSWORD: turismo
     ports:
-      - "5433:5432" #por si se tiene postgres local
+      - "5433:5432" # Por si se tiene postgres local
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -32,9 +33,24 @@ services:
     networks:
       - turismo-net
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: angular-frontend
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    networks:
+      - turismo-net
+
 volumes:
   postgres_data:
 
 networks:
   turismo-net:
-    external: true 
+    external: true
