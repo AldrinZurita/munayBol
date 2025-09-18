@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+/*import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Hotel } from '../../interfaces/hotel.interface';
@@ -65,4 +65,16 @@ export class Inicio implements OnInit {
     const select = event.target as HTMLSelectElement;
     this.ordenCalificacion = select.value as 'asc' | 'desc';
   }
+}*/
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-inicio',
+  imports: [],
+  templateUrl: './inicio.html',
+  styleUrl: './inicio.scss'
+})
+export class Inicio {
+
 }

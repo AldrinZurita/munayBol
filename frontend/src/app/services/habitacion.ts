@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { Habitacion } from '../interfaces/habitacion.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class HabitacionService {
   private apiUrl = environment.apiUrl;
 
@@ -16,8 +14,20 @@ export class HabitacionService {
     return this.http.get<Habitacion[]>(`${this.apiUrl}habitaciones/`);
   }
 
-  getHabitacionesPorHotel(codigo_hotel: number): Observable<Habitacion[]> {
-    const params = new HttpParams().set('codigo_hotel', codigo_hotel);
-    return this.http.get<Habitacion[]>(`${this.apiUrl}habitaciones/`, { params });
+  agregarHabitacion(habitacion: Partial<Habitacion>): Observable<Habitacion> {
+    return this.http.post<Habitacion>(`${this.apiUrl}habitaciones/`, habitacion);
   }
+
+  actualizarHabitacion(habitacion: Habitacion): Observable<Habitacion> {
+    return this.http.put<Habitacion>(`${this.apiUrl}habitaciones/${habitacion.num}/`, habitacion);
+  }
+
+  eliminarHabitacion(id_habitacion: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}habitaciones/${id_habitacion}/`);
+  }
+
+  getHabitacionesPorHotel(codigo_hotel: number): Observable<Habitacion[]> {
+  return this.http.get<Habitacion[]>(`${this.apiUrl}habitaciones/?codigo_hotel=${codigo_hotel}`);
+  }
+  
 }

@@ -1,67 +1,47 @@
-<div class="inicio-container">
-  <section class="hero">
-    <h1>Descubre las Maravillas de Bolivia</h1>
-    <p>Desde el místico Salar de Uyuni hasta las vibrantes calles de La Paz, encuentra los hoteles y tours perfectos para tu aventura boliviana</p>
-    <div class="actions">
-      <button class="search-btn" routerLink="/hoteles">Buscar Hoteles</button>
-    </div>
-    <div class="filter-row">
-      <label for="departamento">Filtrar por Departamento:</label>
-      <select id="departamento" (change)="onDepartamentoChange($event)">
-        <option value="">Todos</option>
-        <option value="Cochabamba">Cochabamba</option>
-        <option value="La Paz">La Paz</option>
-        <option value="Santa Cruz">Santa Cruz</option>
-        <option value="Oruro">Oruro</option>
-        <option value="Beni">Beni</option>
-        <option value="Chuquisaca">Chuquisaca</option>
-        <option value="Tarija">Tarija</option>
-        <option value="Pando">Pando</option>
-        <option value="Potosi">Potosi</option>
-      </select>
-      <label for="calificacion">Calificación:</label>
-      <select id="calificacion" (change)="onOrdenCalificacionChange($event)">
-        <option value="asc">Ascendente</option>
-        <option value="desc">Descendente</option>
-      </select>
-    </div>
-  </section>
-
-  <section class="hotel-list">
-    <h2>Hoteles sugeridos</h2>
-    <div *ngIf="cargando">Cargando hoteles...</div>
-    <div *ngIf="error">{{ error }}</div>
-    <div *ngIf="!cargando && hotelesFiltrados.length === 0 && !error">No hay hoteles que coincidan con el filtro.</div>
-    <ul>
-      <li *ngFor="let hotel of hotelesFiltrados">
-        <strong>{{ hotel.nombre }}</strong> ({{ hotel.departamento | titlecase }})<br>
-        Ubicación: {{ hotel.ubicacion }}<br>
-        Calificación: {{ hotel.calificacion }}<br>
-        Estado: <span [ngClass]="{ 'activo': hotel.estado, 'inactivo': !hotel.estado }">{{ hotel.estado ? 'Activo' : 'Inactivo' }}</span><br>
-        Fecha creación: {{ hotel.fecha_creacion }}
-      </li>
-    </ul>
-  </section>
-
-  <section class="about">
-    <h2>¿Quiénes somos?</h2>
-    <p>
-      <strong>MunayBol</strong> te conecta con la magia de Bolivia. Descubre paisajes únicos, cultura milenaria y experiencias inolvidables en el corazón de Sudamérica.
+<section class="hero">
+  <div class="hero__overlay"></div>
+  <div class="container hero__inner">
+    <h1 class="hero__title">Bienvenido a MunayBol</h1>
+    <p class="hero__subtitle">Descubre Bolivia</p>
+    <p class="hero__lead">
+      Hoteles y paquetes turísticos en los mejores destinos bolivianos. Explora el Salar de Uyuni,
+      Lago Titicaca, La Paz y mucho más.
     </p>
-  </section>
 
-  <section class="features">
-    <div class="feature">
-      <h3>Paisajes Únicos</h3>
-      <p>Desde el Salar de Uyuni hasta la Cordillera Real, explora los paisajes más espectaculares del altiplano.</p>
+    <div class="hero__actions">
+      <a routerLink="/hoteles" class="btn btn--brand">Explorar Hoteles</a>
+      <a routerLink="/paquetes" class="btn btn--outline btn--light">Explorar Paquetes</a>
     </div>
-    <div class="feature">
-      <h3>Lago Titicaca</h3>
-      <p>Navega por el lago navegable más alto del mundo y conoce las tradiciones ancestrales de los uros.</p>
+  </div>
+</section>
+
+<!-- ¿QUIÉNES SOMOS? -->
+<section class="quienes">
+  <div class="container">
+    <h2 class="quienes__title">¿Quiénes somos?</h2>
+    <p class="quienes__intro">
+      MunayBol es la plataforma líder en turismo boliviano, conectando viajeros con experiencias auténticas
+      en los destinos más espectaculares de Bolivia.
+    </p>
+
+    <div class="quienes__grid">
+      <article class="card">
+        <div class="card__icon">🌄</div>
+        <h3 class="card__title">Destinos Únicos</h3>
+        <p class="card__text">Desde el Salar de Uyuni hasta el Lago Titicaca, descubre paisajes inolvidables.</p>
+      </article>
+
+      <article class="card">
+        <div class="card__icon">🧭</div>
+        <h3 class="card__title">Expertos Locales</h3>
+        <p class="card__text">Operadores confiables y guías locales que conocen cada rincón del país.</p>
+      </article>
+
+      <article class="card">
+        <div class="card__icon">🛡️</div>
+        <h3 class="card__title">Reservas Seguras</h3>
+        <p class="card__text">Pagos protegidos y confirmaciones al instante para viajar con tranquilidad.</p>
+      </article>
     </div>
-    <div class="feature">
-      <h3>Cultura Viva</h3>
-      <p>Sumérgete en la rica herencia aimara y quechua, y vive experiencias auténticas con las comunidades locales.</p>
-    </div>
-  </section>
-</div>
+  </div>
+</section>
