@@ -1,0 +1,82 @@
+<div class="reserva-container">
+  <a class="back-link" routerLink="/hotel-detalle">
+    &larr; Volver a los detalles
+  </a>
+  <h1>Completar Reserva</h1>
+  <div class="reserva-main">
+    <section class="pago-card">
+      <!--
+      <h3><span class="icon material-symbols-rounded">credit_card</span> Información de Pago</h3>
+      <p class="pago-desc">Ingresa los datos de tu tarjeta de crédito o débito</p>
+      <form>
+        <label>
+          Número de tarjeta
+          <input type="text" maxlength="19" placeholder="1234 5678 9012 3456" [(ngModel)]="tarjeta" name="tarjeta" required />
+        </label>
+        <label>
+          Nombre del titular
+          <input type="text" placeholder="Nombre como aparece en la tarjeta" [(ngModel)]="nombre" name="nombre" required />
+        </label>
+        <div class="row">
+          <label>
+            Fecha de expiración
+            <input type="text" maxlength="5" placeholder="MM/AA" [(ngModel)]="expiracion" name="expiracion" required />
+          </label>
+          <label>
+            CVV
+            <input type="text" maxlength="3" placeholder="123" [(ngModel)]="cvv" name="cvv" required />
+          </label>
+        </div>
+        <div class="pago-seguro">
+          <span class="icon material-symbols-rounded">shield_lock</span>
+          <span>
+            <b>Pago 100% seguro</b><br />
+            Tus datos están protegidos con encriptación SSL
+          </span>
+        </div>
+        <button class="btn btn--pago" type="button" (click)="confirmarPago()">
+          Confirmar Pago - {{ total }} BOB
+        </button>
+      -->
+        <div class="extra-fields">
+          <label>
+            Nombre del huésped
+            <input type="text" placeholder="Nombre completo" [(ngModel)]="nombreHuesped" name="nombreHuesped" />
+          </label>
+          <label>
+            Correo electrónico
+            <input type="email" placeholder="correo@ejemplo.com" [(ngModel)]="correoHuesped" name="correoHuesped" />
+          </label>
+        </div>
+        <button class="btn btn--reserva" type="button" (click)="confirmarReserva()">
+          Confirmar Reserva
+        </button>
+      <!--
+      </form>
+      -->
+    </section>
+    <aside class="resumen-card">
+      <h4>Resumen de reserva</h4>
+      <div class="hotel-info">
+        <b>{{ hotel.nombre }}</b>
+        <div><span class="icon material-symbols-rounded">location_on</span> {{ hotel.ciudad }}</div>
+      </div>
+      <div class="resumen-datos">
+        <div><span class="icon material-symbols-rounded">group</span> Huéspedes <span class="right">{{ huespedes }}</span></div>
+        <div>Noches <span class="right">{{ noches }}</span></div>
+      </div>
+      <div class="resumen-precio">
+        <div>{{ hotel.precio }} BOB x {{ noches }} noches <span class="right">{{ subtotal }} BOB</span></div>
+        <div>IVA (13%) <span class="right">{{ iva }} BOB</span></div>
+      </div>
+      <div class="resumen-total">
+        <b>Total <span class="orange">{{ total }} BOB</span></b>
+      </div>
+      <ul class="beneficios">
+        <li>✓ Cancelación gratuita hasta 24 horas antes</li>
+        <li>✓ Confirmación inmediata</li>
+        <li>✓ Atención al cliente 24/7</li>
+      </ul>
+    </aside>
+  </div>
+</div>

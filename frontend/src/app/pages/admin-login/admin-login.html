@@ -1,0 +1,15 @@
+<div class="login-container">
+  <h2>Iniciar Sesión (Super Administrador)</h2>
+  <form (ngSubmit)="login()" autocomplete="off">
+    <div class="form-group">
+      <label for="correo">Correo</label>
+      <input id="correo" name="correo" [(ngModel)]="correo" required />
+    </div>
+    <div class="form-group">
+      <label for="contrasenia">Contraseña</label>
+      <input id="contrasenia" name="contrasenia" type="password" [(ngModel)]="contrasenia" required />
+    </div>
+    <button type="submit" [disabled]="loading">Ingresar</button>
+    <div class="error" *ngIf="error">{{ error }}</div>
+  </form>
+</div>
