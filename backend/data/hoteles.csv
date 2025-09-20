@@ -1,0 +1,785 @@
+departamento,nombre,calificacion,ubicacion
+Santa Cruz,Hotel La Casona,6,Av. Carlos Daher Harb S N Pasillo La Williams Pasillo la Williams Pasillo La WilliamsCamiri 
+Pando,Dorado Hotel,6,Final Avenida Internacional 583 Cobija 
+Pando,Estrella Del Norte,5,Calle Miguel Farah 48 Barrio Conavi CobijaCobijaPando 
+Pando,Amazonia Hotel,4,Avenida 6 De Agosto Esquina Avenida PandoCobija 
+Pando,Un Hotel,5,Leoncio Justiniano Montero Senac s/n Cobija 
+Cochabamba,Monserrat,6,Street España # 342 between Mayor Rocha and EcuadorCochabamba 
+Cochabamba,Hotel Hacienda de Kaluyo,10,"Tajra N777 , La Angostura Desvio a Tarata Km. 4CochabambaZona Kaluyo "
+Cochabamba,Apart Hotel Regina,8,España 636 Entre Reza Y El Prado entre Reza y el pradoCochabamba 1321 
+Cochabamba,La Colonia,6,Calle Mostajo Esq Atahuallpa 100 Cochabamba 
+Cochabamba,Cesar s Plaza Hotel,6,Calle 25 De Mayo S 0210 Cochabamba 
+Cochabamba,Gran Hotel Ambassador,8,Calle España 349 Entre Mayor Rocha Y Ecuador CentralCochabamba 
+Cochabamba,Hotel Aranjuez Cochabamba,8,Calle Buenos Aires E563 P.O. Box 3056Cochabamba 
+Cochabamba,Gran Hotel Toloma,6,Av. Oquendo N 690 Esquina Pedro Borda Esquina Pedro BordaCochabamba 9999 
+Cochabamba,Hotel La Corona,8,Calle Jose de la Reza 433 Cochabamba 9999 
+Cochabamba,Hotel Regina Resort & Convenciones,8,Prolongacion Calle Cochabamba Cochabamba 
+Cochabamba,Regina Iii,4,CALLE NATANIEL AGUIRRE 718 COCHABAMBA 
+Cochabamba,Hotel Diplomat,8,Av. Ballivian 611 P.O. Box 5824Cochabamba 
+Cochabamba,Portales,8,AV PANDO 1271 ZONA RECOLETA COCHABAMBA 
+Cochabamba,Americana Hotel,6,Esteban Arce 788 4910 Cochabamba 
+Cochabamba,Gran Hotel Cochabamba,6,Plaza Ubaldo Anze La Recoleta S N RecoletaCochabamba 
+Cochabamba,Felipez Hotel,6,Calle Espana Nro. 172 Entre Av. Heroinas Y C. Colombia Entre Avenida Heroínas y Calle ColombiaCochabamba 
+Cochabamba,Adara Hotel,5,Calle Junín 867 Entre Teniente Arévalo y La Paz CentralCochabamba 
+Cochabamba,Hotel Attridge,6,Av. Ballivian 0530 Acera EsteA Pocos Pasos De La Plaza ColónCochabamba 
+Cochabamba,Hostal Olympic,6,Avenida Aniceto 766 Cochabamba 
+Cochabamba,Hotel Tamesis,6,Calle Paccieri 684 Cochabamba 
+Cochabamba,Hotel El Super 8,4,Hamiraya 475 Entre Jordan Y Calama Entre Jordan y CalamaCochabamba 9999 
+Cochabamba,Apart Hotel Violettas,6,Calle Lanza Nº 0464 Entre Paccieri Y Venezuela Entre Paccieri Y Venezuela5914 Cochabamba 
+Cochabamba,Outlanders Hostel,4,Avenida Salamanca 860 Cochabamba 
+Cochabamba,Hotel Ginas,4,Mexico 346 Entre C. Espana Y C. 25 De Mayo Entre España y 25 de MayoCochabamba 
+Cochabamba,Anteus,6,Avenida Potosi 1365 COCHABAMBA 
+Cochabamba,Hotel Regina,6,Reza 359 Between Calle Spain and Prado (Central)Cochabamba 
+Cochabamba,Camino Plaza,6,Huallparimachi Plazuela De Cala Cala 1862 Plazuela De Cala CalaCochabamba 
+Cochabamba,Capitol,6,"Calle Colombia, E-415 COCHABAMBA "
+Cochabamba,Running Chaski Hostel,5,Calle España 449 Casi Calle MéxicoCochabamba 
+Cochabamba,Residencial Jordan,2,Antezana 671 Cochabamba 
+Cochabamba,Hostal Jordan,4,25 de Mayo 651 SudoesteCochabamba 
+Cochabamba,El Jardín Suites and Guest House,5,Calle Baptista 722 Cochabamba 3085 
+Cochabamba,Apart Hotel BTP City Apartments,4,Ladislao Cabrera E-157 SudoesteCochabamba 
+Cochabamba,Ñaupa House Hostel,2,Calle España  250 Cochabamba 
+Cochabamba,Olgas Hotel,2,Calle Colombia 467 Zona CentralCochabamba 
+Cochabamba,Jaguar House,4,Calle Baptista entre La Paz y Tte. Arevalo #746 Entre La Paz y Tte. ArevaloCochabambaCercado 
+Cochabamba,Apartments Torre Azul,10,Av. Ayacucho 0893 esq. Rafael UrquidiCochabamba 
+Cochabamba,Hotel Oblitas,5,Avenida Oblitas 220 Cochabamba 
+Cochabamba,El Prado Hotel,6,Av. Ballivian 709 Entre La Paz Y Tte. Arevalo entre La Paz y Tte. Arevalo CochabambaDepartamento Cochabamba 
+Cochabamba,Samay Hostel,4,1474 Colombia Street Cochabamba 
+Cochabamba,Cabaña Las Lilas Hostel,4,Zona Linde Tiquipaya DepartamentoCochabamba 
+Cochabamba,Brasilia Hostel,5,Calle Brasil 560 Entre Lanza Y San MartínCochabamba 
+Cochabamba,Hotel Moraine,6,Avenida Ayacucho 356 Cochabamba 
+Cochabamba,Hotel Briston,6,Calle Suipacha 181 Cochabamba 2500 
+Cochabamba,Hotel Boutique La Casa de Margarita,5,Pasaje Juan Jose Quezada 449 Queru-QueruEntre el Parque Anze y la CicloviaCochabamba 
+Cochabamba,Hostal Arevalo,5,Teofilo Vargas 110 Cala CalaCochabamba 
+Cochabamba,Armenia Hotel,6,Calle General Acha 560 Entre Falsuri Y TumuslaCochabamba 
+Cochabamba,Hotel Ganesh Srl,6,Tupac Amaru 1772 Cochabamba 
+Cochabamba,Jardines Del Cerro Hotel Boutique,6,Urbanizaciã N Irlandes Pasaje Jacaranda 30 591 Cochabamba Zona Muyurina Cochabamba 2500 
+Cochabamba,Hotel Boutique Casamagna,10,Calle Obispo Anaya 0 260 CochabambaCercado 
+Cochabamba,Huper Hotel Boutique,6,Avenida Portales Edificio Huper Mall Piso 6 Entre Melchor Urquidi y Pandu Entre Avenida Pando y Avenida Melchor UrquidiEdificio Hupermall 6toPiso 
+Cochabamba,Hotel Luxor,8,Calle La Paz 439 Entre Lanza Y ValdiviesoCochabamba 
+Cochabamba,Kokusai Hotel,6,Avenida Ayacucho 552 Entre Ladislao Cabrera Y CalamaCochabamba 
+Cochabamba,Concordia Hospedaje,5,Juan De La Cruz Torres 1414 Cochabamba 
+Cochabamba,Hostal Costa De Marfil,4,Avenida Ayacucho 863 Entre Costanera Y Teniente ArévaloCochabamba 
+Cochabamba,Hostal Versalles,4,Avenida Ayacucho 714 Entre Ladislao Cabrera Y AromaCochabamba 9999 
+Cochabamba,Hotel Viggiatore,5,Calle Tomas Frias 1213 Entre Calle Beni Y Calle Aniceto PadillaCochabamb 
+Cochabamba,Portal Rent Apart,4,Calle Nicolas Ortiz 226 Entre Melchor Perez y Calampampa Entre Melchor Perez Y CalampampaCochabamba 
+Cochabamba,La Fontaine Hotel,6,Calle Hamiraya 181 CentralCochabamba 
+Cochabamba,Montanero Lodge,5,Final avenida reducto Montesillo Bajo Cochabamba 2500 
+Cochabamba,Las Colinas Apart,5,Papa Alejandro VI 89 Zona El Frutillar-PacataCochabamba 
+Cochabamba,Nativa Suites,5,Entre Calle Espana Y Avenida Heroinas 0344 Pasaje Fidelia De SanchezEdificioCochabamba 
+Cochabamba,Selenza Apart Hotel,5,Avenida Portales 420 Entre La Avenida Santa Cruz Y Potosi 
+Cochabamba,Residencial Velia Victoria,5,Avenida Portales 855 Cochabamba 
+Cochabamba,Hotel Galarza,5,Calle Esteban Arze 1313 Entre Tarata y Totora 
+Cochabamba,Hotel Catena,8,"Pedro Blanco #458 entre Av. Potosi y C. Tomas Frías 1234 Cochabamba, Bolivia "
+Cochabamba,Hotel Domani,6,"Federico Blanco #913 casi esq. Oquendo 2500 Cochabamba, Bolivia "
+Cochabamba,Portal Rent Apart 6,6,Canichana 139  
+Cochabamba,Portal Rent Apart 1,6,Av America Casi Esquina Sta Cruz Ed Saavedra  
+Cochabamba,Portal Rent Apart 2,6,Calle Beni Casi Esquina Santa Cruz Edificio Jose Maria Dpto1 D  
+Cochabamba,Portal Rent Apart 3,6,Plaza De Cala Cala Ed. Patmos  
+Cochabamba,Portal Rent Apart 4,6,Av Uyuni Lado Home Center Ed. Guadalupe  
+Cochabamba,Portal Rent Apart 7,6,"Pedro Blanco Casi Av Villarroel Ed. Puerto Vallarta, Dep 7D  "
+Cochabamba,Apartasuites By Gran Hotel Cochabamba,6,Plaza Ubaldo Anze E 416  
+Cochabamba,Portal Rent Apart 5,6,Calle 23 De Enero Casi Av Beijing Ed. Partenon  
+Cochabamba,Departamento De Lujo,6,Pedro Blanco Edificio Continental Departamento 9I  
+Cochabamba,Hostal Jem,5,Antezana Entre Sucre Y Jordan 341  
+Cochabamba,Elite Apartment,6,A.Quijarro #1747 Departamento 9H Edificio Altamira  
+Cochabamba,Apartamento Con Jardin,5,Calle Bolivia 1022  
+Cochabamba,Apartamentos Sercan,5,Calle Baldivieso Edif. 662 Apt. 1D Alameda  
+Cochabamba,Rosales Norte Apartamentos Gch,5,Idelfonso Murguia  
+Cochabamba,Vila Festiva 148e,5,Calle Colombia Casi Esquina Av. Ayacucho Nro 146  
+Cochabamba,dulces SueÑos,5,Calle Sin Numero Collpapampa Tiquipaya Cochabamba  
+Cochabamba,San Martin,5,Pasaje Grover Suarez Edificio Geotecnia  
+Cochabamba,Garzonier Centrico,5,Carlos Davis #1577Casi Belzu Piso 3 Departamento 31  
+Cochabamba,C&r Apartments,5,Calle Litoral 288 7Th Floor  
+Cochabamba,Apartamento Familiar Ideal,5,Baptista #779  
+Cochabamba,Torre Isos,5,Avenida Papa Paulo #1121 Depto. 10E Edificio Torre Isos  
+Cochabamba,Amplio Departamento,5,Calle Adela Zamudio Edificio Cipres  
+Cochabamba,Departamento Lincoln Cochabamba,5,Av. Quilla Esq Av. Gabriel Rene Moreno Edificio Catalania Piso 3 Dpto.3E  
+Cochabamba,Garzonier Confortable en Tiquipaya,5,Calle Cochabamba Tiquipaya Bolivia S N Piso 2  
+Cochabamba,Apartamento Mira 2,5,Avenida Melchor Urquidi Edificio Paseo Recoleta 10I  
+Cochabamba,Wayrashaus,5,Ayoreo Entre 23 De Enero Y Pasaje Itonama 112  
+La Paz,Ecolodge Copacabana,4,Av. Costanera Copacabana 
+La Paz,Hotel Rosario Lago Titicaca,8,Av. Costanera Esq. Rigoberto Paredes Copacabana 02-1701Departamento La PazManco Kapac 
+La Paz,Gloria Copacabana,6,Avenida 16 De Julio S/N CopacabanaLago Titicaca 
+La Paz,Hotel Onkel Inn Torres de Copacabana,6,Avenida Costanera 257 Playa de CopacabanaZona ChaapampaCopacabana 
+La Paz,Hotel Wendy Mar,4,Avenida 16 De Julio Sin Numero Copacabana 9999 
+La Paz,Hotel Utama,6,Calle Michael Perez 60 Esquine San Antonio s/nCopacabana 
+La Paz,Hotel Estelar del Lago Titicaca,6,Avenida Costanera s/n Esquina Avenida BuschCopacabana 
+La Paz,Hotel Perla del Lago,6,Colque pata y 3 de Mayo Copacabana 0510 
+La Paz,Hostal Brisas del Titicaca,2,Av. 6 de Agosto 9999 Copacabana 
+La Paz,La Aldea Del Inca,6,San Antonio 2; Entre C General Jauregui Y C Michel Perez Entre Calle General Jauregui Y Calle Michel PerezCopacabana 
+La Paz,Hostal Villa Imperial,4,Av. 6 de Agosto Copacabana 
+La Paz,Hostal Puerto Alegre,5,Manuel Mena Mejia 190 Copacabana 9999 
+La Paz,Hotel Lago Azul,6,Avenida Costanera No. 13 CopacabanaManco Kapac 
+La Paz,Hostal Real los Andes del Lago,4,Av. Busch S N Entre Av. 16 De Julio Y Costanera Entre Avenida 16 de Julio Y CostaneraCopacabana 0001 
+La Paz,Hostal Florencia,2,Calle Mena Mejia 120 Copacabana 
+La Paz,Hotel La Cupula,5,Calle Michel Perez 1-3 CopacabanaDepartamento La Paz 
+La Paz,Hostal Olas Del Titicaca,5,Avenida 16 De Julio Cruce Con Avenida BuschCopacabana 
+La Paz,Hostal Flor de Mi Tierra,2,Ruta Nacional 2 Avenida PanamericanaCopacabana 5912 
+La Paz,Hotel Paraiso del Lago,5,Avenida Busch 1000 Copacabana 
+La Paz,Hostal Joshua,5,Calle Manko kapac Copacabana 
+La Paz,Hostal Piedra Andina,5,Calle Sin Nombre Urbaniacion Bella VistaZona Bella VisitaCopacabana 
+La Paz,Hotel Mirador del Lago,5,Avenida Costanera Esquina Buch S/Nzona LitoralCopacabana 0012 
+La Paz,Hostal Sonia,5,Ruta Nacional 2 Calle Murillo Esq Rosa Tejada 256Copacabana 
+La Paz,Hostal Pizarro,4,Avenue Bush Copacabana 1234 
+La Paz,Hostal Las Balsas,5,Avenida 16 De Julio s/n Esquina SaavedraZona GaritaCopacabana 
+La Paz,Hotel Espejo,4,Calle Jauregui Frente Plaza 2 De FebreroCopacabana 
+La Paz,Kusi,5,Avenida Costanera Esquina Rigoberto Paredes 3er Piso 
+La Paz,Hostal Las Olas,5,Calle Michel Perez Nº1 3 Calle Jauregui  
+La Paz,Estrella Del Lago,5,Avenida Gonzalo Jauregui. A Media Cuadra De La Avenida Costanera  
+La Paz,Hostal Luz Yhobimar,5,Calle Max Paredes Entre Avenida16 De Julio Y Bolivar S N  
+La Paz,Hostal Palacio Del Inca,5,Camino Norte Sur A 100 Metros De La Punta Del Inca  
+La Paz,Hostal La Casa Del Sol,5,Calle Jose Ballivian Zona Munaypata  
+La Paz,Rio Selva Resort Yungas,10,Yungas COROICO 
+La Paz,Villa Saracena,6,Coroico; Provincia De Nor Yungas; Departmento La P Coroico 
+La Paz,El Viejo Molino,6,Camino de Santa Bárbara - Nor Yungas LA PAZ 
+La Paz,Hotel Gloria Coroico,6,Av. Keneddy final CoroicoLa Paz 
+La Paz,Hotel Viejo Molino Coroico,10,15 Min Walking Of Coroico´s Main Square On The Way To Santa Barbara Community Coroico 
+La Paz,Hotel Esmeralda,4,Calle Julio Zuazo Cuenca 725 Coroico 2040 
+La Paz,Villa Bella,5,"Nor Yungas A 1,05 km De YolosaCamino A Coroico ViejoCoroico Viejo "
+La Paz,Pedacito de Cielo,5,Ubicado En Carretera Nor Yungas ComunidadAl Lado De La Escuela De La ComunidadCoroico Viejo 
+La Paz,Hotel Bella Vista,5,Felix Reyes Ortiz A 120 MeterDel centroCoroico 
+La Paz,Blue Pine Farm Lodge Cabanas,5,Ex Ferrocarril Lacahuarca  
+La Paz,Villa Hermosa,5,Carretera 3 Desvio Campamento Abc  
+La Paz,Ecolodge Copacabana,4,Av. Costanera Copacabana 
+La Paz,La Casona Hotel Boutique,8,Av. Mariscal Santa Cruz 938 9999 La Paz 
+La Paz,Hotel Fuentes,4,Calle Linares 888 Entre Sta Cruz y SagarnagaCentro De La PazLa Paz 9999 
+La Paz,Hotel Torino,2,Calle Socabaya Zona Central 457 La Paz City CentreLa Paz 
+La Paz,Condeza,4,Diagonal Juan XXIII Nº 190 entre Illampu y LinaresLa Paz 
+La Paz,Hotel Avenida,4,Av Montes 690 Esq. Bozo Esquina BozoLa Paz 9999 
+La Paz,Hotel Rosario La Paz,6,Av. Illampu 704 Casilla Centro12446 La Paz 
+La Paz,Stannum Boutique Hotel & Spa,8,"2631 Avenida Arce Torre Multicine, Piso 12La Paz "
+La Paz,El Dorado,6,Av. Villazon S Nº P.O. Box 77Correo CentralLa Paz 
+La Paz,Hotel Europa La Paz,8,Calle Tiahuanaco N. 64 La PazBolivia 
+La Paz,Rio Selva Resort Yungas,10,Yungas COROICO 
+La Paz,Hotel Calacoto,8,Calle 13 Esq Av Sanchez Bustamante 8009 La Paz 
+La Paz,Plaza,8,Av 16 De Julio 1789  
+La Paz,Hotel Rosario Lago Titicaca,8,Av. Costanera Esq. Rigoberto Paredes Copacabana 02-1701Departamento La PazManco Kapac 
+La Paz,Madre Tierra,6,Av. 20 de Octubre # 2080 Zona SopocachiLa Paz 
+La Paz,Real plaza hotel & Convention Center,6,Av Arce 2177. Po Box 8689 2177 Sopocachi SopocachiLa Paz 
+La Paz,Hotel Presidente,6,Calle Potosí 920 La Paz 
+La Paz,Hotel Gloria La Paz,6,Calle Potosi Nro. 909 CentralLa Paz 
+La Paz,Osira,6,"Av. 20 de Octubre, 1494 LA PAZ "
+La Paz,Villa Saracena,6,Coroico; Provincia De Nor Yungas; Departmento La P Coroico 
+La Paz,Hotel Boutique El Consulado,6,Calle Carlos Bravo 299 Tiwanaku CornerLa Paz 
+La Paz,Residencial Latino,4,Calle Junin n. 857 La Paz 
+La Paz,A La Maison,6,Pasaje Munoz Cornejo 15 La Paz 
+La Paz,Apart Hotel Los Delfines,6,Claudio Aliaga. Calle 17 De Calacoto 8275 Esq. Claudio Aliaga 8275 CalacotoLa Paz 
+La Paz,Hotel Lp Columbus,6,Av. Illimani 1990 Frente Stadium Hernando Siles La Paz 5432 
+La Paz,Suites Camino Real,8,Av. Ballivian 369 Y Esquina Calle 10 Esquina Calle 10La Paz 
+La Paz,Ritz Apart Hotel,8,Plaza Isabel La Católica Nro. 2478 Av. ArceLa Paz 
+La Paz,El Rey Palace Apart Hotel,6,Av 20 De Octubre 1947 SopocachiLa Paz 10727 
+La Paz,Hostal Naira,6,Sagarnaga No 161 Plaza San FranciscoLa Paz 
+La Paz,El Viejo Molino,6,Camino de Santa Bárbara - Nor Yungas LA PAZ 
+La Paz,Camino Real Aparthotel & Spa,10,Capitan Ravelo 2123 P.O. Box: 5904La Paz 
+La Paz,Casa Grande Suites,8,Av. Ballivian Esq. Calle 17 Nº 1000 Calacoto Esq. Calle 17 Nº 1000Zona CalacotoLa Paz 
+La Paz,Copacabana,6,"Avenida 16 De Julio, 1802 LA PAZ "
+La Paz,Alcalá Apart Hotel,6,Calle Víctor Sanjinéz 2662 Plaza España Sopocachi Plaza España - Sopocachi Plaza España - SopocachiLa Paz 
+La Paz,Pan American Hotel,6,Mexico 1555 y Otero de la Vega entre callesNicolas Acosta y Otero de la VegaLa Paz 
+La Paz,Gloria Copacabana,6,Avenida 16 De Julio S/N CopacabanaLago Titicaca 
+La Paz,Hotel Berlina,4,Av Illampu 761 Entre Santa Cruz Y Graneros Entre Santa Cruz y Graneros Entre Santa Cruz y GranerosLa Paz 
+La Paz,Hotel Oberland,6,Av. Florida C.2 Mallasa C.2 MallasaLa Paz 
+La Paz,Hotel Sagarnaga,4,Sagarnaga 326 Zona RosarioLa Paz 
+La Paz,Las Brisas,6,Illampu Nº742 El RosarioLa PazProvinz Murillo 
+La Paz,Hotel Gloria Coroico,6,Av. Keneddy final CoroicoLa Paz 
+La Paz,San Bartolome,6,CHULUMANI SUD - YUNGAS LA PAZ 
+La Paz,Dm Andino,10,"AV. MANUEL CASTILLO, 5 LA PAZ "
+La Paz,Casa Grande Hotel,8,"Calle 16 No.8009, Calacoto CalacotoLa Paz "
+La Paz,Casa de Piedra Hotel Boutique,5,Jenaro Sanjinez N 451 Centro de La PazLa Paz 9999 
+La Paz,Hotel Rio Selva Aranjuez,10,Avenida Victor Paz Estenssoro N.10 Sobre El Puente Aranjuez Sobre El Puente AranguezZona Sur AranjuezLa Paz 
+La Paz,Hotel Onkel Inn Torres de Copacabana,6,Avenida Costanera 257 Playa de CopacabanaZona ChaapampaCopacabana 
+La Paz,Hotel La Paz,6,Avenida Sucre 1081 NorteLa Paz 
+La Paz,Sajama Hotel Restaurante,6,Calle Illampu775 Esquina Avenida Santa CruzLa Paz 
+La Paz,Hotel Milton,4,Calle Illampu Esquina Calderón 1123 CasillaLa Paz 
+La Paz,Hotel Castilla,2,Avenida Iturralde 1239 La Paz 
+La Paz,Hotel Wendy Mar,4,Avenida 16 De Julio Sin Numero Copacabana 9999 
+La Paz,Hotel Utama,6,Calle Michael Perez 60 Esquine San Antonio s/nCopacabana 
+La Paz,Hotel Estelar del Lago Titicaca,6,Avenida Costanera s/n Esquina Avenida BuschCopacabana 
+La Paz,Estrella Andina,6,Calle Illampu 716 La Paz 
+La Paz,Hotel Perla del Lago,6,Colque pata y 3 de Mayo Copacabana 0510 
+La Paz,Casa Fusion Hotel Boutique,8,Miguel de Cervantes 2725 La Paz 9999 
+La Paz,Eurotel Davina,8,Avenida Illimani 1706 Zona MirafloresLa Paz 
+La Paz,Victoria Apart Hotel,6,Av. Sucre 1055 La Paz City CentreLa Paz 9999 
+La Paz,Hotel Cordillera Real,6,Avenida America 494 Casi Esquina PandoLa Paz 
+La Paz,Golden Palace,6,Sagarnaga No 531 La Paz 9999 
+La Paz,Hotel Garcilazo,2,Calle Isaac Tamayo 560 Centro De La PazLa Paz 9999 
+La Paz,Hotel La Valle,4,Calle Evaristo Valle 153 La Paz 9999 
+La Paz,Bolivian Suites Achumani,4,Calle Manuel Cáceres 45 Entre calles 14 y 15AchumaniLa Paz 9999 
+La Paz,Inca's Room Hotel,4,Calle Illampu 670 La Paz 9999 
+La Paz,Hotel La Joya,6,Max Paredes Street 541 La Paz 2153 
+La Paz,Casa Colonial San Pedro,6,Calle Colombia 314 Zona San Pedro Zona San PedroLa Paz 0000 
+La Paz,Bash and Crash Hostel,4,Ingavi Street 861 La Paz 
+La Paz,Llama s House,4,Calle Ricardo Mujia N 766 Sopocachi SopocachiLa Paz 
+La Paz,Onkel Inn,4,Colombia 257 Galeria ColonialLa Paz 
+La Paz,Hotel Monte Carlo,6,Av. Montes Nro. 767 Centro De La PazLa Paz 9999 
+La Paz,Almudena Apart Hotel,8,Carlos Medinacelli Esq Borda 1022 Esquine BordaZona SopocachiLa Paz 9999 
+La Paz,Boutique Eco Resort & Spa Allkamari,6,Valle De Las Ánimas C. Camiraya S N La Paz Zona Chañoco - UniValle de Las ÁnimasPalca 
+La Paz,Hostal Republica,6,Comercio 1455 esquina Bueno (Zona Central)La PazBolivia 
+La Paz,Casa Prado Suites,6,Avenida 16 de Julio El Prado 1615La Paz 
+La Paz,Muzungu Hostel,4,Calle Illampu A441 esquina Santa CruzLa Paz 
+La Paz,Hostal Maya Inn,4,Calle Sagarnaga 339 Zona Rosario Cerca Plaza San FranciscoUbicado en la zona Central de La PazLa Paz 
+La Paz,Hostal Copacabana,5,Calle Illampu Numero 734 Stadtzentrum La Paz9999 La Paz 
+La Paz,La Colina Bed and Breakfast,6,Av. Los Jasminez No.17 Urb. Auquisamana Urb. Alto AuquisamanaLa Paz 2200 
+La Paz,Hostal Melody,6,Almirante Grau esq. General Gonzales #416 9999 La Paz 
+La Paz,Hostal Brisas del Titicaca,2,Av. 6 de Agosto 9999 Copacabana 
+La Paz,La Aldea Del Inca,6,San Antonio 2; Entre C General Jauregui Y C Michel Perez Entre Calle General Jauregui Y Calle Michel PerezCopacabana 
+La Paz,Hostal Villa Imperial,4,Av. 6 de Agosto Copacabana 
+La Paz,Hostal Puerto Alegre,5,Manuel Mena Mejia 190 Copacabana 9999 
+La Paz,Loki Hostel,5,Americas 120 Plaza Alonso de MendozaLa Paz Zona 9La Paz 
+La Paz,Hotel Lago Azul,6,Avenida Costanera No. 13 CopacabanaManco Kapac 
+La Paz,B&B Piacere Hotel,5,Calle Harrington 745 Esquina Abdón SaavedraSopocachiLa Paz 
+La Paz,Hostal Ananay,4,Jaen 710 La Paz 
+La Paz,La Posada de la Abuela Obdulia,5,Linares 947 Zona El RosarioLa Paz 
+La Paz,The Adventure Brew Hostel,5,Avenida Montes Nº 503 533 Zona 10La Paz 
+La Paz,Hotel Ensueños,5,Avenida 6 De Marzo 450 Entre Calles 4 y 512 De OctubreEl Alto 
+La Paz,Hostal Isidoros,6,Calle Cobija Nro. 120 Esquina de Calle Cobija con Calle ConstitucionLa Paz 
+La Paz,Kroosty & Kelly Homestay,2,Pasaje chaco #1077 pasaje Chaco entre General Lanza y Arturo Borda Entre Arturo Borda y General LanzaZona Cristo ReySopocachi 
+La Paz,Landscape Bolivian Home B&B,4,Reseguín 1945 Entre Aspiazu Y Harrington Sopocachi Entre Aspiazu Y HarringtonSopocachiLa Paz 
+La Paz,Hostal Real los Andes del Lago,4,Av. Busch S N Entre Av. 16 De Julio Y Costanera Entre Avenida 16 de Julio Y CostaneraCopacabana 0001 
+La Paz,Los Sauces Apart Hotel,6,Avenida Arequipa 8283 Esquina Los SaucesLa Paz 
+La Paz,Monticulo Apart Hotel,5,Calle Macario Pinilla 580 SopocachiLa Paz 
+La Paz,Hotel MITRU,8,Edificio Torre Girasoles Avenida 6 de Agosto N°2628Entre Pinilla y GosalvezLa Paz 
+La Paz,Bolivian Passport,5,Avenida Perú Esquina Beni  291La Paz 
+La Paz,Atix Hotel,8,Calacoto Calle 16 N 8052 between Patiño and Bustamante between Julio Patiño and Sánchez BustamanteCalacotoLa Paz 
+La Paz,Residencial Alta Vista,4,Calle Linares 826 Entre Santa Cruz Y Sagarnaga Entre Santa Cruz y Sagarnaga Entre Santa Cruz y SagarnagaLa Paz 
+La Paz,Hotel Alexander,6,Av. Jorge Carrasco Esq. Calle 3 Nro.61 El Alto Calle 3 No 61Zona 12 de OctubreEl Alto 
+La Paz,Landscape Apartment B&B,4,Av. Arce #2652 Frente Multicine. Edif. Mila Bloque A Piso 5 Apt. 501. Sopocachi Centro 5th FloorApartment 501Front of Multicine 
+La Paz,Elegance Hotel,6,Av. Saavedra MirafloresLa Paz 1845 
+La Paz,Hotel Boutique Palma Real,6,Calle Goitia N. 162 Av. Arce La Paz 
+La Paz,Hotel Viejo Molino Coroico,10,15 Min Walking Of Coroico´s Main Square On The Way To Santa Barbara Community Coroico 
+La Paz,Hostal Florencia,2,Calle Mena Mejia 120 Copacabana 
+La Paz,Bolivian Rooms & Suites (Zona Sur),6,Avenida Jose Aguirre Achá 490 Barrio Los PinosLa Paz 
+La Paz,Hostel Porvenir,6,Calle Murillo Esquina Tarija # 1014 La Paz 
+La Paz,Hotel Diamante Azul,6,Aroma No. 40 Y Esq. Illampu Esquina IllampuLa Paz 
+La Paz,Hotel Savoy,5,Calle Chuquisaca 675 San SebastiánLa Paz Zona 9La Paz 
+La Paz,Flavias Hostal Spa Sauna,6,Nanawa 1874 Miraflores Centro Miraflores CentroLa Paz 9999 
+La Paz,York B&B,4,Calle Sagarnaga 229 La Paz 
+La Paz,Tinka,6,Calle Jacinto Benavente Pasaje #250 Pasaje 250La Paz 0010 
+La Paz,Casa Mia Boutique Hotel Zona Sur Calacoto,6,Calle 11 Numero 7837 entre Avenida Ballivian e Inofuentes Entre Avenida Ballivian y Avenida InofuentesLa Paz 
+La Paz,Greenhouse Bolivia,4,Calle Victor Sanjinez 2866 La Paz 1011 
+La Paz,Rendezvous Hotel Restaurant,5,Subteniente M. Carranza 461 Final Avenida Sanchez LimaSopocachiLa Paz 3165 
+La Paz,Hotel Nuevo Sol,6,Linares Street 1011 Corner Juan XXIIILa Paz 
+La Paz,Qhini Hotel Boutique,6,Calle 4 580 ObrajesLa PazDepartamento La Paz 
+La Paz,Hotel La Cupula,5,Calle Michel Perez 1-3 CopacabanaDepartamento La Paz 
+La Paz,Anami Hotel Boutique,8,Calle Ecuador Casi Esquina Aspiazu 2049 Zona SopocachiLa Paz 
+La Paz,Qantu Hotel,6,Avenida Illampu 740 Zona El RosarioLa Paz 
+La Paz,York Vintage,4,Calle Murillo 743 La Paz 
+La Paz,Hostal Olas Del Titicaca,5,Avenida 16 De Julio Cruce Con Avenida BuschCopacabana 
+La Paz,Midtown La Paz,6,Avenida Hernando Siles 4503 Obrajes Avenida Hernando Siles y Calle 1ObrajesLa Paz 
+La Paz,Paitití Hostel,2,Calle Chiu-Chiu #1088 Esquina Juan Gutierrez PaniaguaLa Paz 
+La Paz,Casa Hotel Achumani,8,Calle 7 De Achumani # 732 Esquina Fuerza NavalLa Paz 
+La Paz,The Adventure Brew Downtown Hostel,2,Calle Tarija 238 La Paz 
+La Paz,Hostal Flor de Mi Tierra,2,Ruta Nacional 2 Avenida PanamericanaCopacabana 5912 
+La Paz,Hostal Austria,5,Calle Yanacocha 531 La Paz 0016 
+La Paz,3600 Hostel,5,Avinguda Ecuador corner of J.J. Perez #1982La Paz 
+La Paz,Hotel Rennova,8,Calle 13 de Calacoto Esq. Julio Patiño #695 La Paz 
+La Paz,Wild Rover La Paz,5,Calle Comercio 1476 La Paz 
+La Paz,Hotel Paraiso del Lago,5,Avenida Busch 1000 Copacabana 
+La Paz,Cruz de Los Andes,4,Calle Aroma 216 Zona El Rosario00591 La Paz 
+La Paz,Hotel Esmeralda,4,Calle Julio Zuazo Cuenca 725 Coroico 2040 
+La Paz,Hostal Joshua,5,Calle Manko kapac Copacabana 
+La Paz,Bunkie Hostel,5,Avenida Montes Nª641 La Paz 
+La Paz,Hostal Piedra Andina,5,Calle Sin Nombre Urbaniacion Bella VistaZona Bella VisitaCopacabana 
+La Paz,Hotel Orquídea,6,Avenida Satélite 632 Hospital Boliviano HolandésZona Ciudad SatéliteEl Alto 
+La Paz,Hotel Mirador del Lago,5,Avenida Costanera Esquina Buch S/Nzona LitoralCopacabana 0012 
+La Paz,Villa Bella,5,"Nor Yungas A 1,05 km De YolosaCamino A Coroico ViejoCoroico Viejo "
+La Paz,Casa Skyways B&B,5,Calle Pinilla y Ascarrunz 558 2do PisoZona SopochachiLa Paz 40100 
+La Paz,Microclima Posada del Monticulo,5,Calle Gregorio Reynolds 690 Bolivia Barrio SopocachiPlaza EspanaLa Paz 
+La Paz,La Maison De La Bolivie,4,Hermanos Manchego Street 2416 La Paz 
+La Paz,Savoy Bed and Breakfast,5,Chuquisaca Street Alonso de Mendoza Square 675 La Paz 1234 
+La Paz,Hostal Bellavista Inn,5,Calle Vicenta Eguino 442 La Paz 0022 
+La Paz,Hostal Iskanwaya,6,Calle General Gonzales Esquire Rodriguez Y LinaresLa Paz 1106 
+La Paz,Hb Apartments And Suites,6,Sopocachi Av. Sanchez Lima Entre Rosendo Gutierrez Y Belisario Salinas. Edificio Sky Tower Ed. Sky Tower Av. Sanchez Lima - entre Rosendo Gutierrez y Belisario SalinasEdificio Sky Tower3000 La Paz 
+La Paz,Hostal Sol Andino,5,Calle Aroma Zona RosarioEntre Illampu And Isacc TamayoLa Paz 0591 
+La Paz,Luxstone Executive & Suites,6,Avenida 6 De Agosto Entre Rozendo Gutierrez Edificio Torre 2255Zona SopochiLa Paz 
+La Paz,Hostal Umajalzu,4,Calle Potosi 1356 Entre Calles Colón y LoayzaLa Paz 
+La Paz,Wolf Hostel,2,Calle 7 lote 6 Avenida Gran Bretaña y Avenida ItaliaZona Rio AbajoAvircato 
+La Paz,Hostal Sonia,5,Ruta Nacional 2 Calle Murillo Esq Rosa Tejada 256Copacabana 
+La Paz,Hostal Pizarro,4,Avenue Bush Copacabana 1234 
+La Paz,Hostal Perla Negra,4,Avenida Armentia Calle Pedro Kramer 775 00000 La Paz La Paz 
+La Paz,Belmont Hotel,2,Avenida Illampu 867 La Paz City CentreLa Paz 
+La Paz,La Fonte - Hotel Boutique,4,2953 Prolongación Armaza Entre Ricardo Mujia Y Eduardo GuerraLa PazMurillo 
+La Paz,Hostal El Lobo,4,Calle Illampu Nro 807 Zona El RosarioLa Paz 9999 
+La Paz,Hotel Mitru Sur,8,Calle 23 Calacoto Avenue Fuerza Naval 948CalacotoLa Paz 
+La Paz,Selina La Paz,6,Av. 20 De Octubre 2080 Zona Sopocachi La Paz 1047 
+La Paz,Posada Velez,6,Calle 27 100 La Paz 
+La Paz,Hotel Madrid,6,Calles Junin Y Bolivar Indaburo 1157 La Paz City CentreLa Paz 
+La Paz,Hostal Salas,5,Calle Sagarnaga 534 Zona Gran PoderLa Paz 
+La Paz,The Cathedral,5,Calle Victor Sanjinez 2865 La Paz 9100 
+La Paz,Flamingo Hotel,4,Canada Strongest 1441 Zona San PedroLa Paz 
+La Paz,Star Shine B&B,5,Calle Pinilla Y Ascarrunz 525 La Paz 
+La Paz,Hostal Las Balsas,5,Avenida 16 De Julio s/n Esquina SaavedraZona GaritaCopacabana 
+La Paz,Pedacito de Cielo,5,Ubicado En Carretera Nor Yungas ComunidadAl Lado De La Escuela De La ComunidadCoroico Viejo 
+La Paz,Hotel Espejo,4,Calle Jauregui Frente Plaza 2 De FebreroCopacabana 
+La Paz,Guest Home B&B,5,Avenida Arce Entre Calle Jón Hermanos Manchegos 2576La Paz 
+La Paz,Ecohotel B&B El Biotopo,5,Calle 24 Calacoto Esquina Montenegro North 184La Paz 
+La Paz,Hostal toscana,5,Calle Gustavo Otero Calderón 1536 Entre Calle Otero De La Vega Y batallón SucreZona San PedroLa Paz 1536 
+La Paz,Hotel Bella Vista,5,Felix Reyes Ortiz A 120 MeterDel centroCoroico 
+La Paz,Cholet Havana,6,Avenida 16 De Julio 400B Entre Calle Catacora Y Alvarez PlataEl AltoLa Paz 
+La Paz,Hotel Espectacular,6,Calle 5 50 Esquina Francisco CarvajalVilla DoloresEl Alto 
+La Paz,Lost Inn La Paz,4,Av. Illampu #670 La Paz 
+La Paz,Hostal Gran Copacabana,6,Calle 5 400 Villa DoloresEntre Calle Francisco Carvajal Y Avenida TihuanacuCallampaya 
+La Paz,Hostal Don Nelo,5,Calle Casimiro Corrales 1056 MirafloresLa Paz 
+La Paz,Kusi,5,Avenida Costanera Esquina Rigoberto Paredes 3er Piso 
+La Paz,Loki Boutique,5,Calle Loayza 420 Downtown La Paz 
+La Paz,Tecno Boutique Hotel,10,Calle 5 Achumani N 586 La Paz 
+La Paz,Hostal Río Ibare,5,Calle Manuel Rodríguez 427 Paralela a la Avenida Tejada Sorzano 
+La Paz,Met Hotel,8,"Av. Fuerza Naval #1626 entre Calle 23 y 24 Calacoto 9999 La Paz, Bolivia "
+La Paz,HB 6 de Agosto,6,Av 6 De Agosto Btw Salinas & Salazar Ed. Hilda  
+La Paz,HB Calacoto,6,Av Ballivian Esquina 10 Edificio Germania  
+La Paz,Myapartment,6,Melchor Jimenez 688 Zona El Rosario  
+La Paz,Minimalist Department,6,Calle 24A No. 88 Urbanizacion Los Pinos Norte Calacoto  
+La Paz,Blue Pine Farm Lodge Cabanas,5,Ex Ferrocarril Lacahuarca  
+La Paz,Casa Grande Express,6,Sanchez Bustamante Entre 16 Y 17 1012  
+La Paz,A Place In The Sky,5,Calle 23 De Calacoto Edificio Isabela Maria Piso 19  
+La Paz,Meraki,6,Litoral 1261 Piso 7 Dpto. 7B  
+La Paz,Departamento En Miraflores,5,Avenida Saavedra #2016  
+La Paz,Hospedaje Milenio,5,Yanacocha 860  
+La Paz,Brussels Apartment,6,Guerilleros Lanza 1368 edificio Bruselas. Barrio Miraflores  
+La Paz,Hostal Flores Bolivia,5,Calle Alfredo Azcarrumz 2620 Spocachi  
+La Paz,Cozy Room,5,Calle 8 Calacoto Zona Sur # 8089  
+La Paz,Villa Hermosa,5,Carretera 3 Desvio Campamento Abc  
+La Paz,Centrico Segurovista Panoramica Desde Piso 20. Transporte Aeropuerto,5,Avenida Arce Edificio Santa Isabel  
+La Paz,Hostal Las Olas,5,Calle Michel Perez Nº1 3 Calle Jauregui  
+La Paz,Estrella Del Lago,5,Avenida Gonzalo Jauregui. A Media Cuadra De La Avenida Costanera  
+La Paz,Colibri Camping,4,Calle 4 Jupapina Near Mallasa  
+La Paz,Departamento por Temporadas,5,Avenida Hernando Siles 5621 Zona Sur La Paz  
+La Paz,Hostal Luz Yhobimar,5,Calle Max Paredes Entre Avenida16 De Julio Y Bolivar S N  
+La Paz,Miraflores Apart,5,Avenida Saavedra 1948  
+La Paz,Imperial Apartamento,5,Avenida Arce 2670 Edificio Apolo Piso 7 Apto. 701  
+La Paz,Hostal Palacio Del Inca,5,Camino Norte Sur A 100 Metros De La Punta Del Inca  
+La Paz,Apartamento Exclusivo Vip,5,Av. Arce Edificio Santa Isabel Bloque C Piso 2 Dpto 202  
+La Paz,Hostal La Casa Del Sol,5,Calle Jose Ballivian Zona Munaypata  
+La Paz,Residencial Uruguay,5,Avenida Uruguay N# 470  
+Cochabamba,Terracotta Casa del Azulejo,5,Yotala A 14Km De Sucre  
+Potosí,Hostal Tukos La Casa Real,6,Hoyos 29 Potosi 
+Potosí,Tonito Hotel,4,Avenida Ferroviaria N 60 Uyuni 
+Potosí,Hotel Julia,6,Avenida Ferroviaria Arce 314 Uyuni 0006 
+Potosí,Libertador,6,"Millares 58,58 POTOSI "
+Potosí,Cristal Samana,8,Salar de Uyuni Potosí Bolivia 
+Potosí,Hostal La Casona,4,calle Chuquisaca 460 Potosi 
+Potosí,Hotel Santa Teresa,6,Cll. Ayacucho No 43 Potosi 
+Potosí,Hotel Cima Argentum,8,Avenida Villazón Numero 239 Potosi 
+Potosí,Hostal Patrimonio Potosi,8,Calle Matos 62 Potosi 
+Potosí,Hotel Jardines de Uyuni,6,Potosi 113 9999 Potosi Uyuni 
+Potosí,Los Girasoles Hotel,6,Calle Santa Cruz 155 Uyuni 
+Potosí,Hotel Palacio de Sal,8,Orillas Salar De Uyuni UyuniPotosí 
+Potosí,Hotel Coloso Potosi,10,Calle Bolivar 965 Potosí 
+Potosí,Hostal Colonial Potosi,8,Hoyos #8 Potosí 
+Potosí,Hotel Museo Cayara,5,22 km ruta a Oruro CayaraPotosi 
+Potosí,Hotel De Sal Luna Salada,8,Salar De Uyuni Uyuni 
+Potosí,Cerro Rico,8,Calle Ramos # 123 Zona Barrio Colonial San Pedro Potosi 5912 
+Potosí,Hotel Jumari,4,Calle Sucre N 179 Uyuni 9999 
+Potosí,Oasis Blanco,6,Plaza Campero # 27 Entre calle Litoral y Avenida AvaroaUyuni 9999 
+Potosí,Hotel La Torre,6,Avenida Chichas 220 Tupiza 
+Potosí,Hotel Mitru,5,Av. Chichas 187 Tupiza 067 
+Potosí,Samay Wasi Uyuni,4,Av Potosi n°965 Entre Junin y Av 14 Entre c. Junín y c. 14 A Uyuni 
+Potosí,Cilos hotel,2,Calle Junin entre Fernando Alonzo y Calle Mexico 9999 Uyuni 
+Potosí,Residencial La Cabaña,4,Calle Bolivar entre Av. Ferroviaria y Av. Potosi 9999 Uyuni 
+Potosí,Hotel Salcay,2,Bolivar entre Potosi y Colon 9999 Uyuni 
+Potosí,Hostal Oro Blanco,6,Av. Ferroviaria nº 6 entre Sucre y Arce Entre Sucre y ArceUyuni 9999 
+Potosí,Hostal Butch Cassidy,4,Avenida Jose Luis San Juan Garcia s/n Zona de ChajrahuasTupiza 
+Potosí,Eucalyptus Hostal,5,Calle Linares 88A 9999 Potosi 
+Potosí,Claudia Hotel,6,Avenida del Maestro 322 Potosi 
+Potosí,Hostel Casa Blanca Potosi,5,Calle Tarija 35 Entre Calles Nogales Y ChuquisacaPotosí 2341Tomás Frías 
+Potosí,El Refugio del Turista,5,Av. Santa Cruz 425  
+Potosí,Anexo Mitru,6,Av. Avaroa 245 Tupiza 
+Potosí,Le Ciel d'Uyuni,5,Calle Sucre Esq. Av. Potosi UyuniPotosí 
+Potosí,Hostal Los Salares,6,Zona Chajrahuasi Calle Ecuador y ParaguayTupiza 
+Potosí,Apart Hotel Turquesa,6,Calle Enrique Viaña Nº 106 PotosiTomás Frías 
+Potosí,Hostal San Pedro Velmont,4,Calle Ramos 188 Potosi 
+Potosí,Hostal Reina del Salar,4,Avenida Potosi #19 Entre Bolivar y ArceUyuni 
+Potosí,Serma Hotel,5,Avenida Panamericana 11 PotosiDepartamento Potosí 
+Potosí,Hostal La Magia De Uyuni,4,Calle Colon Numero 432 Emtre Sucre y Camacho Entre Sucre y CamachoUyuni 2370 
+Potosí,Hostal Wilma,5,Interseccion Calles Montes y Potosi s/n TorotoroCharcas 
+Potosí,Hostal Coronel Pedro Arraya,5,Avenida Coronel Pedro Arraya 494 Tupiza 
+Potosí,Hotel de Sal Samarikuna,4,Community Villa Candelaria Colcha KPotosi 
+Potosí,Hotel Joya Andina,4,Calle Cabrera 473 Entre Sucre Y CamachoUyuni 9999 
+Potosí,Hostal Valle Hermoso,5,Avenida Pedro Arraya 478 0001 Tupiza 
+Potosí,Las Tholas Hotel,6,Avenida Ferroviaria 720 Uyuni 
+Potosí,Hotel de Sal Casa Andina,8,Avenida Potosi #61 Entre Calle Ayacucho Y 7ma AvenidaUyuni 
+Potosí,Hotel Kutimuy,5,Avenue Potosi Esquina Avaroa Uyuni 
+Potosí,Hotel Churata,5,Avenida Las Banderas 8 Potosi 2286 
+Potosí,Samaricusun Hotel,8,Calle Bustillos 857 Potosí 14555 
+Potosí,Hostal Koala Den,5,Calle Junin 56 Potosí 
+Potosí,Hostal Eden,5,Calle Saenz Torotoro 
+Potosí,Hostal Aramayo,5,Avenida Regimiento Chichas 230 Tupiza 
+Potosí,Vargas Hotel,5,Chuquisaca Street 77 9999 Tupiza 
+Potosí,Cabanas Umajalanta,5,Comunidad De Huayra Kasa Torotoro 
+Potosí,Hotel Aguilar,6,Calle Cabrera s/n Entre Loa Y JuninUyuni 
+Potosí,Hostal Valle Hermoso II,5,Avenida Pedro Arraya 505 Tupiza 0001 
+Potosí,Apart Hotel La Colonia,4,Calle Suipacha 473 Tupiza 
+Potosí,Beliz Inn B&B,4,Calle Mexico 126 Entre Camacho y SucreUyuni 
+Potosí,Wimaco Hostal De Sal,4,Calle Uruguay 222 Between Avenida Arce & Avenida BolivarUyuni 3693Potosi 
+Potosí,La Vicuna,5,Ingavi 184 Potosi 9999 
+Potosí,Cristales Joyas De Sal,8,Colon Esquina Novena 379 Uyuni 
+Potosí,Hostal Quinua Dorada,5,Calle Uruguay s/n Entre Calle Boliviar Y AvaroaUyuni 
+Potosí,El Grano De Oro Hotel,5,Avenida Pedro Arraya Tupiza 
+Potosí,Hostel Arcoiris,5,Avenida Arce 27 Uyuni 
+Potosí,Kory Wasy Hostal,4,Avenida Potosi Entre Sucre y Arce Uyuni 9999 
+Potosí,Atlantis,5,Calle Beni Tupiza 
+Potosí,KW Hotel,5,Avenida Potosí entre Santa Cruz y Colombia Uyuni 
+Potosí,JJ Hotel Cruz,5,Calle Florida Entre Avenida Chichar Y SerranosTupiza 
+Potosí,Hotel El Molino,5,Toro Toro National Park Toro ToroCharcasPotosi Department 
+Potosí,Rumi Kipu Hotel Boutique,5,Carretera Toro Toro km 2 Cochabamba 
+Potosí,Hostal La Predilecta,5,Intersection Of Avenida Cabrera & Sucre Uyuni 
+Potosí,Hostal La Roca Uyuni,5,Calle Bolivar Entre Colon y Potosi Uyuni 
+Potosí,Onkel Inn Wagon Sleepbox Uyuni,5,Avenue Ferroviaria Frente A Plaza Arce Estacion Central de Tren 
+Potosí,La Maison Martinet,6,Avenue Potosi  16 Frente Al Teatro Municipal 
+Potosí,Samarikuna Torotoro Hotel,5,"calle Cochabamba Pasaje Vásquez 1111 Torotoro, Bolivia "
+Potosí,Hostal La Realeza,5,Ayacucho #15 Frente Al Museo Casa De La Moneda  
+Potosí,Luna Salada Colchani,6,25 kms away from Uyuni town UYUNI 
+Potosí,Piedra Blanca Backpackers Hostel,5,Loa Esquina Tomás Frías Sin Número  
+Potosí,Calor de hogar con Altura,5,Calle Uruguay 214 Esquina Cheguevara Uruguay 214 Zona Ciudad Satelite  
+Potosí,Hostal Torotoro,5,Charcas Calle Saenz Sin Numero  
+Potosí,Hostal Terra,2,Avenida Potosi S N Entre Calle Camacho Y Sucre  
+Potosí,Casa De HuÉspedes MarÍa Victoria,5,156 Chuquisaca  
+Potosí,Eucalyptus Uyuni,5,Calle Cabrera  
+Potosí,Hotel Santa Mónica,6,Calle Sucre 46  
+Potosí,Hotel Boutique Atipax,8,Calle Mexico Esquina Junin  
+Beni,Hotel Perla Amazonica,5,Avenida Heroes Del Chaco 174 Barrio ConaviRiberalta 
+Beni,Maya de la Amazonia,10,Comercio esq. Beni s/nRurrenabaque 
+Beni,Hotel Ambaibo,5,Santa Cruz Rurrenabaque 
+Beni,Hostal El Lobo,5,Calle Comercio Esquina Calle Ballivian Rurrenabaque 5913Departamento Beni 
+Beni,El Curichal Hostel,5,Calle Comercio 1490 Rurrenabaque 
+Beni,Pampa And Selva,6,Avenida Comercio Esquina Calle PandoRurrenabaque 
+Beni,Casa De Campo,5,Calle Comercio Final Zona SurRurrenabaque 4085 
+Beni,Hotel Takana,4,Calle Comercio Frente A Plaza 2 De FebreroRurrenabaqueLa Paz 
+Beni,Hotel Pahuichi,2,Calle Comercio Vaca Diez Rurrenabaque 0591 
+Beni,Hotel Oriental Rurrenabaque,2,Unnamed Road Plaza 2 De FebreroRurrenabaque 
+Beni,Los Tucanes de rurre,5,Avenida Aniceto Arce RurrenabaqueBeni 
+Beni,La Isla De Los Tucanes,5,Entre Avenida Bolivar Y Amutari Rurrenabaque 
+Beni,Hotel Rurrenabaque,5,Vaca Diez s/n Esquina BolivarRurrenabaque 
+Beni,Hostal Santa Ana,5,Calle Avaroa 0000  
+Beni,Perezoso Hostel,5,Calle Tarija 4  
+Santa Cruz,Hotel La Mision,10,Calle Libertad s/n Plaza 31 de JulioSan Ignacio de Velasco 
+Santa Cruz,Aparthotel San Ignacio,8,Calle 24 de Septiembre y Cochabamba San Ignacio de VelascoSanta Cruz 
+Santa Cruz,Hotel Tierra Linda,6,Calle Comercio con Esquina Chiquitos San Ignacio de Velasco 
+Santa Cruz,HOTEL CAPARU,8,Unnamed Road San Ignacio De Velasco 
+Santa Cruz,San Xavier Quinta eco Resort,5,Carretera santa cruz San Javier 85620 
+Santa Cruz,Hotel Villa Chiquitana,10,Calle 9 De Abril Sin Numero  
+Santa Cruz,La Casona Chiquitana,5,"c. Ñuflo de Chávez, a 120 metros de la Plaza Principal de San José de Chiquitos - Santa Cruz  "
+Santa Cruz,El Suto Aparthotel,5,Avenida El Suto Barrio Santa Maria Ref 2 Estatuas BlancasSan Jose de Chiquitos 4876 
+Santa Cruz,Hotel Misiones de Chiquitos,10,Acera Norte Frente A Plaza Principal In front Of The Main SquareSan Jose de Chiquitos 
+Santa Cruz,Las Churapas Hotel,5,Avenida Ejercito Final San José De Chiquitos 
+Santa Cruz,Posada Don David,5,Calle 2 000 SinCuadras Subiendo Por Mercado TucabacaSantiago De Chiquitos 0591 
+Santa Cruz,Hotel K Misional,8,Ingavi Esquina Independencia Esquina IngaviManzana UnoSanta Cruz 
+Santa Cruz,Hotel Laguna Volcan Eco Resort,10,Carretera a Samaipata km 82 y medio Santa Cruz de la Sierra 
+Santa Cruz,Suites Apart Hotel Ortiz,6,Bolivar 657 Zona Central zona centralSanta Cruz 
+Santa Cruz,Hotel California,6,Calle Charagua 23 Avenida Canoto Zona 7 Calles (7 Calles)Santa Cruz de la SierraSanta Cruz 
+Santa Cruz,Urbari Apartment Hotel,6,Calle Igmiri 506 506 Barrio Urbari Casilla 1020Santa Cruz de la SierraSanta Cruz 
+Santa Cruz,La Quinta Apart Hotel,8,Barrio Urbari Calle Aruma Entre Av Pirai Y Grigota Barrio UrbariP.O. Box 1270Santa Cruz de la Sierra 
+Santa Cruz,Sun Hotel,6,Carretera Al Norte Km 12 Avenida Banzer Aeropuerto Internacional Viru Viru Santa Cruz De la Sierra 
+Santa Cruz,Hotel Rio Selva Resort Santa Cruz,10,km19 Carretera Norte Barrio SirariSanta Cruz de la Sierra 
+Santa Cruz,Senses Hotel Boutique,6,Sucre 5 Esquina 24 De Septiembre Plaza Principal Esquina 24 de SeptiembreSanta Cruz de la Sierra 
+Santa Cruz,Royal Hotel Equipetrol,8,Av San Martin N 200 Equipetrol Norte Equipetrol NorteSanta Cruz 
+Santa Cruz,Yotau Suites,6,Av. San Martin 7 Barrio EquipetrolSanta Cruz de la Sierra 
+Santa Cruz,House Inn Apart Hotel,10,Calle Colón 643 P.O. Box 387Santa Cruz de la Sierra 
+Santa Cruz,Las Palmas,8,Av. El Trompillo 604 Santa Cruz de la Sierra 
+Santa Cruz,Las Americas,6,Calle 21 de Mayo esq. Seoane Santa Cruz 
+Santa Cruz,Lido,8,21 de Mayo Street 527 Santa CruzPO box 2533 
+Santa Cruz,Gran Hotel Santa Cruz,8,RENE MORENO 289 SANTA CRUZ DE LA SIERRA 
+Santa Cruz,Hotel Casablanca,10,Avenida Marcelo Terceros Banzer Hotel Casablanca Zona EquipetrolSanta Cruz 
+Santa Cruz,Hotel Arenal,6,Calle Beni 340 Santa Cruz 
+Santa Cruz,Hotel Camino Real,8,Av. San Martin Y Av. Cuarto Anillo Equipetrol Norte P.O.BOX 2130Santa Cruz 
+Santa Cruz,Hotel Cortez,6,Av. Cristobal De Mendoza 280 PO Box 626Centro HistóricoSanta Cruz de la Sierra 
+Santa Cruz,Hotel Continental Park,6,Avenida Canoto 289 Esq. Calle Junin esq. Junín (Central) Santa Cruz de la Sierra 
+Santa Cruz,Tropical Inn,6,Calle España Nº 351 Zona CentralSanta Cruz de la Sierra 
+Santa Cruz,Apart Hotel Premium Suites,8,Calle Las Begonias 30 A 1 Cuadra De La Avenida San Martin EquipetrolSanta Cruz 
+Santa Cruz,Buganvillas Hotel Suites & Spa,8,Av. Roca Y Coronado 901 Santa Cruz 
+Santa Cruz,Biocentro Güembe,8,"Km. 5 camino a Porongo, zona Urubó SANTA CRUZ DE LA SIERRA "
+Santa Cruz,Lp Santa Cruz,6,Av. Ejercito Nacional 290 (frente Stadium Tahuichi) near Stadium TahuichiSanta Cruz de la Sierra 
+Santa Cruz,Caparuch,8,SAN MARTIN DE LA SIERRA SANTA CRUZ DE LA SIERRA 
+Santa Cruz,Los Tajibos Hotel and Convention Center,6,Av. San Martin 455 Barrio EquipetrolSanta Cruz 
+Santa Cruz,Los Cedros Eco Resort,10,Carretera Antigua A Cochabamba Km 23.5 La Guardia Km 23 Doble Via La GuardiaEstancia San MiguelitoSanta Cruz de la Sierra 
+Santa Cruz,Felimar,6,Calle Ayacgucho 445 Santa Cruz de la Sierra 
+Santa Cruz,El Canciller,6,Calle Ayacucho Nro 220 Santa Cruz de la Sierra 
+Santa Cruz,Toborochi Suites,6,Calle Jaimes Freire 7 Esq Av San Martin 2966 Santa Cruz Esq. Av. San MartinZona Barrio EquipetrolSanta Cruz 
+Santa Cruz,Hostal Los Aventureros,6,Tercer Anillo Interno Entre Av.Beni Y Av. Alemania SANTA CRUZ 
+Santa Cruz,Terranova Suites,6,7Mo Anillo 400 Mts Oeste Av Cristo Redentor Av. Cristo Redentor 400 mts al Oeste de Avenida Cristo RedentorSanta Cruz 
+Santa Cruz,Hotel Asturias,8,Moldes 154 SANTA CRUZ 
+Santa Cruz,Puerta del Rey,8,Av. Busch Esq. El Savador 689 Esquina El SalvadorSanta Cruz de la Sierra 
+Santa Cruz,Torre Hotel Ejecutivo,8,Av. El Trompillo 478 Santa Cruz 
+Santa Cruz,Los Trotamundos,4,"AV. BANZER CALLE 8, ENTRE 3ER Y 4TO ANILLO, 100 SANTA CRUZ "
+Santa Cruz,Gran Hotel Canada,6,Charcas 595 Y Abaroa AbaroaSanta Cruz De La Sierra 9999 
+Santa Cruz,Hotel La Sierra,6,Monseñor Salvatierra 474 Santa Cruz de la Sierra 
+Santa Cruz,Hotel Internacional,6,Calle Colon 437 Santa Cruz 
+Santa Cruz,Residencial Ikandire II,5,Calle Barron 571 Santa Cruz de la Sierra 
+Santa Cruz,Hotel Jenecheru,6,3er anillo interno 2355 Santa Cruz de la Sierra 9999 
+Santa Cruz,Senses Hotel Equipetrol,6,Av. San Martin # 6 2Do AnilloSanta Cruz de la Sierra 
+Santa Cruz,Hotel Libertador Simon Bolivar,6,Calle Buenos Aires 119 Esquina Libertad Esquina Libertada dos cuadras de la plaza principalSanta Cruz de la Sierra 
+Santa Cruz,Hotel Elisa,2,C Fray Del Pilar Nro 21 Santa Cruz de la Sierra 
+Santa Cruz,Hotel Madrid,6,Calle Cordillera 240 Santa Cruz de la Sierra 
+Santa Cruz,Casa Kolping,5,Av. Bernabé Sosa (Esquina Luis Lavadens) Santa Cruz 
+Santa Cruz,Sirari Suites Hotel,6,Barrio Sirari Calle Los Claveles 497 9999  Santa Cruz de la Sierra 
+Santa Cruz,Aviador Hotel Boutique,6,"Av. La Barranca # 35. Segundo Anillo, Santa Cruz de la Sierra, Bolivia  "
+Santa Cruz,Villa Magna Apart Hotel,6,Calle Barron # 70 Zona Central Zona CentralSanta Cruz de la Sierra 4258 
+Santa Cruz,Casa por Temporadas,6,Avenida Cristo Redentor Frente Al Cementerio Las Misiones Frente Al cementerio Las MisionesSanta Cruz 
+Santa Cruz,Lp Equipetrol,6,Dr Victor Pinto Esquina Av. Marcelo Terceros Banzer Zona Equipetrol esquina Marcelo Terceros Banzer 3rd Anillo Externo Esquina Dr. Viador PintoBarrio EquipetrolSanta Cruz de la Sierra 
+Santa Cruz,Santa Cruz Departamentos,4,"Avenida Beni Calle 5, Este nro 44 Condominio 25 Santa Cruz "
+Santa Cruz,Hotel Intercontinental 7 Calles,4,Calle Suárez de Figueroa Esquina CordilleraSanta Cruz 
+Santa Cruz,Residencial Ikandire,5,Calle Sucre 51 Santa Cruz De La Sierra 2489 
+Santa Cruz,Cinco Hotel Boutique,8,Calle los Claveles 530 Barrio SirariSanta Cruz 
+Santa Cruz,Hostal & Restaurante Warique,4,"Avenida Radial 27 entre 3º y 4º anillo, a 3 cuadras del ZoológicoSanta Cruz "
+Santa Cruz,La Jara Backpackers Hostel,5,Calle Otuquis 161 entre la suarez arana y charcasSanta Cruz de la Sierra 
+Santa Cruz,Loro Loco Hostel,2,Avenida Suarez Arana 134 entre primer y segundo anilloSanta Cruz de la Sierra 
+Santa Cruz,Hotel BV,8,Avenida Alemana #730 Santa Cruz de la Sierra 
+Santa Cruz,Casa Vida,6,Condominio Club Campestre Kilometro 13 Doble Via La Guardia Kilometro 13 doble via La Guardia Kilometro 13 doble via La Guardia0701 Santa Cruz de la Sierra 
+Santa Cruz,Terramia Resort & Spa,6,Ruta 7 Km 36 Carretera Al Norte Entre Warnes Y Montero Entre Warnes y MonteroEntrada A Las BarrerasSanta Cruz De La Sierra 0701 
+Santa Cruz,Terrasol Apartamentos,6,Calle Aroma 347 Entre C Caballero Y C Charcas Santa Cruz 
+Santa Cruz,Hampton by Hilton Santa Cruz,8,San Martin Avenue Esq Street E E Esquina Street E-EquipetrolSanta Cruz de la Sierra 
+Santa Cruz,Hostal Azteca,5,Calle Arenales No. 587  
+Santa Cruz,Hotel Hatfield,5,Calle Camiri 67 Suarez de FigeroaSanta Cruz de la Sierra 
+Santa Cruz,Jodanga Backpackers Hostel,4,El Fuerte 1380 Calle el Fuerte  1380Santa Cruz de la Sierra 
+Santa Cruz,Hostal Rio Magdalena,5,Calle Arenales 653 CentralSanta Cruz de la Sierra 
+Santa Cruz,La Siesta Hotel,6,C. Vallegrande No. 17 Entre Ingavi Y Ayacucho Entre Ingavi y AyacuchoSanta Cruz de la Sierra 
+Santa Cruz,Hotel Alaska,5,Florida  569 CentralSanta Cruz de la SierraSanta Cruz 
+Santa Cruz,Inboccalupo The Hotel Boutique,10,Alfonsina Storni #12 Equipetrol Santa Cruz de la SierraSanta Cruz 
+Santa Cruz,Prince Hotel,6,Pauro Street 64 N A Santa Cruz De La Sierra Santa Cruz 
+Santa Cruz,Radisson Hotel Santa Cruz,10,Avenida Segunda #4 Colinas del UrubóSanta Cruz 
+Santa Cruz,Senses Centro,6,calle Rene Moreno casi esquina Pari 247  
+Santa Cruz,Maisuites,10,Calle Los Pino #522 Esquina Los Lirios Zona Equipetrol Cuarto Anillo Esquina Calle Los LiriosZona Equipetrol Cuarto AnilloSanta Cruz 
+Santa Cruz,Santa Cruz Backpacker Hostel,5,Calle Yapacaní 267 entre calles Pedro Velez y Mario FloresSanta Cruz 
+Santa Cruz,Eco Resort Colpa Caranda,6,Carretera Al Norte Km 32 Antes De Llegar A Warnes La BelgicaSanta Cruz de la Sierra 
+Santa Cruz,Residencial Mundial Santa Cruz,5,Calle Caballero Esquina Murillo 166Santa Cruz 
+Santa Cruz,Hotel Roma,5,Calle 24 de Septiembre 530 Santa Cruz de la SierraSanta Cruz 
+Santa Cruz,Cosmopolitano Hotel Boutique,6,Pari 70 Centro HistoricoEntre Rene Moreno y IndependenciaSanta Cruz 
+Santa Cruz,Veronica Hotel Boutique,5,Calle Córdoba 10 Avenida San Martin entre 2do y 3er anillo EquipetrolSanta Cruz de la SierraDepartamento Santa Cruz 
+Santa Cruz,Hotel Spa Santa Maria la Antigua,5,Buena Vista Km 93 La ArboledaSanta Cruz de la SierraSanta Cruz 
+Santa Cruz,Nomad Hostel,5,Calle Velasco 316 entre la calle Pari y mercado Santa Cruz de la SierraSanta Cruz 
+Santa Cruz,Buen Retiro Apart Hotel,5,Calle Florida 432 Between Sarha And Santa BarbaraSanta Cruz 
+Santa Cruz,Backpackers Apart & Suites,5,Calle Monseñor Salvatierra esquina Velasco 200 Santa Cruz de la SierraDepartamento Santa Cruz 
+Santa Cruz,Marriott Santa Cruz de la Sierra Hotel,10,4to Anillo Entre Radial 23 y Calle Las Ramblas s/n At Calle Las Ramblas Santa Cruz de la Sierra 10260 
+Santa Cruz,Hotel Plaza Center,6,Avenue Argamoza Tumusla 167Esquina TumuslaSanta Cruz 
+Santa Cruz,Hotel Plaza 24,5,Calle 24 De Septiembre 610 Esq. Vacadiez Esquina VacadiezSanta Cruz 
+Santa Cruz,Taos Apart Hotel,10,Calle Pablo Sanz 9 Equipetrol NorteSanta Cruz de la Sierra 5556 
+Santa Cruz,Hostal Ibiza,4,Calle Ayacucho 445 Santa Cruz 00591 
+Santa Cruz,Hotel By Armonia Scz,6,Avenida Guapay Canal Cotoca Cll Armonia 96Santa Cruz 
+Santa Cruz,Urban Suites,5,Calle Don Bosco Edificio Altos Del Sur Esquina Gualberto VillaroelSanta Cruz de la Sierra 
+Santa Cruz,hotel virgen pastora,6,Monseñor Salvatierra 466 Santa Cruz de la Sierra 0001 
+Santa Cruz,Casa Patio Hotel Boutique,8,"Avenida Iberica Calle 5, 6 Barrio Las PalmasSanta Cruz "
+Santa Cruz,Hotel La Casona,6,Av. Carlos Daher Harb S N Pasillo La Williams Pasillo la Williams Pasillo La WilliamsCamiri 
+Santa Cruz,360 Grados,5,Calle Abaroa 548 Entre calle 6 de agosto y vaca diezSanta Cruz de la Sierra 1111 
+Santa Cruz,Habitación en Condominio Casablanca,5,Avenida Marcelo Banzer 230 Tercer Anillo ExternoEntre Canal Isuto Y Avenida San MartinSanta Cruz De La Sierra 
+Santa Cruz,San Xavier Quinta eco Resort,5,Carretera santa cruz San Javier 85620 
+Santa Cruz,Sur Backpackers,5,Calle Guadalajara 8 Barrio GuadalupeSanta Cruz de la Sierra 
+Santa Cruz,Backpacker Bar&Suites,5,Calle Velasco 480 Entre Mons Salvatierra y MercadoDiagonal Iglesia San RoqueSanta Cruz 5913 
+Santa Cruz,Coco Jamboo Hostel,5,Bolivar 614 Santa Cruz De La Sierra 
+Santa Cruz,Pacifico Apart Hotel,5,Calle Riberalta 169 Zona CentroSanta Cruz 
+Santa Cruz,Hb Apartments And Suites Santa Cruz,6,Barrio Equipetrol Tercer Anillo Externo Entre Av. La Salle Y A. San Martin Hotel Casa Blanca Bloque 2 Condominio Casa Blanca Bloque 2 Av San Martin y Av La SalleCondominio Casa Blanca Bloque 2Santa Cruz 
+Santa Cruz,Residencial Dulce Amanecer,5,Avenida Brasil 341 Entre 1er Y 2 Do AnilloSanta Cruz 
+Santa Cruz,Hostal Doña Alicia,6,Avenida Cristobal De Mendoza 344 Entre Avenida Monseñor Rivero Y Avenida BeniSanta Cruz 
+Santa Cruz,Hotel G,6,Av Pedro Rivera 750 Esq. Av Alemana 591 Santa Cruz De La Sierra Esq Avenida Alemana 3er Anillo InternoSanta Cruz 
+Santa Cruz,Los Jazmines Hotel Resort,5,Zona Norte Sobre El 2do Anillo De Warnes A 20 minutos Del Aeropuerto Internacional De Viru-Viru Y A 30 Minutos De Santa CruzSanta Cruz 
+Santa Cruz,Hostal Don Nabil,5,Calle Magdalena 2835 Santa Cruz De La Sierra 
+Santa Cruz,Hotel Bolivia,4,"Libertad, 365 santa Cruz "
+Santa Cruz,Residencial Javi,5,Avenida Udalrrico Zambrana 4 Anillo Entre Avenida Pirai y Radial 17 1/2Santa Cruz de la Sierra 4230 
+Santa Cruz,Residencial La Casona Azul,4,Radial 21 207 Santa Cruz de la Sierra 
+Santa Cruz,Sibaris,5,Reyes Cardona 273 Santa Cruz De La Sierra 
+Santa Cruz,Swissotel Santa Cruz,8,CANAL ISUTO LOS PACHIO BARRIO 2 DE ABRIL Barrio 2 De Abril SANTA CRUZ DE LA SIERRA 0 
+Santa Cruz,Chairu Eco Hotel,6,"Calle Famboyanes Numero 173 1234 Santa Cruz de la Sierra, Bolivia "
+Santa Cruz,Premium Suites Deluxe Aparthotel Equipetrol,6,"Azucenas Nro 127 Azucenas Nro 127 1 block from San Martin Avenue 2477 Santa Cruz de la Sierra, Bolivia "
+Santa Cruz,Studio Mangales,5,Antonioi Vicente Barba 3200  
+Santa Cruz,Casa Moneda China,5,Kilometro 13 Doble Via La Guardia 9999 9999  
+Santa Cruz,Suite De La Moneda China,5,Condominio Club Campestre Kilometro 13 Doble Via La Guardia  
+Santa Cruz,Apartamento Equipetrol,5,Av Enrique Finot Esquina Nicolas Ortiz Edificio Macororo #7  
+Santa Cruz,Edificio Las Palmas 3100,5,Doble Via La Guardia Edificio Nro. 3100  
+Santa Cruz,Departamentos En Edificio Acrebol,5,Calle Acre Esquina Baures Ed. Acrebol  
+Santa Cruz,Amboro 360 Grados,5,Parque Amboro  
+Santa Cruz,Downtown Apartments altos Del Sur,5,Don Bosco Suites Altos El Sur Piso 4 Entre Av. Argentina Y Gualberto Villarroel Zona Las Americas  
+Santa Cruz,Departamento La Riviera,5,4To Anillo Y Av. Las Ramblas  
+Santa Cruz,Cesar's Tropical Hotel,5,Km. 158 Carretera Cochabamba Santa Cruz  
+Santa Cruz,Casa De Leny,5,Av.Roca Y Coronado Villa Fraterna . Barrio Curupau Condomino Las Nieves # 5  
+Santa Cruz,Departamento En Santa Cruz De La Sierra,5,Avenida Cristo Redentor Barrio Residencias Del Norte Entre 4To Y 5To Anillo. Calle 8 Esquina Tobrochi  
+Santa Cruz,Suite Casa Vida,5,Kilometro 13 Doble Via La Guardia 9999 9999 Santa Cruz De La Sierra  
+Santa Cruz,Portofino Iv,5,Santa Cruz De La Sierra Bolivia  
+Santa Cruz,City Lodge,5,Av. Santa Cruz Y 2Do Anillo  
+Santa Cruz,Studio Nano 4c By Go And Rest,5,Avenida San Martin Calle La Plata  
+Santa Cruz,El Retiro,5,Km 100 Carretera Samipata  
+Santa Cruz,Mi Bella Santa Cruz,5,Arenales 254 Arenales Entre Murillo Y Aroma  
+Santa Cruz,Departamento La Boutique,5,7 Oeste Edificio La Boutique Piso 2  
+Santa Cruz,Pequeno Y Acogedor Departamento,5,Av.Roca Y Coronado Pasando 4To. Anillo Condominio Cerrado  
+Santa Cruz,Condominio San Andres,5,24 De Septiembre 336 336  
+Santa Cruz,Sibaris Cañoto,5,Calle Mexico 125 Av. Cañoto  
+Santa Cruz,Hotel Viru Viru II,4,Av. Alameda 72 - Zona Valle Sanchez  
+Santa Cruz,TRYP by Wyndham Santa Cruz,8,"Av. San Martin, Calle 9 Este,no. 4, Equipetrol.  "
+Santa Cruz,Delfines Collection,6,Calle Pablo Sanz 29  
+Pando,Ecolodge La Estancia,5,Isla Del Sol Isla del SolLago Titicaca 
+Pando,Hotel Imperio del Sol,6,Parte Sur Isla del Sol 9999  Comunidad Yumani 
+Pando,Casa De La Luna,4,Comunidad Yumani Lado Sur Isla Del SolLado Sur 9999 
+Pando,Willka Kuti Hostal - Lado Norte Isla del Sol,5,Isla del Sol lado Norte Comunidad ChallapampaIsla del Sol 
+Pando,Hostal Jacha Inti,5,Comunidad Yumani Lado Sur de la Isla Del SolIsla del Sol 
+Pando,Refugio Ecologico Kalluchi,4,Comunidad Yumani Isla Del Sol 0002 
+Pando,Hostal Templo del Sol,5,Yumani 3929 Isla De Sol 
+Pando,Hostal Jallalla,5,Isla Del Sol  
+Pando,Utasawa,5,Isla Del Sol Bolivia  
+Pando,CabaÑas EcolÓgicas Santo Campo,6,Camino Al Pilcocaina  
+Pando,Hostal Phaxsi,5,Camino Norte Sur Puerto Yumani  
+Pando,Hostal Utama,5,Comino Norte  
+Pando,WiÑay Inti Lodge,5,Comunidad Yumani Lado Sur De Isla Del Sol  
+Chuquisaca,Las Torres Hostal,4,San Alberto Nº 19 Sucre 
+Chuquisaca,Hostal CasArte Takubamba,6,"Calle J.M.Serrano, 256 SUCRE "
+Chuquisaca,Mi Pueblo Samary Hotel Boutique,10,Dalence 349 Entre las calles Potosí y AvaroaSucre 
+Chuquisaca,Hostal Paola,5,Calle Colon 138 Sucre 9999 
+Chuquisaca,Capital Plaza Hotel,8,Plaza 25 De Mayo Nº 29 Sucre 
+Chuquisaca,Hotel Independencia,6,Calvo 31 Sucre 
+Chuquisaca,Hotel Premier,8,San Alberto 43 Sucre 9999 
+Chuquisaca,Hostal Bicentenario,4,Calle Junin 161 entre Ballivian y Miguel Ángel ValdaSucre 
+Chuquisaca,Hostal Cruz de Popayán Sucre,4,Calle Loa 881 Sucre 
+Chuquisaca,Casa Verde B&B,4,Potosi # 374 Sucre 
+Chuquisaca,B&B Santa Cecilia,6,Calle Potosi 386 Sucre 
+Chuquisaca,Glorieta Hotel,8,Bolivar Nº 128 Sucre 
+Chuquisaca,Real Audiencia,8,"CALLE POTOSI, 142 SUCRE "
+Chuquisaca,De Su Merced,8,C.Azurduy 16 Sucre 
+Chuquisaca,Hostal Colonial,8,Plaza 25 De Mayo Nro 3 Sucre 
+Chuquisaca,Parador Santa Maria la Real,10,Bolivar 625 Sucre Sucre 
+Chuquisaca,San Marino Royal Hotel,8,Calle Arenales 13 Sucre 
+Chuquisaca,Boutique La Posada,8,Audiencia 92 SucreChuquisaca 
+Chuquisaca,Villa Antigua Hotel,8,Calvo 237 Centro HistoricoSucre 
+Chuquisaca,Monasterio,8,Calle Calvo 140 SUCRE 
+Chuquisaca,Hostal Sucre,6,Calle Bustillos No. 113 PO Box 91Sucre 
+Chuquisaca,Casas Kolping,6,Pasaje Iturricha 265 Zona La RecoletaCasilla Nº 39Sucre 
+Chuquisaca,Sky Hacienda,6,Mosoj Llajta 19kms south from Sucre City 
+Chuquisaca,Hostal Recoleta Sur,4,Calle Ravelo Esq. Loa Esquina LoaCentralSucre 
+Chuquisaca,Hostal Patrimonio Sucre,8,Calle Grau No 154 Sucre 
+Chuquisaca,Hostal Corona Blanca,6,Aniceto Arce 267 Entre Urcullo y Avenida Hernando SilesSucre 9999 
+Chuquisaca,Hostelling Señor de las 3 Caidas,4,Calle Dalence 609 Sucre 
+Chuquisaca,Hostelling Bustillo,4,Bolivar N 161 Sucre 
+Chuquisaca,Travelers Guesthouse,4,Kilometro 7 # 242 In Front of Parque BolivarSucreChuquisaca 
+Chuquisaca,Hostal España,5,Calle España 138 SucreChuquisaca 
+Chuquisaca,Casa Solariega Hostal B&B,2,Calle Grau 241 Zona CentralSucreOropeza 
+Chuquisaca,La Escondida Hostal,5,Junin 445 Entre Ravelo y H. SilesSucre 
+Chuquisaca,Casa Al Tronco,5,Topater 57 Sucre 
+Chuquisaca,Casa de Huespedes Condor B&B,5,Eduardo Avaroa 243 Sucre 
+Chuquisaca,La Selenita,5,Calle José Mostajo 145 Entre Calle Bolivar y Calle Destacamento 317Sucre 
+Chuquisaca,Roles Hotel,10,Av. Juana Azurduy de Padilla esq. Ladislao Cabrera Esquina Ladislao CabreraSucre 
+Chuquisaca,Aladino's House,4,Jose Mostajo 135 Sucre 591 
+Chuquisaca,Casa Residencial Maya Inn B&B,4,Calvo 576 Between El Guereo And SuipachaSucreChuquisaca 
+Chuquisaca,Mandrágora Guest House,4,Calle Bolivar 582 Sucre 
+Chuquisaca,KulturBerlin,5,Avaroa 326 9999 Sucre 
+Chuquisaca,Hostal Copacabana,5,Avenida Hernando Siles 734 Entre Junin Y LoaSucre 
+Chuquisaca,Spanish Friends,5,Padilla 355 Sucre 0003 
+Chuquisaca,Colors House,5,Calle Dalence 109 Esquina Nicolas OrtizSucre 0591 
+Chuquisaca,Sermal Hotel,6,Avenida Jaime Mendoza Sucre 2030 
+Chuquisaca,Hostel Casa Blanca Sucre,5,Calle Loa 909 1234 Sucre 
+Chuquisaca,7 Patas Hostel,5,Calle Loa 525 Sucre 
+Chuquisaca,Mi Angeline,5,Calle Linares 15 Sucre 
+Chuquisaca,Viejo Olivo Bed & Breakfast,5,Calle Beni San Roque 31 Sucre 
+Chuquisaca,Egil B&B Quechua,5,Serrano 149 Sucre 5914 
+Chuquisaca,El Gobernador Hostal,6,Calle Gregorio Mendizabal 27 Sucre 
+Chuquisaca,Grand Hotel,6,Aniceto Arce 61 Sucre 
+Chuquisaca,On-Boutique,10,Calle Potosi 300 Esquina GrauChuquisacaSucre 2000 
+Chuquisaca,Casa de Huespedes,5,326 B Camargo Sucre 
+Chuquisaca,Imaynalla Hostel,4,Nicolas Ortiz 46 Sucre 
+Chuquisaca,Alojamiento El Turista Hostel,4,Ravelo 118 Sucre 
+Chuquisaca,The Celtic Cross,4,Grau Street 508 Sucre 0591 
+Chuquisaca,Hispano hostel,5,Calle Grau Nro 637 Sucre 
+Chuquisaca,Villa Oropeza Guest House,5,Loa 743 Sucre 0001 
+Chuquisaca,Berfran,6,Avenida German Mendoza 1825 Sucre 
+Chuquisaca,Las Lomas,5,Avenida Heroes Del Chaco Entre Boquerón Y BolívarFrente Al ComplejoDeportivo San Francisco 
+Chuquisaca,Cittadella Hostal,5,Bolivar 490 Sucre 0598 
+Chuquisaca,Casa Ramirez Guest House.,5,Calle Bolivar 609  
+Chuquisaca,San Felipe,5,Calle La Paz N 587  
+Tarija,Residencial Altiplano,6,"Level 3, Calle Junin #737 (between Ingavi and Bolivar)Los PanosasAvenida Belgrano #1640, 1000 Tarija "
+Tarija,La Pasarela,8,Coimata Km10 Tarija 
+Tarija,Hotel San Javier,6,Barrio San Luis s/n San LuisTarija 
+Tarija,Los Parrales Hotel Resort,10,Urbanización El Carmen De Aranjuez Km. 3 5 Tarija 
+Tarija,Terravina Hotel Del Vino,8,Bolivar E525 Tarija 
+Tarija,Hostal Carmen,6,Calle Ingavi O 0784 Tarija 
+Tarija,Hotel Victoria Plaza,6,La Madrid 282 Eesquina SucrePlaza PrincipalTarija 
+Tarija,Hostal Granny,8,Calle 15 De Abril #655 00000 Tarija Zona CentralTarija 9999 
+Tarija,Hotel Los Ceibos,8,Av. Panamericana Nro. 612 Central CentralTarija 0015 
+Tarija,Hotel Mitru Tarija,6,Calle Avaroa 450 Entre Issac Attle y DelgadilloBarrio Las PanosasTarija 9999 
+Tarija,Hotel Martinez,4,Av. La Paz 251  
+Tarija,Luz Palace Hotel,6,Calle Sucre Esq. Domingo Paz Nº 921 TarijaCercado 
+Tarija,Hotel El Salvador,6,Alejandro del Carpio 840 Tarija 
+Tarija,Hotel Las Panosas,6,Calle La Madrid 316 Esq. MendezTarijaBolivia 
+Tarija,Hostal Punta Arenas,6,"Av. Panamericana, entre Luis Campero y Timoteo Raña # 1544  "
+Tarija,Poneloya,8,Rio Seco 4 Tomatitas Tarija 
+Tarija,La Cupula Hostel and Camping,5,Calle Celedonio Avila 920 Barrio El Tejar FinalMedia Cuadra Antes De La Escuela De Policias EsbapolTarija 0601 
+Tarija,Chura Tierra Hotel Boutique,6,Avenida Belgrano 1640 Tarija 
+Tarija,Macondo De Pizza Pazza Hotel Resto Bar,6,Calle Sucre 508 Esquina15 De AbrilPlaza PrincipalTarija 
+Tarija,Kiwi Casita Aparthotel,6,Calle Ramon Rojas El Valle De La ConcepciónUriondoTarija 
+Tarija,Grand Hotel Tarija,5,Sucre Nro 762 Tarija 
+Tarija,Kultur Berlin Tarija Guesthouse,5,Calle Ballivian 367 Tarija 0001 
+Tarija,Tierra Nuestra,5,Calle Ingavi 463 Tarija 
+Tarija,Hostel Sucursal Del Cielo,5,2nd Floor 365 Bolivar StreetTarija 
+Tarija,Hosteria Bodega Valle Divino,5,Calle 6 De Julio Esquina VerdigueraValle De ConcepcionTarija 
+Tarija,La Poza Del Pato,5,Comunidad De Coimata Zona Turistica En Tarija La Ultima Casa En Coimata Al Lado De Las Pozas  
+Tarija,Linda Casa Acogedora,5,138 O'connor  
+Tarija,Namaste Hostel,5,Daniel Campos 1034 Entre Las Calles Cochabamba Y Corrado  
+Tarija,Hostal Urbano,5,Campero Entre Ingavi Y Bolivar No. 751 3Er Piso  
+La Paz,Posada Del Inca Lodge,6,Top Of Sun Island Top of Sun Island Lake TiticacaIsla del Sol 
+La Paz,Inca Utama Hotel,6,86 Carretera Asfaltada Lake Titicaca Huatajata 4785 Bolivia Copacabana4785 Huatajata 
+Potosí,Hostal Wilma,5,Interseccion Calles Montes y Potosi s/n TorotoroCharcas 
+Potosí,Hostal Eden,5,Calle Saenz Torotoro 
+Potosí,Cabanas Umajalanta,5,Comunidad De Huayra Kasa Torotoro 
+Potosí,Hotel El Molino,5,Toro Toro National Park Toro ToroCharcasPotosi Department 
+Potosí,Rumi Kipu Hotel Boutique,5,Carretera Toro Toro km 2 Cochabamba 
+Potosí,Hostal Torotoro,5,Charcas Calle Saenz Sin Numero  
+Beni,Hotel Piesta,6,Calle Manuel Limpias 120 Esquina Cochabamba Esquina CochabambaTrinidad 9999 
+Beni,Hotel Campanario,8,Avenida 6 De Agosto 80 CentralTrinidad 3273Beni 
+Beni,Hotel Boutique Del Rey,10,6 De Aagosto 374 Trinidad 3336 
+Beni,Hotel Laguna Jardín,5,Carretera Laguna Suarez km 6 Trinidad 9999 
+Beni,Hotel Río Ibare,5,Avenida Ganadera Frente a FexpoBeniTrinidad 
+Potosí,Hotel La Torre,6,Avenida Chichas 220 Tupiza 
+Potosí,Hotel Mitru,5,Av. Chichas 187 Tupiza 067 
+Potosí,Hostal Butch Cassidy,4,Avenida Jose Luis San Juan Garcia s/n Zona de ChajrahuasTupiza 
+Potosí,El Refugio del Turista,5,Av. Santa Cruz 425  
+Potosí,Anexo Mitru,6,Av. Avaroa 245 Tupiza 
+Potosí,Hostal Los Salares,6,Zona Chajrahuasi Calle Ecuador y ParaguayTupiza 
+Potosí,Hostal Coronel Pedro Arraya,5,Avenida Coronel Pedro Arraya 494 Tupiza 
+Potosí,Hostal Valle Hermoso,5,Avenida Pedro Arraya 478 0001 Tupiza 
+Potosí,Hostal Aramayo,5,Avenida Regimiento Chichas 230 Tupiza 
+Potosí,Vargas Hotel,5,Chuquisaca Street 77 9999 Tupiza 
+Potosí,Hostal Valle Hermoso II,5,Avenida Pedro Arraya 505 Tupiza 0001 
+Potosí,Apart Hotel La Colonia,4,Calle Suipacha 473 Tupiza 
+Potosí,El Grano De Oro Hotel,5,Avenida Pedro Arraya Tupiza 
+Potosí,Atlantis,5,Calle Beni Tupiza 
+Potosí,JJ Hotel Cruz,5,Calle Florida Entre Avenida Chichar Y SerranosTupiza 
+Oruro,Hotel Gloria Urmiri,6,Localidad Urmiri A 2 horas y media de la Ciudad de La PazUrmiriLa Paz 
+Oruro,Hotel Virgen Del Socavon,6,Junin 1179 Oruro 8920 
+Oruro,Hotel Eden By Bluebay,6,Bolivar 777 Esquina Presidente Montes Plaza Principal 10 de Febrero Plaza Principal (Central)OruroCercado 
+Oruro,Hotel Houston Oruro,4,Avenida 6 entre Bolivar y Sucre de Octubre N°61449999 Oruro 
+Oruro,Hotel Hidalgo,6,6 De Octubre 1616 Oruro 
+Oruro,Hotel Beirut Oruro,5,Avenida 6 De Agosto Entre Aroma Y RodriguezOruro 
+Oruro,The Oruro Inn,5,Lote 16  Huajara III Manzano BUna Cuadra Frente A La Nueva Terminal De Buses OruroOruro 
+Potosí,Tonito Hotel,4,Avenida Ferroviaria N 60 Uyuni 
+Potosí,Hotel Julia,6,Avenida Ferroviaria Arce 314 Uyuni 0006 
+Potosí,Cristal Samana,8,Salar de Uyuni Potosí Bolivia 
+Potosí,Hotel Jardines de Uyuni,6,Potosi 113 9999 Potosi Uyuni 
+Potosí,Los Girasoles Hotel,6,Calle Santa Cruz 155 Uyuni 
+Potosí,Hotel Palacio de Sal,8,Orillas Salar De Uyuni UyuniPotosí 
+Potosí,Hotel De Sal Luna Salada,8,Salar De Uyuni Uyuni 
+Potosí,Hotel Jumari,4,Calle Sucre N 179 Uyuni 9999 
+Potosí,Oasis Blanco,6,Plaza Campero # 27 Entre calle Litoral y Avenida AvaroaUyuni 9999 
+Potosí,Samay Wasi Uyuni,4,Av Potosi n°965 Entre Junin y Av 14 Entre c. Junín y c. 14 A Uyuni 
+Potosí,Cilos hotel,2,Calle Junin entre Fernando Alonzo y Calle Mexico 9999 Uyuni 
+Potosí,Residencial La Cabaña,4,Calle Bolivar entre Av. Ferroviaria y Av. Potosi 9999 Uyuni 
+Potosí,Hotel Salcay,2,Bolivar entre Potosi y Colon 9999 Uyuni 
+Potosí,Hostal Oro Blanco,6,Av. Ferroviaria nº 6 entre Sucre y Arce Entre Sucre y ArceUyuni 9999 
+Potosí,Le Ciel d'Uyuni,5,Calle Sucre Esq. Av. Potosi UyuniPotosí 
+Potosí,Hostal Reina del Salar,4,Avenida Potosi #19 Entre Bolivar y ArceUyuni 
+Potosí,Hostal La Magia De Uyuni,4,Calle Colon Numero 432 Emtre Sucre y Camacho Entre Sucre y CamachoUyuni 2370 
+Potosí,Hotel Joya Andina,4,Calle Cabrera 473 Entre Sucre Y CamachoUyuni 9999 
+Potosí,Las Tholas Hotel,6,Avenida Ferroviaria 720 Uyuni 
+Potosí,Hotel de Sal Casa Andina,8,Avenida Potosi #61 Entre Calle Ayacucho Y 7ma AvenidaUyuni 
+Potosí,Hotel Kutimuy,5,Avenue Potosi Esquina Avaroa Uyuni 
+Potosí,Hotel Aguilar,6,Calle Cabrera s/n Entre Loa Y JuninUyuni 
+Potosí,Beliz Inn B&B,4,Calle Mexico 126 Entre Camacho y SucreUyuni 
+Potosí,Wimaco Hostal De Sal,4,Calle Uruguay 222 Between Avenida Arce & Avenida BolivarUyuni 3693Potosi 
+Potosí,Cristales Joyas De Sal,8,Colon Esquina Novena 379 Uyuni 
+Potosí,Hostal Quinua Dorada,5,Calle Uruguay s/n Entre Calle Boliviar Y AvaroaUyuni 
+Potosí,Hostel Arcoiris,5,Avenida Arce 27 Uyuni 
+Potosí,Kory Wasy Hostal,4,Avenida Potosi Entre Sucre y Arce Uyuni 9999 
+Potosí,KW Hotel,5,Avenida Potosí entre Santa Cruz y Colombia Uyuni 
+Potosí,Hostal La Predilecta,5,Intersection Of Avenida Cabrera & Sucre Uyuni 
+Potosí,Hostal La Roca Uyuni,5,Calle Bolivar Entre Colon y Potosi Uyuni 
+Potosí,Onkel Inn Wagon Sleepbox Uyuni,5,Avenue Ferroviaria Frente A Plaza Arce Estacion Central de Tren 
+Potosí,La Maison Martinet,6,Avenue Potosi  16 Frente Al Teatro Municipal 
+Potosí,Luna Salada Colchani,6,25 kms away from Uyuni town UYUNI 
+Potosí,Piedra Blanca Backpackers Hostel,5,Loa Esquina Tomás Frías Sin Número  
+Potosí,Hostal Terra,2,Avenida Potosi S N Entre Calle Camacho Y Sucre  
+Potosí,Eucalyptus Uyuni,5,Calle Cabrera  
+Potosí,Hotel Boutique Atipax,8,Calle Mexico Esquina Junin  
+Santa Cruz,Plaza Pueblo Hotel,6,Calle Virrey Mendonza 132 VallegrandeDepartment of Santa Cruz 
+Santa Cruz,CabaÑa El Mirador Vallegrande,5,Zona El Mirador De La Cruz Barrio La Muralla Av. 2Do. Anillo Vallegrande  
