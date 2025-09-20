@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReservasService, Reserva } from '../../services/reservas.service';
+import { PagoService, Pago } from '../../services/pago.service';
 
 @Component({
   selector: 'app-reserva',
@@ -27,7 +28,7 @@ import { ReservasService, Reserva } from '../../services/reservas.service';
     nombreHuesped = '';
     correoHuesped = '';
 
-    constructor(private reservasService: ReservasService) {}
+  constructor(private reservasService: ReservasService, private pagoService: PagoService) {}
 
     ngOnInit() {
       this.reservasService.getReservas().subscribe(data => {
@@ -48,7 +49,22 @@ import { ReservasService, Reserva } from '../../services/reservas.service';
         alert('Por favor, completa todos los campos correctamente.');
         return;
       }
-      alert('¡Pago realizado con éxito!');
+      // Crear pago real en backend
+      const hoy = new Date().toISOString().slice(0, 10);
+      const pago: Pago = {
+        tipo_pago: 'tarjeta',
+        monto: this.total,
+        fecha: hoy,
+        fecha_creacion: hoy
+      };
+      this.pagoService.crearPago(pago).subscribe({
+        next: (res) => {
+          alert('Pago registrado en la base de datos. ID: ' + res.id_pago);
+        },
+        error: (err) => {
+          alert('Error al registrar el pago: ' + (err.error?.error || err.message));
+        }
+      });
     }
 
     confirmarReserva() {
