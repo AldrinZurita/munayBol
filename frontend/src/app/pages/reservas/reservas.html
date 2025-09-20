@@ -76,3 +76,17 @@
     </aside>
   </div>
 </div>
+  </div>
+
+  <section class="reservas-reales">
+    <h3>Reservas reales</h3>
+    <ul>
+      <li *ngFor="let reserva of reservas">
+        <b>ID:</b> {{ reserva.id_reserva }} |
+        <b>Hotel:</b> {{ reserva.codigo_hotel }} |
+        <b>Habitación:</b> {{ reserva.num_habitacion }} |
+        <b>Usuario:</b> {{ reserva.ci_usuario }} |
+        <b>Fecha reserva:</b> {{ reserva.fecha_reserva }}
+      </li>
+    </ul>
+  </section>
