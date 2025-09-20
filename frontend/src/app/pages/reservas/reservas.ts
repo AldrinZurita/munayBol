@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReservasService, Reserva } from '../../services/reservas.service';
 import { PagoService, Pago } from '../../services/pago.service';
@@ -8,9 +9,23 @@ import { PagoService, Pago } from '../../services/pago.service';
   templateUrl: './reservas.html',
   styleUrls: ['./reservas.scss'],
   standalone: true,
-  imports: [FormsModule]
+  imports: [FormsModule, CommonModule]
 })
 export class ReservaComponent implements OnInit {
+  hotel = { nombre: 'Hotel Demo', ciudad: 'La Paz', precio: 250 };
+  huespedes = 2;
+  noches = 1;
+  Habitacion = { precio: 250 };
+
+  get subtotal() {
+    return this.Habitacion.precio * this.noches;
+  }
+  get iva() {
+    return Math.round(this.subtotal * 0.13);
+  }
+  get total() {
+    return this.subtotal + this.iva;
+  }
   reservas: Reserva[] = [];
 
   //Inputs de pago
