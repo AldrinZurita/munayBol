@@ -1,9 +1,9 @@
 <nav class="navbar">
   <ul class="nav-list">
-    <li><a routerLink="/inicio" routerLinkActive="active">Inicio</a></li>
+    <li><a routerLink="/" routerLinkActive="active">Inicio</a></li>
     <li><a routerLink="/hoteles" routerLinkActive="active">Hoteles</a></li>
     <li><a routerLink="/paquetes" routerLinkActive="active">Paquetes Turísticos</a></li>
-    <li><a routerLink="/contacto" routerLinkActive="active">Contacto</a></li>
+    <li><a routerLink="/contacto" routerLinkActive="active">AsistenteIA</a></li>
   </ul>
   <ng-container *ngIf="isLoggedIn; else showLogin">
     <span class="username">{{ username }}</span>
