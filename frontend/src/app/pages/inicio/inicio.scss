@@ -14,7 +14,7 @@
   color:#fff;
   background:
     linear-gradient(0deg, rgba(0,0,0,0.38), rgba(0,0,0,0.38)),
-    url('https://images.pexels.com/photos/6097178/pexels-photo-6097178.jpeg') center/cover no-repeat #dfefff;
+    url('https://boliviamia.net/Images/Tourpics/atop-uyuni-06.jpg') center/cover no-repeat #dfefff;
   min-height: 420px;
 }
 .hero__inner{
@@ -27,7 +27,7 @@
 .hero__title{
   font-size: clamp(26px, 6vw, 44px);
   line-height: 1.1;
-  font-weight: 800;
+  font-size: 3rem;
   margin: 0 0 8px;
   color: #fff;
 }
@@ -119,4 +119,3 @@
   .card__title { font-size: 17px; }
   .card__text { font-size: 13px; }
 }
-
