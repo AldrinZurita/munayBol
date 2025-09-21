@@ -1,46 +1,60 @@
+.header-top {
+  padding: 15px 50px;
+  background-color: #fff;
+}
+
+
+.logo {
+  font-size: 2.5em; 
+  font-weight: bold;
+  color: #000; 
+}
+
 .navbar {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  position: relative;
-  background: #fff;
-  box-shadow: 0px 2px 4px rgba(0,0,0,0.05);
-  height: 60px;
-  z-index: 99;
+  padding: 10px 50px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .nav-list {
-  display: flex;
-  gap: 40px;
   list-style: none;
+  display: flex;
   margin: 0;
   padding: 0;
-}
-
-.navbar .login-btn {
-  position: absolute;
-  right: 40px;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 8px 20px;
-  background: #1976d2;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 16px;
+  gap: 30px;
 }
 
 .nav-list a {
   text-decoration: none;
   color: #333;
-  font-weight: 500;
-  font-size: 18px;
-  transition: color 0.2s;
+  font-size: large;
+  transition: color 0.3s ease;
 }
 
-.nav-list a.active,
-.nav-list a:hover {
-  color: #1976d2;
+.nav-list a.active {
+  color: #007a33; 
+  font-weight: 600;
+}
+
+h1{
+  color: #007a33;
+}
+
+.login-btn {
+  background-color: #007a33;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: #66BB6A;
 }
