@@ -1,15 +1,3 @@
-.header-top {
-  padding: 15px 50px;
-  background-color: #fff;
-}
-
-
-.logo {
-  font-size: 2.5em; 
-  font-weight: bold;
-  color: #000; 
-}
-
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -17,8 +5,39 @@
   padding: 10px 50px;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  flex-wrap: wrap;
 }
 
+h1 {
+  color: #016d2e;
+  font-size: 1.8em;
+  margin: 0;
+}
+
+/* Ocultar checkbox */
+.menu-toggle {
+  display: none;
+}
+
+/* Icono hamburguesa */
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #016d2e;
+}
+
+/* Contenedor de nav + login */
+.nav-content {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Lista de navegación */
 .nav-list {
   list-style: none;
   display: flex;
@@ -35,16 +54,13 @@
 }
 
 .nav-list a.active {
-  color: #01451d; 
+  color: #016d2e;
   font-weight: 600;
 }
 
-h1{
-  color: #01451d;
-}
-
+/* Botones */
 .login-btn {
-  background-color: #01451d;
+  background-color: #016d2e;
   color: #fff;
   border: none;
   padding: 12px 24px;
@@ -57,4 +73,89 @@ h1{
 
 .login-btn:hover {
   background-color: #66BB6A;
+}
+
+.logout-btn {
+  background-color: transparent;
+  color: #016d2e;
+  border: 2px solid #016d2e;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #016d2e;
+  color: white;
+}
+
+.username {
+  margin-right: 10px;
+  font-weight: 500;
+  color: #016d2e;
+}
+
+.session-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* ------------------------- */
+/* 📱 RESPONSIVE - MÓVIL */
+/* ------------------------- */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav-content {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    display: none;
+    margin-top: 10px;
+  }
+
+  /* Mostrar contenido cuando toggle está activo */
+  .menu-toggle:checked + .hamburger  {
+    display: flex;
+  }
+
+  .nav-list {
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+  }
+
+  .nav-list li {
+    width: 100%;
+    text-align: left;
+  }
+
+  .nav-list a {
+    font-size: 1.1em;
+    padding: 10px 0;
+    display: block;
+  }
+
+  .session-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .login-btn,
+  .logout-btn {
+    width: 100%;
+    text-align: left;
+  }
+
+  .username {
+    margin: 0 0 5px 0;
+  }
 }
