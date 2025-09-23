@@ -1,22 +1,32 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ReservasService, Reserva } from '../../services/reservas.service';
+import { PagoService, Pago } from '../../services/pago.service';
 
 @Component({
   selector: 'app-reserva',
   templateUrl: './reservas.html',
   styleUrls: ['./reservas.scss'],
   standalone: true,
-  imports: [FormsModule]
+  imports: [FormsModule, CommonModule]
 })
-export class ReservaComponent {
-  hotel = {
-    nombre: '',
-    ciudad: '',
-    precio: 0
-  };
-  huespedes = 1;
+export class ReservaComponent implements OnInit {
+  hotel = { nombre: 'Hotel Demo', ciudad: 'La Paz', precio: 250 };
+  huespedes = 2;
   noches = 1;
+  Habitacion = { precio: 250 };
+
+  get subtotal() {
+    return this.Habitacion.precio * this.noches;
+  }
+  get iva() {
+    return Math.round(this.subtotal * 0.13);
+  }
+  get total() {
+    return this.subtotal + this.iva;
+  }
+  reservas: Reserva[] = [];
 
   //Inputs de pago
   tarjeta = '';
@@ -28,25 +38,11 @@ export class ReservaComponent {
   nombreHuesped = '';
   correoHuesped = '';
 
-  //Calculos de precios
-  get subtotal() {
-    return this.hotel.precio * this.noches;
-  }
-  get iva() {
-    return Math.round(this.subtotal * 0.13);
-  }
-  get total() {
-    return this.subtotal + this.iva;
-  }
+  constructor(private reservasService: ReservasService, private pagoService: PagoService) {}
 
-  constructor(private route: ActivatedRoute) {
-    this.route.queryParams.subscribe(params => {
-      //Simulacion para recibir datos por query params
-      this.hotel.nombre = params['nombre'] || 'Hotel Inti Raymi';
-      this.hotel.ciudad = params['ciudad'] || 'La Paz';
-      this.hotel.precio = params['precio'] ? Number(params['precio']) : 250;
-      this.huespedes = params['huespedes'] ? Number(params['huespedes']) : 2;
-      this.noches = params['noches'] ? Number(params['noches']) : 1;
+  ngOnInit() {
+    this.reservasService.getReservas().subscribe(data => {
+      this.reservas = data;
     });
   }
 
@@ -63,7 +59,22 @@ export class ReservaComponent {
       alert('Por favor, completa todos los campos correctamente.');
       return;
     }
-    alert('¡Pago realizado con éxito!');
+    // Crear pago real en backend
+    const hoy = new Date().toISOString().slice(0, 10);
+    const pago: Pago = {
+      tipo_pago: 'tarjeta',
+      monto: this.total,
+      fecha: hoy,
+      fecha_creacion: hoy
+    };
+    this.pagoService.crearPago(pago).subscribe({
+      next: (res) => {
+        alert('Pago registrado en la base de datos. ID: ' + res.id_pago);
+      },
+      error: (err) => {
+        alert('Error al registrar el pago: ' + (err.error?.error || err.message));
+      }
+    });
   }
 
   confirmarReserva() {
