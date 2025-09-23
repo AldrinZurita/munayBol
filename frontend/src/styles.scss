@@ -37,3 +37,15 @@ body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.ms {
+  font-family: 'Material Symbols Outlined';
+  font-weight: 400;         /* 300..700 works */
+  font-style: normal;
+  font-size: 18px;
+  line-height: 1;
+  display: inline-flex;
+  vertical-align: middle;
+  color: inherit;
+}
+

@@ -1,46 +1,174 @@
 .navbar {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  padding: 10px 50px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
-  background: #fff;
-  box-shadow: 0px 2px 4px rgba(0,0,0,0.05);
-  height: 60px;
-  z-index: 99;
+  flex-wrap: wrap;
 }
 
-.nav-list {
+/* 👇 NUEVO: estilos para el enlace del logo */
+.logo {
+  text-decoration: none;   /* sin subrayado */
+  color: inherit;          /* mantiene el color del h1 */
+  cursor: pointer;
+  display: flex;           /* por si luego pones una imagen */
+  align-items: center;
+  flex-shrink: 0;          /* evita que el logo se encoja */
+}
+.logo h1 {
+  margin: 0;
+}
+
+h1 {
+  color: #016d2e;
+  font-size: 1.8em;
+  margin: 0;
+}
+
+/* Ocultar checkbox */
+.menu-toggle {
+  display: none;
+}
+
+/* Icono hamburguesa */
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #016d2e;
+}
+
+/* Contenedor de nav + login */
+.nav-content {
   display: flex;
-  gap: 40px;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Lista de navegación */
+.nav-list {
   list-style: none;
+  display: flex;
   margin: 0;
   padding: 0;
-}
-
-.navbar .login-btn {
-  position: absolute;
-  right: 40px;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 8px 20px;
-  background: #1976d2;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 16px;
+  gap: 30px;
 }
 
 .nav-list a {
   text-decoration: none;
   color: #333;
-  font-weight: 500;
-  font-size: 18px;
-  transition: color 0.2s;
+  font-size: large;
+  transition: color 0.3s ease;
 }
 
-.nav-list a.active,
-.nav-list a:hover {
-  color: #1976d2;
+.nav-list a.active {
+  color: #016d2e;
+  font-weight: 600;
+}
+
+/* Botones */
+.login-btn {
+  background-color: #016d2e;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: #66BB6A;
+}
+
+.logout-btn {
+  background-color: transparent;
+  color: #016d2e;
+  border: 2px solid #016d2e;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #016d2e;
+  color: white;
+}
+
+.username {
+  margin-right: 10px;
+  font-weight: 500;
+  color: #016d2e;
+}
+
+.session-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* ------------------------- */
+/* 📱 RESPONSIVE - MÓVIL */
+/* ------------------------- */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav-content {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    display: none;
+    margin-top: 10px;
+  }
+
+  /* Mostrar contenido cuando toggle está activo */
+  .menu-toggle:checked + .hamburger  {
+    display: flex;
+  }
+
+  .nav-list {
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+  }
+
+  .nav-list li {
+    width: 100%;
+    text-align: left;
+  }
+
+  .nav-list a {
+    font-size: 1.1em;
+    padding: 10px 0;
+    display: block;
+  }
+
+  .session-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .login-btn,
+  .logout-btn {
+    width: 100%;
+    text-align: left;
+  }
+
+  .username {
+    margin: 0 0 5px 0;
+  }
 }
