@@ -1,0 +1,78 @@
+:host { display: block; }
+
+.lugares-container {
+  max-width: 1100px; margin: 0 auto; padding: 24px;
+  .title { font-weight: 800; font-size: 28px; color: #0f172a; margin-bottom: 20px; }
+}
+
+.filtros-card {
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 18px 20px; margin-bottom: 22px;
+
+  h4 { margin: 0 0 14px; font-size: 16px; color: #0f172a; }
+
+  .filtros-grid {
+    display: grid; gap: 14px;
+
+    &.solo-uno {
+      grid-template-columns: 1fr auto;
+      @media (max-width: 560px) { grid-template-columns: 1fr; }
+    }
+
+    .filtro {
+      display: flex; flex-direction: column; gap: 6px;
+      label { font-size: 12px; color: #64748b; }
+      .select {
+        position: relative;
+        select {
+          width: 100%; appearance: none;
+          border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px 34px 10px 12px;
+          font-size: 14px; background: #fff;
+        }
+        .chev {
+          position: absolute; right: 10px; top: 50%;
+          transform: translateY(-50%);
+          display: inline-flex; align-items: center; justify-content: center;
+          pointer-events: none; color: #94a3b8;
+        }
+      }
+    }
+
+    .acciones { display: flex; align-items: end; }
+  }
+}
+
+/* unified button styling */
+.btn {
+  border: none; border-radius: 10px; padding: 10px 14px; font-weight: 600; cursor: pointer;
+
+  &.btn-primary {
+    background: #16a34a; /* same green for both buttons */
+    color: #fff;
+  }
+}
+
+.estado { color: #0f172a; padding: 10px 0; &.error { color: #dc2626; } }
+
+.lista { display: flex; flex-direction: column; gap: 14px; }
+
+.card-lugar {
+  display: grid; grid-template-columns: 1fr 220px; gap: 10px;
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 18px 18px;
+  @media (max-width: 780px) { grid-template-columns: 1fr; }
+
+  .card-left {
+    .lugar-nombre { margin: 0 0 8px; font-size: 20px; color: #0f172a; font-weight: 800; }
+    .meta {
+      display: flex; gap: 16px; padding: 0; margin: 0 0 10px; list-style: none; color: #334155;
+      .meta-item { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; }
+    }
+    .descripcion { margin: 0 0 10px; color: #334155; line-height: 1.45; }
+  }
+
+  .card-right {
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-end;
+  }
+}
+
+/* icon tweak */
+.icon-ms { margin-right: 6px; font-size: 16px; }

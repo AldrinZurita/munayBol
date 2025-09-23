@@ -9,6 +9,7 @@
   flex-wrap: wrap;
 }
 
+
 h1 {
   color: #016d2e;
   font-size: 1.8em;
@@ -44,14 +45,6 @@ h1 {
   margin: 0;
   padding: 0;
   gap: 30px;
-}
-
-.nav-list a {
-  text-decoration: none;
-  color: #333;
-  font-size: large;
-  transition: color 0.3s ease;
-}
 
 .nav-list a.active {
   color: #016d2e;
