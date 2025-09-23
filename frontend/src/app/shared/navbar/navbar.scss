@@ -9,18 +9,6 @@
   flex-wrap: wrap;
 }
 
-/* 👇 NUEVO: estilos para el enlace del logo */
-.logo {
-  text-decoration: none;   /* sin subrayado */
-  color: inherit;          /* mantiene el color del h1 */
-  cursor: pointer;
-  display: flex;           /* por si luego pones una imagen */
-  align-items: center;
-  flex-shrink: 0;          /* evita que el logo se encoja */
-}
-.logo h1 {
-  margin: 0;
-}
 
 h1 {
   color: #016d2e;
@@ -57,14 +45,6 @@ h1 {
   margin: 0;
   padding: 0;
   gap: 30px;
-}
-
-.nav-list a {
-  text-decoration: none;
-  color: #333;
-  font-size: large;
-  transition: color 0.3s ease;
-}
 
 .nav-list a.active {
   color: #016d2e;

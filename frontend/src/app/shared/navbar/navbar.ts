@@ -7,7 +7,7 @@ import { Usuario } from '../../interfaces/usuario.interface';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule], // Importa CommonModule para *ngIf
+  imports: [CommonModule, RouterModule], 
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.scss']
 })
