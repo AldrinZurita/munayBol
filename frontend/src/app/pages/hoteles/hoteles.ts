@@ -1,9 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HotelService } from '../../services/hotel';
-import { Hotel } from '../../interfaces/hotel.interface';
 import { FormsModule } from '@angular/forms';
+import { HotelService } from '../../services/hotel';
 import { AdminAuthService } from '../../services/admin-auth';
+
+export interface Hotel {
+  id_hotel: number;
+  nombre: string;
+  departamento: string;  // ciudad/departamento
+  ubicacion: string;
+  calificacion: number;  // 0..10
+  estado: boolean;       // not shown in UI, but kept for admin ops
+  fecha_creacion: string;
+}
 
 @Component({
   selector: 'app-hoteles',
@@ -15,9 +24,13 @@ import { AdminAuthService } from '../../services/admin-auth';
 export class Hoteles implements OnInit {
   hoteles: Hotel[] = [];
   hotelesFiltrados: Hotel[] = [];
+
+  // filtros
   ciudades: string[] = [];
   ciudadSeleccionada = '';
   calificacionSeleccionada = '';
+
+  // estado
   cargando = false;
   error = '';
   isSuperAdmin = false;
@@ -30,16 +43,23 @@ export class Hoteles implements OnInit {
   ngOnInit() {
     this.cargando = true;
     this.isSuperAdmin = this.authService.isLoggedIn();
+
     this.hotelService.getHoteles().subscribe({
-      next: hoteles => {
+      next: (hoteles) => {
         this.hoteles = hoteles;
-        this.ciudades = [
-          ...new Set(hoteles.map(h => h.departamento.trim()))
-        ];
-        this.hotelesFiltrados = [...hoteles];
+
+        // ciudades únicas (coerción + trim + drop empties + sort)
+        const allCities = this.hoteles
+          .map(h => String(h.departamento ?? '').trim())
+          .filter(s => s.length > 0);
+
+        this.ciudades = Array.from(new Set(allCities))
+          .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
+
+        this.hotelesFiltrados = [...this.hoteles];
         this.cargando = false;
       },
-      error: err => {
+      error: () => {
         this.error = 'No se pudo cargar la lista de hoteles';
         this.cargando = false;
       }
@@ -52,15 +72,17 @@ export class Hoteles implements OnInit {
     if (this.ciudadSeleccionada) {
       const ciudad = this.ciudadSeleccionada.trim().toLowerCase();
       filtrados = filtrados.filter(h =>
-        h.departamento.trim().toLowerCase() === ciudad
+        String(h.departamento ?? '').trim().toLowerCase() === ciudad
       );
     }
 
     if (this.calificacionSeleccionada) {
-      const calif = parseFloat(this.calificacionSeleccionada);
-      filtrados = filtrados.filter(h =>
-        Math.round(h.calificacion) === Math.round(calif)
-      );
+      const calif = Number(this.calificacionSeleccionada);
+      if (!Number.isNaN(calif)) {
+        filtrados = filtrados.filter(h =>
+          Math.round(h.calificacion) === Math.round(calif)
+        );
+      }
     }
 
     this.hotelesFiltrados = filtrados;
@@ -70,6 +92,7 @@ export class Hoteles implements OnInit {
     window.location.href = `/hoteles/${id_hotel}`;
   }
 
+  // ---------- Admin acciones (restauradas) ----------
   onAgregarHotel() {
     const nombre = prompt('Nombre del hotel:');
     const departamento = prompt('Departamento:');
@@ -85,12 +108,12 @@ export class Hoteles implements OnInit {
         estado
       };
       this.hotelService.agregarHotel(nuevoHotel).subscribe({
-        next: hotel => {
-          this.hoteles.push(hotel);
+        next: (hotel) => {
+          this.hoteles.push(hotel as Hotel);
           this.aplicarFiltros();
           alert('Hotel agregado correctamente');
         },
-        error: err => alert('Error al agregar hotel')
+        error: () => alert('Error al agregar hotel')
       });
     }
   }
@@ -111,12 +134,12 @@ export class Hoteles implements OnInit {
         estado
       };
       this.hotelService.actualizarHotel(hotelActualizado).subscribe({
-        next: h => {
+        next: (h) => {
           Object.assign(hotel, h);
           this.aplicarFiltros();
           alert('Hotel actualizado');
         },
-        error: err => alert('Error al actualizar hotel')
+        error: () => alert('Error al actualizar hotel')
       });
     }
   }
@@ -129,8 +152,34 @@ export class Hoteles implements OnInit {
           this.aplicarFiltros();
           alert('Hotel eliminado');
         },
-        error: err => alert('Error al eliminar hotel')
+        error: () => alert('Error al eliminar hotel')
       });
     }
+  }
+
+  // ---------- Rating helpers (mantener) ----------
+  /** Convert 0..10 score to 0..5 stars rounded to nearest 0.5 */
+  toStarScore10to5(score10: number): number {
+    const s = Math.max(0, Math.min(10, Number(score10) || 0));
+    return Math.round((s / 2) * 2) / 2; // nearest 0.5
+  }
+
+  /** Returns an array of 5 entries: 'full' | 'half' | 'empty' */
+  getStarIcons(score10: number): ('full'|'half'|'empty')[] {
+    const score5 = this.toStarScore10to5(score10);
+    const full = Math.floor(score5);
+    const half = score5 - full >= 0.5 ? 1 : 0;
+    const empty = 5 - full - half;
+
+    return [
+      ...Array(full).fill('full'),
+      ...Array(half).fill('half'),
+      ...Array(empty).fill('empty'),
+    ];
+  }
+
+  /** String like '4.5/5' based on 0..10 score */
+  formatFiveScale(score10: number): string {
+    return `${this.toStarScore10to5(score10).toFixed(1)}/5`;
   }
 }

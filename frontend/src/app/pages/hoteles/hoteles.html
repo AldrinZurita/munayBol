@@ -1,45 +1,91 @@
 <div class="hoteles-container">
-  <h1>Hoteles en Bolivia</h1>
+  <h1 class="title">Hoteles en Bolivia</h1>
 
-  <button *ngIf="isSuperAdmin" class="agregar-btn" (click)="onAgregarHotel()">Agregar Hotel</button>
+  <button *ngIf="isSuperAdmin" class="btn btn-secondary agregar-btn" (click)="onAgregarHotel()">
+    Agregar Hotel
+  </button>
 
-  <section class="filtros">
+  <!-- Filtros -->
+  <section class="filtros-card">
     <h4>Filtros de búsqueda</h4>
-    <div class="filtro-row">
-      <label for="ciudad">Ciudad:</label>
-      <select id="ciudad" [(ngModel)]="ciudadSeleccionada">
-        <option value="">Todas las ciudades</option>
-        <option *ngFor="let ciudad of ciudades" [value]="ciudad">{{ ciudad }}</option>
-      </select>
-    </div>
 
-    <div class="filtro-row">
-      <label for="calificacion">Calificación:</label>
-      <select id="calificacion" [(ngModel)]="calificacionSeleccionada">
-        <option value="">Todas</option>
-        <option *ngFor="let cal of [10,9,8,7,6,5,4,3,2,1,0]" [value]="cal">{{ cal }}</option>
-      </select>
-    </div>
+    <div class="filtros-grid">
+      <div class="filtro">
+        <label for="ciudad">Ciudad</label>
+        <div class="select">
+          <select id="ciudad" [(ngModel)]="ciudadSeleccionada">
+            <option value="">Todas las ciudades</option>
+            <option *ngFor="let ciudad of ciudades" [value]="ciudad">{{ ciudad }}</option>
+          </select>
+          <span class="chev"><span class="ms">expand_more</span></span>
+        </div>
+      </div>
 
-    <button class="aplicar-btn" (click)="aplicarFiltros()">Aplicar Filtros</button>
+      <div class="filtro">
+        <label for="calificacion">Calificación</label>
+        <div class="select">
+          <select id="calificacion" [(ngModel)]="calificacionSeleccionada">
+            <option value="">Todas</option>
+            <option *ngFor="let cal of [10,9,8,7,6,5,4,3,2,1,0]" [value]="cal">{{ cal }}</option>
+          </select>
+          <span class="chev"><span class="ms">expand_more</span></span>
+        </div>
+      </div>
+
+      <div class="acciones">
+        <button class="btn btn-primary" (click)="aplicarFiltros()">Aplicar Filtros</button>
+      </div>
+    </div>
   </section>
 
-  <section class="lista-hoteles">
-    <div *ngIf="cargando">Cargando hoteles...</div>
-    <div *ngIf="error">{{ error }}</div>
-    <div *ngIf="!cargando && hotelesFiltrados.length === 0 && !error">No hay hoteles que coincidan con el filtro.</div>
-    <div *ngFor="let hotel of hotelesFiltrados" class="hotel-card">
-      <h3>{{ hotel.nombre }}</h3>
-      <div class="hotel-info">
-        <div><strong>{{ hotel.departamento }}</strong></div>
-        <div>{{ hotel.calificacion }}/10</div>
-        <div class="hotel-descripcion">{{ hotel.ubicacion }}</div>
-        <div>Estado: <span [ngClass]="{ 'activo': hotel.estado, 'inactivo': !hotel.estado }">{{ hotel.estado ? 'Activo' : 'Inactivo' }}</span></div>
-        <div>Fecha de creación: {{ hotel.fecha_creacion }}</div>
+  <!-- Estados -->
+  <div *ngIf="cargando" class="estado">Cargando hoteles...</div>
+  <div *ngIf="error" class="estado error">{{ error }}</div>
+  <div *ngIf="!cargando && hotelesFiltrados.length === 0 && !error" class="estado">
+    No hay hoteles que coincidan con el filtro.
+  </div>
+
+  <!-- Lista -->
+  <section class="lista">
+    <article *ngFor="let hotel of hotelesFiltrados" class="card">
+      <div class="card-left">
+        <h3 class="hotel-nombre">{{ hotel.nombre }}</h3>
+
+        <ul class="meta">
+          <li class="meta-item">
+            <span class="ms icon-ms">location_on</span>
+            {{ hotel.departamento }}
+          </li>
+
+          <li class="meta-item rating">
+            <span class="stars">
+              <ng-container *ngFor="let s of getStarIcons(hotel.calificacion); let i = index">
+                <span class="ms star"
+                      [ngClass]="{'full': s==='full', 'half': s==='half', 'empty': s==='empty'}">
+                  {{ s === 'full' ? 'star' : (s === 'half' ? 'star_half' : 'star_outline') }}
+                </span>
+              </ng-container>
+            </span>
+            <span class="rating-text">{{ formatFiveScale(hotel.calificacion) }}</span>
+          </li>
+        </ul>
+
+        <p class="descripcion" *ngIf="hotel.ubicacion">{{ hotel.ubicacion }}</p>
+
+        <!-- Fecha de creación SOLO para admins (opcional, puedes borrar esta fila si no la quieres en absoluto) -->
+        <div class="fecha-admin" *ngIf="isSuperAdmin && hotel.fecha_creacion">
+          <span class="label">Fecha de creación:</span> {{ hotel.fecha_creacion | date:'longDate' }}
+        </div>
       </div>
-      <button class="detalles-btn" (click)="onVerDetalles(hotel.id_hotel)">Ver Detalles</button>
-      <button *ngIf="isSuperAdmin" class="editar-btn" (click)="onEditarHotel(hotel)">Editar</button>
-      <button *ngIf="isSuperAdmin" class="eliminar-btn" (click)="onEliminarHotel(hotel)">Eliminar</button>
-    </div>
+
+      <div class="card-right">
+        <button class="btn btn-primary" (click)="onVerDetalles(hotel.id_hotel)">Ver Detalles</button>
+
+        <div class="admin-actions" *ngIf="isSuperAdmin">
+          <button class="btn btn-secondary" (click)="onEditarHotel(hotel)">Editar</button>
+          <button class="btn btn-danger" (click)="onEliminarHotel(hotel)">Eliminar</button>
+        </div>
+      </div>
+    </article>
   </section>
 </div>
