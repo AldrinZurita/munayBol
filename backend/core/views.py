@@ -2,7 +2,7 @@ from rest_framework import viewsets, status, permissions
 from .models import Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias
 from .serializers import (
     UsuarioSerializer, HotelSerializer, LugarTuristicoSerializer, PagoSerializer,
-    HabitacionSerializer, ReservaSerializer, PaqueteSerializer, SugerenciasSerializer
+    HabitacionSerializer, ReservaSerializer, PaqueteSerializer, SugerenciasSerializer, LoginSerializer
 )
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -14,27 +14,36 @@ def home(request):
 
 class AdminLoginView(APIView):
     def post(self, request):
-        correo = request.data.get('correo')
-        contrasenia = request.data.get('contrasenia')
-        try:
-            usuario = Usuario.objects.get(
-                correo=correo,
-                contrasenia=contrasenia,
-                rol='superadmin',
-                estado=True
-            )
+        serializer = LoginSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        correo = serializer.validated_data["correo"]
+        contrasenia = serializer.validated_data["contrasenia"]
+
+        usuario = Usuario.objects.filter(
+            correo__iexact=correo,
+            rol="superadmin",
+            estado=True
+        ).first()
+
+        if usuario and usuario.contrasenia == contrasenia:
             return Response({
-                'ci': usuario.ci,
-                'nombre': usuario.nombre,
-                'correo': usuario.correo,
-                'rol': usuario.rol,
-                'pais': usuario.pais,
-                'pasaporte': usuario.pasaporte,
-                'estado': usuario.estado,
-                'fecha_creacion': usuario.fecha_creacion
+                "ci": usuario.ci,
+                "nombre": usuario.nombre,
+                "correo": usuario.correo,
+                "rol": usuario.rol,
+                "is_superadmin": True,
+                "pais": usuario.pais,
+                "pasaporte": usuario.pasaporte,
+                "estado": usuario.estado,
+                "fecha_creacion": usuario.fecha_creacion
             }, status=status.HTTP_200_OK)
-        except Usuario.DoesNotExist:
-            return Response({'error': 'Credenciales inválidas o usuario no autorizado'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response(
+            {"error": "Credenciales inválidas o usuario no autorizado"},
+            status=status.HTTP_401_UNAUTHORIZED
+        )
 
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
@@ -85,3 +94,28 @@ class PaqueteViewSet(viewsets.ModelViewSet):
 class SugerenciasViewSet(viewsets.ModelViewSet):
     queryset = Sugerencias.objects.all()
     serializer_class = SugerenciasSerializer
+
+class PaqueteViewSet(viewsets.ModelViewSet):
+    queryset = Paquete.objects.all()
+    serializer_class = PaqueteSerializer
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsSuperAdmin()]
+        return [permissions.IsAuthenticatedOrReadOnly()]
+    
+class ReservaViewSet(viewsets.ModelViewSet):
+    queryset = Reserva.objects.none()
+    serializer_class = ReservaSerializer
+
+    def get_queryset(self):
+        ci_usuario = self.request.headers.get("X-User-CI")
+        is_superadmin = self.request.headers.get("X-Is-Superadmin", "false").lower() == "true"
+
+        if not ci_usuario:
+            return Reserva.objects.none()
+
+        if is_superadmin:
+            return Reserva.objects.all()
+        else:
+            return Reserva.objects.filter(ci_usuario=ci_usuario)

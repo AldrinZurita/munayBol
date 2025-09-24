@@ -24,6 +24,8 @@ venv/
 # Environment variables
 .env
 .env.*
+backend/.env
+backkend_venv/
 
 # Docker
 *.pid
