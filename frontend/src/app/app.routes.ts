@@ -6,13 +6,16 @@ import { Inicio } from './pages/inicio/inicio';
 import { Habitaciones } from './pages/habitaciones/habitaciones';
 import { AdminLogin } from './pages/admin-login/admin-login';
 import { ReservaComponent } from './pages/reservas/reservas';
+import { AsistenteIa } from './pages/asistente-ia/asistente-ia';
 
 export const routes: Routes = [
-  { path: 'reservas', component: ReservaComponent},
-  { path: 'habitaciones', component: Habitaciones},
-  { path: 'lugares-turisticos', component: LugaresTuristicos},
-  { path: 'hoteles/:id', component: HotelDetalle},
-  { path: 'hoteles', component: Hoteles},
+  { path: 'reservas', component: ReservaComponent },
+  { path: 'habitaciones', component: Habitaciones },
+  { path: 'lugares-turisticos', component: LugaresTuristicos },
+  { path: 'hoteles/:id', component: HotelDetalle },
+  { path: 'hoteles', component: Hoteles },
+  { path: 'asistente-ia', component: AsistenteIa },
   { path: '', component: Inicio },
   { path: 'login', component: AdminLogin},    
 ];
+
