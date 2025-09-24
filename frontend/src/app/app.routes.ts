@@ -14,5 +14,5 @@ export const routes: Routes = [
   { path: 'hoteles/:id', component: HotelDetalle},
   { path: 'hoteles', component: Hoteles},
   { path: '', component: Inicio },
-  { path: 'admin-login', component: AdminLogin},
+  { path: 'login', component: AdminLogin},    
 ];

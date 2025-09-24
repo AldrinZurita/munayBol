@@ -1,8 +1,11 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import UsuarioViewSet, HotelViewSet, LugarTuristicoViewSet, PagoViewSet, HabitacionViewSet, ReservaViewSet, PaqueteViewSet, SugerenciasViewSet, AdminLoginView
+from rest_framework import routers
+from .views import (
+    UsuarioViewSet, HotelViewSet, LugarTuristicoViewSet,
+    PagoViewSet, HabitacionViewSet, ReservaViewSet, PaqueteViewSet, SugerenciasViewSet, SuperadminLoginView, home
+)
 
-router = DefaultRouter()
+router = routers.DefaultRouter()
 router.register(r'usuarios', UsuarioViewSet)
 router.register(r'hoteles', HotelViewSet)
 router.register(r'lugares', LugarTuristicoViewSet)
@@ -13,6 +16,7 @@ router.register(r'paquetes', PaqueteViewSet)
 router.register(r'sugerencias', SugerenciasViewSet)
 
 urlpatterns = [
+    path('', home, name='home'),
+    path('superadmin/login/', SuperadminLoginView.as_view(), name='superadmin-login'),
     path('', include(router.urls)),
-    path('auth/login/', AdminLoginView.as_view(), name='admin-login'),
 ]
