@@ -16,5 +16,6 @@ export const routes: Routes = [
   { path: 'hoteles', component: Hoteles },
   { path: 'asistente-ia', component: AsistenteIa },
   { path: '', component: Inicio },
-  { path: 'admin-login', component: AdminLogin },
+  { path: 'login', component: AdminLogin},    
 ];
+

@@ -27,6 +27,8 @@ class LugarTuristico(models.Model):
     departamento = models.CharField(max_length=100)
     tipo = models.CharField(max_length=50)
     fecha_creacion = models.DateField()
+    horario = models.CharField(max_length=255)
+    descripcion = models.TextField()
 
 class Pago(models.Model):
     id_pago = models.BigIntegerField(primary_key=True)
