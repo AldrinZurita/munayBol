@@ -1,31 +1,115 @@
-<div class="detalles-hotel-container">
-  <div *ngIf="cargandoHotel">Cargando información del hotel...</div>
-  <div *ngIf="errorHotel">{{ errorHotel }}</div>
-  <div *ngIf="hotel">
-    <h2>{{ hotel.nombre }}</h2>
-    <div class="hotel-info">
-      <div><strong>Ubicación:</strong> {{ hotel.ubicacion }}</div>
-      <div><strong>Departamento:</strong> {{ hotel.departamento }}</div>
-      <div><strong>Calificación:</strong> {{ hotel.calificacion }}/10</div>
-      <div><strong>Estado:</strong> <span [ngClass]="{ 'activo': hotel.estado, 'inactivo': !hotel.estado }">{{ hotel.estado ? 'Activo' : 'Inactivo' }}</span></div>
-      <div><strong>Fecha de creación:</strong> {{ hotel.fecha_creacion }}</div>
-    </div>
-  </div>
+<div class="hotel-detalle p-6 max-w-[1000px] mx-auto">
+  <div class="hotel-contenido flex flex-wrap gap-6">
 
-  <h3>Habitaciones de este hotel</h3>
-  <div *ngIf="cargandoHabitaciones">Cargando habitaciones...</div>
-  <div *ngIf="errorHabitaciones">{{ errorHabitaciones }}</div>
-  <div *ngIf="!cargandoHabitaciones && habitaciones.length === 0 && !errorHabitaciones">No hay habitaciones para este hotel.</div>
-  <div *ngFor="let habitacion of habitaciones" class="habitacion-card">
-    <h4>Habitación {{ habitacion.num }}</h4>
-    <div><strong>Características:</strong> {{ habitacion.caracteristicas }}</div>
-    <div><strong>Precio:</strong> {{ habitacion.precio }} BOB</div>
-    <div><strong>Capacidad:</strong> {{ habitacion.cant_huespedes }} huéspedes</div>
-    <div><strong>Estado:</strong>
-      <span [ngClass]="{ 'disponible': habitacion.disponible, 'nodisponible': !habitacion.disponible }">
-        {{ habitacion.disponible ? 'Disponible' : 'No disponible' }}
-      </span>
+    <!-- Contenedor de informacion -->
+    <div class="info-contenedor w-full md:w-[60%] flex flex-col gap-6">
+
+      <!-- Informacion del hotel -->
+      <div class="hotel-info shadow-strong border rounded-lg p-6 bg-white" *ngIf="hotel">
+        <div class="hotel-header flex justify-between items-start mb-6">
+          <div class="hotel-header-left">
+            <h2 class="hotel-title font-bold leading-tight text-[2rem]">{{ hotel.nombre }}</h2>
+            <p class="flex items-center mt-1 text-gray-700 text-[1rem]">
+              {{ hotel.ubicacion }}, {{ hotel.departamento }}
+            </p>
+          </div>
+          <div class="hotel-header-right text-right">
+            <div class="price-block">
+              <div class="text-orange font-bold text-[2.5rem] leading-none mb-1">{{ getPrecioHabitacion() }} BOB</div>
+              <div class="text-gray-600 text-sm">por noche</div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="flex items-center gap-1 mb-2">
+          <span class="stars" [style.--rating]="(hotel.calificacion || 0)/2">★★★★★</span>
+          <span class="score text-[0.95rem]">{{ hotel.calificacion }}/10</span>
+        </div>
+
+        <p class="text-gray-600 mb-4 text-[0.95rem]">
+          Hotel con encanto colonial y excelente ubicacion.
+        </p>
+
+        
+
+        <!-- Amenidades -->
+<div class="amenities flex flex-wrap gap-2 mt-2">
+  <span class="chip"><span class="chip-label">WiFi</span></span>
+  <span class="chip"><span class="chip-label">Desayuno</span></span>
+  <span class="chip"><span class="chip-label">Restaurante</span></span>
+  <span class="chip"><span class="chip-label">Estacionamiento</span></span>
+</div>
+
+<!-- Tarjetas informativas -->
+<div class="info-grid grid grid-cols-2 gap-4 text-sm text-gray-600 mt-4">
+  <div class="flex items-center">
+    <svg class="icon h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 6v6l4 2"></path><circle cx="12" cy="12" r="10"></circle></svg>
+    <span>Check-in: 15:00</span>
+  </div>
+  <div class="flex items-center">
+    <svg class="icon h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 6v6l4 2"></path><circle cx="12" cy="12" r="10"></circle></svg>
+    <span>Check-out: 12:00</span>
+  </div>
+  <div class="flex items-center">
+    <svg class="icon h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+    <span>Tipo: Doble Estándar</span>
+  </div>
+  <div class="flex items-center">
+    <svg class="icon h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg>
+    <span>Disponible</span>
+  </div>
+</div>
+
+
+        <p class="mt-4 text-[0.95rem]">Habitaciones disponibles: {{ habitaciones.length }}</p>
+      </div>
+
+      <!-- Ubicacion -->
+      <div class="hotel-ubicacion shadow-strong border rounded-lg p-6 bg-white" *ngIf="hotel">
+        <h3 class="font-semibold mb-2 text-[1.1rem]">Ubicacion</h3>
+        <p class="text-gray-600 mb-2 text-[0.95rem]">{{ hotel.ubicacion }}, {{ hotel.departamento }}</p>
+        <div class="mapa-placeholder bg-gray-100 h-40 flex items-center justify-center text-gray-500 rounded-lg text-[0.95rem]">
+          Mapa de ubicacion
+        </div>
+      </div>
+
+      <!-- Reviews -->
+      <div class="hotel-reviews shadow-strong border rounded-lg p-6 bg-white" *ngIf="reviews.length > 0">
+        <h3 class="text-lg font-semibold mb-4">Reviews de huespedes</h3>
+        <div class="review bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4" *ngFor="let review of reviews">
+          <p class="text-sm font-medium">{{ review.autor }} —
+            <span class="stars" [style.--rating]="review.calificacion">★★★★★</span>
+            <span class="score">{{ review.calificacion }}/5</span>
+          </p>
+          <p class="text-sm text-gray-700 italic mt-1">“{{ review.texto }}”</p>
+          <p class="text-xs text-gray-500 mt-1">{{ review.fecha }}</p>
+        </div>
+      </div>
+
     </div>
-    <div><strong>Fecha de creación:</strong> {{ habitacion.fecha_creacion }}</div>
+
+    <!-- Panel de reserva -->
+    <div class="reserva shadow-strong w-full md:w-[40%] border rounded-lg p-6 bg-white">
+      <h2 class="font-bold mb-4 text-center text-[1.25rem]">Reserva tu habitacion</h2>
+
+      <div class="precio-panel text-center p-4 bg-blue-100 rounded-lg mb-4">
+  <div class="precio text-orange font-bold text-[3rem] leading-none mb-1">{{ getPrecioHabitacion() }} BOB</div>
+  <div class="text-gray-600 text-sm">por noche</div>
+</div>
+
+
+      <p class="mb-2 text-[0.95rem]">Check-in: 12:00</p>
+      <p class="mb-2 text-[0.95rem]">Check-out: 12:00</p>
+      <p class="mb-2 text-[0.95rem]">Maximo {{ getCapacidadHabitacion() }} huespedes por habitacion</p>
+
+      <div class="text-center mb-4">
+        <button class="btn-reservar w-full px-6 py-3 rounded font-bold text-white bg-green-600 hover:bg-green-700 text-[1rem]" (click)="reservar()">Reservar Ahora</button>
+      </div>
+
+      <p class="text-gray-500 mt-2 text-[0.85rem]">✓ Cancelacion gratuita hasta 24 horas antes</p>
+      <p class="text-gray-500 mt-2 text-[0.85rem]">✓ No se requiere pago por adelantado</p>
+    </div>
+
   </div>
 </div>
