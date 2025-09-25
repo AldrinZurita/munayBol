@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { HabitacionService } from '../../services/habitacion';
 import { Habitacion } from '../../interfaces/habitacion.interface';
 
@@ -13,7 +13,7 @@ interface Review {
 
 @Component({
 	selector: 'app-habitacion-detalle',
-	imports: [CommonModule],
+		imports: [CommonModule, RouterModule],
 	templateUrl: './habitacion-detalle.html',
 	styleUrls: ['./habitacion-detalle.scss'],
 	standalone: true,

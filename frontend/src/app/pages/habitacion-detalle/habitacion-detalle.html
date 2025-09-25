@@ -61,7 +61,7 @@
 			<p class="mb-2 text-[0.95rem]">Máximo {{ getCapacidadHabitacion() }} huéspedes por habitación</p>
 
 			<div class="text-center mb-4">
-				<button class="btn-reservar w-full px-6 py-3 rounded font-bold text-white bg-green-600 hover:bg-green-700 text-[1rem]" (click)="reservar()">Reservar Ahora</button>
+				<a class="btn-reservar w-full px-6 py-3 rounded font-bold text-white bg-green-600 hover:bg-green-700 text-[1rem]" [routerLink]="['/reservas']">Reservar Ahora</a>
 			</div>
 
 			<p class="text-gray-500 mt-2 text-[0.85rem]">✓ Cancelación gratuita hasta 24 horas antes</p>
