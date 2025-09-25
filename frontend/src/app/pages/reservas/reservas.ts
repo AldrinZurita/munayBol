@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReservasService, Reserva } from '../../services/reservas.service';
 import { PagoService, Pago } from '../../services/pago.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-reserva',
@@ -11,11 +12,10 @@ import { PagoService, Pago } from '../../services/pago.service';
   standalone: true,
   imports: [FormsModule, CommonModule]
 })
-export class ReservaComponent implements OnInit {
-  hotel = { nombre: 'Hotel Demo', ciudad: 'La Paz', precio: 250 };
-  huespedes = 2;
+  hotel = { nombre: '', ciudad: '', precio: 0 };
+  huespedes = 1;
   noches = 1;
-  Habitacion = { precio: 250 };
+  Habitacion = { num: '', precio: 0, hotel: '', capacidad: 1 };
 
   get subtotal() {
     return this.Habitacion.precio * this.noches;
@@ -38,9 +38,21 @@ export class ReservaComponent implements OnInit {
   nombreHuesped = '';
   correoHuesped = '';
 
-  constructor(private reservasService: ReservasService, private pagoService: PagoService) {}
+  constructor(
+    private reservasService: ReservasService,
+    private pagoService: PagoService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.Habitacion.num = params['num'] || '';
+      this.Habitacion.precio = params['precio'] ? Number(params['precio']) : 0;
+      this.Habitacion.hotel = params['hotel'] || '';
+      this.Habitacion.capacidad = params['capacidad'] ? Number(params['capacidad']) : 1;
+      this.hotel.precio = this.Habitacion.precio;
+      this.huespedes = this.Habitacion.capacidad;
+    });
     this.reservasService.getReservas().subscribe(data => {
       this.reservas = data;
     });
