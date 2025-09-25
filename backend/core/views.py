@@ -24,7 +24,7 @@ def home(request):
     return HttpResponse("Bienvenido a la API MunayBol")
 
 # Login de superadmin
-class AdminLoginView(APIView):
+class SuperadminLoginView(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if not serializer.is_valid():
