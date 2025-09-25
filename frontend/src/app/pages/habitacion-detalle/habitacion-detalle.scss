@@ -1,0 +1,184 @@
+.btn-reservar {
+	padding: 0.45rem 1rem;
+	border-radius: 0.5rem;
+	font-weight: bold;
+	font-size: 1rem;
+	color: #fff;
+	background-color: #016d2e;
+	transition: background-color 0.2s;
+	border: none;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	display: block;
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+}
+.btn-reservar:hover {
+	background-color: #15803d;
+}
+.habitacion-detalle {
+	max-width: 1000px;
+	margin: 0 auto;
+	padding: 2rem;
+	font-family: 'Segoe UI', sans-serif;
+	color: #333;
+
+	.hotel-contenido {
+		display: flex;
+		flex-wrap: nowrap;
+		gap: 2rem;
+		align-items: flex-start;
+	}
+
+	.info-contenedor {
+		width: 60%;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.reserva {
+		width: 40%;
+		border-radius: 0.75rem;
+		background-color: #fff;
+		padding: 1.5rem;
+		border: 1px solid #ddd;
+		font-size: 1.15rem;
+	}
+
+	.shadow-strong {
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+	}
+
+	.hotel-info, .hotel-ubicacion, .hotel-reviews {
+		border-radius: 0.75rem;
+		background-color: #fff;
+		padding: 1.5rem;
+		border: 1px solid #ddd;
+		font-size: 1.15rem;
+	}
+
+	.hotel-title {
+		font-size: 2.25rem;
+		font-weight: 700;
+		line-height: 1.2;
+	}
+
+	.price-block .text-orange {
+		color: #FF9800;
+		font-size: 2rem;
+		font-weight: 700;
+	}
+
+	.stars {
+		font-size: 1.3rem;
+		letter-spacing: 0.1rem;
+		background: linear-gradient(90deg, #FFD700 calc(var(--rating) * 20%), #ccc calc(var(--rating) * 20%));
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+	}
+
+	.score {
+		font-size: 1.1rem;
+		color: #666;
+	}
+	.precio-panel {
+	background-color: #e3f2fd; // celeste claro
+	border-radius: 0.75rem;
+	padding: 1rem;
+	margin-bottom: 1rem;
+	text-align: center;
+
+	.precio {
+		font-size: 2rem;
+		font-weight: bold;
+		color: #FF9800; // naranja
+		margin-bottom: 0.5rem;
+	}
+
+	.text-gray-600 {
+		font-size: 1rem;
+		color: #666;
+	}
+}
+
+.hotel-header {
+	position: relative;
+
+	.hotel-header-right {
+		position: absolute;
+		top: 0;
+		right: 0;
+		text-align: right;
+
+		.price-block {
+			.text-orange {
+				font-size: 2.5rem;
+				font-weight: bold;
+				color: #FF9800;
+				line-height: 1;
+			}
+
+			.text-gray-600 {
+				font-size: 0.9rem;
+				color: #666;
+			}
+		}
+	}
+}
+
+
+	.amenities {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+.info-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1.5rem;
+	font-size: 1.25rem;
+	color: #666;
+	margin-top: 1rem;
+
+	.flex {
+		display: flex;
+		align-items: center;
+	}
+
+	.icon {
+		stroke: currentColor;
+		width: 1.25rem;
+		height: 1.25rem;
+		margin-right: 0.5rem;
+	}
+  
+	span {
+		font-size: 1rem;
+	}
+}
+
+	.chip {
+		display: flex;
+		align-items: center;
+		background-color: #f0f0f0;
+		border-radius: 0.5rem;
+		padding: 0.4rem 0.8rem;
+		font-size: 1.1rem;
+		color: #555;
+	}
+
+	.mapa-placeholder {
+		height: 160px;
+		background-color: #f0f0f0;
+		border-radius: 0.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #777;
+		font-size: 1.1rem;
+	}
+}
+/* ...existing code... */

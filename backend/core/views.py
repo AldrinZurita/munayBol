@@ -1,3 +1,4 @@
+
 from rest_framework import viewsets, status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,6 +10,7 @@ from .serializers import (
 )
 from .permissions import IsSuperAdmin
 
+
 # Función auxiliar para determinar si la petición viene de un superadmin
 def is_superadmin_request(request):
     """
@@ -18,6 +20,7 @@ def is_superadmin_request(request):
 
 # Vista de bienvenida
 def home(request):
+    from django.http import HttpResponse
     return HttpResponse("Bienvenido a la API MunayBol")
 
 # Login de superadmin
@@ -53,6 +56,7 @@ class AdminLoginView(APIView):
 
 
 # Usuario
+
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer

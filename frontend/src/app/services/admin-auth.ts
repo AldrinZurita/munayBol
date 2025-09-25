@@ -1,38 +1,37 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Observable, BehaviorSubject, tap } from 'rxjs';
-import { AdminLoginData } from '../interfaces/admin-login.interface';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Usuario } from '../interfaces/usuario.interface';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminAuthService {
-  private apiUrl = environment.apiUrl;
-  private adminUserSubject = new BehaviorSubject<Usuario | null>(null);
-  adminUser$ = this.adminUserSubject.asObservable();
+  private baseUrl = environment.apiUrl;
+  private adminUserSubject: BehaviorSubject<Usuario | null>;
+  public adminUser$: Observable<Usuario | null>;
 
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    // Solo lee localStorage si es navegador
+    let savedUser: Usuario | null = null;
     if (isPlatformBrowser(this.platformId)) {
-      const user = localStorage.getItem('adminUser');
-      if (user) {
-        this.adminUserSubject.next(JSON.parse(user));
-      }
+      const userJson = localStorage.getItem('adminUser');
+      savedUser = userJson ? JSON.parse(userJson) : null;
     }
+    this.adminUserSubject = new BehaviorSubject<Usuario | null>(savedUser);
+    this.adminUser$ = this.adminUserSubject.asObservable();
   }
 
-  login(data: AdminLoginData): Observable<Usuario> {
-    return this.http.post<Usuario>(`${this.apiUrl}auth/login/`, data).pipe(
+  login(data: { correo: string; contrasenia: string }): Observable<Usuario> {
+    return this.http.post<Usuario>(`${this.baseUrl}superadmin/login/`, data).pipe(
       tap(user => {
-        this.adminUserSubject.next(user);
-        if (isPlatformBrowser(this.platformId)) {
+        if (user && user.rol === 'superadmin' && user.estado && isPlatformBrowser(this.platformId)) {
           localStorage.setItem('adminUser', JSON.stringify(user));
+          this.adminUserSubject.next(user);
         }
       })
     );
