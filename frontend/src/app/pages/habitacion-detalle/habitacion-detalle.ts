@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { HabitacionService } from '../../services/habitacion';
 import { Habitacion } from '../../interfaces/habitacion.interface';
+import { Router } from '@angular/router';
+
 
 interface Review {
 	autor: string;
@@ -13,7 +15,7 @@ interface Review {
 
 @Component({
 	selector: 'app-habitacion-detalle',
-		imports: [CommonModule, RouterModule],
+	imports: [CommonModule, RouterModule],
 	templateUrl: './habitacion-detalle.html',
 	styleUrls: ['./habitacion-detalle.scss'],
 	standalone: true,

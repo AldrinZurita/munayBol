@@ -1,0 +1,65 @@
+<div class="lugar-detalle p-6 max-w-[1000px] mx-auto">
+    <!-- Volver -->
+    <a class="btn-volver" routerLink="/lugares-turisticos">← Volver a la lista</a>
+  
+    <!-- Estados -->
+    <div *ngIf="cargando" class="estado">Cargando...</div>
+    <div *ngIf="error" class="estado error">{{ error }}</div>
+  
+    <!-- Contenido -->
+    <div *ngIf="!cargando && !error && lugar" class="contenido">
+      <!-- Columna principal -->
+      <div class="col-izq">
+        <div class="card shadow-strong border rounded-lg p-6 bg-white">
+          <h2 class="titulo">{{ lugar.nombre }}</h2>
+  
+          <ul class="meta">
+            <li>
+              <span class="ms">location_on</span>
+              {{ lugar.departamento }}
+            </li>
+            <li *ngIf="lugar.tipo">
+              <span class="ms">sell</span>
+              {{ lugar.tipo }}
+            </li>
+            <li *ngIf="lugar.ubicacion">
+              <span class="ms">map</span>
+              {{ lugar.ubicacion }}
+            </li>
+          </ul>
+  
+          <p class="descripcion" *ngIf="lugar.descripcion">
+            {{ lugar.descripcion }}
+          </p>
+  
+          <p class="fecha" *ngIf="lugar.fecha_creacion">
+            Fecha de creación: {{ lugar.fecha_creacion }}
+          </p>
+        </div>
+      </div>
+  
+      <!-- Panel lateral -->
+      <div class="col-der">
+        <div class="card shadow-strong border rounded-lg p-6 bg-white">
+          <h3 class="subtitulo">Información útil</h3>
+  
+          <div class="info-item" *ngIf="lugar.horario">
+            <div class="label">Horario</div>
+            <div class="value">{{ lugar.horario }}</div>
+          </div>
+  
+          <div class="info-item">
+            <div class="label">Departamento</div>
+            <div class="value">{{ lugar.departamento }}</div>
+          </div>
+  
+          <div class="acciones">
+            <a class="btn-primario" routerLink="/paquetes">Ver paquetes</a>
+          </div>
+  
+          <p class="nota">ℹ️ Los horarios pueden cambiar en feriados.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
