@@ -22,4 +22,7 @@ export class ReservasService {
   getReservas(): Observable<Reserva[]> {
     return this.http.get<Reserva[]>(this.apiUrl);
   }
+  crearReserva(reserva: Partial<Reserva>): Observable<Reserva> {
+    return this.http.post<Reserva>(this.apiUrl, reserva);
+  }
 }

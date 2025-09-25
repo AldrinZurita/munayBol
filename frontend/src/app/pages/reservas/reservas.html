@@ -10,7 +10,7 @@
       <form>
         <label>
           Número de tarjeta
-          <input type="text" maxlength="19" placeholder="1234 5678 9012 3456" [(ngModel)]="tarjeta" name="tarjeta" required />
+          <input type="text" maxlength="19" placeholder="1234 5678 9012 3456" [(ngModel)]="tarjeta" name="tarjeta" required (input)="onTarjetaInput($event)" />
         </label>
         <label>
           Nombre del titular
@@ -19,7 +19,7 @@
         <div class="row">
           <label>
             Fecha de expiración
-            <input type="text" maxlength="5" placeholder="MM/AA" [(ngModel)]="expiracion" name="expiracion" required />
+            <input type="text" maxlength="5" placeholder="MM/AA" [(ngModel)]="expiracion" name="expiracion" required (input)="onExpiracionInput($event)" />
           </label>
           <label>
             CVV

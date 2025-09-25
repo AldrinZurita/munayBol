@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router'; // 👈 necesario para routerLink
 
 interface LugarTuristico {
   id_lugar: number;
@@ -15,7 +16,7 @@ interface LugarTuristico {
 @Component({
   selector: 'app-lugares-turisticos',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, RouterModule], // 👈 añade RouterModule
   templateUrl: './lugares-turisticos.html',
   styleUrls: ['./lugares-turisticos.scss'],
 })
@@ -29,7 +30,6 @@ export class LugaresTuristicos implements OnInit {
   cargando = false;
   error = '';
 
-  // Ajusta al endpoint real de tu backend
   private readonly baseUrl = '/api/lugares';
 
   constructor(private http: HttpClient) {}
@@ -41,7 +41,6 @@ export class LugaresTuristicos implements OnInit {
       next: (rows) => {
         this.lugares = rows;
 
-        // ciudades únicas (coerción + trim + drop empties + sort)
         const allCities = this.lugares
           .map(l => String(l.departamento ?? '').trim())
           .filter(s => s.length > 0);
@@ -72,7 +71,8 @@ export class LugaresTuristicos implements OnInit {
     this.lugaresFiltrados = filtrados;
   }
 
-  onVerDetalles(id_lugar: number) {
-    window.location.href = `/lugares-turisticos/${id_lugar}`;
-  }
+  // ❌ Ya no se necesita:
+  // onVerDetalles(id_lugar: number) {
+  //   window.location.href = `/lugares-turisticos/${id_lugar}`;
+  // }
 }
