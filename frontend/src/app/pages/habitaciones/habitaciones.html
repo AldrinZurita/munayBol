@@ -41,8 +41,9 @@
         </div>
         <div><strong>Fecha de creación:</strong> {{ habitacion.fecha_creacion }}</div>
       </div>
-      <button *ngIf="isSuperAdmin" class="editar-btn" (click)="onEditarHabitacion(habitacion)">Editar</button>
-      <button *ngIf="isSuperAdmin" class="eliminar-btn" (click)="onEliminarHabitacion(habitacion)">Eliminar</button>
+  <a class="ver-detalle-btn" [routerLink]="['/habitaciones', habitacion.num]">Ver detalle</a>
+  <button *ngIf="isSuperAdmin" class="editar-btn" (click)="onEditarHabitacion(habitacion)">Editar</button>
+  <button *ngIf="isSuperAdmin" class="eliminar-btn" (click)="onEliminarHabitacion(habitacion)">Eliminar</button>
     </div>
   </section>
 </div>
