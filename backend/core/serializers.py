@@ -40,3 +40,8 @@ class SugerenciasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sugerencias
         fields = '__all__' 
+
+class LoginSerializer(serializers.Serializer):
+    correo = serializers.EmailField()
+    contrasenia = serializers.CharField()
+    
