@@ -1,17 +1,26 @@
 from rest_framework import viewsets, status, permissions
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.http import HttpResponse
 from .models import Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias
 from .serializers import (
     UsuarioSerializer, HotelSerializer, LugarTuristicoSerializer, PagoSerializer,
     HabitacionSerializer, ReservaSerializer, PaqueteSerializer, SugerenciasSerializer, LoginSerializer
 )
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from django.http import HttpResponse
 from .permissions import IsSuperAdmin
 
+# Función auxiliar para determinar si la petición viene de un superadmin
+def is_superadmin_request(request):
+    """
+    Retorna True si los headers indican que el usuario es superadmin.
+    """
+    return request.headers.get("X-Is-Superadmin", "false").lower() == "true" and bool(request.headers.get("X-User-CI"))
+
+# Vista de bienvenida
 def home(request):
     return HttpResponse("Bienvenido a la API MunayBol")
 
+# Login de superadmin
 class AdminLoginView(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -40,16 +49,16 @@ class AdminLoginView(APIView):
                 "fecha_creacion": usuario.fecha_creacion
             }, status=status.HTTP_200_OK)
 
-        return Response(
-            {"error": "Credenciales inválidas o usuario no autorizado"},
-            status=status.HTTP_401_UNAUTHORIZED
-        )
+        return Response({"error": "Credenciales inválidas o usuario no autorizado"}, status=status.HTTP_401_UNAUTHORIZED)
 
+
+# Usuario
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
 
 
+# Hotel
 class HotelViewSet(viewsets.ModelViewSet):
     queryset = Hotel.objects.all()
     serializer_class = HotelSerializer
@@ -60,9 +69,7 @@ class HotelViewSet(viewsets.ModelViewSet):
         return [permissions.IsAuthenticatedOrReadOnly()]
 
     def get_queryset(self):
-        # El superadmin ve todos, los demás solo activos
-        is_superadmin = self.request.headers.get("X-Is-Superadmin", "false").lower() == "true"
-        if is_superadmin:
+        if is_superadmin_request(self.request):
             return Hotel.objects.all()
         return Hotel.objects.filter(estado=True)
 
@@ -73,29 +80,36 @@ class HotelViewSet(viewsets.ModelViewSet):
         return Response({"message": "Hotel desactivado correctamente"}, status=status.HTTP_200_OK)
 
 
+# Lugar Turístico
 class LugarTuristicoViewSet(viewsets.ModelViewSet):
     queryset = LugarTuristico.objects.all()
     serializer_class = LugarTuristicoSerializer
 
+
+# Pago
 class PagoViewSet(viewsets.ModelViewSet):
     queryset = Pago.objects.all()
     serializer_class = PagoSerializer
 
+
+# Habitacion
 class HabitacionViewSet(viewsets.ModelViewSet):
     queryset = Habitacion.objects.all()
     serializer_class = HabitacionSerializer
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            return [IsSuperAdmin()]
+            if is_superadmin_request(self.request):
+                return []
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("No tienes permiso para realizar esta acción")
         return [permissions.IsAuthenticatedOrReadOnly()]
 
     def get_queryset(self):
         queryset = Habitacion.objects.all()
         codigo_hotel = self.request.query_params.get('codigo_hotel')
-        is_superadmin = self.request.headers.get("X-Is-Superadmin", "false").lower() == "true"
 
-        if not is_superadmin:
+        if not is_superadmin_request(self.request):
             queryset = queryset.filter(disponible=True)
 
         if codigo_hotel is not None:
@@ -110,45 +124,41 @@ class HabitacionViewSet(viewsets.ModelViewSet):
         return Response({"message": "Habitación desactivada correctamente"}, status=status.HTTP_200_OK)
 
 
-class ReservaViewSet(viewsets.ModelViewSet):
-    queryset = Reserva.objects.all()
-    serializer_class = ReservaSerializer
-
-class PaqueteViewSet(viewsets.ModelViewSet):
-    queryset = Paquete.objects.all()
-    serializer_class = PaqueteSerializer
-
-    def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            return [IsSuperAdmin()] 
-        return [permissions.AllowAny()]
-
-
-class SugerenciasViewSet(viewsets.ModelViewSet):
-    queryset = Sugerencias.objects.all()
-    serializer_class = SugerenciasSerializer
-
-class PaqueteViewSet(viewsets.ModelViewSet):
-    queryset = Paquete.objects.all()
-    serializer_class = PaqueteSerializer
-
-    def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            return [IsSuperAdmin()]
-        return [permissions.IsAuthenticatedOrReadOnly()]
-    
+# Reserva
 class ReservaViewSet(viewsets.ModelViewSet):
     queryset = Reserva.objects.none()
     serializer_class = ReservaSerializer
 
     def get_queryset(self):
         ci_usuario = self.request.headers.get("X-User-CI")
-        is_superadmin = self.request.headers.get("X-Is-Superadmin", "false").lower() == "true"
-
         if not ci_usuario:
             return Reserva.objects.none()
 
-        if is_superadmin:
+        if is_superadmin_request(self.request):
             return Reserva.objects.all()
         else:
             return Reserva.objects.filter(ci_usuario=ci_usuario)
+
+
+# Paquete
+class PaqueteViewSet(viewsets.ModelViewSet):
+    queryset = Paquete.objects.all()
+    serializer_class = PaqueteSerializer
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            if is_superadmin_request(self.request):
+                return []
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("No tienes permiso para realizar esta acción")
+        return [permissions.AllowAny()]
+
+    def get_queryset(self):
+        # Todos los usuarios ven todos los paquetes
+        return Paquete.objects.all()
+
+
+# Sugerencias
+class SugerenciasViewSet(viewsets.ModelViewSet):
+    queryset = Sugerencias.objects.all()
+    serializer_class = SugerenciasSerializer
