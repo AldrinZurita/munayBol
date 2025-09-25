@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { HabitacionService } from '../../services/habitacion';
 import { Habitacion } from '../../interfaces/habitacion.interface';
 import { FormsModule } from '@angular/forms';
@@ -8,7 +9,7 @@ import { AdminAuthService } from '../../services/admin-auth';
 @Component({
   selector: 'app-habitaciones',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './habitaciones.html',
   styleUrls: ['./habitaciones.scss']
 })
