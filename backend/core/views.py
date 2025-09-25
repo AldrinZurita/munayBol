@@ -49,15 +49,29 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
 
+
 class HotelViewSet(viewsets.ModelViewSet):
     queryset = Hotel.objects.all()
     serializer_class = HotelSerializer
 
     def get_permissions(self):
-        # Solo superadmin puede crear, actualizar, eliminar
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
             return [IsSuperAdmin()]
         return [permissions.IsAuthenticatedOrReadOnly()]
+
+    def get_queryset(self):
+        # El superadmin ve todos, los demás solo activos
+        is_superadmin = self.request.headers.get("X-Is-Superadmin", "false").lower() == "true"
+        if is_superadmin:
+            return Hotel.objects.all()
+        return Hotel.objects.filter(estado=True)
+
+    def destroy(self, request, *args, **kwargs):
+        hotel = self.get_object()
+        hotel.estado = False
+        hotel.save()
+        return Response({"message": "Hotel desactivado correctamente"}, status=status.HTTP_200_OK)
+
 
 class LugarTuristicoViewSet(viewsets.ModelViewSet):
     queryset = LugarTuristico.objects.all()
@@ -77,11 +91,24 @@ class HabitacionViewSet(viewsets.ModelViewSet):
         return [permissions.IsAuthenticatedOrReadOnly()]
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = Habitacion.objects.all()
         codigo_hotel = self.request.query_params.get('codigo_hotel')
+        is_superadmin = self.request.headers.get("X-Is-Superadmin", "false").lower() == "true"
+
+        if not is_superadmin:
+            queryset = queryset.filter(disponible=True)
+
         if codigo_hotel is not None:
             queryset = queryset.filter(codigo_hotel_id=codigo_hotel)
+
         return queryset
+
+    def destroy(self, request, *args, **kwargs):
+        habitacion = self.get_object()
+        habitacion.disponible = False
+        habitacion.save()
+        return Response({"message": "Habitación desactivada correctamente"}, status=status.HTTP_200_OK)
+
 
 class ReservaViewSet(viewsets.ModelViewSet):
     queryset = Reserva.objects.all()
@@ -90,6 +117,12 @@ class ReservaViewSet(viewsets.ModelViewSet):
 class PaqueteViewSet(viewsets.ModelViewSet):
     queryset = Paquete.objects.all()
     serializer_class = PaqueteSerializer
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsSuperAdmin()] 
+        return [permissions.AllowAny()]
+
 
 class SugerenciasViewSet(viewsets.ModelViewSet):
     queryset = Sugerencias.objects.all()
