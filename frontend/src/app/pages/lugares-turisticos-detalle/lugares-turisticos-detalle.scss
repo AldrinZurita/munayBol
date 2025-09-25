@@ -1,0 +1,159 @@
+/* ===== Lugares Turísticos · Detalle (match Habitaciones) ===== */
+
+.lugar-detalle {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Segoe UI', sans-serif;
+    color: #333;
+  
+    /* Estados */
+    .estado {
+      padding: 16px;
+      border-radius: 0.75rem;
+      background: #f7f7f7;
+      margin-bottom: 1rem;
+  
+      &.error {
+        background: #ffeaea;
+        color: #a00;
+        border: 1px solid #f5c2c7;
+      }
+    }
+  
+    /* Layout principal: 3/2 columnas (igual a habitaciones) */
+    .contenido {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 2rem;
+      align-items: flex-start;
+  
+      /* Si usas utilidades como grid/md:grid-cols-5, esto igualará el resultado */
+      @media (max-width: 960px) {
+        grid-template-columns: 1fr;
+      }
+    }
+  
+    /* Tarjetas: mismas esquinas, borde y sombra fuerte */
+    .card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      font-size: 1.15rem;
+    }
+    .shadow-strong,
+    .card.shadow-strong,
+    .card.shadow { /* asegura misma sombra, uses la clase que uses */
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+  
+    /* Título principal (como .hotel-title) */
+    .titulo {
+      font-size: 2.25rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 0 0 0.75rem 0;
+    }
+  
+    /* Lista de meta (icono + texto) con verde corporativo */
+    .meta {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 0.75rem 0;
+      display: grid;
+      gap: 0.5rem;
+  
+      li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #333;
+  
+        .ms { /* Material Symbols */
+          font-family: 'Material Symbols Outlined', sans-serif;
+          font-size: 1.1rem;
+          color: #016d2e;           /* GREEN */
+          vertical-align: middle;
+        }
+      }
+    }
+  
+    /* Párrafos y fecha (mismos tonos que habitaciones) */
+    .descripcion {
+      color: #444;
+      line-height: 1.55;
+      margin-top: 0.25rem;
+    }
+    .fecha {
+      color: #666;
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+    }
+  
+    /* Panel lateral (Información útil) */
+    .subtitulo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0 0 0.75rem 0;
+    }
+  
+    .info-item {
+      margin-bottom: 0.75rem;
+  
+      .label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 2px;
+      }
+      .value {
+        color: #444;
+      }
+    }
+  
+    /* Nota */
+    .nota {
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+  }
+  
+  /* ===== Green theme (icons, links, CTAs) ===== */
+  
+  .btn-primario,
+  .btn-primary {
+    background-color: #016d2e;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.6rem;
+    padding: 0.55rem 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s, transform 0.08s ease-out;
+  
+    &:hover { background-color: #15803d; }
+    &:active { transform: translateY(1px); }
+  }
+  
+  .btn-volver,
+  a {
+    color: #016d2e;
+    text-decoration: none;
+    transition: color .2s;
+  
+    &:hover {
+      color: #15803d;
+      text-decoration: underline;
+    }
+  }
+  
+  /* Reutilizables (compat) */
+  .border { border: 1px solid #ddd; }
+  .rounded-lg { border-radius: 0.75rem; }
+  .text-gray-600 { color: #666; }
+  
+  
+  
