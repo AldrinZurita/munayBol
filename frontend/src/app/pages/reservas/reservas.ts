@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
   standalone: true,
   imports: [FormsModule, CommonModule]
 })
+export class ReservaComponent implements OnInit {
   hotel = { nombre: '', ciudad: '', precio: 0 };
   huespedes = 1;
   noches = 1;
@@ -33,6 +34,26 @@ import { ActivatedRoute } from '@angular/router';
   nombre = '';
   expiracion = '';
   cvv = '';
+
+  onTarjetaInput(event: any) {
+    let value = event.target.value.replace(/\D/g, '');
+    value = value.substring(0, 16);
+    let formatted = '';
+    for (let i = 0; i < value.length; i += 4) {
+      if (i > 0) formatted += ' ';
+      formatted += value.substring(i, i + 4);
+    }
+    this.tarjeta = formatted;
+  }
+
+  onExpiracionInput(event: any) {
+    let value = event.target.value.replace(/[^\d]/g, '');
+    if (value.length > 4) value = value.substring(0, 4);
+    if (value.length >= 3) {
+      value = value.substring(0, 2) + '/' + value.substring(2);
+    }
+    this.expiracion = value;
+  }
 
   //Inputs de reserva
   nombreHuesped = '';
@@ -59,16 +80,17 @@ import { ActivatedRoute } from '@angular/router';
   }
 
   //Validacion simple
-  pagoInvalido() {
-    return !this.tarjeta.match(/^\d{4} \d{4} \d{4} \d{4}$/) ||
+   pagoInvalido() {
+    return !(new RegExp(/^\d{4} \d{4} \d{4} \d{4}$/).exec(this.tarjeta)) ||
            !this.nombre.trim() ||
-           !this.expiracion.match(/^(0[1-9]|1[0-2])\/(\d{2})$/) ||
-           !this.cvv.match(/^\d{3}$/);
+           !(new RegExp(/^(0[1-9]|1[0-2])\/(\d{2})$/).exec(this.expiracion)) ||
+           !(new RegExp(/^\d{3}$/).exec(this.cvv));
   }
 
   confirmarPago() {
-    if (this.pagoInvalido()) {
-      alert('Por favor, completa todos los campos correctamente.');
+    // Simulación: solo valida formato básico y crea el pago
+    if (!this.tarjeta.trim() || !this.nombre.trim() || !this.expiracion.trim() || !this.cvv.trim()) {
+      alert('Completa todos los campos para simular el pago.');
       return;
     }
     // Crear pago real en backend
@@ -81,7 +103,22 @@ import { ActivatedRoute } from '@angular/router';
     };
     this.pagoService.crearPago(pago).subscribe({
       next: (res) => {
-        alert('Pago registrado en la base de datos. ID: ' + res.id_pago);
+        // Registrar reserva real con el id_pago recibido
+        const reserva = {
+          fecha_reserva: hoy,
+          num_habitacion: this.Habitacion.num,
+          codigo_hotel: Number(this.Habitacion.hotel),
+          ci_usuario: 1, // Aquí deberías poner el usuario real
+          id_pago: res.id_pago
+        };
+        this.reservasService.crearReserva(reserva).subscribe({
+          next: (r) => {
+            alert('Reserva registrada. ID: ' + r.id_reserva);
+          },
+          error: (err) => {
+            alert('Error al registrar la reserva: ' + (err.error?.error || err.message));
+          }
+        });
       },
       error: (err) => {
         alert('Error al registrar el pago: ' + (err.error?.error || err.message));
