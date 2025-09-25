@@ -25,7 +25,7 @@ venv/
 .env
 .env.*
 backend/.env
-backkend_venv/
+backend_venv/
 
 # Docker
 *.pid
