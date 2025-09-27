@@ -1,0 +1,76 @@
+<div class="habitacion-detalle p-6 max-w-[1000px] mx-auto">
+	<div class="hotel-contenido flex flex-wrap gap-6">
+
+		<!-- Contenedor de informacion -->
+		<div class="info-contenedor w-full md:w-[60%] flex flex-col gap-6">
+
+			<!-- Informacion de la habitacion -->
+			<div class="hotel-info shadow-strong border rounded-lg p-6 bg-white" *ngIf="habitacion">
+				<div class="hotel-header flex justify-between items-start mb-6">
+					<div class="hotel-header-left">
+						<h2 class="hotel-title font-bold leading-tight text-[2rem]">Habitación {{ habitacion.num }}</h2>
+						<p class="flex items-center mt-1 text-gray-700 text-[1rem]">
+							{{ habitacion.caracteristicas }}
+						</p>
+					</div>
+					<div class="hotel-header-right text-right">
+						<div class="price-block">
+							<div class="text-orange font-bold text-[2.5rem] leading-none mb-1">{{ getPrecioHabitacion() }} BOB</div>
+							<div class="text-gray-600 text-sm">por noche</div>
+						</div>
+					</div>
+				</div>
+
+				<p class="text-gray-600 mb-4 text-[0.95rem]">
+					Capacidad: {{ habitacion.cant_huespedes }} huéspedes
+				</p>
+
+				<div class="flex items-center gap-1 mb-2">
+					<span class="score text-[0.95rem]">Disponible: {{ habitacion.disponible ? 'Sí' : 'No' }}</span>
+				</div>
+
+				<p class="mt-4 text-[0.95rem]">Fecha de creación: {{ habitacion.fecha_creacion }}</p>
+			</div>
+
+			<!-- Reviews -->
+			<div class="hotel-reviews shadow-strong border rounded-lg p-6 bg-white" *ngIf="reviews.length > 0">
+				<h3 class="text-lg font-semibold mb-4">Reviews de huéspedes</h3>
+				<div class="review bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4" *ngFor="let review of reviews">
+					<p class="text-sm font-medium">{{ review.autor }} —
+						<span class="stars" [style.--rating]="review.calificacion">★★★★★</span>
+						<span class="score">{{ review.calificacion }}/5</span>
+					</p>
+					<p class="text-sm text-gray-700 italic mt-1">“{{ review.texto }}”</p>
+					<p class="text-xs text-gray-500 mt-1">{{ review.fecha }}</p>
+				</div>
+			</div>
+
+		</div>
+
+		<!-- Panel de reserva -->
+		<div class="reserva shadow-strong w-full md:w-[40%] border rounded-lg p-6 bg-white">
+			<h2 class="font-bold mb-4 text-center text-[1.25rem]">Reserva tu habitación</h2>
+
+			<div class="precio-panel text-center p-4 bg-blue-100 rounded-lg mb-4">
+	<div class="precio text-orange font-bold text-[3rem] leading-none mb-1">{{ getPrecioHabitacion() }} BOB</div>
+	<div class="text-gray-600 text-sm">por noche</div>
+</div>
+
+			<p class="mb-2 text-[0.95rem]">Check-in: 12:00</p>
+			<p class="mb-2 text-[0.95rem]">Check-out: 12:00</p>
+			<p class="mb-2 text-[0.95rem]">Máximo {{ getCapacidadHabitacion() }} huéspedes por habitación</p>
+
+			<div class="text-center mb-4">
+				<a class="btn-reservar" [routerLink]="['/reservas']"
+					 [queryParams]="{ num: habitacion?.num, precio: habitacion?.precio, hotel: habitacion?.codigo_hotel, capacidad: habitacion?.cant_huespedes }">
+					Reservar Ahora
+				</a>
+			</div>
+
+			<p class="text-gray-500 mt-2 text-[0.85rem]">✓ Cancelación gratuita hasta 24 horas antes</p>
+			<p class="text-gray-500 mt-2 text-[0.85rem]">✓ No se requiere pago por adelantado</p>
+		</div>
+
+	</div>
+</div>
+<!-- ...existing code... -->
