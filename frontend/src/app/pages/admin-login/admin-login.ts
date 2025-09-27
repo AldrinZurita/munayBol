@@ -32,7 +32,7 @@ export class AdminLogin {
         if (user.rol === 'superadmin' && user.estado) {
           // Notificación de éxito
           this.snackBar.open('¡Inicio de sesión exitoso!', '', { duration: 2500 });
-          this.router.navigate(['/inicio']); // Redirige a la página de inicio
+          this.router.navigate(['/']); // Redirige a la página de inicio
         } else {
           this.error = 'Solo el superadministrador puede acceder.';
           this.auth.logout();

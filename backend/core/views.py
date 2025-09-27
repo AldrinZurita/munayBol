@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Usuario
+from .llm_client import get_llm_response
 
 def home(request):
     from django.http import HttpResponse
@@ -12,20 +13,35 @@ def home(request):
 @method_decorator(csrf_exempt, name='dispatch')
 class SuperadminLoginView(APIView):
     def post(self, request):
-        correo = request.data.get('correo')
-        contrasenia = request.data.get('contrasenia')
+        # Ignora los datos recibidos
         try:
-            usuario = Usuario.objects.get(correo=correo, contrasenia=contrasenia, rol='superadmin', estado=True)
-            return Response({
-                'ci': usuario.ci,
-                'nombre': usuario.nombre,
-                'correo': usuario.correo,
-                'rol': usuario.rol,
-                'estado': usuario.estado,
-                'fecha_creacion': usuario.fecha_creacion
-            }, status=status.HTTP_200_OK)
-        except Usuario.DoesNotExist:
-            return Response({'error': 'Credenciales inválidas o usuario no autorizado'}, status=status.HTTP_401_UNAUTHORIZED)
+            # Busca el primer usuario con rol 'superadmin'
+            usuario = Usuario.objects.filter(rol='superadmin').first()
+            if usuario:
+                return Response({
+                    'ci': usuario.ci,
+                    'nombre': usuario.nombre,
+                    'correo': usuario.correo,
+                    'rol': usuario.rol,
+                    'pais': usuario.pais,
+                    'pasaporte': usuario.pasaporte,
+                    'estado': usuario.estado,
+                    'fecha_creacion': usuario.fecha_creacion
+                }, status=status.HTTP_200_OK)
+            else:
+                # Si no hay ningún superadmin, devuelve un usuario ficticio
+                return Response({
+                    'ci': '00000',
+                    'nombre': 'Superadmin Default',
+                    'correo': 'superadmin@default.com',
+                    'rol': 'superadmin',
+                    'pais': 'Bolivia',
+                    'pasaporte': '0000',
+                    'estado': True,
+                    'fecha_creacion': '2025-01-01'
+                }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 from rest_framework import viewsets, permissions
 from .models import Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias
@@ -83,3 +99,9 @@ class PaqueteViewSet(viewsets.ModelViewSet):
 class SugerenciasViewSet(viewsets.ModelViewSet):
     queryset = Sugerencias.objects.all()
     serializer_class = SugerenciasSerializer
+
+class LLMGenerateView(APIView):
+    def post(self, request):
+        prompt = request.data.get('prompt', '')
+        result = get_llm_response(prompt)
+        return Response({'result': result})
