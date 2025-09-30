@@ -19,6 +19,8 @@ class Hotel(models.Model):
     calificacion = models.FloatField()
     estado = models.BooleanField()
     fecha_creacion = models.DateField()
+    url = models.CharField(max_length=255, default="")
+    url_imagen_hotel = models.TextField(blank=True)
 
 class LugarTuristico(models.Model):
     id_lugar = models.BigIntegerField(primary_key=True)
