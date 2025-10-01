@@ -1,49 +1,99 @@
+<!-- Contenedor principal con el mismo padding y max-width que la otra página -->
 <div class="habitaciones-container">
-  <h1>Habitaciones</h1>
+  <h1 class="title">Administración de Habitaciones</h1>
 
-  <button *ngIf="isSuperAdmin" class="agregar-btn" (click)="onAgregarHabitacion()">Agregar Habitación</button>
+  <!-- Encabezado para acciones principales, como el botón de agregar -->
+  <div class="header-acciones">
+    <button *ngIf="isSuperAdmin" class="btn btn-primary" (click)="onAgregarHabitacion()">
+      <!-- Icono referenciado por su nombre de clase -->
+      <span class="material-symbols-outlined icon-ms">add</span>
+      Agregar Habitación
+    </button>
+  </div>
 
-  <section class="filtros">
+  <!-- Tarjeta de filtros con el nuevo estilo -->
+  <section class="filtros-card">
     <h4>Filtros de búsqueda</h4>
-    <div class="filtro-row">
-      <label for="disponible">Disponibilidad:</label>
-      <select id="disponible" [(ngModel)]="disponibleSeleccionado">
-        <option value="">Todas</option>
-        <option value="true">Disponibles</option>
-        <option value="false">No disponibles</option>
-      </select>
+    <div class="filtros-grid">
+      <!-- Filtro 1: Disponibilidad -->
+      <div class="filtro">
+        <label for="disponible">Disponibilidad</label>
+        <div class="select-wrapper">
+          <select id="disponible" [(ngModel)]="disponibleSeleccionado">
+            <option value="">Todas</option>
+            <option value="true">Disponibles</option>
+            <option value="false">No disponibles</option>
+          </select>
+          <!-- Icono de flecha para el select -->
+          <div class="chevron-icon">
+            <span class="material-symbols-outlined">expand_more</span>
+          </div>
+        </div>
+      </div>
+      <!-- Filtro 2: Hotel -->
+      <div class="filtro">
+        <label for="hotel">Código Hotel</label>
+        <div class="select-wrapper">
+          <select id="hotel" [(ngModel)]="hotelSeleccionado">
+            <option value="">Todos</option>
+            <option *ngFor="let id of hoteles" [value]="id">{{ id }}</option>
+          </select>
+          <div class="chevron-icon">
+             <span class="material-symbols-outlined">expand_more</span>
+          </div>
+        </div>
+      </div>
+      <!-- Botón de acción para aplicar filtros -->
+      <div class="acciones">
+        <button class="btn btn-primary" (click)="aplicarFiltros()">Aplicar</button>
+      </div>
     </div>
-    <div class="filtro-row">
-      <label for="hotel">Código Hotel:</label>
-      <select id="hotel" [(ngModel)]="hotelSeleccionado">
-        <option value="">Todos</option>
-        <option *ngFor="let id of hoteles" [value]="id">{{ id }}</option>
-      </select>
-    </div>
-    <button class="aplicar-btn" (click)="aplicarFiltros()">Aplicar Filtros</button>
   </section>
 
-  <section class="lista-habitaciones">
+  <!-- Sección para mostrar estados (cargando, error, etc.) -->
+  <div class="estado">
     <div *ngIf="cargando">Cargando habitaciones...</div>
-    <div *ngIf="error">{{ error }}</div>
+    <div *ngIf="error" class="error">{{ error }}</div>
     <div *ngIf="!cargando && habitacionesFiltradas.length === 0 && !error">No hay habitaciones que coincidan con el filtro.</div>
+  </div>
+
+  <!-- Lista de tarjetas de habitación -->
+  <section class="lista-habitaciones">
     <div *ngFor="let habitacion of habitacionesFiltradas" class="habitacion-card">
-      <h3>Habitación {{ habitacion.num }}</h3>
-      <div class="habitacion-info">
-        <div><strong>Hotel:</strong> {{ habitacion.codigo_hotel }}</div>
-        <div><strong>Características:</strong> {{ habitacion.caracteristicas }}</div>
-        <div><strong>Precio:</strong> {{ habitacion.precio }} BOB</div>
-        <div><strong>Capacidad:</strong> {{ habitacion.cant_huespedes }} huéspedes</div>
-        <div><strong>Estado:</strong>
-          <span [ngClass]="{ 'disponible': habitacion.disponible, 'nodisponible': !habitacion.disponible }">
+      <!-- Columna Izquierda: Información de la habitación -->
+      <div class="card-left">
+        <h3>Habitación #{{ habitacion.num }}</h3>
+        <p class="descripcion">{{ habitacion.caracteristicas }}</p>
+
+        <!-- Meta-información en una lista para mejor estructura -->
+        <ul class="meta">
+          <li class="meta-item">
+            <!-- Nuevo indicador de estado visual con un punto de color -->
+            <span class="status-dot" [class.disponible]="habitacion.disponible" [class.no-disponible]="!habitacion.disponible"></span>
             {{ habitacion.disponible ? 'Disponible' : 'No disponible' }}
-          </span>
-        </div>
-        <div><strong>Fecha de creación:</strong> {{ habitacion.fecha_creacion }}</div>
+          </li>
+          <li class="meta-item">
+            <span class="material-symbols-outlined">hotel</span>
+            Hotel: {{ habitacion.codigo_hotel }}
+          </li>
+          <li class="meta-item">
+            <span class="material-symbols-outlined">group</span>
+            {{ habitacion.cant_huespedes }} Huéspedes
+          </li>
+           <li class="meta-item">
+            <span class="material-symbols-outlined">payments</span>
+            {{ habitacion.precio | number:'1.2-2' }} BOB
+          </li>
+        </ul>
       </div>
-  <a class="ver-detalle-btn" [routerLink]="['/habitaciones', habitacion.num]">Ver detalle</a>
-  <button *ngIf="isSuperAdmin" class="editar-btn" (click)="onEditarHabitacion(habitacion)">Editar</button>
-  <button *ngIf="isSuperAdmin" class="eliminar-btn" (click)="onEliminarHabitacion(habitacion)">Eliminar</button>
+
+      <!-- Columna Derecha: Botones de acción -->
+      <div class="card-right">
+        <a class="btn btn-accent" [routerLink]="['/habitaciones', habitacion.num]">Ver Detalle</a>
+        <button *ngIf="isSuperAdmin" class="btn btn-secondary" (click)="onEditarHabitacion(habitacion)">Editar</button>
+        <button *ngIf="isSuperAdmin" class="btn btn-danger" (click)="onEliminarHabitacion(habitacion)">Eliminar</button>
+      </div>
     </div>
   </section>
 </div>
+
