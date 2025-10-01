@@ -61,6 +61,21 @@
   @media (max-width: 780px) { grid-template-columns: 1fr; }
 
   .card-left {
+    display: flex; flex-direction: column;
+    .imagen-lugar {
+      margin-bottom: 12px;
+      img {
+        width: 100%;
+        max-width: 320px;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        background: #f1f5f9;
+        display: block;
+      }
+    }
     .lugar-nombre { margin: 0 0 8px; font-size: 20px; color: #0f172a; font-weight: 800; }
     .meta {
       display: flex; gap: 16px; padding: 0; margin: 0 0 10px; list-style: none; color: #334155;

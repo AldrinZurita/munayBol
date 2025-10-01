@@ -2,21 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router'; // 👈 necesario para routerLink
-
-interface LugarTuristico {
-  id_lugar: number;
-  nombre: string;
-  ubicacion: string;
-  departamento: string;
-  tipo: string;
-  fecha_creacion: string; // ISO date string
-}
+import { RouterModule } from '@angular/router';
+import { LugarTuristico } from '../../interfaces/lugar-turistico.interface';
 
 @Component({
   selector: 'app-lugares-turisticos',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, RouterModule], // 👈 añade RouterModule
+  imports: [CommonModule, FormsModule, HttpClientModule, RouterModule],
   templateUrl: './lugares-turisticos.html',
   styleUrls: ['./lugares-turisticos.scss'],
 })
@@ -70,9 +62,4 @@ export class LugaresTuristicos implements OnInit {
 
     this.lugaresFiltrados = filtrados;
   }
-
-  // ❌ Ya no se necesita:
-  // onVerDetalles(id_lugar: number) {
-  //   window.location.href = `/lugares-turisticos/${id_lugar}`;
-  // }
 }

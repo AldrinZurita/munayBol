@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AdminAuthService } from '../../services/admin-auth';
+import { AdminAuthService } from '../../services/admin-auth.service';
 import { Usuario } from '../../interfaces/usuario.interface';
 
 @Component({

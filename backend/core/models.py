@@ -31,6 +31,7 @@ class LugarTuristico(models.Model):
     fecha_creacion = models.DateField()
     horario = models.CharField(max_length=255)
     descripcion = models.TextField()
+    url_image_lugar_turistico = models.TextField()
 
 class Pago(models.Model):
     id_pago = models.BigIntegerField(primary_key=True)

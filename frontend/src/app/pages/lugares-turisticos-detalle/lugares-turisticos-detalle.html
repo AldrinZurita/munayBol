@@ -14,6 +14,9 @@
           <h2 class="titulo">{{ lugar.nombre }}</h2>
   
           <ul class="meta">
+            <li class="img-li" *ngIf="lugar.url_image_lugar_turistico">
+              <img [src]="lugar.url_image_lugar_turistico" [alt]="lugar.nombre" />
+            </li>
             <li>
               <span class="ms">location_on</span>
               {{ lugar.departamento }}

@@ -11,6 +11,9 @@ from .serializers import (
 )
 from .permissions import IsSuperAdmin
 from .llm_client import get_llm_response
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
 
 
 # Función auxiliar para determinar si la petición viene de un superadmin
@@ -170,6 +173,7 @@ class SugerenciasViewSet(viewsets.ModelViewSet):
     serializer_class = SugerenciasSerializer
 
 # Modelo LLM
+@method_decorator(csrf_exempt, name='dispatch')
 class LLMGenerateView(APIView):
     def post(self, request):
         prompt = request.data.get('prompt', '')
