@@ -10,7 +10,7 @@ import torch
 from torch.optim import AdamW
 import numpy as np
 
-# ==== Hiperparámetros  ====
+# Hiperparámetros
 MODEL_PATH = "./gptneo-llm"   
 BATCH_SIZE = 8
 MAX_LENGTH = 192         
@@ -26,7 +26,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 torch.manual_seed(SEED)
 np.random.seed(SEED)
 
-# ==== Dataset & Preprocesamiento ====
+# Dataset & Preprocesamiento
 dataset = load_dataset("json", data_files="datos_turismo.jsonl")
 
 def get_history(example):
