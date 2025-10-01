@@ -1,45 +1,52 @@
 <div class="asistente-container">
-    <div class="header">
-        <div class="icon">🤖</div>
-        <div class="title">
-            <h1>Asistente IA MunayBol</h1>
-            <p>Tu guía personal de turismo boliviano</p>
-        </div>
+  <div class="header">
+    <div class="icon">🤖</div>
+    <div class="title">
+      <h1>Asistente IA MunayBol</h1>
+      <p>Tu guía personal de turismo boliviano</p>
     </div>
+  </div>
 
-    <div class="chat">
-        <div class="message ia">
-            <div class="icon">🤖</div>
-            <div class="text">
-                <p>
-                    Bienvenido a la IA de MunayBol, soy tu asistente. Dime a qué departamento o lugar turístico quieres
-                    ir y yo te ofreceré lo mejor de esa ciudad para que tu experiencia sea única, incluyendo paquetes,
-                    lugares turísticos y las mejores habitaciones disponibles.
-                </p>
-            </div>
-        </div>
+  <div class="chat">
+    <!-- Muestra el historial de mensajes -->
+    <div *ngFor="let r of respuestas" [ngClass]="{'message': true, 'ia': r.from==='ia', 'user': r.from==='user'}">
+      <div class="icon">{{ r.from === 'ia' ? '🤖' : '🧑' }}</div>
+      <div class="text"><p>{{ r.text }}</p></div>
     </div>
-
-    <div class="input-container">
-        <input type="text" placeholder="Escribe tu consulta, e.g., 'Quiero ir a Cochabamba'..." />
-        <button>➤</button>
+    <!-- Mensaje de bienvenida fijo solo si no hay mensajes -->
+    <div class="message ia" *ngIf="respuestas.length === 0">
+      <div class="icon">🤖</div>
+      <div class="text">
+        <p>
+          Bienvenido a la IA de MunayBol, soy tu asistente. Dime a qué departamento o lugar turístico quieres
+          ir y yo te ofreceré lo mejor de esa ciudad para que tu experiencia sea única, incluyendo paquetes,
+          lugares turísticos y las mejores habitaciones disponibles.
+        </p>
+      </div>
     </div>
+  </div>
 
-    <p class="hint">Pregunta sobre destinos, paquetes turísticos, lugares para visitar o habitaciones disponibles en
-        Bolivia.</p>
+  <div class="input-container">
+    <input type="text" [(ngModel)]="prompt" (keyup.enter)="enviar()" placeholder="Escribe tu consulta, e.g., 'Quiero ir a Cochabamba'..." />
+    <button (click)="enviar()">➤</button>
+  </div>
 
-    <div class="quick-buttons">
-        <button class="option">
-            <strong>La Paz</strong><br />
-            Ciudad maravillosa
-        </button>
-        <button class="option">
-            <strong>Salar de Uyuni</strong><br />
-            Espejo del cielo
-        </button>
-        <button class="option">
-            <strong>Ofertas</strong><br />
-            Paquetes económicos
-        </button>
-    </div>
+  <p class="hint">
+    Pregunta sobre destinos, paquetes turísticos, lugares para visitar o habitaciones disponibles en Bolivia.
+  </p>
+
+  <div class="quick-buttons">
+    <button class="option" (click)="enviarQuick('Quiero viajar a La Paz')">
+      <strong>La Paz</strong><br />
+      Ciudad maravillosa
+    </button>
+    <button class="option" (click)="enviarQuick('Quiero conocer el Salar de Uyuni')">
+      <strong>Salar de Uyuni</strong><br />
+      Espejo del cielo
+    </button>
+    <button class="option" (click)="enviarQuick('¿Cuáles son las ofertas de paquetes económicos?')">
+      <strong>Ofertas</strong><br />
+      Paquetes económicos
+    </button>
+  </div>
 </div>

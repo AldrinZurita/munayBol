@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { HabitacionService } from '../../services/habitacion';
+import { HabitacionService } from '../../services/habitacion.service';
 import { Habitacion } from '../../interfaces/habitacion.interface';
 
 interface Review {

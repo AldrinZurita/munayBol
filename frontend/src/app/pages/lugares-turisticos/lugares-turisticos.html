@@ -37,6 +37,12 @@
   <section class="lista">
     <article *ngFor="let l of lugaresFiltrados" class="card-lugar">
       <div class="card-left">
+
+        <!-- Imagen del lugar turístico, si existe -->
+        <div *ngIf="l.url_image_lugar_turistico" class="imagen-lugar">
+          <img [src]="l.url_image_lugar_turistico" [alt]="l.nombre" />
+        </div>
+
         <h3 class="lugar-nombre">{{ l.nombre }}</h3>
 
         <ul class="meta">

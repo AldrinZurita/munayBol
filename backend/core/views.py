@@ -2,6 +2,7 @@
 from rest_framework import viewsets, status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from django.http import HttpResponse
 from .models import Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias
 from .serializers import (
@@ -9,6 +10,10 @@ from .serializers import (
     HabitacionSerializer, ReservaSerializer, PaqueteSerializer, SugerenciasSerializer, LoginSerializer
 )
 from .permissions import IsSuperAdmin
+from .llm_client import get_llm_response
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
 
 
 # Función auxiliar para determinar si la petición viene de un superadmin
@@ -166,3 +171,12 @@ class PaqueteViewSet(viewsets.ModelViewSet):
 class SugerenciasViewSet(viewsets.ModelViewSet):
     queryset = Sugerencias.objects.all()
     serializer_class = SugerenciasSerializer
+
+# Modelo LLM
+@method_decorator(csrf_exempt, name='dispatch')
+class LLMGenerateView(APIView):
+    def post(self, request):
+        prompt = request.data.get('prompt', '')
+        result = get_llm_response(prompt)
+        return Response({'result': result})
+

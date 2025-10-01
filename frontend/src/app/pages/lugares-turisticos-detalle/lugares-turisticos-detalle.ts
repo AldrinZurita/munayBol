@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { LugaresService } from '../../services/lugares';
+import { LugaresService } from '../../services/lugares.service';
 import { LugarTuristico } from '../../interfaces/lugar-turistico.interface';
 
 @Component({
@@ -44,11 +44,5 @@ export class LugaresTuristicosDetalle implements OnInit {
         this.cargando = false;
       }
     });
-
-    // --- Opción B (ideal): si ya tienes /api/lugares/:id, usa esto en su lugar ---
-    // this.lugaresService.getLugarById(id).subscribe({
-    //   next: lugar => { this.lugar = lugar; this.cargando = false; },
-    //   error: () => { this.error = 'No se pudo cargar el lugar'; this.cargando = false; }
-    // });
   }
 }

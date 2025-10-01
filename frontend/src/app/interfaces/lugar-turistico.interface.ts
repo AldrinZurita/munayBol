@@ -6,5 +6,6 @@ export interface LugarTuristico {
     tipo: string;
     fecha_creacion: string; 
     horario?: string;       
-    descripcion?: string;   
+    descripcion?: string; 
+    url_image_lugar_turistico?: string; 
   }

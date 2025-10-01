@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { HabitacionService } from '../../services/habitacion';
+import { HabitacionService } from '../../services/habitacion.service';
 import { Habitacion } from '../../interfaces/habitacion.interface';
 import { FormsModule } from '@angular/forms';
-import { AdminAuthService } from '../../services/admin-auth';
+import { AdminAuthService } from '../../services/admin-auth.service';
 
 @Component({
   selector: 'app-habitaciones',

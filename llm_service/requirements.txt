@@ -1,0 +1,6 @@
+flask
+transformers==4.56.2
+tokenizers==0.22.1
+torch==2.3.0
+numpy<2
+datasets

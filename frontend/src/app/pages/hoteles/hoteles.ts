@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HotelService } from '../../services/hotel';
-import { AdminAuthService } from '../../services/admin-auth';
+import { HotelService } from '../../services/hotel.service';
+import { AdminAuthService } from '../../services/admin-auth.service';
 
 export interface Hotel {
   id_hotel: number;
