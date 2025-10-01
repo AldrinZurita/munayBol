@@ -1,27 +1,201 @@
-# SonarQube
-.scannerwork/
-sonar-project.properties
+# =========================
+# GLOBAL SETTINGS
+# =========================
 
-# VS Code
+# VS Code and IDE files
 .vscode/
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
 
-# macOS
+# MacOS and OS-specific
 .DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+Desktop.ini
 
 # Log files
 *.log
+npm-debug.log*
+yarn-error.log*
+yarn-debug.log*
+testem.log
 
 # Environment variables
 .env
+.env.*
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# Database
+# Database and backup files
 *.db
 *.sqlite
 *.sqlite3
-
-# Backup files
 backup.sql
+
+# SonarQube
+.scannerwork/
+sonar-project.properties
+
+# Miscellaneous
+*.pid
+*.seed
+*.bak
+*.swp
+*.swo
+*.tmp
+*.orig
+*.mocha
+*.nyc_output/
+.history/
+
+# =========================
+# FRONTEND (Angular)
+# =========================
+
+frontend/node_modules/
+frontend/npm-debug.log*
+frontend/yarn-error.log*
+frontend/yarn-debug.log*
+frontend/package-lock.json
+frontend/yarn.lock
+frontend/dist
+frontend/tmp
+frontend/out-tsc
+frontend/bazel-out
+frontend/.angular/
+frontend/.angular/cache
+frontend/.env
+frontend/.env.*
+frontend/coverage/
+frontend/.c9/
+frontend/.project
+frontend/.classpath
+frontend/.settings/
+frontend/.sublime-workspace
+frontend/.sublime-project
+frontend/.vscode/
+!frontend/.vscode/settings.json
+!frontend/.vscode/tasks.json
+!frontend/.vscode/launch.json
+!frontend/.vscode/extensions.json
+frontend/.history/
+frontend/.sass-cache/
+frontend/.connect.lock
+frontend/libpeerconnection.log
+frontend/typings/
+frontend/.cache/
+frontend/temp/
+frontend/tmp/
+frontend/*.tsbuildinfo
+frontend/src/environments/*.local.ts
+frontend/src/environments/*.prod.ts
+frontend/src/environments/*.dev.ts
+frontend/*.tgz
+
+# =========================
+# BACKEND (Django)
+# =========================
+
+backend/__pycache__/
+backend/*.py[cod]
+backend/*$py.class
+backend/db.sqlite3
+backend/static/
+backend/media/
+backend/.env
+backend/.env.*
+backend_venv/
+backend/.vscode/
+backend/.idea/
+backend/logs/
+backend/*.log
+
+# Django migrations (ignore all except __init__.py)
+backend/**/migrations/*.py
+!backend/**/migrations/__init__.py
+
+# Virtual environments
+backend/.venv/
+backend/venv/
+
+# Docker
+backend/docker-compose.override.yml
+
+# PostgreSQL data volume
+backend/postgres_data/
+
+# Coverage reports
+backend/htmlcov/
+backend/.coverage
+backend/.coverage.*
+backend/.cache
+backend/nosetests.xml
+backend/coverage.xml
+backend/*.cover
+backend/*.py,cover
+
+# =========================
+# LLM SERVICE & MODEL FILES
+# =========================
+
+llm_service/gptneo-llm/*.safetensors
+llm_service/gptneo-llm/*.pt
+llm_service/gptneo-llm/*.bin
+llm_service/gptneo-llm/model.safetensors
+llm_service/gptneo-llm/checkpoint-*/
+llm_service/gptneo-llm/optimizer.pt
+llm_service/gptneo-llm/rng_state.pth
+llm_service/gptneo-llm/scheduler.pt
+llm_service/gptneo-llm/training_args.bin
+llm_service/gptneo-llm/trainer_state.json
+llm_service/gptneo-llm/*.h5
+llm_service/gptneo-llm/*.jsonl
+llm_service/gptneo-llm/*.csv
+llm_service/*.jsonl
+llm_service/*.csv
+llm_service/*.h5
+
+# LLM checkpoints folders
+llm_service/gptneo-llm/checkpoint-*/
+llm_service/gptneo-llm/checkpoint-*
+
+# LLM generated
+llm_service/.cache/
+llm_service/__pycache__/
+llm_service/.ipynb_checkpoints/
+llm_service/.env
+llm_service/.venv/
+llm_service/venv/
+
+# =========================
+# OTHER COMMON FILES
+# =========================
+
+*.egg-info/
+*.pot
+*.pyc
+*.pyo
+*.pyd
+/media
+/staticfiles
+/static
+
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+
+# Ignore SQL dumps and other backups
+*.sql
+*.dump
+
+# VS Code workspace files (again, in case)
+.vscode/
