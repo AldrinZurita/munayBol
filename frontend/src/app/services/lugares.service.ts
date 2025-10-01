@@ -23,4 +23,21 @@ export class LugaresService {
   getLugarById(id: number): Observable<LugarTuristico> {
     return this.http.get<LugarTuristico>(`${this.baseUrl}/${id}`);
   }
+
+  // --- NUEVO: Método para agregar un lugar ---
+  agregarLugar(lugar: Partial<LugarTuristico>): Observable<LugarTuristico> {
+    return this.http.post<LugarTuristico>(this.baseUrl, lugar);
+  }
+
+  // --- NUEVO: Método para actualizar un lugar ---
+  actualizarLugar(lugar: LugarTuristico): Observable<LugarTuristico> {
+    // Se envía el ID en la URL para identificar el recurso a actualizar
+    return this.http.put<LugarTuristico>(`${this.baseUrl}/${lugar.id_lugar}`, lugar);
+  }
+
+  // --- NUEVO: Método para eliminar un lugar ---
+  eliminarLugar(id: number): Observable<any> {
+    // Se envía el ID en la URL para identificar el recurso a eliminar
+    return this.http.delete(`${this.baseUrl}/${id}`);
+  }
 }

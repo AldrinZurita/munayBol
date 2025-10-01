@@ -1,74 +1,76 @@
 <div class="lugares-container">
   <h1 class="title">Lugares Turísticos de Bolivia</h1>
 
-  <!-- Filtro: solo Departamento/Ciudad -->
+  <!-- Encabezado para acciones principales, como el botón de agregar -->
+  <div class="header-acciones">
+    <button *ngIf="isSuperAdmin" class="btn btn-primary" (click)="onAgregarLugar()">
+      <span class="material-symbols-outlined icon-ms">add</span>
+      Agregar Lugar Turístico
+    </button>
+  </div>
+
+  <!-- Tarjeta de filtros con el nuevo estilo -->
   <section class="filtros-card">
     <h4>Filtros de búsqueda</h4>
-
     <div class="filtros-grid solo-uno">
+      <!-- Filtro 1: Departamento -->
       <div class="filtro">
         <label for="ciudad">Departamento</label>
-        <div class="select">
+        <div class="select-wrapper">
           <select id="ciudad" [(ngModel)]="ciudadSeleccionada">
             <option value="">Todos los departamentos</option>
-            <option *ngFor="let ciudad of ciudades" [value]="ciudad">
-              {{ ciudad }}
-            </option>
+            <option *ngFor="let ciudad of ciudades" [value]="ciudad">{{ ciudad }}</option>
           </select>
-          <span class="chev">
-            <span class="ms">expand_more</span>
-          </span>
+          <div class="chevron-icon">
+            <span class="material-symbols-outlined">expand_more</span>
+          </div>
         </div>
       </div>
-
+      <!-- Botón de acción para aplicar filtros -->
       <div class="acciones">
-        <button class="btn btn-primary" (click)="aplicarFiltros()">
-          Aplicar Filtros
-        </button>
+        <button class="btn btn-primary" (click)="aplicarFiltros()">Aplicar</button>
       </div>
     </div>
   </section>
 
-  <!-- Estados -->
-  <div *ngIf="cargando" class="estado">Cargando lugares...</div>
-  <div *ngIf="error" class="estado error">{{ error }}</div>
+  <!-- Sección para mostrar estados (cargando, error, etc.) -->
+  <div class="estado">
+    <div *ngIf="cargando">Cargando lugares...</div>
+    <div *ngIf="error" class="error">{{ error }}</div>
+    <div *ngIf="!cargando && lugaresFiltrados.length === 0 && !error">
+      No hay lugares que coincidan con el filtro.
+    </div>
+  </div>
 
-  <!-- Lista -->
+  <!-- Lista de tarjetas de lugares -->
   <section class="lista">
     <article *ngFor="let l of lugaresFiltrados" class="card-lugar">
+      <!-- Columna Izquierda: Información del lugar -->
       <div class="card-left">
-
-        <!-- Imagen del lugar turístico, si existe -->
         <div *ngIf="l.url_image_lugar_turistico" class="imagen-lugar">
-          <img [src]="l.url_image_lugar_turistico" [alt]="l.nombre" />
+          <img [src]="l.url_image_lugar_turistico" [alt]="'Imagen de ' + l.nombre" />
         </div>
-
         <h3 class="lugar-nombre">{{ l.nombre }}</h3>
-
         <ul class="meta">
           <li class="meta-item">
-            <span class="ms icon-ms">location_on</span>
+            <span class="material-symbols-outlined">location_on</span>
             {{ l.departamento }}
           </li>
           <li class="meta-item" *ngIf="l.tipo">
-            <span class="ms icon-ms">sell</span>
+            <span class="material-symbols-outlined">sell</span>
             {{ l.tipo }}
           </li>
         </ul>
-
         <p class="descripcion" *ngIf="l.ubicacion">{{ l.ubicacion }}</p>
       </div>
 
+      <!-- Columna Derecha: Botones de acción -->
       <div class="card-right">
-        <!-- ⭐ Navegación SPA con el router de Angular -->
-        <a class="btn btn-primary" [routerLink]="['/lugares-turisticos', l.id_lugar]">
-          Ver Detalles
-        </a>
+        <a class="btn btn-accent" [routerLink]="['/lugares-turisticos', l.id_lugar]">Ver Detalles</a>
+        <!-- Botones de administración que solo se muestran si isSuperAdmin es true -->
+        <button *ngIf="isSuperAdmin" class="btn btn-secondary" (click)="onEditarLugar(l)">Editar</button>
+        <button *ngIf="isSuperAdmin" class="btn btn-danger" (click)="onEliminarLugar(l)">Eliminar</button>
       </div>
     </article>
-
-    <div *ngIf="!cargando && !error && lugaresFiltrados.length === 0" class="estado">
-      No hay lugares que coincidan con el filtro.
-    </div>
   </section>
 </div>
