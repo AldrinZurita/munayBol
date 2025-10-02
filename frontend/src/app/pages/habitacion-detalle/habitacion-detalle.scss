@@ -76,6 +76,7 @@
 		font-size: 1.3rem;
 		letter-spacing: 0.1rem;
 		background: linear-gradient(90deg, #FFD700 calc(var(--rating) * 20%), #ccc calc(var(--rating) * 20%));
+		background-clip: text;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 	}
@@ -103,6 +104,74 @@
 		color: #666;
 	}
 }
+/* Toast */
+.toast-ocupado {
+	position: fixed;
+	bottom: 1.25rem;
+	right: 1.25rem;
+	background: #b91c1c;
+	color: #fff;
+	padding: 0.75rem 1rem;
+	border-radius: 0.5rem;
+	box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+	font-size: 0.9rem;
+	z-index: 1100;
+	border: none;
+	cursor: pointer;
+}
+
+/* Modal */
+.modal-ocupado-backdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.4);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1090;
+}
+.modal-ocupado {
+	background: #fff;
+	width: min(420px, 92%);
+	border-radius: 0.75rem;
+	padding: 1.5rem 1.25rem 1.25rem;
+	box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+	font-size: 0.95rem;
+}
+.modal-ocupado h3 {
+	margin: 0 0 0.75rem;
+	font-size: 1.15rem;
+	font-weight: 600;
+}
+.acciones-modal {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.75rem;
+	margin-top: 1rem;
+}
+.btn-sec {
+	background: #e5e7eb;
+	color: #374151;
+	border: none;
+	padding: 0.5rem 0.9rem;
+	border-radius: 0.5rem;
+	cursor: pointer;
+	font-weight: 500;
+}
+.btn-sec:hover { background: #d1d5db; }
+.btn-principal {
+	background: #016d2e;
+	color: #fff;
+	border: none;
+	padding: 0.5rem 1rem;
+	border-radius: 0.5rem;
+	cursor: pointer;
+	font-weight: 600;
+}
+.btn-principal:hover { background: #15803d; }
 
 .hotel-header {
 	position: relative;

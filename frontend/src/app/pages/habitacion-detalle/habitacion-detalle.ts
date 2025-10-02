@@ -33,6 +33,9 @@ export class HabitacionDetalle implements OnInit {
 	intervalos: IntervaloReservado[] = [];
 	fechaOcupada: boolean = false;
 	mensajeDisponibilidad: string = '';
+	showToast: boolean = false;
+	showModal: boolean = false;
+	proxDisponible: string = '';
 
 	constructor(
 		private readonly route: ActivatedRoute,
@@ -106,10 +109,14 @@ export class HabitacionDetalle implements OnInit {
 
 	onIntentarReservar() {
 		this.mensajeDisponibilidad = '';
+		this.showToast = false;
+		this.showModal = false;
 		this.evaluarSolapamiento();
 		if (this.fechaOcupada) {
-			const prox = this.disponibilidad?.next_available_from || '';
-			this.mensajeDisponibilidad = `La habitación está ocupada en esas fechas, disponible desde ${prox}`;
+			this.proxDisponible = this.disponibilidad?.next_available_from || '';
+			this.mensajeDisponibilidad = `La habitación está ocupada en esas fechas`;
+			this.showToast = true; // Mostrar toast rápido
+			this.showModal = true; // Y modal con acción
 			return;
 		}
 		// Navegación manual asegurando parámetros consistentes
@@ -124,6 +131,27 @@ export class HabitacionDetalle implements OnInit {
 			}
 		});
 	}
+
+	formatear(fecha: string): string {
+		if (!fecha) return '';
+		const [y,m,d] = fecha.split('-');
+		return `${d}/${m}/${y}`;
+	}
+
+	usarProximaFecha() {
+		if (!this.proxDisponible) return;
+		this.fechaReserva = this.proxDisponible;
+		// set checkout +1 día
+		this.fechaCaducidad = this.addDias(this.proxDisponible, 1);
+		this.minFecha = this.fechaReserva;
+		this.minFechaSalida = this.fechaCaducidad;
+		this.showModal = false;
+		this.showToast = false;
+		this.mensajeDisponibilidad = '';
+	}
+
+	cerrarToast() { this.showToast = false; }
+	cerrarModal() { this.showModal = false; }
 
 	private addDias(fecha: string, dias: number): string {
 		const d = new Date(fecha);

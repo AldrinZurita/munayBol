@@ -82,8 +82,22 @@
 					class="btn-reservar"
 					(click)="$event.preventDefault(); onIntentarReservar();"
 				>Reservar Ahora</a>
-				<div class="warning" *ngIf="mensajeDisponibilidad">
-					{{ mensajeDisponibilidad }}
+				<!-- Toast -->
+				<button *ngIf="showToast" type="button" class="toast-ocupado" (click)="cerrarToast()">
+					{{ mensajeDisponibilidad }}. Disponible desde {{ formatear(proxDisponible) }} (cerrar)
+				</button>
+			</div>
+
+			<!-- Modal -->
+			<div class="modal-ocupado-backdrop" *ngIf="showModal">
+				<div class="modal-ocupado">
+					<h3>Fechas ocupadas</h3>
+					<p>La habitación está ocupada en el rango elegido.<br>
+					Próxima fecha disponible desde <b>{{ formatear(proxDisponible) }}</b>.</p>
+					<div class="acciones-modal">
+						<button class="btn-sec" (click)="cerrarModal()">Cerrar</button>
+						<button class="btn-principal" (click)="usarProximaFecha()">Usar próxima fecha</button>
+					</div>
 				</div>
 			</div>
 
