@@ -8,6 +8,7 @@ import { AdminLogin } from './pages/admin-login/admin-login';
 import { ReservaComponent } from './pages/reservas/reservas';
 import { AsistenteIa } from './pages/asistente-ia/asistente-ia';
 import { HabitacionDetalle } from './pages/habitacion-detalle/habitacion-detalle';
+import { Paquetes } from './pages/paquetes/paquetes';
 
 export const routes: Routes = [
   { path: 'reservas', component: ReservaComponent },
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: 'lugares-turisticos/:id', component: LugaresTuristicosDetalle},
   { path: 'habitaciones/:num', component: HabitacionDetalle },
   { path: 'hoteles', component: Hoteles },
+  { path: 'paquetes', component: Paquetes },
   { path: 'asistente-ia', component: AsistenteIa },
   { path: '', component: Inicio },
   { path: 'login', component: AdminLogin},    
