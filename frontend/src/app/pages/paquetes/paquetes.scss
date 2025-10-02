@@ -209,3 +209,18 @@
       }
     }
   }}
+.editar-btn {
+  background-color: #FF9800; // mismo color que el precio
+  color: #fff;
+  padding: 0.45rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #fb8c00; // tono más oscuro al pasar el mouse
+  }
+}

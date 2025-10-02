@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AdminAuthService } from '../../services/admin-auth.service';
 
 @Component({
   selector: 'app-paquetes',
@@ -123,9 +124,11 @@ export class Paquetes implements OnInit {
   departamentos: string[] = ['Cochabamba', 'Chuquisaca', 'Beni', 'Pando', 'Santa Cruz', 'Tarija', 'La paz', 'Oruro'];
   cargando = false;
   error = '';
-  isSuperAdmin = true;
+  isSuperAdmin = false;
 
+  constructor(private authService: AdminAuthService) {}
   ngOnInit() {
+    this.isSuperAdmin = this.authService.isLoggedIn();
     this.paquetesFiltrados = [...this.paquetes];
   }
 
