@@ -66,6 +66,8 @@ class Reserva(models.Model):
 
 class Paquete(models.Model):
     id_paquete = models.BigIntegerField(primary_key=True)
+    nombre = models.TextField()
+    tipo = models.TextField()
     precio = models.FloatField()
     id_reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE)
     id_lugar = models.ForeignKey(LugarTuristico, on_delete=models.CASCADE)
