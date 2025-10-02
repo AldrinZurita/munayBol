@@ -4,14 +4,14 @@
   display: block;
 }
 
-// --- Shared Design System (Copied from habitaciones.scss for consistency) ---
+// --- Shared Design System ---
 $primary-text: #0f172a;
 $secondary-text: #334155;
 $light-text: #64748b;
 $border-color: #e5e7eb;
 $card-bg: #fff;
 $primary-color: #16a34a; // Green for primary actions
-$accent-color: #16a34a;  // Changed to green for "View Details" consistency
+$accent-color: #16a34a;  // Green for "View Details" consistency
 $danger-color: #dc2626;  // Red for "Delete"
 $secondary-btn-bg: #f1f5f9; // Light grey for "Edit"
 
@@ -29,7 +29,7 @@ $secondary-btn-bg: #f1f5f9; // Light grey for "Edit"
   }
 }
 
-// --- Header for Actions (e.g., "Add" button) ---
+// --- Header for Actions ---
 .header-acciones {
   display: flex;
   justify-content: flex-end;
@@ -62,21 +62,18 @@ $secondary-btn-bg: #f1f5f9; // Light grey for "Edit"
     &:hover { background: color.adjust($primary-color, $lightness: -5%); }
   }
 
-  // Used for "Ver Detalles"
   &.btn-accent {
     background: $accent-color;
     color: #fff;
     &:hover { background: color.adjust($accent-color, $lightness: -5%); }
   }
 
-  // Used for "Editar"
   &.btn-secondary {
     background: $secondary-btn-bg;
     color: $primary-text;
     &:hover { background: color.adjust($secondary-btn-bg, $lightness: -5%); }
   }
 
-  // Used for "Eliminar"
   &.btn-danger {
     background: #fee2e2;
     color: $danger-color;
@@ -118,7 +115,7 @@ $secondary-btn-bg: #f1f5f9; // Light grey for "Edit"
         font-weight: 500;
         color: $light-text;
       }
-      .select-wrapper { // Renamed from .select for clarity
+      .select-wrapper {
         position: relative;
         select {
           width: 100%;
@@ -131,7 +128,7 @@ $secondary-btn-bg: #f1f5f9; // Light grey for "Edit"
           color: $secondary-text;
           cursor: pointer;
         }
-        .chevron-icon { // Renamed from .chev
+        .chevron-icon {
           position: absolute;
           right: 12px;
           top: 50%;
@@ -179,15 +176,19 @@ $secondary-btn-bg: #f1f5f9; // Light grey for "Edit"
   }
 
   @media (min-width: 768px) {
-    grid-template-columns: 1fr 200px;
+    grid-template-columns: 1fr auto;
   }
 
   .card-left {
-    overflow: hidden; // Prevents the image from overflowing its container
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+
     .imagen-lugar {
       margin-bottom: 12px;
       img {
         width: 100%;
+        max-width: 320px; // Keep image from getting too large
         height: 180px;
         object-fit: cover;
         border-radius: 10px;
@@ -233,6 +234,7 @@ $secondary-btn-bg: #f1f5f9; // Light grey for "Edit"
     .btn { width: 100%; }
 
     @media (min-width: 768px) {
+      width: 200px;
       align-items: flex-end;
     }
   }
