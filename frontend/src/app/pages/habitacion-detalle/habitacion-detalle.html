@@ -60,9 +60,23 @@
 			<p class="mb-2 text-[0.95rem]">Check-out: 12:00</p>
 			<p class="mb-2 text-[0.95rem]">Máximo {{ getCapacidadHabitacion() }} huéspedes por habitación</p>
 
+			<!-- Selección de fechas -->
+			<div class="grid grid-cols-1 gap-4 mb-4">
+				<label class="block text-sm">
+					<span class="font-semibold">Fecha reserva (check-in)</span>
+					<input type="date" class="mt-1 w-full border rounded px-3 py-2"
+						[min]="minFecha" [(ngModel)]="fechaReserva" name="fechaReserva" (change)="onChangeFechaReserva()" />
+				</label>
+				<label class="block text-sm">
+					<span class="font-semibold">Fecha caducidad (check-out)</span>
+					<input type="date" class="mt-1 w-full border rounded px-3 py-2"
+						[min]="minFechaSalida" [(ngModel)]="fechaCaducidad" name="fechaCaducidad" />
+				</label>
+			</div>
+
 			<div class="text-center mb-4">
 				<a class="btn-reservar" [routerLink]="['/reservas']"
-					 [queryParams]="{ num: habitacion?.num, precio: habitacion?.precio, hotel: habitacion?.codigo_hotel, capacidad: habitacion?.cant_huespedes }">
+					 [queryParams]="{ num: habitacion?.num, precio: habitacion?.precio, hotel: habitacion?.codigo_hotel, capacidad: habitacion?.cant_huespedes, fecha_reserva: fechaReserva, fecha_caducidad: fechaCaducidad }">
 					Reservar Ahora
 				</a>
 			</div>

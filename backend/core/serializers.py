@@ -39,6 +39,29 @@ class ReservaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reserva
         fields = '__all__'
+        read_only_fields = ('id_reserva', 'fecha_creacion')
+
+    def validate(self, attrs):
+        # Si llega num_habitacion, podemos derivar codigo_hotel si no viene.
+        habitacion = attrs.get('num_habitacion')
+        codigo_hotel = attrs.get('codigo_hotel')
+        if habitacion and not codigo_hotel:
+            attrs['codigo_hotel'] = habitacion.codigo_hotel
+        # Validar coherencia si ambos vienen
+        if habitacion and codigo_hotel and habitacion.codigo_hotel_id != codigo_hotel.id_hotel:
+            raise serializers.ValidationError('La habitación no pertenece al hotel especificado.')
+        # Rango básico de fechas
+        fecha_reserva = attrs.get('fecha_reserva')
+        fecha_caducidad = attrs.get('fecha_caducidad')
+        if fecha_reserva and fecha_caducidad and fecha_caducidad < fecha_reserva:
+            raise serializers.ValidationError('La fecha_caducidad no puede ser anterior a fecha_reserva.')
+        return attrs
+
+    def create(self, validated_data):
+        from datetime import date
+        if 'fecha_creacion' not in validated_data:
+            validated_data['fecha_creacion'] = date.today()
+        return super().create(validated_data)
 
 class PaqueteSerializer(serializers.ModelSerializer):
     class Meta:

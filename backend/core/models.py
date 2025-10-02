@@ -50,7 +50,7 @@ class Habitacion(models.Model):
     cant_huespedes = models.IntegerField()
 
 class Reserva(models.Model):
-    id_reserva = models.BigIntegerField(primary_key=True)
+    id_reserva = models.BigAutoField(primary_key=True)
     fecha_reserva = models.DateField()
     fecha_caducidad = models.DateField()
     num_habitacion = models.ForeignKey(Habitacion, on_delete=models.CASCADE)

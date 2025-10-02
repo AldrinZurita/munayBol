@@ -17,6 +17,8 @@ export class ReservaComponent implements OnInit {
   huespedes = 1;
   noches = 1;
   Habitacion = { num: '', precio: 0, hotel: '', capacidad: 1 };
+  fecha_reserva: string = '';
+  fecha_caducidad: string = '';
 
   get subtotal() {
     return this.Habitacion.precio * this.noches;
@@ -60,9 +62,9 @@ export class ReservaComponent implements OnInit {
   correoHuesped = '';
 
   constructor(
-    private reservasService: ReservasService,
-    private pagoService: PagoService,
-    private route: ActivatedRoute
+    private readonly reservasService: ReservasService,
+    private readonly pagoService: PagoService,
+    private readonly route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -71,6 +73,15 @@ export class ReservaComponent implements OnInit {
       this.Habitacion.precio = params['precio'] ? Number(params['precio']) : 0;
       this.Habitacion.hotel = params['hotel'] || '';
       this.Habitacion.capacidad = params['capacidad'] ? Number(params['capacidad']) : 1;
+      this.fecha_reserva = params['fecha_reserva'] || new Date().toISOString().slice(0,10);
+      // Si no viene fecha_caducidad, por defecto un día después de la reserva
+      if (params['fecha_caducidad']) {
+        this.fecha_caducidad = params['fecha_caducidad'];
+      } else {
+        const d = new Date(this.fecha_reserva);
+        d.setDate(d.getDate() + 1);
+        this.fecha_caducidad = d.toISOString().slice(0,10);
+      }
       this.hotel.precio = this.Habitacion.precio;
       this.huespedes = this.Habitacion.capacidad;
     });
@@ -94,7 +105,7 @@ export class ReservaComponent implements OnInit {
       return;
     }
     // Crear pago real en backend
-    const hoy = new Date().toISOString().slice(0, 10);
+  const hoy = new Date().toISOString().slice(0, 10);
     const pago: Pago = {
       tipo_pago: 'tarjeta',
       monto: this.total,
@@ -105,10 +116,11 @@ export class ReservaComponent implements OnInit {
       next: (res) => {
         // Registrar reserva real con el id_pago recibido
         const reserva = {
-          fecha_reserva: hoy,
+          fecha_reserva: this.fecha_reserva,
+          fecha_caducidad: this.fecha_caducidad,
           num_habitacion: this.Habitacion.num,
           codigo_hotel: Number(this.Habitacion.hotel),
-          ci_usuario: 1, // Aquí deberías poner el usuario real
+          ci_usuario: 1, // Placeholder: integrar ID real de usuario autenticado
           id_pago: res.id_pago
         };
         this.reservasService.crearReserva(reserva).subscribe({
