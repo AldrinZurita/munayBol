@@ -3,9 +3,20 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { LugarTuristico } from '../interfaces/lugar-turistico.interface';
 
+// DTO para crear (el backend pone id_lugar y fecha_creacion)
+export type CrearLugarDTO = Pick<
+  LugarTuristico,
+  'nombre' | 'ubicacion' | 'departamento' | 'tipo' | 'horario' | 'descripcion' | 'url_image_lugar_turistico'
+>;
+
+// DTO para actualizar (enviamos solo los campos editables)
+export type ActualizarLugarDTO = Partial<Pick<
+  LugarTuristico,
+  'nombre' | 'ubicacion' | 'departamento' | 'tipo' | 'horario' | 'descripcion' | 'url_image_lugar_turistico'
+>>;
+
 @Injectable({ providedIn: 'root' })
 export class LugaresService {
-  // Ajusta al endpoint real de tu backend
   private readonly baseUrl = '/api/lugares';
 
   constructor(private http: HttpClient) {}
@@ -24,20 +35,16 @@ export class LugaresService {
     return this.http.get<LugarTuristico>(`${this.baseUrl}/${id}`);
   }
 
-  // --- NUEVO: Método para agregar un lugar ---
-  agregarLugar(lugar: Partial<LugarTuristico>): Observable<LugarTuristico> {
-    return this.http.post<LugarTuristico>(this.baseUrl, lugar);
+  agregarLugar(data: CrearLugarDTO): Observable<LugarTuristico> {
+    return this.http.post<LugarTuristico>(this.baseUrl, data);
   }
 
-  // --- NUEVO: Método para actualizar un lugar ---
-  actualizarLugar(lugar: LugarTuristico): Observable<LugarTuristico> {
-    // Se envía el ID en la URL para identificar el recurso a actualizar
-    return this.http.put<LugarTuristico>(`${this.baseUrl}/${lugar.id_lugar}`, lugar);
+  actualizarLugar(id: number, cambios: ActualizarLugarDTO): Observable<LugarTuristico> {
+    // No enviamos fecha_creacion ni id_lugar aquí.
+    return this.http.put<LugarTuristico>(`${this.baseUrl}/${id}`, cambios);
   }
 
-  // --- NUEVO: Método para eliminar un lugar ---
-  eliminarLugar(id: number): Observable<any> {
-    // Se envía el ID en la URL para identificar el recurso a eliminar
-    return this.http.delete(`${this.baseUrl}/${id}`);
+  eliminarLugar(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }
