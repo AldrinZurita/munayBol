@@ -12,9 +12,9 @@ import numpy as np
 
 # Hiperparámetros
 MODEL_PATH = "./gptneo-llm"   
-BATCH_SIZE = 8
+BATCH_SIZE = 12
 MAX_LENGTH = 192         
-NUM_EPOCHS = 8
+NUM_EPOCHS = 14
 LEARNING_RATE = 2e-5
 WEIGHT_DECAY = 0.01
 PATIENCE = 4
