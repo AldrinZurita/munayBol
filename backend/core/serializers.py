@@ -28,6 +28,8 @@ class PagoSerializer(serializers.ModelSerializer):
             validated_data['fecha'] = date.today()
         if 'fecha_creacion' not in validated_data:
             validated_data['fecha_creacion'] = date.today()
+        if 'estado' not in validated_data:
+            validated_data['estado'] = 'pendiente'
         return super().create(validated_data)
 
 class HabitacionSerializer(serializers.ModelSerializer):

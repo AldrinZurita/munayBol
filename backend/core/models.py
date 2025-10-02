@@ -39,6 +39,16 @@ class Pago(models.Model):
     monto = models.FloatField()
     fecha = models.DateField()
     fecha_creacion = models.DateField()
+    class Estado(models.TextChoices):
+        PENDIENTE = 'pendiente', 'Pendiente'
+        PROCESANDO = 'procesando', 'Procesando'
+        COMPLETADO = 'completado', 'Completado'
+        FALLIDO = 'fallido', 'Fallido'
+        REEMBOLSADO = 'reembolsado', 'Reembolsado'
+        CANCELADO = 'cancelado', 'Cancelado'
+
+    # El pago ahora inicia en 'pendiente' y solo pasa a 'completado' tras validar disponibilidad
+    estado = models.CharField(max_length=15, choices=Estado.choices, default=Estado.PENDIENTE)
 
 class Habitacion(models.Model):
     num = models.CharField(primary_key=True, max_length=20)
@@ -66,8 +76,9 @@ class Reserva(models.Model):
 
 class Paquete(models.Model):
     id_paquete = models.BigIntegerField(primary_key=True)
-    nombre = models.TextField()
-    tipo = models.TextField()
+    # Defaults para evitar prompts en migraciones y ser consistentes con 0009
+    nombre = models.TextField(blank=True, default="")
+    tipo = models.TextField(blank=True, default="")
     precio = models.FloatField()
     id_reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE)
     id_lugar = models.ForeignKey(LugarTuristico, on_delete=models.CASCADE)
