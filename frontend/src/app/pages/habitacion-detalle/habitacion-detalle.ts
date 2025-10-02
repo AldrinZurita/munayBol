@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HabitacionService } from '../../services/habitacion.service';
+import { HabitacionService, DisponibilidadHabitacionResponse, IntervaloReservado } from '../../services/habitacion.service';
 import { Habitacion } from '../../interfaces/habitacion.interface';
 
 
@@ -29,10 +29,15 @@ export class HabitacionDetalle implements OnInit {
 	fechaCaducidad: string = '';
 	minFecha: string = '';
 	minFechaSalida: string = '';
+	disponibilidad: DisponibilidadHabitacionResponse | null = null;
+	intervalos: IntervaloReservado[] = [];
+	fechaOcupada: boolean = false;
+	mensajeDisponibilidad: string = '';
 
 	constructor(
 		private readonly route: ActivatedRoute,
-		private readonly habitacionService: HabitacionService
+		private readonly habitacionService: HabitacionService,
+		private readonly router: Router
 	) {}
 
 	ngOnInit() {
@@ -49,6 +54,9 @@ export class HabitacionDetalle implements OnInit {
 				next: habitaciones => {
 					this.habitacion = habitaciones.find(h => h.num === num) || null;
 					this.generarReviewsFake();
+					if (this.habitacion) {
+						this.cargarDisponibilidad(this.habitacion.num);
+					}
 				}
 			});
 		} else {
@@ -63,6 +71,58 @@ export class HabitacionDetalle implements OnInit {
 			this.fechaCaducidad = nuevaSalida.toISOString().slice(0, 10);
 		}
 		this.minFechaSalida = this.addDias(this.fechaReserva, 1);
+		this.evaluarSolapamiento();
+	}
+
+	onChangeFechaCaducidad() {
+		if (this.fechaCaducidad <= this.fechaReserva) {
+			this.fechaCaducidad = this.addDias(this.fechaReserva, 1);
+		}
+		this.evaluarSolapamiento();
+	}
+
+	private cargarDisponibilidad(num: string) {
+		this.habitacionService.getDisponibilidadHabitacion(num).subscribe({
+			next: resp => {
+				this.disponibilidad = resp;
+				this.intervalos = resp.intervalos_reservados.map(i => ({...i}));
+				// Ya no reajustamos automáticamente; se decide al click.
+				this.evaluarSolapamiento();
+			}
+		});
+	}
+
+	private estaDentro(fecha: string, intervalo: IntervaloReservado): boolean {
+		return fecha >= intervalo.inicio && fecha <= intervalo.fin;
+	}
+
+	private rangoSolapa(inicio: string, fin: string, intervalo: IntervaloReservado): boolean {
+		return inicio <= intervalo.fin && fin >= intervalo.inicio;
+	}
+
+	private evaluarSolapamiento() {
+		this.fechaOcupada = this.intervalos.some(it => this.rangoSolapa(this.fechaReserva, this.fechaCaducidad, it));
+	}
+
+	onIntentarReservar() {
+		this.mensajeDisponibilidad = '';
+		this.evaluarSolapamiento();
+		if (this.fechaOcupada) {
+			const prox = this.disponibilidad?.next_available_from || '';
+			this.mensajeDisponibilidad = `La habitación está ocupada en esas fechas, disponible desde ${prox}`;
+			return;
+		}
+		// Navegación manual asegurando parámetros consistentes
+		this.router.navigate(['/reservas'], {
+			queryParams: {
+				num: this.habitacion?.num,
+				precio: this.habitacion?.precio,
+				hotel: this.habitacion?.codigo_hotel,
+				capacidad: this.habitacion?.cant_huespedes,
+				fecha_reserva: this.fechaReserva,
+				fecha_caducidad: this.fechaCaducidad
+			}
+		});
 	}
 
 	private addDias(fecha: string, dias: number): string {

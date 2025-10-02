@@ -52,8 +52,8 @@
 			<h2 class="font-bold mb-4 text-center text-[1.25rem]">Reserva tu habitación</h2>
 
 			<div class="precio-panel text-center p-4 bg-blue-100 rounded-lg mb-4">
-	<div class="precio text-orange font-bold text-[3rem] leading-none mb-1">{{ getPrecioHabitacion() }} BOB</div>
-	<div class="text-gray-600 text-sm">por noche</div>
+				<div class="precio text-orange font-bold text-[3rem] leading-none mb-1">{{ getPrecioHabitacion() }} BOB</div>
+				<div class="text-gray-600 text-sm">por noche</div>
 </div>
 
 			<p class="mb-2 text-[0.95rem]">Check-in: 12:00</p>
@@ -74,11 +74,17 @@
 				</label>
 			</div>
 
+
+			<!-- Mensaje de ocupación inmediato removido; se muestra solo tras intentar reservar -->
+
 			<div class="text-center mb-4">
-				<a class="btn-reservar" [routerLink]="['/reservas']"
-					 [queryParams]="{ num: habitacion?.num, precio: habitacion?.precio, hotel: habitacion?.codigo_hotel, capacidad: habitacion?.cant_huespedes, fecha_reserva: fechaReserva, fecha_caducidad: fechaCaducidad }">
-					Reservar Ahora
-				</a>
+				<a 
+					class="btn-reservar"
+					(click)="$event.preventDefault(); onIntentarReservar();"
+				>Reservar Ahora</a>
+				<div class="warning" *ngIf="mensajeDisponibilidad">
+					{{ mensajeDisponibilidad }}
+				</div>
 			</div>
 
 			<p class="text-gray-500 mt-2 text-[0.85rem]">✓ Cancelación gratuita hasta 24 horas antes</p>
