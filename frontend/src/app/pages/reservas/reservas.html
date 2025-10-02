@@ -60,6 +60,16 @@
       <div class="resumen-datos">
         <div><span class="icon material-symbols-rounded">group</span> Huéspedes <span class="right">{{ huespedes }}</span></div>
         <div>Noches <span class="right">{{ noches }}</span></div>
+        <div class="fechas-grid">
+          <label class="fecha-item">
+            <span class="lbl">Check-in</span>
+            <input type="date" [min]="minFechaReserva" [(ngModel)]="fecha_reserva" name="fecha_reserva" (change)="onChangeFechaReserva()" />
+          </label>
+          <label class="fecha-item">
+            <span class="lbl">Check-out</span>
+            <input type="date" [min]="minFechaCaducidad" [(ngModel)]="fecha_caducidad" name="fecha_caducidad" (change)="onChangeFechaCaducidad()" />
+          </label>
+        </div>
       </div>
       <div class="resumen-precio">
         <div>{{ hotel.precio }} BOB x {{ noches }} noches <span class="right">{{ subtotal }} BOB</span></div>

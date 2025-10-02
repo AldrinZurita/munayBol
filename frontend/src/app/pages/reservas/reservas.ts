@@ -19,6 +19,8 @@ export class ReservaComponent implements OnInit {
   Habitacion = { num: '', precio: 0, hotel: '', capacidad: 1 };
   fecha_reserva: string = '';
   fecha_caducidad: string = '';
+  minFechaReserva: string = '';
+  minFechaCaducidad: string = '';
 
   get subtotal() {
     return this.Habitacion.precio * this.noches;
@@ -84,10 +86,37 @@ export class ReservaComponent implements OnInit {
       }
       this.hotel.precio = this.Habitacion.precio;
       this.huespedes = this.Habitacion.capacidad;
+      this.minFechaReserva = new Date().toISOString().slice(0,10);
+      this.ajustarFechas();
     });
     this.reservasService.getReservas().subscribe(data => {
       this.reservas = data;
     });
+  }
+
+  private ajustarFechas() {
+    // Garantiza que fecha_caducidad > fecha_reserva y recalcula noches
+    if (this.fecha_caducidad <= this.fecha_reserva) {
+      const d = new Date(this.fecha_reserva);
+      d.setDate(d.getDate() + 1);
+      this.fecha_caducidad = d.toISOString().slice(0,10);
+    }
+    const start = new Date(this.fecha_reserva);
+    const end = new Date(this.fecha_caducidad);
+    const diffMs = end.getTime() - start.getTime();
+    const dias = Math.max(1, Math.round(diffMs / (1000*60*60*24)));
+    this.noches = dias;
+    const minSalida = new Date(this.fecha_reserva);
+    minSalida.setDate(minSalida.getDate() + 1);
+    this.minFechaCaducidad = minSalida.toISOString().slice(0,10);
+  }
+
+  onChangeFechaReserva() {
+    this.ajustarFechas();
+  }
+
+  onChangeFechaCaducidad() {
+    this.ajustarFechas();
   }
 
   //Validacion simple
