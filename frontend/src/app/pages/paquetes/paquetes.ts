@@ -21,7 +21,7 @@ export class Paquetes implements OnInit {
       codigo_hotel: 1,
       departamento: 'Cochabamba',
       descripcion: 'Monumento icónico con vista panorámica de la ciudad y museo histórico en su base.',
-      precio: 216.25,
+      precio: 220,
       tipo: 'cultural',
       inclusiones: ['Visita guiada', 'Entrada al museo', 'Transporte local', 'Guía bilingüe'],
       info_importante: ['Horario: 8 AM - 6 PM', 'Acceso por teleférico', 'Ropa cómoda recomendada'],
@@ -38,7 +38,7 @@ export class Paquetes implements OnInit {
       codigo_hotel: 2,
       departamento: 'Chuquisaca',
       descripcion: 'Museo donde se firmó el Acta de Independencia de Bolivia en 1825.',
-      precio: 150.50,
+      precio: 150,
       tipo: 'historico',
       inclusiones: ['Entrada al museo', 'Guía especializado', 'Recorrido por Sucre'],
       info_importante: ['Horario: 9 AM - 6 PM', 'Grupos máximo de 10 personas'],
@@ -55,7 +55,7 @@ export class Paquetes implements OnInit {
       codigo_hotel: 3,
       departamento: 'La paz',
       descripcion: 'Reserva natural con biodiversidad única, ideal para ecoturismo y fotografía de fauna.',
-      precio: 320.00,
+      precio: 320,
       tipo: 'naturaleza',
       inclusiones: ['Guía ecológica', 'Transporte fluvial', 'Alojamiento ecológico'],
       info_importante: ['Repelente obligatorio', 'Botas de trekking recomendadas'],
@@ -72,7 +72,7 @@ export class Paquetes implements OnInit {
       codigo_hotel: 4,
       departamento: 'Potosí',
       descripcion: 'El salar más grande del mundo, famoso por su paisaje surrealista y espejos naturales.',
-      precio: 410.75,
+      precio: 410,
       tipo: 'aventura',
       inclusiones: ['Tour en 4x4', 'Guía local', 'Alojamiento en hotel de sal'],
       info_importante: ['Lentes de sol recomendados', 'Protección solar'],
@@ -89,7 +89,7 @@ export class Paquetes implements OnInit {
       codigo_hotel: 5,
       departamento: 'Santa Cruz',
       descripcion: 'Cascadas escondidas en medio de la selva, ideales para senderismo y fotografía.',
-      precio: 185.00,
+      precio: 185,
       tipo: 'naturaleza',
       inclusiones: ['Guía de senderismo', 'Transporte privado', 'Refrigerio local'],
       info_importante: ['Ropa impermeable', 'No apto para niños menores de 8 años'],
@@ -106,7 +106,7 @@ export class Paquetes implements OnInit {
       codigo_hotel: 6,
       departamento: 'Tarija',
       descripcion: 'Experiencia gastronómica y cultural en los viñedos más importantes de Bolivia.',
-      precio: 275.50,
+      precio: 275,
       tipo: 'gastronomico',
       inclusiones: ['Degustación de vinos', 'Tour por bodegas', 'Cena tradicional'],
       info_importante: ['No apto para menores de edad', 'Vestimenta casual elegante'],
@@ -121,10 +121,17 @@ export class Paquetes implements OnInit {
   disponibleSeleccionado = '';
   departamentoSeleccionado = '';
   tipoSeleccionado = '';
-  departamentos: string[] = ['Cochabamba', 'Chuquisaca', 'Beni', 'Pando', 'Santa Cruz', 'Tarija', 'La paz', 'Oruro'];
+  departamentos: string[] = ['Cochabamba', 'Chuquisaca', 'Beni', 'Pando', 'Santa Cruz', 'Tarija', 'La Paz', 'Oruro'];
   cargando = false;
   error = '';
   isSuperAdmin = false;
+
+   // Nuevas propiedades para el modal
+  mostrarModalEditar = false;
+  paqueteEditando: any = null;
+  inclusionesTexto = '';
+  infoImportanteTexto = '';
+  itinerarioTexto = '';
 
   constructor(private authService: AdminAuthService) {}
   ngOnInit() {
@@ -151,6 +158,46 @@ export class Paquetes implements OnInit {
     this.paquetesFiltrados = filtrados;
   }
 
+// Nuevo método para abrir el modal de edición
+  onEditarPaquete(paquete: any) {
+    this.paqueteEditando = { ...paquete };
+    this.inclusionesTexto = paquete.inclusiones.join(', ');
+    this.infoImportanteTexto = paquete.info_importante.join(', ');
+    this.itinerarioTexto = paquete.itinerario.join(', ');
+    this.mostrarModalEditar = true;
+  }
+
+  // Método para cerrar el modal
+  cerrarModal() {
+    this.mostrarModalEditar = false;
+    this.paqueteEditando = null;
+    this.inclusionesTexto = '';
+    this.infoImportanteTexto = '';
+    this.itinerarioTexto = '';
+  }
+
+  // Método para guardar los cambios del formulario
+  guardarEdicion() {
+    if (this.paqueteEditando) {
+      // Convertir textos a arrays
+      this.paqueteEditando.inclusiones = this.inclusionesTexto.split(',').map((item: string) => item.trim()).filter((item: string) => item);
+      this.paqueteEditando.info_importante = this.infoImportanteTexto.split(',').map((item: string) => item.trim()).filter((item: string) => item);
+      this.paqueteEditando.itinerario = this.itinerarioTexto.split(',').map((item: string) => item.trim()).filter((item: string) => item);
+
+      const index = this.paquetes.findIndex(p => p.id === this.paqueteEditando.id);
+      if (index !== -1) {
+        this.paquetes[index] = { ...this.paqueteEditando };
+        this.aplicarFiltros();
+        this.cerrarModal();
+        alert('Paquete actualizado correctamente');
+      }
+    }
+  }
+
+
+
+
+  
   onAgregarPaquete() {
     const lugar_turistico = prompt('Lugar turístico:')?.trim();
     const hotel = prompt('Nombre del hotel:')?.trim();
@@ -190,44 +237,7 @@ export class Paquetes implements OnInit {
     }
   }
 
-  onEditarPaquete(paquete: any) {
-    const lugar_turistico = prompt('Nuevo lugar turístico:', paquete.lugar_turistico)?.trim();
-    const hotel = prompt('Nuevo hotel:', paquete.hotel)?.trim();
-    const habitacion = prompt('Nueva habitación:', paquete.habitacion)?.trim();
-    const codigo_hotel = Number(prompt('Nuevo código hotel:', paquete.codigo_hotel.toString()));
-    const departamento = prompt('Nuevo departamento:', paquete.departamento);
-    const descripcion = prompt('Nueva descripción:', paquete.descripcion);
-    const precio = Number(prompt('Nuevo precio:', paquete.precio.toString()));
-    const tipo = prompt('Nuevo tipo:', paquete.tipo);
-    const inclusiones = prompt('Inclusiones (separadas por comas):', paquete.inclusiones.join(', '))?.split(',').map(i => i.trim());
-    const info_importante = prompt('Información importante (separada por comas):', paquete.info_importante.join(', '))?.split(',').map(i => i.trim());
-    const itinerario = prompt('Itinerario (separado por comas):', paquete.itinerario.join(', '))?.split(',').map(i => i.trim());
-    const disponible = confirm('¿Disponible?');
-    const ubicacion = prompt('Nueva ubicación:', paquete.ubicacion)?.trim();
-
-    if (lugar_turistico && hotel && habitacion && !isNaN(codigo_hotel) && departamento && descripcion && !isNaN(precio) && tipo && inclusiones && info_importante && itinerario && ubicacion) {
-      const paqueteActualizado = {
-        ...paquete,
-        lugar_turistico,
-        hotel,
-        habitacion,
-        codigo_hotel,
-        departamento,
-        descripcion,
-        precio,
-        tipo,
-        inclusiones,
-        info_importante,
-        itinerario,
-        disponible,
-        ubicacion
-      };
-      const index = this.paquetes.findIndex(p => p.id === paquete.id);
-      this.paquetes[index] = paqueteActualizado;
-      this.aplicarFiltros();
-      alert('Paquete actualizado');
-    }
-  }
+ 
 
   onEliminarPaquete(paquete: any) {
     if (confirm('¿Eliminar paquete?')) {

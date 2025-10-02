@@ -284,3 +284,32 @@
     }
   }
 }
+.habitacion-detalle {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hotel-contenido {
+  display: flex;
+  flex-wrap: nowrap; // evita que se apilen
+  gap: 1.5rem;
+
+  @media (max-width: 1024px) {
+    flex-wrap: wrap; // en pantallas pequeñas se apilan
+  }
+}
+
+.info-contenedor {
+  flex: 0 0 65%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.reserva {
+  flex: 0 0 35%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}

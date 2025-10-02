@@ -1,305 +1,361 @@
-.btn-reservar {
-	padding: 0.45rem 1rem;
-	border-radius: 0.5rem;
-	font-weight: bold;
-	font-size: 1rem;
-	color: #fff;
-	background-color: #016d2e;
-	transition: background-color 0.2s;
-	border: none;
-	cursor: pointer;
-	text-align: center;
-	text-decoration: none;
-	display: block;
-	width: fit-content;
-	margin-left: auto;
-	margin-right: auto;
-}
-.btn-reservar:hover {
-	background-color: #15803d;
-}
 .habitacion-detalle {
-	max-width: 1000px;
-	margin: 0 auto;
-	padding: 2rem;
-	font-family: 'Segoe UI', sans-serif;
-	color: #333;
-
-	.hotel-contenido {
-		display: flex;
-		flex-wrap: nowrap;
-		gap: 2rem;
-		align-items: flex-start;
-	}
-
-	.info-contenedor {
-		width: 60%;
-		display: flex;
-		flex-direction: column;
-		gap: 2rem;
-	}
-
-	.reserva {
-		width: 40%;
-		border-radius: 0.75rem;
-		background-color: #fff;
-		padding: 1.5rem;
-		border: 1px solid #ddd;
-		font-size: 1.15rem;
-	}
-
-	.shadow-strong {
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-	}
-
-	.hotel-info, .hotel-ubicacion, .hotel-reviews {
-		border-radius: 0.75rem;
-		background-color: #fff;
-		padding: 1.5rem;
-		border: 1px solid #ddd;
-		font-size: 1.15rem;
-	}
-
-	.hotel-title {
-		font-size: 2.25rem;
-		font-weight: 700;
-		line-height: 1.2;
-	}
-
-	.price-block .text-orange {
-		color: #FF9800;
-		font-size: 2rem;
-		font-weight: 700;
-	}
-
-	.stars {
-		font-size: 1.3rem;
-		letter-spacing: 0.1rem;
-		background: linear-gradient(90deg, #FFD700 calc(var(--rating) * 20%), #ccc calc(var(--rating) * 20%));
-		background-clip: text;
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-	}
-
-	.score {
-		font-size: 1.1rem;
-		color: #666;
-	}
-	.precio-panel {
-	background-color: #e3f2fd; // celeste claro
-	border-radius: 0.75rem;
-	padding: 1rem;
-	margin-bottom: 1rem;
-	text-align: center;
-
-	.precio {
-		font-size: 2rem;
-		font-weight: bold;
-		color: #FF9800; // naranja
-		margin-bottom: 0.5rem;
-	}
-
-	.text-gray-600 {
-		font-size: 1rem;
-		color: #666;
-	}
-}
-/* Toast */
-.toast-ocupado {
-	position: fixed;
-	bottom: 1.25rem;
-	right: 1.25rem;
-	background: #b91c1c;
-	color: #fff;
-	padding: 0.75rem 1rem;
-	border-radius: 0.5rem;
-	box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-	font-size: 0.9rem;
-	z-index: 1100;
-	border: none;
-	cursor: pointer;
+  padding: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-/* Modal */
+.hotel-contenido {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1.5rem;
+
+  @media (max-width: 1024px) {
+    flex-wrap: wrap;
+  }
+}
+
+.info-contenedor {
+  flex: 0 0 65%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.reserva {
+  flex: 0 0 35%;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+}
+
+.hotel-info,
+.hotel-reviews,
+.reserva {
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.hotel-info-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.hotel-info-texto {
+  flex: 1;
+}
+
+.hotel-title {
+  font-size: 1.65rem;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
+}
+
+.title-skeleton {
+  height: 1.5rem;
+  background-color: #e5e7eb;
+  border-radius: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.hotel-ubicacion {
+  color: #4b5563;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.hotel-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.meta-lines {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+
+    .icon {
+      margin-right: 0.25rem;
+    }
+
+    .disponible {
+      color: #15803d;
+    }
+
+    .no-disponible {
+      color: #dc2626;
+    }
+  }
+}
+
+.price-wrapper {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.price-big {
+  color: #f97316;
+  font-weight: bold;
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.price-label {
+  color: #4b5563;
+  font-size: 0.75rem;
+}
+
+.reviews-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.review {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+
+  .review-header {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .review-text {
+    font-size: 0.875rem;
+    color: #374151;
+    font-style: italic;
+    margin-top: 0.25rem;
+  }
+
+  .review-fecha {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+  }
+}
+
+.reserva-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.precio-panel {
+  text-align: center;
+  background-color: #dbeafe;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+
+  .precio {
+    color: #f97316;
+    font-weight: bold;
+    font-size: 2.5rem;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .precio-label {
+    color: #4b5563;
+    font-size: 0.875rem;
+  }
+}
+
+.reserva-capacidad {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.fechas-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+
+  .date-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+
+    label {
+      width: 6rem;
+      font-weight: 600;
+    }
+
+    input {
+      flex: 1;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      padding: 0.5rem 0.75rem;
+    }
+  }
+}
+
+.accion-reservar {
+  margin-bottom: 1rem;
+
+  .btn-reservar {
+    display: inline-block;
+    background-color: #2563eb;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #1d4ed8;
+    }
+  }
+
+  .toast-ocupado {
+    display: block;
+    margin-top: 0.5rem;
+    background-color: #fee2e2;
+    color: #b91c1c;
+    font-size: 0.875rem;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    border: none;
+    cursor: pointer;
+  }
+}
+
 .modal-ocupado-backdrop {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba(0,0,0,0.4);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	z-index: 1090;
-}
-.modal-ocupado {
-	background: #fff;
-	width: min(420px, 92%);
-	border-radius: 0.75rem;
-	padding: 1.5rem 1.25rem 1.25rem;
-	box-shadow: 0 8px 28px rgba(0,0,0,0.25);
-	font-size: 0.95rem;
-}
-.modal-ocupado h3 {
-	margin: 0 0 0.75rem;
-	font-size: 1.15rem;
-	font-weight: 600;
-}
-.acciones-modal {
-	display: flex;
-	justify-content: flex-end;
-	gap: 0.75rem;
-	margin-top: 1rem;
-}
-.btn-sec {
-	background: #e5e7eb;
-	color: #374151;
-	border: none;
-	padding: 0.5rem 0.9rem;
-	border-radius: 0.5rem;
-	cursor: pointer;
-	font-weight: 500;
-}
-.btn-sec:hover { background: #d1d5db; }
-.btn-principal {
-	background: #016d2e;
-	color: #fff;
-	border: none;
-	padding: 0.5rem 1rem;
-	border-radius: 0.5rem;
-	cursor: pointer;
-	font-weight: 600;
-}
-.btn-principal:hover { background: #15803d; }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(31, 41, 55, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-.hotel-header {
-	position: relative;
+  .modal-ocupado {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    max-width: 400px;
+    text-align: center;
 
-	.hotel-header-right {
-		position: absolute;
-		top: 0;
-		right: 0;
-		text-align: right;
+    h3 {
+      font-size: 1.125rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
 
-		.price-block {
-			.text-orange {
-				font-size: 2.5rem;
-				font-weight: bold;
-				color: #FF9800;
-				line-height: 1;
-			}
+    p {
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
 
-			.text-gray-600 {
-				font-size: 0.9rem;
-				color: #666;
-			}
-		}
-	}
+    .acciones-modal {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+
+      .btn-sec,
+      .btn-principal {
+        flex: 1;
+        padding: 0.5rem;
+        border-radius: 0.375rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .btn-sec {
+        background-color: #e5e7eb;
+        color: #374151;
+      }
+
+      .btn-principal {
+        background-color: #2563eb;
+        color: white;
+      }
+    }
+  }
 }
 
-
-	.amenities {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 1rem;
-		margin-top: .4rem;
-		margin-bottom: 1.1rem;
-	}
-.info-grid {
-	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 1.5rem;
-	font-size: 1.25rem;
-	color: #666;
-	margin-top: 1rem;
-
-	.flex {
-		display: flex;
-		align-items: center;
-	}
-
-	.icon {
-		stroke: currentColor;
-		width: 1.25rem;
-		height: 1.25rem;
-		margin-right: 0.5rem;
-	}
-  
-	span {
-		font-size: 1rem;
-	}
+.reserva-info {
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
 }
 
-	.chip {
-		display: flex;
-		align-items: center;
-		background-color: #f0f0f0;
-		border-radius: 0.5rem;
-		padding: 0.4rem 0.8rem;
-		font-size: 1.1rem;
-		color: #555;
-		gap: .35rem;
-	}
-	.chip-icon { font-size: .95rem; line-height:1; }
-	.price-side { min-width: 140px; }
-	.price-wrapper {
-		.price-big { font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; font-weight:700; letter-spacing:.5px; margin-bottom:.35rem; }
-	}
-
-	/* info-grid-alt eliminado: reemplazado por .meta-lines */
-
-	/* Nueva lista de meta datos estilo líneas con ícono */
-	.meta-lines {
-		list-style: none;
-		margin: .2rem 0 .85rem;
-		padding: 0;
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-		gap: .35rem .75rem;
-		li {
-			font-size: .9rem;
-			color: #1f2937;
-			display: flex;
-			align-items: center;
-			gap: .35rem;
-			padding: .35rem .55rem;
-			background: #f8fafc;
-			border: 1px solid #e5e7eb;
-			border-radius: .5rem;
-		}
-		.icon { font-size: 1rem; line-height: 1; }
-	}
-
-	.price-side .price-big { font-size: 2.5rem; }
-	.price-side .price-big, .text-orange { color:#FF9800 !important; }
-
-	.title-skeleton {
-		width: 65%;
-		height: 2.1rem;
-		border-radius: .4rem;
-		background: linear-gradient(90deg,#e5e7eb 0%, #f3f4f6 40%, #e5e7eb 80%);
-		background-size: 200% 100%;
-		animation: shimmer 1.2s linear infinite;
-	}
-	@keyframes shimmer { to { background-position: -200% 0; } }
-
-	/* Alineación botón reservar (panel lateral) */
-	.accion-reservar { text-align: left; margin-top: .75rem; }
-	.btn-reservar-inline { margin-left: 0; margin-right: 0; }
-
-	.text-green-700 { color:#047857; }
-	.text-red-600 { color:#dc2626; }
-
-	.mapa-placeholder {
-		height: 160px;
-		background-color: #f0f0f0;
-		border-radius: 0.5rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: #777;
-		font-size: 1.1rem;
-	}
+.location-wrapper {
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 1.5rem;
 }
-/* ...existing code... */
+.location-section {
+  .location-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #0f172a;
+  }
+
+  .location-box {
+    display: flex;
+    align-items: center;
+    background-color: #eaeaea;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    gap: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .location-icon {
+    font-size: 2rem;
+    color: #016d2e;
+  }
+
+  .location-text {
+    display: flex;
+    flex-direction: column;
+
+    .map-label {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 0.3rem;
+    }
+
+    .map-location {
+      font-size: 1rem;
+      color: #555;
+    }
+  }
+}
