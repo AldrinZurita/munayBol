@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReservasService } from '../../services/reservas.service';
 import { PagoService, Pago } from '../../services/pago.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HabitacionService } from '../../services/habitacion.service';
 
 @Component({
@@ -77,7 +77,8 @@ export class ReservaComponent implements OnInit {
   private readonly reservasService: ReservasService, // retained in case future use (could be removed)
     private readonly pagoService: PagoService,
     private readonly route: ActivatedRoute,
-    private readonly habitacionService: HabitacionService
+    private readonly habitacionService: HabitacionService,
+    private readonly router: Router
   ) {}
 
   ngOnInit() {
@@ -137,6 +138,8 @@ export class ReservaComponent implements OnInit {
   }
 
   confirmarPago() {
+    // Evita doble envío si ya está procesando
+    if (this.creating) return;
     // Simulación: solo valida formato básico y crea el pago
     if (!this.tarjeta.trim() || !this.nombre.trim() || !this.expiracion.trim() || !this.cvv.trim()) {
       this.lanzarError('Completa todos los campos para simular el pago.');
@@ -206,7 +209,17 @@ export class ReservaComponent implements OnInit {
 
   // confirmarReserva removed (no longer needed)
 
-  cerrarSuccess() { this.showSuccessModal = false; }
+  cerrarSuccess() {
+    this.showSuccessModal = false;
+    // Reset sensitive fields
+    this.tarjeta = '';
+    this.nombre = '';
+    this.expiracion = '';
+    this.cvv = '';
+    this.creating = false;
+    // Navigate to home after short microtask to ensure modal closes cleanly
+    setTimeout(()=> this.router.navigate(['']), 0);
+  }
   cerrarConflict() { this.showConflictModal = false; }
   usarFechaSugerida() {
     if (this.conflictNextAvailable) {

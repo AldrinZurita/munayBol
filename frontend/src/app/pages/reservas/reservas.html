@@ -33,8 +33,10 @@
             Tus datos están protegidos con encriptación SSL
           </span>
         </div>
-        <button class="btn btn--pago" type="button" (click)="confirmarPago()">
-          Confirmar Pago - {{ total }} BOB
+        <button class="btn btn--pago" type="button" (click)="confirmarPago()" [disabled]="creating || pagoInvalido()" [attr.aria-busy]="creating ? 'true' : 'false'">
+          <span class="spinner" *ngIf="creating"></span>
+          <span *ngIf="!creating">Confirmar Pago - {{ total }} BOB</span>
+          <span *ngIf="creating">Procesando...</span>
         </button>
         <!-- Eliminados campos de nombre huésped y correo -->
       </form>
