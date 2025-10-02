@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ReservasService, Reserva } from '../../services/reservas.service';
 import { PagoService, Pago } from '../../services/pago.service';
 import { ActivatedRoute } from '@angular/router';
+import { HabitacionService } from '../../services/habitacion.service';
 
 @Component({
   selector: 'app-reserva',
@@ -66,7 +67,8 @@ export class ReservaComponent implements OnInit {
   constructor(
     private readonly reservasService: ReservasService,
     private readonly pagoService: PagoService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly habitacionService: HabitacionService
   ) {}
 
   ngOnInit() {
@@ -133,36 +135,55 @@ export class ReservaComponent implements OnInit {
       alert('Completa todos los campos para simular el pago.');
       return;
     }
-    // Crear pago real en backend
-  const hoy = new Date().toISOString().slice(0, 10);
-    const pago: Pago = {
-      tipo_pago: 'tarjeta',
-      monto: this.total,
-      fecha: hoy,
-      fecha_creacion: hoy
-    };
-    this.pagoService.crearPago(pago).subscribe({
-      next: (res) => {
-        // Registrar reserva real con el id_pago recibido
-        const reserva = {
-          fecha_reserva: this.fecha_reserva,
-          fecha_caducidad: this.fecha_caducidad,
-          num_habitacion: this.Habitacion.num,
-          codigo_hotel: Number(this.Habitacion.hotel),
-          ci_usuario: 1, // Placeholder: integrar ID real de usuario autenticado
-          id_pago: res.id_pago
+    // Paso 1: Revalidar disponibilidad actualizada (doble verificación)
+    const num = this.Habitacion.num;
+    if (!num) {
+      alert('No se encontró la habitación.');
+      return;
+    }
+    this.habitacionService.getDisponibilidadHabitacion(num).subscribe({
+      next: disp => {
+        const conflicto = disp.intervalos_reservados.some(i =>
+          this.fecha_reserva <= i.fin && this.fecha_caducidad >= i.inicio
+        );
+        if (conflicto) {
+          alert('El rango ya fue ocupado. Próxima fecha disponible: ' + disp.next_available_from);
+          return;
+        }
+        // Paso 2: Crear pago tras validar disponibilidad vigente
+        const hoy = new Date().toISOString().slice(0, 10);
+        const pago: Pago = {
+          tipo_pago: 'tarjeta',
+          monto: this.total,
+          fecha: hoy,
+          fecha_creacion: hoy
         };
-        this.reservasService.crearReserva(reserva).subscribe({
-          next: (r) => {
-            alert('Reserva registrada. ID: ' + r.id_reserva);
+        this.pagoService.crearPago(pago).subscribe({
+          next: (res) => {
+            const reserva = {
+              fecha_reserva: this.fecha_reserva,
+              fecha_caducidad: this.fecha_caducidad,
+              num_habitacion: this.Habitacion.num,
+              codigo_hotel: Number(this.Habitacion.hotel),
+              ci_usuario: 1,
+              id_pago: res.id_pago
+            };
+            this.reservasService.crearReserva(reserva).subscribe({
+              next: (r) => {
+                alert('Reserva registrada. ID: ' + r.id_reserva);
+              },
+              error: (err) => {
+                alert('Error al registrar la reserva: ' + (err.error?.error || err.message));
+              }
+            });
           },
           error: (err) => {
-            alert('Error al registrar la reserva: ' + (err.error?.error || err.message));
+            alert('Error al registrar el pago: ' + (err.error?.error || err.message));
           }
         });
       },
-      error: (err) => {
-        alert('Error al registrar el pago: ' + (err.error?.error || err.message));
+      error: err => {
+        alert('No se pudo validar disponibilidad: ' + (err.error?.error || err.message));
       }
     });
   }
