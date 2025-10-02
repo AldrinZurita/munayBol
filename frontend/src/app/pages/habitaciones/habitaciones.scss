@@ -1,162 +1,237 @@
+:host {
+  display: block;
+}
 
-.ver-detalle-btn {
-  position: absolute;
-  right: 24px;
-  bottom: 20px;
-  background: #285c91;
-  color: #fff;
-  padding: 8px 24px;
-  border-radius: 4px;
-  border: none;
-  font-weight: 600;
-  font-size: 1em;
-  box-shadow: 0 1px 5px rgba(40,92,145,0.08);
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  transition: background 0.2s;
-  &:hover {
-    background: #1c4167;
+// --- Sistema de Diseño (Variables para consistencia) ---
+$primary-text: #0f172a;
+$secondary-text: #334155;
+$light-text: #64748b;
+$border-color: #e5e7eb;
+$card-bg: #fff;
+$primary-color: #16a34a; // Verde para acciones principales
+$accent-color: #16a34a;  // Azul para "Ver Detalle"
+$danger-color: #dc2626;  // Rojo para "Eliminar" y estado "No disponible"
+$secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
+
+// --- Contenedor Principal ---
+.habitaciones-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+
+  .title {
+    font-weight: 800;
+    font-size: 28px;
+    color: $primary-text;
+    margin-bottom: 20px;
   }
 }
-.habitaciones-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 32px 16px;
+
+// --- Encabezado de Acciones ---
+.header-acciones {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 22px;
 }
 
-h1 {
-  text-align: center;
+// --- Estilos de Botones Unificados ---
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  }
+
+  &.btn-primary {
+    background: $primary-color;
+    color: #fff;
+    &:hover { background: darken($primary-color, 5%); }
+  }
+
+  &.btn-accent {
+    background: $accent-color;
+    color: #fff;
+    &:hover { background: darken($accent-color, 5%); }
+  }
+
+  &.btn-secondary {
+    background: $secondary-btn-bg;
+    color: $primary-text;
+    &:hover { background: darken($secondary-btn-bg, 5%); }
+  }
+
+  &.btn-danger {
+    background: #fee2e2;
+    color: $danger-color;
+    &:hover { background: #fecaca; }
+  }
+}
+
+// --- Tarjeta de Filtros ---
+.filtros-card {
+  background: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  padding: 20px;
   margin-bottom: 24px;
-}
-
-.filtros {
-  background: #f7f7f7;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 32px;
 
   h4 {
-    margin-top: 0;
-    color: #285c91;
-    font-weight: 600;
+    margin: 0 0 16px;
+    font-size: 16px;
+    font-weight: 700;
+    color: $primary-text;
   }
 
-  .filtro-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 12px;
+  .filtros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    align-items: end;
 
-    label {
-      min-width: 120px;
-      margin-right: 8px;
-      font-weight: 500;
-      color: #333;
+    .filtro {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
+      label {
+        font-size: 12px;
+        font-weight: 500;
+        color: $light-text;
+      }
+
+      .select-wrapper {
+        position: relative;
+        select {
+          width: 100%;
+          appearance: none;
+          border: 1px solid $border-color;
+          border-radius: 10px;
+          padding: 10px 34px 10px 12px;
+          font-size: 14px;
+          background-color: #fff;
+          color: $secondary-text;
+          cursor: pointer;
+        }
+        .chevron-icon {
+          position: absolute;
+          right: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          pointer-events: none;
+          color: #94a3b8;
+        }
+      }
     }
 
-    select {
-      flex: 1;
-      padding: 6px 8px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      font-size: 1em;
-    }
-  }
-
-  .aplicar-btn {
-    background: #285c91;
-    color: #fff;
-    padding: 8px 24px;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    margin-top: 8px;
-    font-weight: 600;
-    transition: background 0.2s;
-    &:hover {
-      background: #1c4167;
+    .acciones {
+      .btn {
+        width: 100%; // Botón ocupa todo el ancho en su celda de la grilla
+      }
     }
   }
 }
 
+// --- Indicador de Estado (Cargando, Error) ---
+.estado {
+  color: $primary-text;
+  padding: 10px 0;
+  min-height: 24px;
+  font-weight: 500;
+  &.error { color: $danger-color; }
+}
+
+// --- Lista y Tarjetas de Habitación ---
 .lista-habitaciones {
   display: grid;
-  gap: 24px;
+  gap: 18px;
 }
 
 .habitacion-card {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(40, 92, 145, 0.08);
-  padding: 20px 24px;
-  position: relative;
-  transition: box-shadow 0.2s;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  background: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: 14px;
+  padding: 20px;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
   &:hover {
-    box-shadow: 0 4px 16px rgba(40, 92, 145, 0.15);
+    border-color: darken($border-color, 5%);
+    box-shadow: 0 4px 12px rgba(40, 92, 145, 0.06);
   }
 
-  h3 {
-    margin: 0 0 12px 0;
-    color: #285c91;
-    font-size: 1.2em;
-    font-weight: 700;
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 200px; // Dos columnas en pantallas más grandes
   }
 
-  .habitacion-info {
-    font-size: 0.98em;
-    color: #444;
-    margin-bottom: 12px;
-  }
+  .card-left {
+    h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      color: $primary-text;
+      font-weight: 800;
+    }
 
-  .disponible {
-    color: green;
-    font-weight: bold;
-  }
-  .nodisponible {
-    color: #c00;
-    font-weight: bold;
-  }
+    .descripcion {
+      margin: 0 0 14px;
+      color: $secondary-text;
+      line-height: 1.5;
+      font-size: 14px;
+    }
 
-  .editar-btn,
-  .eliminar-btn {
-    border: none;
-    border-radius: 4px;
-    margin-right: 8px;
-    padding: 7px 18px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-  }
-  .editar-btn {
-    background: #ffe38a;
-    color: #7c5a00;
-    &:hover {
-      background: #ffd054;
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      color: $secondary-text;
+      font-size: 14px;
+
+      .meta-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        .status-dot {
+          width: 9px;
+          height: 9px;
+          border-radius: 50%;
+          &.disponible { background-color: $primary-color; }
+          &.no-disponible { background-color: $danger-color; }
+        }
+      }
     }
   }
-  .eliminar-btn {
-    background: #ffd6d6;
-    color: #a00;
-    &:hover {
-      background: #ffb3b3;
-    }
-  }
-}
 
-.agregar-btn {
-  background: #48c774;
-  color: #fff;
-  padding: 9px 30px;
-  border-radius: 5px;
-  border: none;
-  margin-bottom: 18px;
-  font-weight: 600;
-  font-size: 1.1em;
-  box-shadow: 0 1px 5px rgba(40,92,145,0.08);
-  cursor: pointer;
-  transition: background 0.2s;
-  &:hover {
-    background: #34a55c;
+  .card-right {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+
+    // Los botones ocupan todo el ancho en su contenedor
+    .btn {
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      align-items: flex-end; // Botones a la derecha en escritorio
+      justify-content: center;
+    }
   }
 }

@@ -13,6 +13,68 @@ from .permissions import IsSuperAdmin
 from .llm_client import get_llm_response
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from datetime import date, timedelta
+
+
+class HabitacionDisponibilidadView(APIView):
+    """Devuelve intervalos reservados y la próxima fecha disponible para una habitación.
+
+    Parámetros query opcionales:
+      desde: YYYY-MM-DD (por defecto hoy)
+      hasta: YYYY-MM-DD (por defecto hoy + 90 días)
+    """
+    def get(self, request, num):
+        try:
+            habitacion = Habitacion.objects.get(pk=num)
+        except Habitacion.DoesNotExist:
+            return Response({"error": "Habitación no encontrada"}, status=404)
+
+        # Ventana de consulta
+        desde_str = request.query_params.get('desde')
+        hasta_str = request.query_params.get('hasta')
+        try:
+            ventana_desde = date.fromisoformat(desde_str) if desde_str else date.today()
+        except ValueError:
+            return Response({"error": "Formato inválido en 'desde'"}, status=400)
+        try:
+            ventana_hasta = date.fromisoformat(hasta_str) if hasta_str else (date.today() + timedelta(days=90))
+        except ValueError:
+            return Response({"error": "Formato inválido en 'hasta'"}, status=400)
+        if ventana_hasta < ventana_desde:
+            return Response({"error": "'hasta' no puede ser anterior a 'desde'"}, status=400)
+
+        # Obtener reservas que intersectan la ventana
+        reservas = (Reserva.objects
+                    .filter(num_habitacion=habitacion,
+                            fecha_reserva__lte=ventana_hasta,
+                            fecha_caducidad__gte=ventana_desde)
+                    .order_by('fecha_reserva'))
+
+        intervalos = []
+        for r in reservas:
+            intervalos.append({
+                'inicio': r.fecha_reserva.isoformat(),
+                'fin': r.fecha_caducidad.isoformat()
+            })
+
+        # Calcular próxima fecha disponible partiendo de ventana_desde
+        cursor = ventana_desde
+        for r in reservas:
+            # Si el cursor cae dentro de un intervalo, saltar al día siguiente al fin
+            if r.fecha_reserva <= cursor <= r.fecha_caducidad:
+                cursor = r.fecha_caducidad + timedelta(days=1)
+        next_available_from = cursor.isoformat()
+
+        return Response({
+            'habitacion': habitacion.num,
+            'codigo_hotel': habitacion.codigo_hotel_id,
+            'intervalos_reservados': intervalos,
+            'next_available_from': next_available_from,
+            'ventana_consulta': {
+                'desde': ventana_desde.isoformat(),
+                'hasta': ventana_hasta.isoformat()
+            }
+        })
 
 
 

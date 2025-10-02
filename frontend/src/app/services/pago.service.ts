@@ -8,6 +8,8 @@ export interface Pago {
   monto: number;
   fecha?: string;
   fecha_creacion?: string;
+  estado?: string;
+  cod_seguridad?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -18,5 +20,9 @@ export class PagoService {
 
   crearPago(pago: Pago): Observable<Pago> {
     return this.http.post<Pago>(this.apiUrl, pago);
+  }
+
+  getPagoById(id: number): Observable<Pago> {
+    return this.http.get<Pago>(`${this.apiUrl}${id}/`);
   }
 }

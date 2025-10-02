@@ -2,7 +2,8 @@ from django.urls import path, include
 from rest_framework import routers
 from .views import (
     UsuarioViewSet, HotelViewSet, LugarTuristicoViewSet,
-    PagoViewSet, HabitacionViewSet, ReservaViewSet, PaqueteViewSet, SugerenciasViewSet, SuperadminLoginView, home, LLMGenerateView
+    PagoViewSet, HabitacionViewSet, ReservaViewSet, PaqueteViewSet, SugerenciasViewSet, SuperadminLoginView, home, LLMGenerateView,
+    HabitacionDisponibilidadView
 )
 
 
@@ -20,5 +21,6 @@ urlpatterns = [
     path('', home, name='home'),
     path('superadmin/login/', SuperadminLoginView.as_view(), name='superadmin-login'),
     path('llm/generate/', LLMGenerateView.as_view(), name='llm-generate'),
+    path('habitaciones/<str:num>/disponibilidad/', HabitacionDisponibilidadView.as_view(), name='habitacion-disponibilidad'),
     path('', include(router.urls)),
 ]

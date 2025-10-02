@@ -29,16 +29,26 @@ class LugarTuristico(models.Model):
     departamento = models.CharField(max_length=100)
     tipo = models.CharField(max_length=50)
     fecha_creacion = models.DateField()
-    horario = models.CharField(max_length=255)
-    descripcion = models.TextField()
-    url_image_lugar_turistico = models.TextField()
+    horario = models.CharField(max_length=255, blank=True, default="")
+    descripcion = models.TextField(blank=True, default="")
+    url_image_lugar_turistico = models.TextField(blank=True, default="")
 
 class Pago(models.Model):
-    id_pago = models.BigIntegerField(primary_key=True)
+    id_pago = models.BigAutoField(primary_key=True)
     tipo_pago = models.CharField(max_length=50)
     monto = models.FloatField()
     fecha = models.DateField()
     fecha_creacion = models.DateField()
+    class Estado(models.TextChoices):
+        PENDIENTE = 'pendiente', 'Pendiente'
+        PROCESANDO = 'procesando', 'Procesando'
+        COMPLETADO = 'completado', 'Completado'
+        FALLIDO = 'fallido', 'Fallido'
+        REEMBOLSADO = 'reembolsado', 'Reembolsado'
+        CANCELADO = 'cancelado', 'Cancelado'
+
+    # El pago ahora inicia en 'pendiente' y solo pasa a 'completado' tras validar disponibilidad
+    estado = models.CharField(max_length=15, choices=Estado.choices, default=Estado.PENDIENTE)
 
 class Habitacion(models.Model):
     num = models.CharField(primary_key=True, max_length=20)
@@ -50,7 +60,7 @@ class Habitacion(models.Model):
     cant_huespedes = models.IntegerField()
 
 class Reserva(models.Model):
-    id_reserva = models.BigIntegerField(primary_key=True)
+    id_reserva = models.BigAutoField(primary_key=True)
     fecha_reserva = models.DateField()
     fecha_caducidad = models.DateField()
     num_habitacion = models.ForeignKey(Habitacion, on_delete=models.CASCADE)
@@ -59,8 +69,16 @@ class Reserva(models.Model):
     ci_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     id_pago = models.ForeignKey(Pago, on_delete=models.CASCADE)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["num_habitacion", "fecha_reserva", "fecha_caducidad"]),
+        ]
+
 class Paquete(models.Model):
     id_paquete = models.BigIntegerField(primary_key=True)
+    # Defaults para evitar prompts en migraciones y ser consistentes con 0009
+    nombre = models.TextField(blank=True, default="")
+    tipo = models.TextField(blank=True, default="")
     precio = models.FloatField()
     id_reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE)
     id_lugar = models.ForeignKey(LugarTuristico, on_delete=models.CASCADE)

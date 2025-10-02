@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ReservasService, Reserva } from '../../services/reservas.service';
+import { ReservasService } from '../../services/reservas.service';
 import { PagoService, Pago } from '../../services/pago.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HabitacionService } from '../../services/habitacion.service';
 
 @Component({
   selector: 'app-reserva',
@@ -17,6 +18,10 @@ export class ReservaComponent implements OnInit {
   huespedes = 1;
   noches = 1;
   Habitacion = { num: '', precio: 0, hotel: '', capacidad: 1 };
+  fecha_reserva: string = '';
+  fecha_caducidad: string = '';
+  minFechaReserva: string = '';
+  minFechaCaducidad: string = '';
 
   get subtotal() {
     return this.Habitacion.precio * this.noches;
@@ -27,7 +32,18 @@ export class ReservaComponent implements OnInit {
   get total() {
     return this.subtotal + this.iva;
   }
-  reservas: Reserva[] = [];
+  // reservas list removed from UI
+  // reservas: Reserva[] = [];
+
+  // UI feedback states
+  showSuccessModal: boolean = false;
+  showConflictModal: boolean = false;
+  conflictNextAvailable: string = '';
+  successCodigo: string = '';
+  successTotal: number = 0;
+  creating: boolean = false;
+  showErrorToast: boolean = false;
+  errorMessage: string = '';
 
   //Inputs de pago
   tarjeta = '';
@@ -55,14 +71,14 @@ export class ReservaComponent implements OnInit {
     this.expiracion = value;
   }
 
-  //Inputs de reserva
-  nombreHuesped = '';
-  correoHuesped = '';
+  // Removed guest name/email inputs
 
   constructor(
-    private reservasService: ReservasService,
-    private pagoService: PagoService,
-    private route: ActivatedRoute
+  private readonly reservasService: ReservasService, // retained in case future use (could be removed)
+    private readonly pagoService: PagoService,
+    private readonly route: ActivatedRoute,
+    private readonly habitacionService: HabitacionService,
+    private readonly router: Router
   ) {}
 
   ngOnInit() {
@@ -71,12 +87,46 @@ export class ReservaComponent implements OnInit {
       this.Habitacion.precio = params['precio'] ? Number(params['precio']) : 0;
       this.Habitacion.hotel = params['hotel'] || '';
       this.Habitacion.capacidad = params['capacidad'] ? Number(params['capacidad']) : 1;
+      this.fecha_reserva = params['fecha_reserva'] || new Date().toISOString().slice(0,10);
+      // Si no viene fecha_caducidad, por defecto un día después de la reserva
+      if (params['fecha_caducidad']) {
+        this.fecha_caducidad = params['fecha_caducidad'];
+      } else {
+        const d = new Date(this.fecha_reserva);
+        d.setDate(d.getDate() + 1);
+        this.fecha_caducidad = d.toISOString().slice(0,10);
+      }
       this.hotel.precio = this.Habitacion.precio;
       this.huespedes = this.Habitacion.capacidad;
+      this.minFechaReserva = new Date().toISOString().slice(0,10);
+      this.ajustarFechas();
     });
-    this.reservasService.getReservas().subscribe(data => {
-      this.reservas = data;
-    });
+    // Removed fetching of all reservas (UI section removed)
+  }
+
+  private ajustarFechas() {
+    // Garantiza que fecha_caducidad > fecha_reserva y recalcula noches
+    if (this.fecha_caducidad <= this.fecha_reserva) {
+      const d = new Date(this.fecha_reserva);
+      d.setDate(d.getDate() + 1);
+      this.fecha_caducidad = d.toISOString().slice(0,10);
+    }
+    const start = new Date(this.fecha_reserva);
+    const end = new Date(this.fecha_caducidad);
+    const diffMs = end.getTime() - start.getTime();
+    const dias = Math.max(1, Math.round(diffMs / (1000*60*60*24)));
+    this.noches = dias;
+    const minSalida = new Date(this.fecha_reserva);
+    minSalida.setDate(minSalida.getDate() + 1);
+    this.minFechaCaducidad = minSalida.toISOString().slice(0,10);
+  }
+
+  onChangeFechaReserva() {
+    this.ajustarFechas();
+  }
+
+  onChangeFechaCaducidad() {
+    this.ajustarFechas();
   }
 
   //Validacion simple
@@ -88,49 +138,101 @@ export class ReservaComponent implements OnInit {
   }
 
   confirmarPago() {
+    // Evita doble envío si ya está procesando
+    if (this.creating) return;
     // Simulación: solo valida formato básico y crea el pago
     if (!this.tarjeta.trim() || !this.nombre.trim() || !this.expiracion.trim() || !this.cvv.trim()) {
-      alert('Completa todos los campos para simular el pago.');
+      this.lanzarError('Completa todos los campos para simular el pago.');
       return;
     }
-    // Crear pago real en backend
-    const hoy = new Date().toISOString().slice(0, 10);
-    const pago: Pago = {
-      tipo_pago: 'tarjeta',
-      monto: this.total,
-      fecha: hoy,
-      fecha_creacion: hoy
-    };
-    this.pagoService.crearPago(pago).subscribe({
-      next: (res) => {
-        // Registrar reserva real con el id_pago recibido
-        const reserva = {
-          fecha_reserva: hoy,
-          num_habitacion: this.Habitacion.num,
-          codigo_hotel: Number(this.Habitacion.hotel),
-          ci_usuario: 1, // Aquí deberías poner el usuario real
-          id_pago: res.id_pago
+    // Paso 1: Revalidar disponibilidad actualizada (doble verificación)
+    const num = this.Habitacion.num;
+    if (!num) {
+      alert('No se encontró la habitación.');
+      return;
+    }
+    this.creating = true;
+    this.habitacionService.getDisponibilidadHabitacion(num).subscribe({
+      next: disp => {
+        const conflicto = disp.intervalos_reservados.some(i =>
+          this.fecha_reserva <= i.fin && this.fecha_caducidad >= i.inicio
+        );
+        if (conflicto) {
+          this.conflictNextAvailable = disp.next_available_from;
+          this.showConflictModal = true;
+          this.creating = false;
+          return;
+        }
+        // Paso 2: Crear pago tras validar disponibilidad vigente
+        const hoy = new Date().toISOString().slice(0, 10);
+        const pago: Pago = {
+          tipo_pago: 'tarjeta',
+          monto: this.total,
+          fecha: hoy,
+          fecha_creacion: hoy
         };
-        this.reservasService.crearReserva(reserva).subscribe({
-          next: (r) => {
-            alert('Reserva registrada. ID: ' + r.id_reserva);
+        this.pagoService.crearPago(pago).subscribe({
+          next: (res) => {
+            const reserva = {
+              fecha_reserva: this.fecha_reserva,
+              fecha_caducidad: this.fecha_caducidad,
+              num_habitacion: this.Habitacion.num,
+              codigo_hotel: Number(this.Habitacion.hotel),
+              ci_usuario: 1,
+              id_pago: res.id_pago
+            };
+            this.reservasService.crearReserva(reserva).subscribe({
+              next: (r) => {
+                this.successCodigo = '#MNY' + r.id_reserva.toString(36).toUpperCase();
+                this.successTotal = this.total;
+                this.showSuccessModal = true;
+                this.creating = false;
+              },
+              error: (err) => {
+                this.lanzarError('Error al registrar la reserva: ' + (err.error?.error || err.message));
+                this.creating = false;
+              }
+            });
           },
           error: (err) => {
-            alert('Error al registrar la reserva: ' + (err.error?.error || err.message));
+            this.lanzarError('Error al registrar el pago: ' + (err.error?.error || err.message));
+            this.creating = false;
           }
         });
       },
-      error: (err) => {
-        alert('Error al registrar el pago: ' + (err.error?.error || err.message));
+      error: err => {
+        this.lanzarError('No se pudo validar disponibilidad: ' + (err.error?.error || err.message));
+        this.creating = false;
       }
     });
   }
 
-  confirmarReserva() {
-    if (!this.nombreHuesped.trim() || !this.correoHuesped.trim()) {
-      alert('Por favor, ingresa nombre y correo.');
-      return;
+  // confirmarReserva removed (no longer needed)
+
+  cerrarSuccess() {
+    this.showSuccessModal = false;
+    // Reset sensitive fields
+    this.tarjeta = '';
+    this.nombre = '';
+    this.expiracion = '';
+    this.cvv = '';
+    this.creating = false;
+    // Navigate to home after short microtask to ensure modal closes cleanly
+    setTimeout(()=> this.router.navigate(['']), 0);
+  }
+  cerrarConflict() { this.showConflictModal = false; }
+  usarFechaSugerida() {
+    if (this.conflictNextAvailable) {
+      this.fecha_reserva = this.conflictNextAvailable;
+      const d = new Date(this.fecha_reserva);
+      d.setDate(d.getDate() + 1);
+      this.fecha_caducidad = d.toISOString().slice(0,10);
+      this.showConflictModal = false;
     }
-    alert('¡Reserva confirmada!');
+  }
+  lanzarError(msg: string) {
+    this.errorMessage = msg;
+    this.showErrorToast = true;
+    setTimeout(()=> this.showErrorToast = false, 4500);
   }
 }
