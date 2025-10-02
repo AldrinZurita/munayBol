@@ -59,6 +59,19 @@ class Habitacion(models.Model):
     fecha_creacion = models.DateField()
     cant_huespedes = models.IntegerField()
 
+class Paquete(models.Model):
+    id_paquete = models.BigAutoField(primary_key=True)
+    nombre = models.CharField(max_length=255, default="noname")
+    tipo = models.CharField(max_length=100, blank=True, default="")  
+    precio = models.FloatField()
+    id_hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, null=True, blank=True)
+    id_lugar = models.ForeignKey(LugarTuristico, on_delete=models.CASCADE)
+    estado = models.BooleanField(default=True)
+    fecha_creacion = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.nombre} ({self.tipo})"
+
 class Reserva(models.Model):
     id_reserva = models.BigAutoField(primary_key=True)
     fecha_reserva = models.DateField()
@@ -68,21 +81,13 @@ class Reserva(models.Model):
     fecha_creacion = models.DateField()
     ci_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     id_pago = models.ForeignKey(Pago, on_delete=models.CASCADE)
+    id_paquete = models.ForeignKey(Paquete, on_delete=models.SET_NULL, null=True, blank=True) 
+
 
     class Meta:
         indexes = [
             models.Index(fields=["num_habitacion", "fecha_reserva", "fecha_caducidad"]),
         ]
-
-class Paquete(models.Model):
-    id_paquete = models.BigIntegerField(primary_key=True)
-    # Defaults para evitar prompts en migraciones y ser consistentes con 0009
-    nombre = models.TextField(blank=True, default="")
-    tipo = models.TextField(blank=True, default="")
-    precio = models.FloatField()
-    id_reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE)
-    id_lugar = models.ForeignKey(LugarTuristico, on_delete=models.CASCADE)
-    fecha_creacion = models.DateField()
 
 class Sugerencias(models.Model):
     id_sugerencia = models.BigIntegerField(primary_key=True)
