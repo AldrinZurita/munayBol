@@ -200,6 +200,15 @@ export class HabitacionDetalle implements OnInit {
 		const fmt = new Intl.NumberFormat('es-BO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(val);
 		return `${fmt} BOB`;
 	}
+	getPrecio(): string {
+  const val = this.getPrecioHabitacion();
+  const fmt = new Intl.NumberFormat('es-BO', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(val);
+  return `${fmt} BOB`;
+}
+
 
 	getNombreSeccion(): string {
 		if (this.loadingHotel) return '';
