@@ -36,19 +36,7 @@
         <button class="btn btn--pago" type="button" (click)="confirmarPago()">
           Confirmar Pago - {{ total }} BOB
         </button>
-        <div class="extra-fields">
-          <label>
-            Nombre del huésped
-            <input type="text" placeholder="Nombre completo" [(ngModel)]="nombreHuesped" name="nombreHuesped" />
-          </label>
-          <label>
-            Correo electrónico
-            <input type="email" placeholder="correo@ejemplo.com" [(ngModel)]="correoHuesped" name="correoHuesped" />
-          </label>
-        </div>
-        <button class="btn btn--reserva" type="button" (click)="confirmarReserva()">
-          Confirmar Reserva
-        </button>
+        <!-- Eliminados campos de nombre huésped y correo -->
       </form>
     </section>
     <aside class="resumen-card">
@@ -86,18 +74,7 @@
     </aside>
   </div>
 
-  <section class="reservas-reales">
-    <h3>Reservas reales</h3>
-    <ul>
-      <li *ngFor="let reserva of reservas">
-        <b>ID:</b> {{ reserva.id_reserva }} |
-        <b>Hotel:</b> {{ reserva.codigo_hotel }} |
-        <b>Habitación:</b> {{ reserva.num_habitacion }} |
-        <b>Usuario:</b> {{ reserva.ci_usuario }} |
-        <b>Fecha reserva:</b> {{ reserva.fecha_reserva }}
-      </li>
-    </ul>
-  </section>
+  <!-- Se eliminó la sección de reservas reales -->
 
   <!-- Modal Éxito -->
   <div class="modal-backdrop" *ngIf="showSuccessModal">

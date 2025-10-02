@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ReservasService, Reserva } from '../../services/reservas.service';
+import { ReservasService } from '../../services/reservas.service';
 import { PagoService, Pago } from '../../services/pago.service';
 import { ActivatedRoute } from '@angular/router';
 import { HabitacionService } from '../../services/habitacion.service';
@@ -32,7 +32,8 @@ export class ReservaComponent implements OnInit {
   get total() {
     return this.subtotal + this.iva;
   }
-  reservas: Reserva[] = [];
+  // reservas list removed from UI
+  // reservas: Reserva[] = [];
 
   // UI feedback states
   showSuccessModal: boolean = false;
@@ -70,12 +71,10 @@ export class ReservaComponent implements OnInit {
     this.expiracion = value;
   }
 
-  //Inputs de reserva
-  nombreHuesped = '';
-  correoHuesped = '';
+  // Removed guest name/email inputs
 
   constructor(
-    private readonly reservasService: ReservasService,
+  private readonly reservasService: ReservasService, // retained in case future use (could be removed)
     private readonly pagoService: PagoService,
     private readonly route: ActivatedRoute,
     private readonly habitacionService: HabitacionService
@@ -101,9 +100,7 @@ export class ReservaComponent implements OnInit {
       this.minFechaReserva = new Date().toISOString().slice(0,10);
       this.ajustarFechas();
     });
-    this.reservasService.getReservas().subscribe(data => {
-      this.reservas = data;
-    });
+    // Removed fetching of all reservas (UI section removed)
   }
 
   private ajustarFechas() {
@@ -207,15 +204,7 @@ export class ReservaComponent implements OnInit {
     });
   }
 
-  confirmarReserva() {
-    if (!this.nombreHuesped.trim() || !this.correoHuesped.trim()) {
-      this.lanzarError('Por favor, ingresa nombre y correo.');
-      return;
-    }
-    this.successCodigo = '#MNY-PRELIM';
-    this.successTotal = this.total;
-    this.showSuccessModal = true;
-  }
+  // confirmarReserva removed (no longer needed)
 
   cerrarSuccess() { this.showSuccessModal = false; }
   cerrarConflict() { this.showConflictModal = false; }
