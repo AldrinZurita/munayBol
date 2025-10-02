@@ -20,6 +20,15 @@ class PagoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pago
         fields = '__all__'
+        read_only_fields = ('id_pago',)
+
+    def create(self, validated_data):
+        from datetime import date
+        if 'fecha' not in validated_data:
+            validated_data['fecha'] = date.today()
+        if 'fecha_creacion' not in validated_data:
+            validated_data['fecha_creacion'] = date.today()
+        return super().create(validated_data)
 
 class HabitacionSerializer(serializers.ModelSerializer):
     class Meta:

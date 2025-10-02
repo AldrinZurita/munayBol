@@ -29,12 +29,12 @@ class LugarTuristico(models.Model):
     departamento = models.CharField(max_length=100)
     tipo = models.CharField(max_length=50)
     fecha_creacion = models.DateField()
-    horario = models.CharField(max_length=255)
-    descripcion = models.TextField()
-    url_image_lugar_turistico = models.TextField()
+    horario = models.CharField(max_length=255, blank=True, default="")
+    descripcion = models.TextField(blank=True, default="")
+    url_image_lugar_turistico = models.TextField(blank=True, default="")
 
 class Pago(models.Model):
-    id_pago = models.BigIntegerField(primary_key=True)
+    id_pago = models.BigAutoField(primary_key=True)
     tipo_pago = models.CharField(max_length=50)
     monto = models.FloatField()
     fecha = models.DateField()
