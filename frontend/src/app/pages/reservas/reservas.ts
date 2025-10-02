@@ -34,6 +34,16 @@ export class ReservaComponent implements OnInit {
   }
   reservas: Reserva[] = [];
 
+  // UI feedback states
+  showSuccessModal: boolean = false;
+  showConflictModal: boolean = false;
+  conflictNextAvailable: string = '';
+  successCodigo: string = '';
+  successTotal: number = 0;
+  creating: boolean = false;
+  showErrorToast: boolean = false;
+  errorMessage: string = '';
+
   //Inputs de pago
   tarjeta = '';
   nombre = '';
@@ -132,7 +142,7 @@ export class ReservaComponent implements OnInit {
   confirmarPago() {
     // Simulación: solo valida formato básico y crea el pago
     if (!this.tarjeta.trim() || !this.nombre.trim() || !this.expiracion.trim() || !this.cvv.trim()) {
-      alert('Completa todos los campos para simular el pago.');
+      this.lanzarError('Completa todos los campos para simular el pago.');
       return;
     }
     // Paso 1: Revalidar disponibilidad actualizada (doble verificación)
@@ -141,13 +151,16 @@ export class ReservaComponent implements OnInit {
       alert('No se encontró la habitación.');
       return;
     }
+    this.creating = true;
     this.habitacionService.getDisponibilidadHabitacion(num).subscribe({
       next: disp => {
         const conflicto = disp.intervalos_reservados.some(i =>
           this.fecha_reserva <= i.fin && this.fecha_caducidad >= i.inicio
         );
         if (conflicto) {
-          alert('El rango ya fue ocupado. Próxima fecha disponible: ' + disp.next_available_from);
+          this.conflictNextAvailable = disp.next_available_from;
+          this.showConflictModal = true;
+          this.creating = false;
           return;
         }
         // Paso 2: Crear pago tras validar disponibilidad vigente
@@ -170,29 +183,54 @@ export class ReservaComponent implements OnInit {
             };
             this.reservasService.crearReserva(reserva).subscribe({
               next: (r) => {
-                alert('Reserva registrada. ID: ' + r.id_reserva);
+                this.successCodigo = '#MNY' + r.id_reserva.toString(36).toUpperCase();
+                this.successTotal = this.total;
+                this.showSuccessModal = true;
+                this.creating = false;
               },
               error: (err) => {
-                alert('Error al registrar la reserva: ' + (err.error?.error || err.message));
+                this.lanzarError('Error al registrar la reserva: ' + (err.error?.error || err.message));
+                this.creating = false;
               }
             });
           },
           error: (err) => {
-            alert('Error al registrar el pago: ' + (err.error?.error || err.message));
+            this.lanzarError('Error al registrar el pago: ' + (err.error?.error || err.message));
+            this.creating = false;
           }
         });
       },
       error: err => {
-        alert('No se pudo validar disponibilidad: ' + (err.error?.error || err.message));
+        this.lanzarError('No se pudo validar disponibilidad: ' + (err.error?.error || err.message));
+        this.creating = false;
       }
     });
   }
 
   confirmarReserva() {
     if (!this.nombreHuesped.trim() || !this.correoHuesped.trim()) {
-      alert('Por favor, ingresa nombre y correo.');
+      this.lanzarError('Por favor, ingresa nombre y correo.');
       return;
     }
-    alert('¡Reserva confirmada!');
+    this.successCodigo = '#MNY-PRELIM';
+    this.successTotal = this.total;
+    this.showSuccessModal = true;
+  }
+
+  cerrarSuccess() { this.showSuccessModal = false; }
+  cerrarConflict() { this.showConflictModal = false; }
+  usarFechaSugerida() {
+    if (this.conflictNextAvailable) {
+      this.fecha_reserva = this.conflictNextAvailable;
+      const d = new Date(this.fecha_reserva);
+      d.setDate(d.getDate() + 1);
+      this.fecha_caducidad = d.toISOString().slice(0,10);
+      this.showConflictModal = false;
+    }
+  }
+  lanzarError(msg: string) {
+    this.errorMessage = msg;
+    this.showErrorToast = true;
+    setTimeout(()=> this.showErrorToast = false, 4500);
   }
 }

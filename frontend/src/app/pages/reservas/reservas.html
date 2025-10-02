@@ -98,3 +98,33 @@
       </li>
     </ul>
   </section>
+
+  <!-- Modal Éxito -->
+  <div class="modal-backdrop" *ngIf="showSuccessModal">
+    <dialog class="modal-card" open aria-labelledby="reservaConfirmadaTitulo">
+      <div class="icon-circle success">✔</div>
+      <h2 id="reservaConfirmadaTitulo">¡Reserva Confirmada!</h2>
+      <p>Tu reserva de habitación ha sido confirmada exitosamente. Recibirás un email con todos los detalles.</p>
+      <p><b>Confirmación:</b> {{ successCodigo }}<br>
+         <b>Total pagado:</b> {{ successTotal }} BOB</p>
+      <button class="btn-modal" (click)="cerrarSuccess()">Volver al Inicio</button>
+    </dialog>
+  </div>
+
+  <!-- Modal Conflicto -->
+  <div class="modal-backdrop" *ngIf="showConflictModal">
+    <dialog class="modal-card warning" open aria-labelledby="conflictoTitulo">
+      <div class="icon-circle warn">!</div>
+      <h2 id="conflictoTitulo">Fechas ocupadas</h2>
+      <p>Otro usuario reservó ese rango mientras completabas el pago.</p>
+      <p>Próxima fecha disponible: <b>{{ conflictNextAvailable }}</b></p>
+      <div class="modal-actions">
+        <button class="btn-sec" (click)="cerrarConflict()">Cerrar</button>
+        <button class="btn-principal" (click)="usarFechaSugerida()">Usar fecha sugerida</button>
+      </div>
+    </dialog>
+  </div>
+
+  <!-- Toast Error -->
+  <div class="toast-error" *ngIf="showErrorToast">{{ errorMessage }}</div>
+</div>
