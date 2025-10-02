@@ -59,6 +59,11 @@ class Reserva(models.Model):
     ci_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     id_pago = models.ForeignKey(Pago, on_delete=models.CASCADE)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["num_habitacion", "fecha_reserva", "fecha_caducidad"]),
+        ]
+
 class Paquete(models.Model):
     id_paquete = models.BigIntegerField(primary_key=True)
     precio = models.FloatField()

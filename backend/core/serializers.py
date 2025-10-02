@@ -55,6 +55,19 @@ class ReservaSerializer(serializers.ModelSerializer):
         fecha_caducidad = attrs.get('fecha_caducidad')
         if fecha_reserva and fecha_caducidad and fecha_caducidad < fecha_reserva:
             raise serializers.ValidationError('La fecha_caducidad no puede ser anterior a fecha_reserva.')
+
+        # Validar solapamiento: existe intersección si (start1 <= end2) y (start2 <= end1)
+        if habitacion and fecha_reserva and fecha_caducidad:
+            overlapping = Reserva.objects.filter(
+                num_habitacion=habitacion,
+                fecha_reserva__lte=fecha_caducidad,
+                fecha_caducidad__gte=fecha_reserva
+            )
+            # En create siempre es nueva, en update excluir la propia instancia
+            if self.instance:
+                overlapping = overlapping.exclude(pk=self.instance.pk)
+            if overlapping.exists():
+                raise serializers.ValidationError('La habitación ya está reservada en el rango de fechas solicitado.')
         return attrs
 
     def create(self, validated_data):
