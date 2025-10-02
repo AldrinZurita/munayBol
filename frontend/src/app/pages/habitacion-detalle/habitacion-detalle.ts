@@ -4,6 +4,8 @@ import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HabitacionService, DisponibilidadHabitacionResponse, IntervaloReservado } from '../../services/habitacion.service';
 import { Habitacion } from '../../interfaces/habitacion.interface';
+import { HotelService } from '../../services/hotel.service';
+import { Hotel } from '../../interfaces/hotel.interface';
 
 
 interface Review {
@@ -11,6 +13,11 @@ interface Review {
 	texto: string;
 	calificacion: number;
 	fecha: string;
+}
+
+interface AmenidadChip {
+  label: string;
+  icon: string; // could be emoji or later an SVG/material symbol key
 }
 
 @Component({
@@ -22,7 +29,10 @@ interface Review {
 })
 export class HabitacionDetalle implements OnInit {
 	habitacion: Habitacion | null = null;
+	hotel: Hotel | null = null;
+	loadingHotel: boolean = true;
 	reviews: Review[] = [];
+	amenidades: AmenidadChip[] = [];
 
 	// Nuevos campos para seleccionar rango de fechas
 	fechaReserva: string = '';
@@ -40,6 +50,7 @@ export class HabitacionDetalle implements OnInit {
 	constructor(
 		private readonly route: ActivatedRoute,
 		private readonly habitacionService: HabitacionService,
+		private readonly hotelService: HotelService,
 		private readonly router: Router
 	) {}
 
@@ -58,7 +69,14 @@ export class HabitacionDetalle implements OnInit {
 					this.habitacion = habitaciones.find(h => h.num === num) || null;
 					this.generarReviewsFake();
 					if (this.habitacion) {
+						this.procesarAmenidades(this.habitacion.caracteristicas);
 						this.cargarDisponibilidad(this.habitacion.num);
+						// Cargar info del hotel para cabecera enriquecida
+						this.loadingHotel = true;
+						this.hotelService.getHotelById(this.habitacion.codigo_hotel as unknown as number).subscribe({
+							next: h => { this.hotel = h; this.loadingHotel = false; },
+							error: () => { this.loadingHotel = false; }
+						});
 					}
 				}
 			});
@@ -175,6 +193,65 @@ export class HabitacionDetalle implements OnInit {
 
 	getCapacidadHabitacion(): number {
 		return this.habitacion ? this.habitacion.cant_huespedes : 2;
+	}
+
+	getPrecioFormateado(): string {
+		const val = this.getPrecioHabitacion();
+		const fmt = new Intl.NumberFormat('es-BO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(val);
+		return `${fmt} BOB`;
+	}
+
+	getNombreSeccion(): string {
+		if (this.loadingHotel) return '';
+		if (this.hotel?.nombre) return `Habitación en ${this.hotel.nombre}`;
+		return this.habitacion ? `Habitación ${this.habitacion.num}` : '';
+	}
+
+	getUbicacionCompuesta(): string {
+		if (!this.hotel) return '';
+		// departamento, ubicacion (asumiendo ubicacion contiene ciudad / direccion)
+		return `${this.hotel.departamento}, ${this.hotel.ubicacion}`;
+	}
+
+	getCalificacion(): string {
+		if (!this.hotel) return '';
+		const scoreInt = Math.round(this.hotel.calificacion || 0); // mostrar entero
+		return `${scoreInt}/5 (3 reseñas)`; // Placeholder reseñas
+	}
+
+	getDisponibilidadLabel(): string {
+		if (!this.habitacion) return '';
+		return this.habitacion.disponible ? 'Disponible' : 'No disponible';
+	}
+
+	private procesarAmenidades(raw: string) {
+		if (!raw) { this.amenidades = []; return; }
+		const mapIcons: Record<string,string> = {
+			'wifi': '📶',
+			'wi-fi': '📶',
+			'Internet': '📶',
+			'desayuno': '🍳',
+			'desayuno incluido': '🍳',
+			'tv': '📺',
+			'tv cable': '📺',
+			'cable': '📺',
+			'baño privado': '🛁',
+			'aire acondicionado': '❄️',
+			'calefacción': '🔥',
+			'parking': '🅿️',
+			'estacionamiento': '🅿️',
+			'gimnasio': '🏋️',
+			'pool': '🏊',
+			'piscina': '🏊'
+		};
+		this.amenidades = raw.split(',')
+			.map(c => c.trim())
+			.filter(c => !!c)
+			.map(c => {
+				const key = c.toLowerCase();
+				const icon = mapIcons[key] || '•';
+				return { label: c, icon } as AmenidadChip;
+			});
 	}
 
 	private generarReviewsFake() {

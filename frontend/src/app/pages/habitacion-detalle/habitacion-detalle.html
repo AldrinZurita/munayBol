@@ -4,32 +4,49 @@
 		<!-- Contenedor de informacion -->
 		<div class="info-contenedor w-full md:w-[60%] flex flex-col gap-6">
 
-			<!-- Informacion de la habitacion -->
+			<!-- Card principal estilo ficha -->
 			<div class="hotel-info shadow-strong border rounded-lg p-6 bg-white" *ngIf="habitacion">
-				<div class="hotel-header flex justify-between items-start mb-6">
-					<div class="hotel-header-left">
-						<h2 class="hotel-title font-bold leading-tight text-[2rem]">Habitación {{ habitacion.num }}</h2>
-						<p class="flex items-center mt-1 text-gray-700 text-[1rem]">
-							{{ habitacion.caracteristicas }}
-						</p>
-					</div>
-					<div class="hotel-header-right text-right">
-						<div class="price-block">
-							<div class="text-orange font-bold text-[2.5rem] leading-none mb-1">{{ getPrecioHabitacion() }} BOB</div>
-							<div class="text-gray-600 text-sm">por noche</div>
+				<div class="flex justify-between items-start gap-4">
+					<div class="flex-1">
+						<ng-container *ngIf="!loadingHotel; else titleSkeleton">
+							<h2 class="hotel-title font-bold leading-tight text-[1.65rem] mb-1">{{ getNombreSeccion() }}</h2>
+						</ng-container>
+						<ng-template #titleSkeleton>
+							<div class="title-skeleton mb-3"></div>
+						</ng-template>
+						<p class="text-gray-600 text-sm mb-2" *ngIf="hotel">{{ getUbicacionCompuesta() }}</p>
+						<div class="flex items-center gap-2 mb-3" *ngIf="hotel">
+							<span class="stars" [style.--rating]="hotel.calificacion">★★★★★</span>
+							<span class="score text-sm">{{ getCalificacion() }}</span>
 						</div>
+						<!-- Características con íconos -->
+						<div class="amenities flex flex-wrap gap-2 mb-4" *ngIf="amenidades.length">
+							<span class="chip" *ngFor="let a of amenidades"><span class="chip-icon">{{ a.icon }}</span> {{ a.label }}</span>
+						</div>
+						<ul class="meta-lines">
+							<li>
+								<span class="icon">🛏️</span>
+								Capacidad: {{ habitacion.cant_huespedes }} huéspedes
+							</li>
+							<li>
+								<span class="icon">🕒</span>
+								Check-in: 12:00
+							</li>
+							<li>
+								<span class="icon">🕒</span>
+								Check-out: 12:00
+							</li>
+							<li>
+								<span class="icon">👤</span>
+								<span [class.text-green-700]="habitacion.disponible" [class.text-red-600]="!habitacion.disponible">{{ getDisponibilidadLabel() }}</span>
+							</li>
+						</ul>
+					</div>
+					<div class="text-right shrink-0 price-side price-wrapper">
+						<div class="text-orange font-bold price-big leading-none mb-1">{{ getPrecioFormateado() }}</div>
+						<div class="text-gray-600 text-xs">por noche</div>
 					</div>
 				</div>
-
-				<p class="text-gray-600 mb-4 text-[0.95rem]">
-					Capacidad: {{ habitacion.cant_huespedes }} huéspedes
-				</p>
-
-				<div class="flex items-center gap-1 mb-2">
-					<span class="score text-[0.95rem]">Disponible: {{ habitacion.disponible ? 'Sí' : 'No' }}</span>
-				</div>
-
-				<p class="mt-4 text-[0.95rem]">Fecha de creación: {{ habitacion.fecha_creacion }}</p>
 			</div>
 
 			<!-- Reviews -->
@@ -52,34 +69,32 @@
 			<h2 class="font-bold mb-4 text-center text-[1.25rem]">Reserva tu habitación</h2>
 
 			<div class="precio-panel text-center p-4 bg-blue-100 rounded-lg mb-4">
-				<div class="precio text-orange font-bold text-[3rem] leading-none mb-1">{{ getPrecioHabitacion() }} BOB</div>
+				<div class="precio text-orange font-bold text-[3rem] leading-none mb-1">{{ getPrecioFormateado() }}</div>
 				<div class="text-gray-600 text-sm">por noche</div>
 </div>
 
-			<p class="mb-2 text-[0.95rem]">Check-in: 12:00</p>
-			<p class="mb-2 text-[0.95rem]">Check-out: 12:00</p>
 			<p class="mb-2 text-[0.95rem]">Máximo {{ getCapacidadHabitacion() }} huéspedes por habitación</p>
 
-			<!-- Selección de fechas -->
-			<div class="grid grid-cols-1 gap-4 mb-4">
-				<label class="block text-sm">
-					<span class="font-semibold">Fecha reserva (check-in)</span>
-					<input type="date" class="mt-1 w-full border rounded px-3 py-2"
+			<!-- Selección de fechas integradas -->
+			<div class="fechas-inline mb-4 flex flex-col gap-3">
+				<div class="date-row flex items-center gap-3 text-sm">
+					<label for="fechaReserva" class="w-24 font-semibold">Check-in:</label>
+					<input id="fechaReserva" type="date" class="flex-1 border rounded px-3 py-2"
 						[min]="minFecha" [(ngModel)]="fechaReserva" name="fechaReserva" (change)="onChangeFechaReserva()" />
-				</label>
-				<label class="block text-sm">
-					<span class="font-semibold">Fecha caducidad (check-out)</span>
-					<input type="date" class="mt-1 w-full border rounded px-3 py-2"
-						[min]="minFechaSalida" [(ngModel)]="fechaCaducidad" name="fechaCaducidad" />
-				</label>
+				</div>
+				<div class="date-row flex items-center gap-3 text-sm">
+					<label for="fechaCaducidad" class="w-24 font-semibold">Check-out:</label>
+					<input id="fechaCaducidad" type="date" class="flex-1 border rounded px-3 py-2"
+						[min]="minFechaSalida" [(ngModel)]="fechaCaducidad" name="fechaCaducidad" (change)="onChangeFechaCaducidad()" />
+				</div>
 			</div>
 
 
 			<!-- Mensaje de ocupación inmediato removido; se muestra solo tras intentar reservar -->
 
-			<div class="text-center mb-4">
+			<div class="accion-reservar mb-4">
 				<a 
-					class="btn-reservar"
+					class="btn-reservar btn-reservar-inline"
 					(click)="$event.preventDefault(); onIntentarReservar();"
 				>Reservar Ahora</a>
 				<!-- Toast -->
