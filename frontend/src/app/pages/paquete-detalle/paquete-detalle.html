@@ -1,0 +1,87 @@
+<div class="package-detail">
+  <div class="content-container">
+
+    <!-- Contenedor de información -->
+    <div class="info-section" *ngIf="paquete">
+      <div class="header-section">
+        <div class="header-left">
+          <h2 class="package-title">{{ paquete.lugar_turistico }} + {{ paquete.hotel }}</h2>
+          <p class="package-description">{{ paquete.descripcion }}</p>
+        </div>
+        <div class="header-right">
+          <div class="price-block">
+  <div class="price-value">{{ paquete.precio.toFixed(2) }} BOB</div>
+</div>
+
+        </div>
+      </div>
+
+      <p><strong>Ubicación:</strong> {{ paquete.ubicacion }}</p>
+      <p><strong>Departamento:</strong> {{ paquete.departamento }}</p>
+      <p><strong>Tipo:</strong> {{ paquete.tipo | titlecase }}</p>
+      <p><strong>Disponible:</strong> {{ paquete.disponible ? 'Sí' : 'No' }}</p>
+
+      <div class="inclusions-section">
+        <h3>Incluye:</h3>
+        <ul>
+          <li *ngFor="let item of paquete.inclusiones">{{ item }}</li>
+        </ul>
+      </div>
+
+      <div class="important-info-section">
+        <h3>Información importante:</h3>
+        <ul>
+          <li *ngFor="let info of paquete.info_importante">{{ info }}</li>
+        </ul>
+      </div>
+      <div class="itinerary-section">
+  <h3>Itinerario</h3>
+  <div class="itinerary-list">
+    <div class="itinerary-day" *ngFor="let dia of paquete.itinerario; let i = index">
+      <div class="day-number">Día {{ i + 1 }}</div>
+      <div class="day-description">{{ dia }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="location-section">
+  <h3>Ubicación del tour</h3>
+  <div class="location-box">
+    <div class="location-icon">📍</div>
+    <div class="location-text">
+      <div class="map-label">Mapa del recorrido</div>
+      <div class="map-location">{{ paquete.ubicacion }}</div>
+    </div>
+  </div>
+</div>
+
+    </div>
+
+    <!-- Panel de reserva -->
+    <div class="booking-panel">
+      <h2 class="booking-title">Reserva tu paquete</h2>
+
+      <div class="price-panel">
+       
+        <div class="price-value">{{ paquete.precio.toFixed(2) }} BOB</div>
+    </div>
+
+
+      <p>Inicio: 08:00</p>
+      <p>Fin: 18:00</p>
+      <p>Hotel asignado: {{ paquete.hotel }}</p>
+      <p>Habitación: {{ paquete.habitacion }}</p>
+
+      <div class="booking-action">
+        <a class="booking-button" [routerLink]="['/reservas']"
+           [queryParams]="{ paqueteId: paquete?.id, precio: paquete?.precio, hotel: paquete?.hotel, ubicacion: paquete?.ubicacion }">
+          Reservar Ahora
+        </a>
+      </div>
+
+      <p class="cancellation-policy">✓ Cancelación gratuita hasta 48 horas antes</p>
+      <p class="prepayment-policy">✓ No se requiere pago por adelantado</p>
+    </div>
+
+  </div>
+</div>

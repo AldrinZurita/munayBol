@@ -1,0 +1,67 @@
+<div class="paquetes-container">
+  <h1>Paquetes Turísticos</h1>
+
+  <div class="filtros">
+    <h4>Filtros de búsqueda</h4>
+    <div class="filtro-row">
+      <label>Disponibilidad:</label>
+      <select [(ngModel)]="disponibleSeleccionado">
+        <option value="">Todas</option>
+        <option value="true">Disponibles</option>
+        <option value="false">No disponibles</option>
+      </select>
+    </div>
+    <div class="filtro-row">
+      <label>Departamento:</label>
+      <select [(ngModel)]="departamentoSeleccionado">
+        <option value="">Todos</option>
+        <option *ngFor="let dep of departamentos" [value]="dep">{{ dep }}</option>
+      </select>
+    </div>
+    <div class="filtro-row">
+      <label>Tipo de paquete:</label>
+      <select [(ngModel)]="tipoSeleccionado">
+        <option value="">Todos</option>
+        <option value="aventura">Aventura</option>
+        <option value="cultural">Cultural</option>
+        <option value="naturaleza">Naturaleza</option>
+        <option value="historico">Histórico</option>
+        <option value="gastronomico">Gastronómico</option>
+      </select>
+    </div>
+    <button class="aplicar-btn" (click)="aplicarFiltros()">Aplicar Filtros</button>
+  </div>
+
+  <p *ngIf="cargando">Cargando paquetes...</p>
+  <p *ngIf="error">{{ error }}</p>
+  <p *ngIf="!cargando && !error && paquetesFiltrados.length === 0">No hay paquetes que coincidan con el filtro.</p>
+
+  <div class="lista-paquetes">
+    <ng-container *ngFor="let paquete of paquetesFiltrados">
+      <div class="paquete-card">
+        <div class="paquete-header">
+          <h3 class="paquete-nombre">{{ paquete.lugar_turistico }} + {{ paquete.hotel }}</h3>
+          <span class="paquete-etiqueta">{{ paquete.tipo | titlecase }}</span>
+        </div>
+
+        <div class="paquete-meta">
+          <p class="meta-item"><strong>Habitación:</strong> {{ paquete.habitacion }}</p>
+          <p class="meta-item"><strong>Ubicación:</strong> {{ paquete.ubicacion }}</p>
+          <p class="meta-item"><strong>Departamento:</strong> {{ paquete.departamento }}</p>
+        </div>
+
+        <p class="paquete-descripcion">{{ paquete.descripcion }}</p>
+
+        <ul class="paquete-incluye">
+          <li *ngFor="let item of paquete.inclusiones">{{ item }}</li>
+        </ul>
+
+        <div class="paquete-footer">
+          <span class="paquete-precio">{{ paquete.precio }} BOB</span>
+          <a class="ver-detalle-btn" [routerLink]="['/paquetes', paquete.id]">Ver Detalles</a>
+          <button class="editar-btn" (click)="onEditarPaquete(paquete)" *ngIf="isSuperAdmin">Editar</button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

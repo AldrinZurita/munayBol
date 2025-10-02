@@ -199,3 +199,7 @@ llm_service/venv/
 
 # VS Code workspace files (again, in case)
 .vscode/
+
+# Entornos virtuales
+.venv/
+venv/
