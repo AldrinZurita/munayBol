@@ -1,51 +1,49 @@
-<div class="registro-contenedor">
-  <button class="btn-volver" type="button" routerLink="/admin-login">
-    <svg class="icono-volver" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+<div class="registro">
+  <button class="registro__volver-btn" type="button" routerLink="/login" aria-label="Volver al inicio de sesión">
+    <svg class="registro__volver-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
       <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     Volver al inicio de sesión
   </button>
 
-  <div class="card-registro">
-    <div class="card-encabezado">
-      <h4 class="card-titulo">Registrarse</h4>
-      <p class="card-descripcion">Crea tu cuenta para acceder a ofertas exclusivas</p>
+  <div class="registro__card">
+    <div class="registro__card-header">
+      <h4 class="registro__titulo">Registrarse</h4>
+      <p class="registro__descripcion">Crea tu cuenta para acceder a ofertas exclusivas</p>
     </div>
 
-    <div class="card-contenido">
-      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="formulario-registro">
-        <div class="campo-formulario">
-          <label class="etiqueta-campo" for="name">Nombre completo</label>
-          <input class="input-campo" type="text" id="name" formControlName="name" placeholder="Tu nombre completo" />
+    <div class="registro__card-body">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="registro__form">
+        
+        <div class="registro__campo">
+          <label class="registro__label" for="name">Nombre completo</label>
+          <input class="registro__input" type="text" id="name" formControlName="name" placeholder="Tu nombre completo" autocomplete="name" />
         </div>
 
-        <div class="campo-formulario">
-          <label class="etiqueta-campo" for="email">Correo electrónico</label>
-          <input class="input-campo" type="email" id="email" formControlName="email" placeholder="tu@email.com" />
+        <div class="registro__campo">
+          <label class="registro__label" for="email">Correo electrónico</label>
+          <input class="registro__input" type="email" id="email" formControlName="email" placeholder="tu@email.com" autocomplete="email" />
         </div>
 
-        <div class="campo-formulario">
-          <label class="etiqueta-campo" for="password">Contraseña</label>
-          <input class="input-campo" type="password" id="password" formControlName="password" placeholder="Mínimo 6 caracteres" />
+        <div class="registro__campo">
+          <label class="registro__label" for="password">Contraseña</label>
+          <input class="registro__input" type="password" id="password" formControlName="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
         </div>
 
-        <div class="campo-formulario">
-          <label class="etiqueta-campo" for="confirmPassword">Confirmar contraseña</label>
-          <input class="input-campo" type="password" id="confirmPassword" formControlName="confirmPassword" placeholder="Repite tu contraseña" />
-          <div *ngIf="form.hasError('passwordsMismatch') && form.get('confirmPassword')?.touched" class="error-text">
-  Las contraseñas no coinciden.
+        <div class="registro__campo">
+          <label class="registro__label" for="confirmPassword">Confirmar contraseña</label>
+          <input class="registro__input" type="password" id="confirmPassword" formControlName="confirmPassword" placeholder="Repite tu contraseña" autocomplete="new-password" />
+          <div *ngIf="form.hasError('passwordsMismatch') && form.get('confirmPassword')?.touched" class="registro__error">
+            Las contraseñas no coinciden.
+          </div>
+        </div>
+
+        <div *ngIf="form.invalid && form.touched" class="registro__mensaje-error">
+  No se puede crear la cuenta. Verifica los campos obligatorios y que las contraseñas coincidan.
 </div>
 
-        </div>
 
-        <div class="campo-formulario">
-          <label class="etiqueta-campo" for="role">Tipo de usuario</label>
-          <select class="select-campo" id="role" formControlName="role">
-            <option *ngFor="let r of roles" [value]="r.value">{{ r.label }}</option>
-          </select>
-        </div>
-
-        <button class="btn-submit" type="submit">Crear Cuenta</button>
+        <button class="registro__submit-btn" type="submit">Crear Cuenta</button>
       </form>
     </div>
   </div>

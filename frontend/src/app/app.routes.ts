@@ -19,6 +19,7 @@ export const routes: Routes = [
   { path: 'lugares-turisticos', component: LugaresTuristicos },
   { path: 'lugares-turisticos/:id', component: LugaresTuristicosDetalle},
   { path: 'habitaciones/:num', component: HabitacionDetalle },
+  { path: 'admin-login', component: AdminLogin },
   { path: 'hoteles', component: Hoteles },
   { path: 'paquetes', component: Paquetes },
   { path: 'paquetes/:id', component: PaqueteDetalle },
@@ -26,6 +27,7 @@ export const routes: Routes = [
   { path: 'paquetes/nuevo-paquete', component: CrearPaquete },
   { path: 'registrarse', component: Registrarse },
   { path: '', component: Inicio },
+  { path: 'login', component: AdminLogin}, 
   
 
 ];

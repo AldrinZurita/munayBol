@@ -1,120 +1,130 @@
-// Variables base
-$color-primario: #0077cc;
-$color-secundario: #f5f5f5;
+// 🎨 Variables base
+$color-principal: #15803d;
+$color-fondo: #f5f5f5;
 $color-texto: #333;
 $color-error: #d32f2f;
 $espaciado: 1rem;
 $radio-borde: 6px;
+$sombra-input: 0 0 0 2px rgba(21, 128, 61, 0.1);
 
-// Contenedor principal
-.registro-contenedor {
+// 🧱 Contenedor principal
+.registro {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  background-color: $color-secundario;
+  background-color: $color-fondo;
   min-height: 100vh;
-}
 
-// Botón de volver
-.btn-volver {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: none;
-  border: none;
-  color: $color-primario;
-  font-weight: 500;
-  cursor: pointer;
-  margin-bottom: 2rem;
+  &__volver-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: $color-principal;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 2rem;
 
-  .icono-volver {
-    width: 20px;
-    height: 20px;
-  }
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-// Tarjeta de registro
-.card-registro {
-  background-color: white;
-  border-radius: $radio-borde;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 420px;
-  padding: 2rem;
-
-  .card-encabezado {
-    text-align: center;
-    margin-bottom: $espaciado;
-
-    .card-titulo {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: $color-texto;
+    &:hover {
+      text-decoration: underline;
     }
 
-    .card-descripcion {
-      font-size: 0.95rem;
-      color: darken($color-texto, 20%);
+    & > .registro__volver-icon {
+      width: 20px;
+      height: 20px;
     }
   }
 
-  .card-contenido {
-    .formulario-registro {
-      display: flex;
-      flex-direction: column;
-      gap: $espaciado;
+  &__card {
+    background-color: white;
+    border-radius: $radio-borde;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 420px;
+    padding: 2rem;
 
-      .campo-formulario {
+    &-header {
+      text-align: center;
+      margin-bottom: $espaciado;
+
+      .registro__titulo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: $color-principal;
+      }
+
+      .registro__descripcion {
+        font-size: 0.95rem;
+        color: darken($color-texto, 20%);
+      }
+    }
+
+    &-body {
+      .registro__form {
         display: flex;
         flex-direction: column;
+        gap: $espaciado;
 
-        .etiqueta-campo {
-          font-weight: 500;
-          margin-bottom: 0.25rem;
-          color: $color-texto;
-        }
+        .registro__campo {
+          display: flex;
+          flex-direction: column;
 
-        .input-campo,
-        .select-campo {
-          padding: 0.6rem;
-          border: 1px solid #ccc;
-          border-radius: $radio-borde;
-          font-size: 1rem;
-          transition: border-color 0.2s;
+          .registro__label {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            color: $color-texto;
+          }
 
-          &:focus {
-            border-color: $color-primario;
-            outline: none;
+          .registro__input {
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: $radio-borde;
+            font-size: 1rem;
+            box-shadow: $sombra-input;
+            transition: border-color 0.2s, box-shadow 0.2s;
+
+            &:focus {
+              border-color: $color-principal;
+              box-shadow: 0 0 0 2px rgba(21, 128, 61, 0.3);
+              outline: none;
+            }
+          }
+
+          .registro__error {
+            margin-top: 0.25rem;
+            font-size: 0.85rem;
+            color: $color-error;
           }
         }
 
-        .error-text {
-          margin-top: 0.25rem;
-          font-size: 0.85rem;
-          color: $color-error;
-        }
-      }
+        .registro__submit-btn {
+          background-color: $color-principal;
+          color: white;
+          padding: 0.75rem;
+          border: none;
+          border-radius: $radio-borde;
+          font-size: 1rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background-color 0.2s;
 
-      .btn-submit {
-        background-color: $color-primario;
-        color: white;
-        padding: 0.75rem;
-        border: none;
-        border-radius: $radio-borde;
-        font-size: 1rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: background-color 0.2s;
-
-        &:hover {
-          background-color: darken($color-primario, 10%);
+          &:hover {
+            background-color: darken($color-principal, 10%);
+          }
         }
       }
     }
   }
+}
+.registro__mensaje-error {
+  background-color: rgba($color-error, 0.1);
+  color: $color-error;
+  border: 1px solid $color-error;
+  border-radius: $radio-borde;
+  padding: 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: center;
 }
