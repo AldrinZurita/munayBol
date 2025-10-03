@@ -1,0 +1,346 @@
+.reserva-detalle-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+.header {
+  margin-bottom: 30px;
+  
+  .btn-volver {
+    background: none;
+    border: none;
+    color: #4a90e2;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 8px 12px;
+    margin-bottom: 15px;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #357abd;
+      text-decoration: underline;
+    }
+  }
+
+  .titulo {
+    font-size: 32px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 10px 0;
+  }
+
+  .reserva-id {
+    display: inline-block;
+    font-size: 16px;
+    color: #4a90e2;
+    font-weight: 500;
+    margin-right: 15px;
+  }
+
+  .badge-estado {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #e0e0e0;
+    color: #666;
+
+    &.confirmada {
+      background-color: #d4edda;
+      color: #155724;
+    }
+  }
+}
+
+.contenido {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  .card-titulo {
+    font-size: 18px;
+    font-weight: 600;
+    color: #8b4513;
+    margin: 0 0 20px 0;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+}
+
+.info-item {
+  margin-bottom: 16px;
+  
+  .info-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 4px;
+  }
+
+  .info-sublabel {
+    font-size: 14px;
+    color: #7f8c8d;
+  }
+
+  .info-valor {
+    font-size: 14px;
+    color: #555;
+  }
+
+  .info-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-top: 4px;
+
+    .icon-location {
+      font-size: 16px;
+    }
+  }
+
+  .icon-huespedes {
+    font-size: 18px;
+    margin-right: 8px;
+  }
+}
+
+.fechas-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 20px 0;
+
+  .fecha-box {
+    background: #f8f9fa;
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #e9ecef;
+
+    .fecha-label {
+      font-size: 12px;
+      color: #7f8c8d;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .fecha-icon {
+      font-size: 24px;
+      margin: 8px 0;
+    }
+
+    .fecha-valor {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 4px;
+    }
+
+    .fecha-dia {
+      font-size: 12px;
+      color: #7f8c8d;
+    }
+  }
+}
+
+.card-precio {
+  background: #fffaf0;
+
+  .precio-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0e6d2;
+
+    .precio-label {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .precio-valor {
+      font-size: 14px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+  }
+
+  .precio-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 0 0 0;
+    margin-top: 12px;
+    border-top: 2px solid #8b4513;
+
+    .total-label {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    .total-valor {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ff8c00;
+    }
+  }
+}
+
+.card-politica {
+  .politica-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+
+    .politica-icono {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .politica-contenido {
+      flex: 1;
+
+      .politica-titulo {
+        font-size: 14px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 4px;
+      }
+
+      .politica-descripcion {
+        font-size: 13px;
+        color: #7f8c8d;
+        line-height: 1.5;
+      }
+    }
+  }
+}
+
+.acciones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 24px;
+
+  .btn {
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &.btn-modificar {
+      background-color: #4caf50;
+      color: white;
+
+      &:hover {
+        background-color: #45a049;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+      }
+    }
+
+    &.btn-cancelar {
+      background-color: white;
+      color: #e74c3c;
+      border: 2px solid #e74c3c;
+
+      &:hover {
+        background-color: #e74c3c;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+      }
+    }
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #4a90e2;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  p {
+    margin-top: 20px;
+    color: #7f8c8d;
+    font-size: 16px;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-container {
+  text-align: center;
+  padding: 40px;
+  color: #e74c3c;
+  
+  .btn-volver {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+
+    &:hover {
+      background-color: #357abd;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .reserva-detalle-container {
+    padding: 15px;
+  }
+
+  .header .titulo {
+    font-size: 24px;
+  }
+
+  .fechas-container {
+    grid-template-columns: 1fr;
+  }
+
+  .acciones {
+    grid-template-columns: 1fr;
+  }
+}

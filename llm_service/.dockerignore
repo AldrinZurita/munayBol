@@ -1,0 +1,10 @@
+# Evitar que los pesos grandes y entornos locales se copien a la imagen
+# (los montaremos como volumen en runtime)
+
+gptneo-llm/
+.venv/
+__pycache__/
+*.pyc
+nohup.out
+cache/
+.tmp/

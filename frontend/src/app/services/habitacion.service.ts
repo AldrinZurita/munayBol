@@ -43,6 +43,10 @@ export class HabitacionService {
   return this.http.get<Habitacion[]>(`${this.apiUrl}habitaciones/?codigo_hotel=${codigo_hotel}`);
   }
 
+  getHabitacionByNum(num: string): Observable<Habitacion> {
+    return this.http.get<Habitacion>(`${this.apiUrl}habitaciones/${num}/`);
+  }
+
   getDisponibilidadHabitacion(num: string, desde?: string, hasta?: string): Observable<DisponibilidadHabitacionResponse> {
     const params: string[] = [];
     if (desde) params.push(`desde=${desde}`);
