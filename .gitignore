@@ -159,6 +159,7 @@ llm_service/gptneo-llm/*.csv
 llm_service/*.jsonl
 llm_service/*.csv
 llm_service/*.h5
+llm_service/venv_gpu/
 
 # LLM checkpoints folders
 llm_service/gptneo-llm/checkpoint-*/

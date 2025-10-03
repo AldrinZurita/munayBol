@@ -1,7 +1,21 @@
 {
   "version": "1.0",
-  "truncation": null,
-  "padding": null,
+  "truncation": {
+    "direction": "Right",
+    "max_length": 384,
+    "strategy": "LongestFirst",
+    "stride": 0
+  },
+  "padding": {
+    "strategy": {
+      "Fixed": 384
+    },
+    "direction": "Right",
+    "pad_to_multiple_of": null,
+    "pad_id": 50256,
+    "pad_type_id": 0,
+    "pad_token": "<|endoftext|>"
+  },
   "added_tokens": [
     {
       "id": 50256,
@@ -10,6 +24,42 @@
       "lstrip": false,
       "rstrip": false,
       "normalized": true,
+      "special": true
+    },
+    {
+      "id": 50257,
+      "content": "<|INSTRUCTION|>",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
+      "special": true
+    },
+    {
+      "id": 50258,
+      "content": "<|CONTEXT|>",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
+      "special": true
+    },
+    {
+      "id": 50259,
+      "content": "<|RESPONSE|>",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
+      "special": true
+    },
+    {
+      "id": 50260,
+      "content": "<|END|>",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
       "special": true
     }
   ],

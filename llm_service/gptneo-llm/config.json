@@ -49,6 +49,6 @@
   "summary_use_proj": true,
   "transformers_version": "4.56.2",
   "use_cache": true,
-  "vocab_size": 50257,
+  "vocab_size": 50261,
   "window_size": 256
 }
