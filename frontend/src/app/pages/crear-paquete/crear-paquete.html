@@ -1,26 +1,22 @@
-<!-- src/app/components/crear-paquete/crear-paquete.component.html -->
-<div class="form-container">
-  <h2>Crear Paquete</h2>
-  <form (ngSubmit)="crearPaquete()" #paqueteForm="ngForm">
+<div class="crear-paquete">
+  <h2>Crear nuevo paquete turístico</h2>
 
-    <label>Nombre:</label>
+  <form (ngSubmit)="crearPaquete()">
+    <label>Nombre</label>
     <input type="text" [(ngModel)]="paquete.nombre" name="nombre" required />
 
-    <label>Tipo:</label>
+    <label>Tipo</label>
     <input type="text" [(ngModel)]="paquete.tipo" name="tipo" required />
 
-    <label>Precio:</label>
-    <input type="number" [(ngModel)]="paquete.precio" name="precio" required />
+    <label>Precio</label>
+    <input type="number" [(ngModel)]="paquete.precio" name="precio" step="0.01" required />
 
-    <label>Id Reserva:</label>
-    <input type="number" [(ngModel)]="paquete.id_reserva" name="id_reserva" />
+    <label>Hotel ID</label>
+    <input type="number" [(ngModel)]="paquete.id_hotel" name="id_hotel" required />
 
-    <label>Id Lugar:</label>
-    <input type="number" [(ngModel)]="paquete.id_lugar" name="id_lugar" />
+    <label>Lugar ID</label>
+    <input type="number" [(ngModel)]="paquete.id_lugar" name="id_lugar" required />
 
-    <label>Fecha de Creación:</label>
-    <input type="date" [(ngModel)]="paquete.fecha_creacion" name="fecha_creacion" />
-
-    <button type="submit">Guardar Paquete</button>
+    <button type="submit">Crear paquete</button>
   </form>
 </div>
