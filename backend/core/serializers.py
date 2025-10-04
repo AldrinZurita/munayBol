@@ -79,9 +79,14 @@ class ReservaSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 class PaqueteSerializer(serializers.ModelSerializer):
+    hotel = HotelSerializer(source='id_hotel', read_only=True)
+    lugar = LugarTuristicoSerializer(source='id_lugar', read_only=True)
+
     class Meta:
         model = Paquete
         fields = '__all__'
+        read_only_fields = ('id_paquete', 'fecha_creacion', 'estado')
+
 
 class SugerenciasSerializer(serializers.ModelSerializer):
     class Meta:

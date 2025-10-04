@@ -211,7 +211,6 @@ class ReservaViewSet(viewsets.ModelViewSet):
             return Reserva.objects.filter(ci_usuario=ci_usuario)
 
 
-# Paquete
 class PaqueteViewSet(viewsets.ModelViewSet):
     queryset = Paquete.objects.all()
     serializer_class = PaqueteSerializer
@@ -225,8 +224,16 @@ class PaqueteViewSet(viewsets.ModelViewSet):
         return [permissions.AllowAny()]
 
     def get_queryset(self):
-        # Todos los usuarios ven todos los paquetes
-        return Paquete.objects.all()
+        if is_superadmin_request(self.request):
+            return Paquete.objects.all()
+        return Paquete.objects.filter(estado=True)  # solo activos para usuarios
+
+    def destroy(self, request, *args, **kwargs):
+        paquete = self.get_object()
+        paquete.estado = False
+        paquete.save()
+        return Response({"message": "Paquete desactivado correctamente"}, status=status.HTTP_200_OK)
+
 
 
 # Sugerencias

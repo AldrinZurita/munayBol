@@ -1,23 +1,32 @@
-// src/app/services/paquete.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { Paquete } from '../interfaces/paquete.interface';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class PaqueteService {
+  private apiUrl = environment.apiUrl;
 
-    private apiUrl = 'http://localhost:8000/api/paquete/nuevo-paquete'; // Ajusta según tu backend
+  constructor(private http: HttpClient) {}
 
-    constructor(private http: HttpClient) { }
+  getPaquetes(): Observable<Paquete[]> {
+    return this.http.get<Paquete[]>(`${this.apiUrl}paquetes/`);
+  }
 
-    crearPaquete(paquete: Paquete): Observable<Paquete> {
-        return this.http.post<Paquete>(this.apiUrl, paquete);
-    }
+  crearPaquete(paquete: Partial<Paquete>): Observable<Paquete> {
+    return this.http.post<Paquete>(`${this.apiUrl}paquetes/`, paquete);
+  }
 
-    getPaquetes(): Observable<Paquete[]> {
-        return this.http.get<Paquete[]>(this.apiUrl);
-    }
+  actualizarPaquete(paquete: Paquete): Observable<Paquete> {
+    return this.http.put<Paquete>(`${this.apiUrl}paquetes/${paquete.id_paquete}/`, paquete);
+  }
+
+  eliminarPaquete(id_paquete: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}paquetes/${id_paquete}/`);
+  }
+
+  getPaqueteById(id: number): Observable<Paquete> {
+    return this.http.get<Paquete>(`${this.apiUrl}paquetes/${id}/`);
+  }
 }

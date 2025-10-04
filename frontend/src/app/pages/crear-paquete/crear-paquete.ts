@@ -1,17 +1,16 @@
 import { Component } from '@angular/core';
 import { PaqueteService } from '../../services/paquete.service';
 import { Paquete } from '../../interfaces/paquete.interface';
-import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'crear-paquete',
   templateUrl: './crear-paquete.html',
   styleUrls: ['./crear-paquete.scss'],
   imports: [FormsModule]
 })
-
-export class CrearPaquete{
- paquete: Paquete = {
+export class CrearPaquete {
+  paquete: Paquete = {
     id_paquete: 0,
     nombre: '',
     tipo: '',

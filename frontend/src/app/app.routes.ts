@@ -12,7 +12,7 @@ import { HabitacionDetalle } from './pages/habitacion-detalle/habitacion-detalle
 import { Paquetes } from './pages/paquetes/paquetes';
 import { PaqueteDetalle } from './pages/paquete-detalle/paquete-detalle';
 import { CrearPaquete } from './pages/crear-paquete/crear-paquete';
-import { Registrarse} from './pages/registrarse/registrarse'; 
+import { Registrarse } from './pages/registrarse/registrarse';
 
 export const routes: Routes = [
   { path: 'reservas', component: ReservaComponent },
@@ -29,8 +29,5 @@ export const routes: Routes = [
   { path: 'paquetes/nuevo-paquete', component: CrearPaquete },
   { path: 'registrarse', component: Registrarse },
   { path: '', component: Inicio },
-  { path: 'login', component: AdminLogin}, 
-  
-
+  { path: 'login', component: AdminLogin }
 ];
-

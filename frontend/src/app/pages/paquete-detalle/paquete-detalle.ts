@@ -119,6 +119,8 @@ export class PaqueteDetalle implements OnInit {
     }
   ];
 
+  constructor(private route: ActivatedRoute) {}
+
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -133,8 +135,6 @@ export class PaqueteDetalle implements OnInit {
     }
   }
 
-  constructor(private route: ActivatedRoute) {}
-
   getPrecioFormateado(): string {
     return this.paquete ? `${this.paquete.precio.toFixed(2)} BOB` : '';
   }
@@ -147,9 +147,8 @@ export class PaqueteDetalle implements OnInit {
 
   getGrupo(): string {
     const info = this.paquete?.info_importante?.find((i: string) =>
-  i.toLowerCase().includes('grupo')
-);
-
+      i.toLowerCase().includes('grupo')
+    );
     return info || 'Grupo estándar';
   }
 }

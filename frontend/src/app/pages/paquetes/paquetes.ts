@@ -126,7 +126,7 @@ export class Paquetes implements OnInit {
   error = '';
   isSuperAdmin = false;
 
-   // Nuevas propiedades para el modal
+  // Modal edición
   mostrarModalEditar = false;
   paqueteEditando: any = null;
   inclusionesTexto = '';
@@ -134,6 +134,7 @@ export class Paquetes implements OnInit {
   itinerarioTexto = '';
 
   constructor(private authService: AdminAuthService) {}
+  
   ngOnInit() {
     this.isSuperAdmin = this.authService.isLoggedIn();
     this.paquetesFiltrados = [...this.paquetes];
@@ -158,7 +159,7 @@ export class Paquetes implements OnInit {
     this.paquetesFiltrados = filtrados;
   }
 
-// Nuevo método para abrir el modal de edición
+  // Nuevo método para abrir el modal de edición
   onEditarPaquete(paquete: any) {
     this.paqueteEditando = { ...paquete };
     this.inclusionesTexto = paquete.inclusiones.join(', ');
@@ -194,10 +195,6 @@ export class Paquetes implements OnInit {
     }
   }
 
-
-
-
-  
   onAgregarPaquete() {
     const lugar_turistico = prompt('Lugar turístico:')?.trim();
     const hotel = prompt('Nombre del hotel:')?.trim();
@@ -236,8 +233,6 @@ export class Paquetes implements OnInit {
       alert('Paquete agregado correctamente');
     }
   }
-
- 
 
   onEliminarPaquete(paquete: any) {
     if (confirm('¿Eliminar paquete?')) {
