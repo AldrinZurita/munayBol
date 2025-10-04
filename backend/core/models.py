@@ -39,6 +39,7 @@ class Pago(models.Model):
     monto = models.FloatField()
     fecha = models.DateField()
     fecha_creacion = models.DateField()
+
     class Estado(models.TextChoices):
         PENDIENTE = 'pendiente', 'Pendiente'
         PROCESANDO = 'procesando', 'Procesando'
@@ -46,7 +47,6 @@ class Pago(models.Model):
         FALLIDO = 'fallido', 'Fallido'
         REEMBOLSADO = 'reembolsado', 'Reembolsado'
         CANCELADO = 'cancelado', 'Cancelado'
-
     # El pago ahora inicia en 'pendiente' y solo pasa a 'completado' tras validar disponibilidad
     estado = models.CharField(max_length=15, choices=Estado.choices, default=Estado.PENDIENTE)
 
@@ -61,7 +61,7 @@ class Habitacion(models.Model):
 
 class Paquete(models.Model):
     id_paquete = models.BigAutoField(primary_key=True)
-    nombre = models.CharField(max_length=255, default="noname")
+    nombre = models.CharField(max_length=255, default="sin nombre")
     tipo = models.CharField(max_length=100, blank=True, default="")  
     precio = models.FloatField()
     id_hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, null=True, blank=True)
@@ -82,7 +82,6 @@ class Reserva(models.Model):
     ci_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     id_pago = models.ForeignKey(Pago, on_delete=models.CASCADE)
     id_paquete = models.ForeignKey(Paquete, on_delete=models.SET_NULL, null=True, blank=True) 
-
 
     class Meta:
         indexes = [

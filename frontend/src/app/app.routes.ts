@@ -12,6 +12,7 @@ import { HabitacionDetalle } from './pages/habitacion-detalle/habitacion-detalle
 import { Paquetes } from './pages/paquetes/paquetes';
 import { PaqueteDetalle } from './pages/paquete-detalle/paquete-detalle';
 import { CrearPaquete } from './pages/crear-paquete/crear-paquete';
+import { Registrarse } from './pages/registrarse/registrarse';
 
 export const routes: Routes = [
   { path: 'reservas', component: ReservaComponent },
@@ -20,12 +21,13 @@ export const routes: Routes = [
   { path: 'lugares-turisticos', component: LugaresTuristicos },
   { path: 'lugares-turisticos/:id', component: LugaresTuristicosDetalle},
   { path: 'habitaciones/:num', component: HabitacionDetalle },
+  { path: 'admin-login', component: AdminLogin },
   { path: 'hoteles', component: Hoteles },
   { path: 'paquetes', component: Paquetes },
   { path: 'paquetes/:id', component: PaqueteDetalle },
   { path: 'asistente-ia', component: AsistenteIa },
-    { path: 'paquetes/nuevo-paquete', component: CrearPaquete },
+  { path: 'paquetes/nuevo-paquete', component: CrearPaquete },
+  { path: 'registrarse', component: Registrarse },
   { path: '', component: Inicio },
-  { path: 'login', component: AdminLogin},    
+  { path: 'login', component: AdminLogin }
 ];
-

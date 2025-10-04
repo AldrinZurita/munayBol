@@ -1,18 +1,165 @@
-<div class="paquetes">
-  <h2>Listado de paquetes turísticos</h2>
+<div class="paquetes-container">
+  <h1>Paquetes Turísticos</h1>
 
-  <div *ngFor="let paquete of paquetes" class="paquete-item">
-    <h3 class="paquete-nombre">
-      {{ paquete.lugar?.nombre }} + {{ paquete.hotel?.nombre }}
-    </h3>
+  <div class="filtros">
+    <h4>Filtros de búsqueda</h4>
+    <div class="filtro-row">
+      <label>Disponibilidad:</label>
+      <select [(ngModel)]="disponibleSeleccionado">
+        <option value="">Todas</option>
+        <option value="true">Disponibles</option>
+        <option value="false">No disponibles</option>
+      </select>
+    </div>
+    <div class="filtro-row">
+      <label>Departamento:</label>
+      <select [(ngModel)]="departamentoSeleccionado">
+        <option value="">Todos</option>
+        <option *ngFor="let dep of departamentos" [value]="dep">{{ dep }}</option>
+      </select>
+    </div>
+    <div class="filtro-row">
+      <label>Tipo de paquete:</label>
+      <select [(ngModel)]="tipoSeleccionado">
+        <option value="">Todos</option>
+        <option value="aventura">Aventura</option>
+        <option value="cultural">Cultural</option>
+        <option value="naturaleza">Naturaleza</option>
+        <option value="historico">Histórico</option>
+        <option value="gastronomico">Gastronómico</option>
+      </select>
+    </div>
+    <button class="aplicar-btn" (click)="aplicarFiltros()">Aplicar Filtros</button>
+  </div>
 
-    <p><strong>Ubicación:</strong> {{ paquete.lugar?.ubicacion }}</p>
-    <p><strong>Departamento:</strong> {{ paquete.lugar?.departamento }}</p>
-    <p><strong>Precio:</strong> {{ paquete?.precio?.toFixed(2) }} BOB</p>
-    <p><strong>Disponible:</strong> {{ paquete.estado ? 'Sí' : 'No' }}</p>
+  <p *ngIf="cargando">Cargando paquetes...</p>
+  <p *ngIf="error">{{ error }}</p>
+  <p *ngIf="!cargando && !error && paquetesFiltrados.length === 0">No hay paquetes que coincidan con el filtro.</p>
 
-    <a class="detalle-btn" [routerLink]="['/paquetes', paquete.id_paquete]">
-      Ver Detalles
-    </a>
+  <div class="lista-paquetes">
+    <ng-container *ngFor="let paquete of paquetesFiltrados">
+      <div class="paquete-card">
+        <div class="paquete-header">
+          <h3 class="paquete-nombre">{{ paquete.lugar_turistico }} + {{ paquete.hotel }}</h3>
+          <span class="paquete-etiqueta">{{ paquete.tipo | titlecase }}</span>
+        </div>
+
+        <div class="paquete-meta">
+          <p class="meta-item"><strong>Habitación:</strong> {{ paquete.habitacion }}</p>
+          <p class="meta-item"><strong>Ubicación:</strong> {{ paquete.ubicacion }}</p>
+          <p class="meta-item"><strong>Departamento:</strong> {{ paquete.departamento }}</p>
+        </div>
+
+        <p class="paquete-descripcion">{{ paquete.descripcion }}</p>
+
+        <ul class="paquete-incluye">
+          <li *ngFor="let item of paquete.inclusiones">{{ item }}</li>
+        </ul>
+
+        <div class="paquete-footer">
+          <span class="paquete-precio">{{ paquete.precio }} BOB</span>
+          <a class="ver-detalle-btn" [routerLink]="['/paquetes', paquete.id]">Ver Detalles</a>
+          <button class="editar-btn" (click)="onEditarPaquete(paquete)" *ngIf="isSuperAdmin">Editar</button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<!-- MODAL PARA EDITAR - Agregar esto al final del archivo -->
+<div class="modal-overlay" *ngIf="mostrarModalEditar" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Editar Paquete Turístico</h2>
+      <button class="close-btn" (click)="cerrarModal()">&times;</button>
+    </div>
+    
+    <form class="form-editar" (ngSubmit)="guardarEdicion()">
+      <div class="form-group">
+        <label>Lugar Turístico:</label>
+        <input type="text" [(ngModel)]="paqueteEditando.lugar_turistico" name="lugar_turistico" required>
+      </div>
+
+      <div class="form-group">
+        <label>Hotel:</label>
+        <input type="text" [(ngModel)]="paqueteEditando.hotel" name="hotel" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Habitación:</label>
+          <input type="text" [(ngModel)]="paqueteEditando.habitacion" name="habitacion" required>
+        </div>
+
+        <div class="form-group">
+          <label>Código Hotel:</label>
+          <input type="number" [(ngModel)]="paqueteEditando.codigo_hotel" name="codigo_hotel" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Departamento:</label>
+          <select [(ngModel)]="paqueteEditando.departamento" name="departamento" required>
+            <option value="">Seleccionar departamento</option>
+            <option *ngFor="let dep of departamentos" [value]="dep">{{ dep }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Tipo de Paquete:</label>
+          <select [(ngModel)]="paqueteEditando.tipo" name="tipo" required>
+            <option value="">Seleccionar tipo</option>
+            <option value="aventura">Aventura</option>
+            <option value="cultural">Cultural</option>
+            <option value="naturaleza">Naturaleza</option>
+            <option value="historico">Histórico</option>
+            <option value="gastronomico">Gastronómico</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Ubicación:</label>
+        <input type="text" [(ngModel)]="paqueteEditando.ubicacion" name="ubicacion" required>
+      </div>
+
+      <div class="form-group">
+        <label>Precio (BOB):</label>
+        <input type="number" [(ngModel)]="paqueteEditando.precio" name="precio" step="0.01" required>
+      </div>
+
+      <div class="form-group">
+        <label>Descripción:</label>
+        <textarea [(ngModel)]="paqueteEditando.descripcion" name="descripcion" rows="3" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Inclusiones (separadas por coma):</label>
+        <textarea [(ngModel)]="inclusionesTexto" name="inclusiones" rows="3" placeholder="Ej: Visita guiada, Transporte, Alojamiento"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Información Importante (separada por coma):</label>
+        <textarea [(ngModel)]="infoImportanteTexto" name="info_importante" rows="2" placeholder="Ej: Horario: 8 AM - 6 PM, Ropa cómoda"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Itinerario (separado por coma):</label>
+        <textarea [(ngModel)]="itinerarioTexto" name="itinerario" rows="3" placeholder="Ej: Día 1: City tour, Día 2: Visita museos"></textarea>
+      </div>
+
+      <div class="form-group checkbox-group">
+        <label>
+          <input type="checkbox" [(ngModel)]="paqueteEditando.disponible" name="disponible">
+          Paquete disponible
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+        <button type="submit" class="btn-guardar">Guardar Cambios</button>
+      </div>
+    </form>
   </div>
 </div>

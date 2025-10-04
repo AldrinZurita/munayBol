@@ -10,14 +10,14 @@ import { FormsModule } from '@angular/forms';
   imports: [FormsModule]
 })
 export class CrearPaquete {
-  paquete: Partial<Paquete> = {
+  paquete: Paquete = {
+    id_paquete: 0,
     nombre: '',
     tipo: '',
     precio: 0,
-    estado: true,
-    id_hotel: 0,
+    id_reserva: 0,
     id_lugar: 0,
-    fecha_creacion: new Date().toISOString().split('T')[0]
+    fecha_creacion: new Date().toISOString().split('T')[0] // formato YYYY-MM-DD
   };
 
   constructor(private paqueteService: PaqueteService) {}
@@ -27,10 +27,20 @@ export class CrearPaquete {
       next: (response) => {
         console.log('Paquete creado:', response);
         alert('Paquete guardado correctamente ✅');
+        // opcional: limpiar formulario
+        this.paquete = {
+          id_paquete: 0,
+          nombre: '',
+          tipo: '',
+          precio: 0,
+          id_reserva: 0,
+          id_lugar: 0,
+          fecha_creacion: new Date().toISOString().split('T')[0]
+        };
       },
       error: (err) => {
         console.error('Error al crear paquete:', err);
-        alert('Error al guardar el paquete');
+        alert('error al guardar el paquete');
       }
     });
   }

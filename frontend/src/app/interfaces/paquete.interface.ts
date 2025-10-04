@@ -29,8 +29,9 @@ export interface Paquete {
   precio: number;
   estado: boolean;
   fecha_creacion: string;
-  id_hotel: number;
+  id_hotel?: number;  
   id_lugar: number;
-  hotel: Hotel;
-  lugar: Lugar;
+  hotel?: Hotel;      
+  lugar?: Lugar;      
+  id_reserva?: number; 
 }

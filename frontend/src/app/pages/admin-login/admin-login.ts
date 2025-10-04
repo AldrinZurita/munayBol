@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminAuthService } from '../../services/admin-auth.service';
@@ -8,7 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar'; // <-- Importa el sna
 @Component({
   selector: 'app-admin-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './admin-login.html',
   styleUrls: ['./admin-login.scss']
 })
