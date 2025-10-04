@@ -156,6 +156,37 @@ class LugarTuristicoViewSet(viewsets.ModelViewSet):
     queryset = LugarTuristico.objects.all()
     serializer_class = LugarTuristicoSerializer
 
+    def get_permissions(self):
+        """
+        Solo el superadmin puede crear, actualizar o desactivar lugares turísticos.
+        Los demás usuarios solo pueden ver los lugares activos.
+        """
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            if is_superadmin_request(self.request):
+                return []
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("No tienes permiso para realizar esta acción")
+        return [permissions.AllowAny()]
+
+    def get_queryset(self):
+        """
+        Si la petición proviene de un superadmin, se devuelven todos los lugares.
+        En caso contrario, solo los lugares activos (estado=True).
+        """
+        if is_superadmin_request(self.request):
+            return LugarTuristico.objects.all()
+        return LugarTuristico.objects.filter(estado=True)
+
+    def destroy(self, request, *args, **kwargs):
+        """
+        No elimina el registro físicamente, solo marca el lugar como inactivo.
+        """
+        lugar = self.get_object()
+        lugar.estado = False
+        lugar.save()
+        return Response({"message": "Lugar turístico desactivado correctamente"}, status=status.HTTP_200_OK)
+
+
 
 # Pago
 class PagoViewSet(viewsets.ModelViewSet):
@@ -197,20 +228,85 @@ class HabitacionViewSet(viewsets.ModelViewSet):
 
 # Reserva
 class ReservaViewSet(viewsets.ModelViewSet):
-    queryset = Reserva.objects.none()
+    queryset = Reserva.objects.all()
     serializer_class = ReservaSerializer
 
     def get_queryset(self):
+        """
+        - Si la petición proviene de un superadmin, devuelve todas las reservas.
+        - Si no, solo devuelve las reservas activas (estado=True) del usuario autenticado.
+        """
         ci_usuario = self.request.headers.get("X-User-CI")
         if not ci_usuario:
             return Reserva.objects.none()
 
         if is_superadmin_request(self.request):
             return Reserva.objects.all()
-        else:
-            return Reserva.objects.filter(ci_usuario=ci_usuario)
+        return Reserva.objects.filter(ci_usuario=ci_usuario, estado=True)
 
+    def create(self, request, *args, **kwargs):
+        """
+        Crea una nueva reserva asignando automáticamente el usuario desde los headers.
+        """
+        ci_usuario = request.headers.get("X-User-CI")
+        if not ci_usuario:
+            return Response({"error": "Debe incluir el header X-User-CI"}, status=400)
 
+        data = request.data.copy()
+        data["ci_usuario"] = ci_usuario
+
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        return Response({
+            "message": "Reserva creada correctamente",
+            "reserva": serializer.data
+        }, status=status.HTTP_201_CREATED)
+
+    def partial_update(self, request, *args, **kwargs):
+        """
+        Permite actualizaciones parciales:
+        - Solo el superadmin puede modificar cualquier campo.
+        - El usuario común solo puede cambiar campos no críticos (como fechas).
+        """
+        reserva = self.get_object()
+
+        # Validar permisos
+        if not is_superadmin_request(request):
+            if str(reserva.ci_usuario.ci) != request.headers.get("X-User-CI"):
+                return Response({"error": "No tiene permiso para modificar esta reserva"}, status=403)
+
+            # Campos no permitidos para usuarios comunes
+            campos_restringidos = [
+                "ci_usuario", "codigo_hotel", "num_habitacion",
+                "id_pago", "id_paquete", "fecha_creacion", "estado"
+            ]
+            for campo in campos_restringidos:
+                if campo in request.data:
+                    return Response(
+                        {"error": f"No se permite modificar el campo '{campo}'"},
+                        status=400
+                    )
+
+        return super().partial_update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        """
+        Realiza un soft delete: cambia estado=False en lugar de eliminar el registro.
+        """
+        reserva = self.get_object()
+
+        # Solo superadmin o el dueño pueden desactivar la reserva
+        if not is_superadmin_request(request):
+            if str(reserva.ci_usuario.ci) != request.headers.get("X-User-CI"):
+                return Response({"error": "No tiene permiso para eliminar esta reserva"}, status=403)
+
+        reserva.estado = False
+        reserva.save()
+        return Response({"message": "Reserva desactivada correctamente"}, status=status.HTTP_200_OK)
+
+# Paquete
 class PaqueteViewSet(viewsets.ModelViewSet):
     queryset = Paquete.objects.all()
     serializer_class = PaqueteSerializer
