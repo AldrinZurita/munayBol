@@ -32,6 +32,7 @@ class LugarTuristico(models.Model):
     horario = models.CharField(max_length=255, blank=True, default="")
     descripcion = models.TextField(blank=True, default="")
     url_image_lugar_turistico = models.TextField(blank=True, default="")
+    estado = models.BooleanField(default=True)
 
 class Pago(models.Model):
     id_pago = models.BigAutoField(primary_key=True)
@@ -81,7 +82,8 @@ class Reserva(models.Model):
     fecha_creacion = models.DateField()
     ci_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     id_pago = models.ForeignKey(Pago, on_delete=models.CASCADE)
-    id_paquete = models.ForeignKey(Paquete, on_delete=models.SET_NULL, null=True, blank=True) 
+    estado = models.BooleanField(default=True)
+    id_paquete = models.ForeignKey(Paquete, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         indexes = [
