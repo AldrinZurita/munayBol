@@ -17,7 +17,8 @@ export class CrearPaquete {
     precio: 0,
     id_reserva: 0,
     id_lugar: 0,
-    fecha_creacion: new Date().toISOString().split('T')[0] // formato YYYY-MM-DD
+    fecha_creacion: new Date().toISOString().split('T')[0], // formato YYYY-MM-DD
+    estado: true
   };
 
   constructor(private paqueteService: PaqueteService) {}
@@ -27,7 +28,7 @@ export class CrearPaquete {
       next: (response) => {
         console.log('Paquete creado:', response);
         alert('Paquete guardado correctamente ✅');
-        // opcional: limpiar formulario
+        // Limpiar formulario
         this.paquete = {
           id_paquete: 0,
           nombre: '',
@@ -35,7 +36,8 @@ export class CrearPaquete {
           precio: 0,
           id_reserva: 0,
           id_lugar: 0,
-          fecha_creacion: new Date().toISOString().split('T')[0]
+          fecha_creacion: new Date().toISOString().split('T')[0],
+          estado: true
         };
       },
       error: (err) => {
