@@ -47,7 +47,7 @@
   "summary_proj_to_labels": true,
   "summary_type": "cls_index",
   "summary_use_proj": true,
-  "transformers_version": "4.56.2",
+  "transformers_version": "4.57.0",
   "use_cache": true,
   "vocab_size": 50257,
   "window_size": 256

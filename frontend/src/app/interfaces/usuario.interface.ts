@@ -1,5 +1,5 @@
 export interface Usuario {
-  ci: number;
+  id: number;
   nombre: string;
   correo: string;
   rol: string;

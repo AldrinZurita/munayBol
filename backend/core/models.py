@@ -1,15 +1,18 @@
 from django.db import models
 
 class Usuario(models.Model):
-    ci = models.BigIntegerField(primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     nombre = models.CharField(max_length=255)
-    correo = models.CharField(max_length=255)
-    contrasenia = models.CharField(max_length=255)
-    rol = models.CharField(max_length=50)
+    correo = models.CharField(max_length=255, unique=True)
+    contrasenia = models.CharField(max_length=255) 
+    rol = models.CharField(max_length=50, choices=[('superadmin', 'Superadmin'), ('usuario', 'Usuario')])
     pais = models.CharField(max_length=50)
     pasaporte = models.CharField(max_length=50)
-    estado = models.BooleanField()
-    fecha_creacion = models.DateField()
+    estado = models.BooleanField(default=True)
+    fecha_creacion = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.nombre} ({self.rol})"
 
 class Hotel(models.Model):
     id_hotel = models.BigIntegerField(primary_key=True)
@@ -48,7 +51,6 @@ class Pago(models.Model):
         FALLIDO = 'fallido', 'Fallido'
         REEMBOLSADO = 'reembolsado', 'Reembolsado'
         CANCELADO = 'cancelado', 'Cancelado'
-    # El pago ahora inicia en 'pendiente' y solo pasa a 'completado' tras validar disponibilidad
     estado = models.CharField(max_length=15, choices=Estado.choices, default=Estado.PENDIENTE)
 
 class Habitacion(models.Model):
@@ -80,7 +82,7 @@ class Reserva(models.Model):
     num_habitacion = models.ForeignKey(Habitacion, on_delete=models.CASCADE)
     codigo_hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     fecha_creacion = models.DateField()
-    ci_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     id_pago = models.ForeignKey(Pago, on_delete=models.CASCADE)
     estado = models.BooleanField(default=True)
     id_paquete = models.ForeignKey(Paquete, on_delete=models.SET_NULL, null=True, blank=True)
@@ -93,5 +95,5 @@ class Reserva(models.Model):
 class Sugerencias(models.Model):
     id_sugerencia = models.BigIntegerField(primary_key=True)
     preferencias = models.TextField()
-    ci_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     fecha_creacion = models.DateField()

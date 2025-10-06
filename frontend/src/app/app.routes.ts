@@ -29,5 +29,5 @@ export const routes: Routes = [
   { path: 'paquetes/nuevo-paquete', component: CrearPaquete },
   { path: 'registrarse', component: Registrarse },
   { path: '', component: Inicio },
-  { path: 'login', component: AdminLogin }
+  { path: 'usuarios/login', component: AdminLogin }
 ];
