@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { AdminAuthService } from '../../services/admin-auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-paquetes',
@@ -133,7 +133,7 @@ export class Paquetes implements OnInit {
   infoImportanteTexto = '';
   itinerarioTexto = '';
 
-  constructor(private authService: AdminAuthService) {}
+  constructor(private authService: AuthService) {}
   
   ngOnInit() {
     this.isSuperAdmin = this.authService.isLoggedIn();

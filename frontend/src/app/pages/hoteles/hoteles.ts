@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HotelService } from '../../services/hotel.service';
-import { AdminAuthService } from '../../services/admin-auth.service';
+import { AuthService } from '../../services/auth.service';
 
 export interface Hotel {
   id_hotel: number;
@@ -37,7 +37,7 @@ export class Hoteles implements OnInit {
 
   constructor(
     private hotelService: HotelService,
-    private authService: AdminAuthService
+    private authService: AuthService
   ) {}
 
   ngOnInit() {

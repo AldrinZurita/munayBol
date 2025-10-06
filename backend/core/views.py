@@ -103,7 +103,8 @@ class LoginView(APIView):
                     "correo": usuario.correo,
                     "rol": usuario.rol,
                     "pais": usuario.pais,
-                    "pasaporte": usuario.pasaporte
+                    "pasaporte": usuario.pasaporte,
+                    "estado": usuario.estado
                 }
             })
         return Response({"error": "Credenciales inválidas"}, status=401)
@@ -254,7 +255,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
             return Response({"error": "No autenticado"}, status=401)
 
         data = request.data.copy()
-        data["ci_usuario"] = user.id
+        data["id_usuario"] = user.id
 
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
@@ -274,7 +275,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
                 return Response({"error": "No tiene permiso para modificar esta reserva"}, status=403)
 
             campos_restringidos = [
-                "ci_usuario", "codigo_hotel", "num_habitacion",
+                "id_usuario", "codigo_hotel", "num_habitacion",
                 "id_pago", "id_paquete", "fecha_creacion", "estado"
             ]
             for campo in request.data:

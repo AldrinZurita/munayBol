@@ -19,7 +19,6 @@ router.register(r'sugerencias', SugerenciasViewSet)
 
 urlpatterns = [
     path('', home, name='home'),
-    path('superadmin/login/', SuperadminLoginView.as_view(), name='superadmin-login'),
     path('usuarios/registro/', RegistroView.as_view(), name='usuario-registro'),
     path('usuarios/login/', LoginView.as_view(), name='usuario-login'),
     path('llm/generate/', LLMGenerateView.as_view(), name='llm-generate'),

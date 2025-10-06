@@ -3,8 +3,6 @@
     <h4 class="card-title">Iniciar Sesión</h4>
     <p class="card-description">Accede a tu cuenta para reservar y gestionar tus viajes en Bolivia</p>
   </div>
-
-  <!-- FORMULARIO -->
   <form (ngSubmit)="login()" autocomplete="off">
     <div class="form-group">
       <label for="correo">Correo</label>
@@ -17,14 +15,11 @@
     <button type="submit" [disabled]="loading">Ingresar</button>
     <div class="error" *ngIf="error">{{ error }}</div>
   </form>
-
-  <!-- ENLACES FUERA DEL FORM -->
   <div class="auth-links-container">
     <a class="forgot-password-link" routerLink="/recuperar-contrasenia">¿Olvidaste tu contraseña?</a>
     <div class="signup-prompt">
       ¿No tienes cuenta?
       <a class="signup-link" routerLink="/registrarse">Registrarse</a>
-
     </div>
   </div>
 </div>

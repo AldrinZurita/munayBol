@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { HabitacionService } from '../../services/habitacion.service';
 import { Habitacion } from '../../interfaces/habitacion.interface';
 import { FormsModule } from '@angular/forms';
-import { AdminAuthService } from '../../services/admin-auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-habitaciones',
@@ -25,7 +25,7 @@ export class Habitaciones implements OnInit {
 
   constructor(
     private habitacionService: HabitacionService,
-    private authService: AdminAuthService
+    private authService: AuthService
   ) {}
 
   ngOnInit() {

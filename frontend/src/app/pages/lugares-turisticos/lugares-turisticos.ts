@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { LugarTuristico } from '../../interfaces/lugar-turistico.interface';
-import { AdminAuthService } from '../../services/admin-auth.service';
+import { AuthService } from '../../services/auth.service';
 import { LugaresService, CrearLugarDTO, ActualizarLugarDTO } from '../../services/lugares.service';
 
 @Component({
@@ -44,7 +44,7 @@ export class LugaresTuristicos implements OnInit {
 
   constructor(
     private lugaresService: LugaresService,
-    private authService: AdminAuthService
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
