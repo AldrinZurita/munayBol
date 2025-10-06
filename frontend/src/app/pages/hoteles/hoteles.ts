@@ -3,14 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HotelService } from '../../services/hotel.service';
 import { AdminAuthService } from '../../services/admin-auth.service';
+import { ActivatedRoute } from '@angular/router';
 
 export interface Hotel {
   id_hotel: number;
   nombre: string;
-  departamento: string;  // ciudad/departamento
+  departamento: string;
   ubicacion: string;
-  calificacion: number;  // 0..10
-  estado: boolean;       // not shown in UI, but kept for admin ops
+  calificacion: number;
+  estado: boolean;
   fecha_creacion: string;
 }
 
@@ -24,31 +25,36 @@ export interface Hotel {
 export class Hoteles implements OnInit {
   hoteles: Hotel[] = [];
   hotelesFiltrados: Hotel[] = [];
+  departamentoSeleccionado: string | null = null;
 
-  // filtros
   ciudades: string[] = [];
   ciudadSeleccionada = '';
   calificacionSeleccionada = '';
 
-  // estado
   cargando = false;
   error = '';
   isSuperAdmin = false;
 
   constructor(
     private hotelService: HotelService,
-    private authService: AdminAuthService
+    private authService: AdminAuthService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.cargando = true;
     this.isSuperAdmin = this.authService.isLoggedIn();
 
+    // Leer el departamento desde los query params
+    this.route.queryParams.subscribe(params => {
+      this.departamentoSeleccionado = params['departamento'] ?? null;
+      this.aplicarFiltros(); // aplicar filtros con el departamento recibido
+    });
+
     this.hotelService.getHoteles().subscribe({
       next: (hoteles) => {
         this.hoteles = hoteles;
 
-        // ciudades únicas (coerción + trim + drop empties + sort)
         const allCities = this.hoteles
           .map(h => String(h.departamento ?? '').trim())
           .filter(s => s.length > 0);
@@ -58,6 +64,12 @@ export class Hoteles implements OnInit {
 
         this.hotelesFiltrados = [...this.hoteles];
         this.cargando = false;
+        // aplicar filtro con dpto seleccionado desde inicio
+        this.route.queryParams.subscribe(params => {
+        this.departamentoSeleccionado = params['departamento'] ?? null;
+        this.aplicarFiltros();
+      });
+
       },
       error: () => {
         this.error = 'No se pudo cargar la lista de hoteles';
@@ -69,10 +81,10 @@ export class Hoteles implements OnInit {
   aplicarFiltros() {
     let filtrados = this.hoteles;
 
-    if (this.ciudadSeleccionada) {
-      const ciudad = this.ciudadSeleccionada.trim().toLowerCase();
+    if (this.departamentoSeleccionado) {
+      const departamento = this.departamentoSeleccionado.trim().toLowerCase();
       filtrados = filtrados.filter(h =>
-        String(h.departamento ?? '').trim().toLowerCase() === ciudad
+        String(h.departamento ?? '').trim().toLowerCase() === departamento
       );
     }
 
@@ -92,7 +104,6 @@ export class Hoteles implements OnInit {
     window.location.href = `/hoteles/${id_hotel}`;
   }
 
-  // ---------- Admin acciones (restauradas) ----------
   onAgregarHotel() {
     const nombre = prompt('Nombre del hotel:');
     const departamento = prompt('Departamento:');
@@ -157,15 +168,12 @@ export class Hoteles implements OnInit {
     }
   }
 
-  // ---------- Rating helpers (mantener) ----------
-  /** Convert 0..10 score to 0..5 stars rounded to nearest 0.5 */
   toStarScore10to5(score10: number): number {
     const s = Math.max(0, Math.min(10, Number(score10) || 0));
-    return Math.round((s / 2) * 2) / 2; // nearest 0.5
+    return Math.round((s / 2) * 2) / 2;
   }
 
-  /** Returns an array of 5 entries: 'full' | 'half' | 'empty' */
-  getStarIcons(score10: number): ('full'|'half'|'empty')[] {
+  getStarIcons(score10: number): ('full' | 'half' | 'empty')[] {
     const score5 = this.toStarScore10to5(score10);
     const full = Math.floor(score5);
     const half = score5 - full >= 0.5 ? 1 : 0;
@@ -178,7 +186,6 @@ export class Hoteles implements OnInit {
     ];
   }
 
-  /** String like '4.5/5' based on 0..10 score */
   formatFiveScale(score10: number): string {
     return `${this.toStarScore10to5(score10).toFixed(1)}/5`;
   }
