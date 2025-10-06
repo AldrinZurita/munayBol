@@ -1,1 +1,36 @@
-<!-- Archivo vaciado: componente migrado a habitacion-detalle -->
+<div class="hotel-detalle-container">
+  <ng-container *ngIf="cargando">
+    <div class="estado">Cargando datos del hotel...</div>
+  </ng-container>
+  <ng-container *ngIf="error">
+    <div class="estado error">{{ error }}</div>
+  </ng-container>
+  <ng-container *ngIf="hotel && !cargando && !error">
+    <div class="hotel-card">
+      <div class="hotel-img-box">
+        <img *ngIf="hotel.url_imagen_hotel; else noImg"
+             [src]="hotel.url_imagen_hotel"
+             alt="Imagen de {{ hotel.nombre }}"
+             (error)="hotel.url_imagen_hotel = 'assets/no-image.svg'" />
+        <ng-template #noImg>
+          <img src="assets/no-image.svg" alt="Imagen no disponible" />
+        </ng-template>
+      </div>
+      <div class="hotel-info">
+        <h1>{{ hotel.nombre }}</h1>
+        <div class="meta">
+          <span><b>Departamento:</b> {{ hotel.departamento }}</span>
+          <span><b>Ubicación:</b> {{ hotel.ubicacion }}</span>
+        </div>
+        <div class="meta">
+          <span><b>Calificación:</b> {{ hotel.calificacion }}/10</span>
+          <span *ngIf="hotel.estado" class="estado-hotel activo">Activo</span>
+          <span *ngIf="!hotel.estado" class="estado-hotel inactivo">Inactivo</span>
+        </div>
+        <div class="fecha-creacion">
+          <b>Fecha de creación:</b> {{ hotel.fecha_creacion | date:'longDate' }}
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

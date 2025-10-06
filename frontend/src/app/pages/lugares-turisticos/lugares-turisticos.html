@@ -1,9 +1,6 @@
 <div class="lugares-container">
   <h1 class="title">Lugares Turísticos de Bolivia</h1>
 
-  <!-- DEBUG BANNER: remove after testing -->
-  <div class="debug-banner" *ngIf="showEditModal">DEBUG: showEditModal = true</div>
-
   <div class="header-acciones">
     <button *ngIf="isSuperAdmin" class="btn btn-primary" (click)="onAgregarLugar()">
       <span class="material-symbols-outlined icon-ms">add</span>
@@ -46,9 +43,7 @@
         <div *ngIf="l.url_image_lugar_turistico" class="imagen-lugar">
           <img [src]="l.url_image_lugar_turistico" [alt]="'Imagen de ' + l.nombre" (error)="onImageError($event)" />
         </div>
-
         <h3 class="lugar-nombre">{{ l.nombre }}</h3>
-
         <ul class="meta">
           <li class="meta-item">
             <span class="material-symbols-outlined">location_on</span>
@@ -59,67 +54,53 @@
             {{ l.tipo }}
           </li>
         </ul>
-
         <p class="descripcion" *ngIf="l.ubicacion">{{ l.ubicacion }}</p>
       </div>
-
       <div class="card-right">
         <a class="btn btn-accent" [routerLink]="['/lugares-turisticos', l.id_lugar]">Ver Detalles</a>
-        <!-- IMPORTANT: uses openEditModal -->
         <button *ngIf="isSuperAdmin" class="btn btn-secondary" (click)="openEditModal(l)">Editar</button>
         <button *ngIf="isSuperAdmin" class="btn btn-danger" (click)="onEliminarLugar(l)">Eliminar</button>
       </div>
     </article>
   </section>
-</div>
 
-<!-- ===== Modal ===== -->
-<div class="modal-backdrop" *ngIf="showEditModal" (click)="closeEditModal(false)" aria-hidden="true"></div>
-
-<div class="modal-root" *ngIf="showEditModal" role="dialog" aria-modal="true" aria-labelledby="editLugarTitle" (click)="closeEditModal(false)">
-  <div class="modal-card" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h3 id="editLugarTitle">Editar lugar</h3>
-      <button class="icon-btn" (click)="closeEditModal(false)" aria-label="Cerrar">
-        <span class="material-symbols-outlined">close</span>
-      </button>
-    </div>
-
-    <form #editForm="ngForm" (ngSubmit)="saveEdit(editForm)" novalidate>
-      <div class="modal-body">
-        <label class="form-label" for="nombre">Nombre *</label>
-        <input id="nombre" name="nombre" type="text" class="form-input" [(ngModel)]="editModel.nombre" required />
-
-        <label class="form-label" for="departamento">Departamento *</label>
-        <input id="departamento" name="departamento" type="text" class="form-input" [(ngModel)]="editModel.departamento" required />
-
-        <label class="form-label" for="tipo">Tipo *</label>
-        <input id="tipo" name="tipo" type="text" class="form-input" [(ngModel)]="editModel.tipo" required />
-
-        <label class="form-label" for="ubicacion">Ubicación *</label>
-        <textarea id="ubicacion" name="ubicacion" class="form-textarea" rows="3" [(ngModel)]="editModel.ubicacion" required></textarea>
-
-        <label class="form-label" for="horario">Horario</label>
-        <input id="horario" name="horario" type="text" class="form-input" [(ngModel)]="editModel.horario" />
-
-        <label class="form-label" for="descripcion">Descripción</label>
-        <textarea id="descripcion" name="descripcion" class="form-textarea" rows="3" [(ngModel)]="editModel.descripcion"></textarea>
-
-        <label class="form-label" for="img">URL de imagen</label>
-        <input id="img" name="img" type="url" class="form-input" [(ngModel)]="editModel.url_image_lugar_turistico" />
-
-        <div class="img-preview" *ngIf="editModel.url_image_lugar_turistico">
-          <img [src]="editModel.url_image_lugar_turistico" alt="Vista previa" (error)="onImageError($event)" />
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeEditModal(false)">Cancelar</button>
-        <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid || savingEdit">
-          {{ savingEdit ? 'Guardando…' : 'Guardar cambios' }}
+  <!-- Modal Edición -->
+  <div class="modal-backdrop" *ngIf="showEditModal" (click)="closeEditModal(false)" aria-hidden="true"></div>
+  <div class="modal-root" *ngIf="showEditModal" role="dialog" aria-modal="true" aria-labelledby="editLugarTitle" (click)="closeEditModal(false)">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3 id="editLugarTitle">Editar lugar</h3>
+        <button class="icon-btn" (click)="closeEditModal(false)" aria-label="Cerrar">
+          <span class="material-symbols-outlined">close</span>
         </button>
       </div>
-    </form>
+      <form #editForm="ngForm" (ngSubmit)="saveEdit(editForm)" novalidate>
+        <div class="modal-body">
+          <label class="form-label" for="nombre">Nombre *</label>
+          <input id="nombre" name="nombre" type="text" class="form-input" [(ngModel)]="editModel.nombre" required />
+          <label class="form-label" for="departamento">Departamento *</label>
+          <input id="departamento" name="departamento" type="text" class="form-input" [(ngModel)]="editModel.departamento" required />
+          <label class="form-label" for="tipo">Tipo *</label>
+          <input id="tipo" name="tipo" type="text" class="form-input" [(ngModel)]="editModel.tipo" required />
+          <label class="form-label" for="ubicacion">Ubicación *</label>
+          <textarea id="ubicacion" name="ubicacion" class="form-textarea" rows="3" [(ngModel)]="editModel.ubicacion" required></textarea>
+          <label class="form-label" for="horario">Horario</label>
+          <input id="horario" name="horario" type="text" class="form-input" [(ngModel)]="editModel.horario" />
+          <label class="form-label" for="descripcion">Descripción</label>
+          <textarea id="descripcion" name="descripcion" class="form-textarea" rows="3" [(ngModel)]="editModel.descripcion"></textarea>
+          <label class="form-label" for="img">URL de imagen</label>
+          <input id="img" name="img" type="url" class="form-input" [(ngModel)]="editModel.url_image_lugar_turistico" />
+          <div class="img-preview" *ngIf="editModel.url_image_lugar_turistico">
+            <img [src]="editModel.url_image_lugar_turistico" alt="Vista previa" (error)="onImageError($event)" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeEditModal(false)">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid || savingEdit">
+            {{ savingEdit ? 'Guardando…' : 'Guardar cambios' }}
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
-<!-- ===== /Modal ===== -->
