@@ -1,63 +1,43 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { HabitacionService } from '../../services/habitacion.service';
-import { Habitacion } from '../../interfaces/habitacion.interface';
-
-interface Review {
-  autor: string;
-  texto: string;
-  calificacion: number;
-  fecha: string;
-}
+import { Hotel } from '../../interfaces/hotel.interface';
+import { HotelService } from '../../services/hotel.service';
 
 @Component({
-  selector: 'app-habitacion-detalle',
+  selector: 'app-hotel-detalle',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './hotel-detalle.html',
   styleUrls: ['./hotel-detalle.scss'],
-  standalone: true,
 })
-export class HabitacionDetalle implements OnInit {
-  habitacion: Habitacion | null = null;
-  reviews: Review[] = [];
+export class HotelDetalleComponent implements OnInit {
+  hotel: Hotel | null = null;
+  cargando = false;
+  error = '';
 
   constructor(
     private route: ActivatedRoute,
-    private habitacionService: HabitacionService
+    private hotelService: HotelService
   ) {}
 
-  ngOnInit() {
-    const num = this.route.snapshot.paramMap.get('num');
-    if (num) {
-      this.habitacionService.getHabitaciones().subscribe({
-        next: habitaciones => {
-          this.habitacion = habitaciones.find(h => h.num === num) || null;
-          this.generarReviewsFake();
-        }
-      });
-    } else {
-      this.generarReviewsFake();
+  ngOnInit(): void {
+    this.cargando = true;
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (!id) {
+      this.error = 'ID de hotel no válido.';
+      this.cargando = false;
+      return;
     }
-  }
-
-  reservar() {
-    alert('Funcionalidad de reserva en construccion 🚀');
-  }
-
-  getPrecioHabitacion(): number {
-    return this.habitacion ? this.habitacion.precio : 0;
-  }
-
-  getCapacidadHabitacion(): number {
-    return this.habitacion ? this.habitacion.cant_huespedes : 2;
-  }
-
-  private generarReviewsFake() {
-    this.reviews = [
-      { autor: 'Ana', texto: 'Muy acogedor y limpio. Volveria sin duda.', calificacion: 4.5, fecha: '2025-09-10' },
-      { autor: 'Luis', texto: 'Excelente ubicacion y atencion. Desayuno completo.', calificacion: 4.2, fecha: '2025-09-12' },
-      { autor: 'Maria', texto: 'Hotel con encanto. Ideal para descansar y recorrer.', calificacion: 4.8, fecha: '2025-09-15' },
-    ];
+    this.hotelService.getHotelById(id).subscribe({
+      next: (hotel) => {
+        this.hotel = hotel;
+        this.cargando = false;
+      },
+      error: (e) => {
+        this.error = 'No se pudo cargar el hotel.';
+        this.cargando = false;
+      }
+    });
   }
 }

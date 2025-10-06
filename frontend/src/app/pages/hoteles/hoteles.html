@@ -8,7 +8,6 @@
   <!-- Filtros -->
   <section class="filtros-card">
     <h4>Filtros de búsqueda</h4>
-
     <div class="filtros-grid">
       <div class="filtro">
         <label for="ciudad">Ciudad</label>
@@ -20,7 +19,6 @@
           <span class="chev"><span class="ms">expand_more</span></span>
         </div>
       </div>
-
       <div class="filtro">
         <label for="calificacion">Calificación</label>
         <div class="select">
@@ -31,7 +29,6 @@
           <span class="chev"><span class="ms">expand_more</span></span>
         </div>
       </div>
-
       <div class="acciones">
         <button class="btn btn-primary" (click)="aplicarFiltros()">Aplicar Filtros</button>
       </div>
@@ -50,13 +47,17 @@
     <article *ngFor="let hotel of hotelesFiltrados" class="card">
       <div class="card-left">
         <h3 class="hotel-nombre">{{ hotel.nombre }}</h3>
-
+        <!-- Imagen del hotel -->
+        <img *ngIf="hotel.url_imagen_hotel"
+             [src]="hotel.url_imagen_hotel"
+             alt="Imagen de {{ hotel.nombre }}"
+             class="hotel-imagen"
+             (error)="hotel.url_imagen_hotel = 'assets/no-image.svg'" />
         <ul class="meta">
           <li class="meta-item">
             <span class="ms icon-ms">location_on</span>
             {{ hotel.departamento }}
           </li>
-
           <li class="meta-item rating">
             <span class="stars">
               <ng-container *ngFor="let s of getStarIcons(hotel.calificacion); let i = index">
@@ -69,18 +70,13 @@
             <span class="rating-text">{{ formatFiveScale(hotel.calificacion) }}</span>
           </li>
         </ul>
-
         <p class="descripcion" *ngIf="hotel.ubicacion">{{ hotel.ubicacion }}</p>
-
-        <!-- Fecha de creación SOLO para admins (opcional, puedes borrar esta fila si no la quieres en absoluto) -->
         <div class="fecha-admin" *ngIf="isSuperAdmin && hotel.fecha_creacion">
           <span class="label">Fecha de creación:</span> {{ hotel.fecha_creacion | date:'longDate' }}
         </div>
       </div>
-
       <div class="card-right">
         <button class="btn btn-primary" (click)="onVerDetalles(hotel.id_hotel)">Ver Detalles</button>
-
         <div class="admin-actions" *ngIf="isSuperAdmin">
           <button class="btn btn-secondary" (click)="onEditarHotel(hotel)">Editar</button>
           <button class="btn btn-danger" (click)="onEliminarHotel(hotel)">Eliminar</button>

@@ -5,6 +5,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields = '__all__'
+        read_only_fields = ['rol', 'estado', 'fecha_creacion']
         extra_kwargs = {
             'contrasenia': {'write_only': True}
         }
@@ -18,7 +19,9 @@ class RegistroSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        from django.contrib.auth.hashers import make_password
         validated_data['rol'] = 'usuario'
+        validated_data['contrasenia'] = make_password(validated_data['contrasenia'])
         return Usuario.objects.create(**validated_data)
 
 class HotelSerializer(serializers.ModelSerializer):
@@ -56,7 +59,7 @@ class ReservaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reserva
         fields = '__all__'
-        read_only_fields = ('id_reserva', 'fecha_creacion')
+        read_only_fields = ('id_reserva', 'fecha_creacion', 'estado', 'id_usuario')
 
     def validate(self, attrs):
         habitacion = attrs.get('num_habitacion')
@@ -94,7 +97,7 @@ class PaqueteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Paquete
         fields = '__all__'
-        read_only_fields = ('id_paquete', 'fecha_creacion', 'estado')
+        read_only_fields = ('id_paquete', 'fecha_creacion')
 
 class SugerenciasSerializer(serializers.ModelSerializer):
     class Meta:

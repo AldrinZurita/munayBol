@@ -72,4 +72,14 @@ export class AuthService {
     }
     return null;
   }
+
+  isSuperadmin(): boolean {
+    const user = this.getUser();
+    return !!user && user.rol === 'superadmin' && user.estado;
+  }
+
+  isUsuario(): boolean {
+    const user = this.getUser();
+    return !!user && user.rol === 'usuario' && user.estado;
+  }
 }

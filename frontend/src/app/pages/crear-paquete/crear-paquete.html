@@ -1,7 +1,6 @@
 <div class="form-container">
   <h2>Crear Paquete</h2>
   <form (ngSubmit)="crearPaquete()" #paqueteForm="ngForm">
-
     <label>Nombre:</label>
     <input type="text" [(ngModel)]="paquete.nombre" name="nombre" required />
 
@@ -11,14 +10,16 @@
     <label>Precio:</label>
     <input type="number" [(ngModel)]="paquete.precio" name="precio" required />
 
-    <label>Id Reserva:</label>
-    <input type="number" [(ngModel)]="paquete.id_reserva" name="id_reserva" />
+    <label>Id Hotel:</label>
+    <input type="number" [(ngModel)]="paquete.id_hotel" name="id_hotel" required />
 
     <label>Id Lugar:</label>
-    <input type="number" [(ngModel)]="paquete.id_lugar" name="id_lugar" />
+    <input type="number" [(ngModel)]="paquete.id_lugar" name="id_lugar" required />
 
-    <label>Fecha de Creación:</label>
-    <input type="date" [(ngModel)]="paquete.fecha_creacion" name="fecha_creacion" />
+    <label>
+      <input type="checkbox" [(ngModel)]="paquete.estado" name="estado" />
+      Disponible
+    </label>
 
     <button type="submit">Guardar Paquete</button>
   </form>

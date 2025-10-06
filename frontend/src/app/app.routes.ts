@@ -13,6 +13,7 @@ import { Paquetes } from './pages/paquetes/paquetes';
 import { PaqueteDetalle } from './pages/paquete-detalle/paquete-detalle';
 import { CrearPaquete } from './pages/crear-paquete/crear-paquete';
 import { Registrarse } from './pages/registrarse/registrarse';
+import { HotelDetalleComponent } from './pages/hotel-detalle/hotel-detalle';
 
 // Guards
 import { adminGuard } from './guards/admin.guard';
@@ -25,22 +26,24 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'registrarse', component: Registrarse },
   { path: 'lugares-turisticos', component: LugaresTuristicos },
-  { path: 'lugares-turisticos/:id', component: LugaresTuristicosDetalle},
+  { path: 'lugares-turisticos/:id', component: LugaresTuristicosDetalle },
+  { path: 'hoteles', component: Hoteles},
+  { path: 'hoteles/:id', component: HotelDetalleComponent},
 
-  // Rutas protegidas para usuarios normales
+  // Rutas protegidas para usuarios autenticados (usuario o superadmin)
   { path: 'reservas', component: ReservaComponent, canActivate: [userGuard] },
   { path: 'reservas/:id', component: ReservaDetalleComponent, canActivate: [userGuard] },
   { path: 'habitaciones', component: Habitaciones, canActivate: [userGuard] },
   { path: 'habitaciones/:num', component: HabitacionDetalle, canActivate: [userGuard] },
   { path: 'paquetes', component: Paquetes, canActivate: [userGuard] },
   { path: 'paquetes/:id', component: PaqueteDetalle, canActivate: [userGuard] },
-  { path: 'paquetes/nuevo-paquete', component: CrearPaquete, canActivate: [userGuard] },
+  { path: 'paquetes/nuevo-paquete', component: CrearPaquete, canActivate: [adminGuard] }, // Solo superadmin puede crear paquetes
   { path: 'asistente-ia', component: AsistenteIa, canActivate: [userGuard] },
 
-  // Rutas exclusivas admin
+  // Rutas exclusivas admin (superadmin)
   { path: 'admin', component: Hoteles, canActivate: [adminGuard] },
-  // puedes agregar más rutas admin aquí
+  // { path: 'admin/habitaciones', component: HabitacionesAdmin, canActivate: [adminGuard] },
+  // { path: 'admin/paquetes', component: PaquetesAdmin, canActivate: [adminGuard] },
 
-  // fallback
   { path: '**', redirectTo: '' }
 ];

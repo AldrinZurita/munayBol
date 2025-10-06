@@ -1,18 +1,53 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
-class Usuario(models.Model):
+class UsuarioManager(BaseUserManager):
+    def create_user(self, correo, contrasenia=None, **extra_fields):
+        if not correo:
+            raise ValueError('El usuario debe tener un correo')
+        correo = self.normalize_email(correo)
+        user = self.model(correo=correo, **extra_fields)
+        user.set_password(contrasenia)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, correo, contrasenia=None, **extra_fields):
+        extra_fields.setdefault('rol', 'superadmin')
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_staff', True)
+        return self.create_user(correo, contrasenia, **extra_fields)
+
+class Usuario(AbstractBaseUser, PermissionsMixin):
     id = models.BigAutoField(primary_key=True)
     nombre = models.CharField(max_length=255)
-    correo = models.CharField(max_length=255, unique=True)
-    contrasenia = models.CharField(max_length=255) 
+    correo = models.EmailField(max_length=255, unique=True)
+    contrasenia = models.CharField(max_length=255)
     rol = models.CharField(max_length=50, choices=[('superadmin', 'Superadmin'), ('usuario', 'Usuario')])
     pais = models.CharField(max_length=50)
     pasaporte = models.CharField(max_length=50)
     estado = models.BooleanField(default=True)
     fecha_creacion = models.DateField(auto_now_add=True)
+    is_staff = models.BooleanField(default=False)  # Necesario para admin
+
+    USERNAME_FIELD = 'correo'
+    REQUIRED_FIELDS = ['nombre', 'pais', 'pasaporte']
+
+    objects = UsuarioManager()
 
     def __str__(self):
         return f"{self.nombre} ({self.rol})"
+
+    @property
+    def is_active(self):
+        return self.estado
+
+    def set_password(self, raw_password):
+        from django.contrib.auth.hashers import make_password
+        self.contrasenia = make_password(raw_password)
+
+    def check_password(self, raw_password):
+        from django.contrib.auth.hashers import check_password
+        return check_password(raw_password, self.contrasenia)
 
 class Hotel(models.Model):
     id_hotel = models.BigIntegerField(primary_key=True)

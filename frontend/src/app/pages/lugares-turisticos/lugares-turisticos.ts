@@ -17,13 +17,10 @@ import { LugaresService, CrearLugarDTO, ActualizarLugarDTO } from '../../service
 export class LugaresTuristicos implements OnInit {
   lugares: LugarTuristico[] = [];
   lugaresFiltrados: LugarTuristico[] = [];
-
   ciudades: string[] = [];
   ciudadSeleccionada = '';
-
   cargando = false;
   error = '';
-  isSuperAdmin = false;
 
   // Modal
   showEditModal = false;
@@ -44,20 +41,17 @@ export class LugaresTuristicos implements OnInit {
 
   constructor(
     private lugaresService: LugaresService,
-    private authService: AuthService
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.cargando = true;
-    this.isSuperAdmin = this.authService.isLoggedIn();
-
     this.lugaresService.getLugares().subscribe({
       next: (rows) => {
         this.lugares = rows ?? [];
         const allCities = this.lugares
           .map((l) => (l?.departamento ?? '').toString().trim())
           .filter((s) => s.length > 0);
-
         this.ciudades = Array.from(new Set(allCities)).sort((a, b) => a.localeCompare(b));
         this.lugaresFiltrados = [...this.lugares];
         this.cargando = false;
@@ -69,6 +63,10 @@ export class LugaresTuristicos implements OnInit {
     });
   }
 
+  get isSuperAdmin(): boolean {
+    return this.authService.isSuperadmin();
+  }
+
   aplicarFiltros(): void {
     let filtrados = this.lugares;
     if (this.ciudadSeleccionada) {
@@ -78,6 +76,7 @@ export class LugaresTuristicos implements OnInit {
   }
 
   onAgregarLugar(): void {
+    if (!this.isSuperAdmin) return;
     const nombre = prompt('Nombre del lugar:')?.trim();
     const ubicacion = prompt('Ubicación o dirección:')?.trim();
     const departamento = prompt('Departamento:')?.trim();
@@ -85,7 +84,6 @@ export class LugaresTuristicos implements OnInit {
     const horario = prompt('Horario (opcional):')?.trim() || undefined;
     const descripcion = prompt('Descripción (opcional):')?.trim() || undefined;
     const url_image_lugar_turistico = prompt('URL de la imagen (opcional):')?.trim() || undefined;
-
     if (nombre && ubicacion && departamento && tipo) {
       const nuevo: CrearLugarDTO = {
         nombre, ubicacion, departamento, tipo, horario, descripcion, url_image_lugar_turistico
@@ -102,6 +100,7 @@ export class LugaresTuristicos implements OnInit {
   }
 
   onEliminarLugar(lugar: LugarTuristico): void {
+    if (!this.isSuperAdmin) return;
     if (confirm(`¿Estás seguro de que quieres eliminar "${lugar.nombre}"?`)) {
       this.lugaresService.eliminarLugar(lugar.id_lugar).subscribe({
         next: () => {
@@ -114,9 +113,8 @@ export class LugaresTuristicos implements OnInit {
     }
   }
 
-  // ===== Modal Edit =====
   openEditModal(lugar: LugarTuristico) {
-    console.log('[Edit] Opening modal for:', lugar); // DEBUG
+    if (!this.isSuperAdmin) return;
     this._editTargetRef = lugar;
     this.editModel = {
       id_lugar: lugar.id_lugar,
@@ -142,9 +140,8 @@ export class LugaresTuristicos implements OnInit {
   }
 
   saveEdit(form: any) {
-    if (!form.valid || !this._editTargetRef) return;
+    if (!form.valid || !this._editTargetRef || !this.isSuperAdmin) return;
     this.savingEdit = true;
-
     const cambios: ActualizarLugarDTO = {
       nombre: this.editModel.nombre,
       ubicacion: this.editModel.ubicacion,
@@ -154,7 +151,6 @@ export class LugaresTuristicos implements OnInit {
       descripcion: this.editModel.descripcion,
       url_image_lugar_turistico: this.editModel.url_image_lugar_turistico
     };
-
     this.lugaresService.actualizarLugar(this.editModel.id_lugar, cambios).subscribe({
       next: (resp) => {
         Object.assign(this._editTargetRef!, resp);
@@ -171,7 +167,6 @@ export class LugaresTuristicos implements OnInit {
     });
   }
 
-  // Helpers
   trackByLugar = (_: number, item: LugarTuristico) => item.id_lugar;
 
   onImageError(evt: Event) {

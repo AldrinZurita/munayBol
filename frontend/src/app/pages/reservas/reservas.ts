@@ -5,6 +5,8 @@ import { ReservasService } from '../../services/reservas.service';
 import { PagoService, Pago } from '../../services/pago.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HabitacionService } from '../../services/habitacion.service';
+import { AuthService } from '../../services/auth.service';
+import { Reserva } from '../../interfaces/reserva.interface';
 
 @Component({
   selector: 'app-reserva',
@@ -32,10 +34,7 @@ export class ReservaComponent implements OnInit {
   get total() {
     return this.subtotal + this.iva;
   }
-  // reservas list removed from UI
-  // reservas: Reserva[] = [];
 
-  // UI feedback states
   showSuccessModal: boolean = false;
   showConflictModal: boolean = false;
   conflictNextAvailable: string = '';
@@ -45,39 +44,17 @@ export class ReservaComponent implements OnInit {
   showErrorToast: boolean = false;
   errorMessage: string = '';
 
-  //Inputs de pago
   tarjeta = '';
   nombre = '';
   expiracion = '';
   cvv = '';
 
-  onTarjetaInput(event: any) {
-    let value = event.target.value.replace(/\D/g, '');
-    value = value.substring(0, 16);
-    let formatted = '';
-    for (let i = 0; i < value.length; i += 4) {
-      if (i > 0) formatted += ' ';
-      formatted += value.substring(i, i + 4);
-    }
-    this.tarjeta = formatted;
-  }
-
-  onExpiracionInput(event: any) {
-    let value = event.target.value.replace(/[^\d]/g, '');
-    if (value.length > 4) value = value.substring(0, 4);
-    if (value.length >= 3) {
-      value = value.substring(0, 2) + '/' + value.substring(2);
-    }
-    this.expiracion = value;
-  }
-
-  // Removed guest name/email inputs
-
   constructor(
-  private readonly reservasService: ReservasService, // retained in case future use (could be removed)
+    private readonly reservasService: ReservasService,
     private readonly pagoService: PagoService,
     private readonly route: ActivatedRoute,
     private readonly habitacionService: HabitacionService,
+    private readonly authService: AuthService,
     private readonly router: Router
   ) {}
 
@@ -88,7 +65,6 @@ export class ReservaComponent implements OnInit {
       this.Habitacion.hotel = params['hotel'] || '';
       this.Habitacion.capacidad = params['capacidad'] ? Number(params['capacidad']) : 1;
       this.fecha_reserva = params['fecha_reserva'] || new Date().toISOString().slice(0,10);
-      // Si no viene fecha_caducidad, por defecto un día después de la reserva
       if (params['fecha_caducidad']) {
         this.fecha_caducidad = params['fecha_caducidad'];
       } else {
@@ -101,11 +77,9 @@ export class ReservaComponent implements OnInit {
       this.minFechaReserva = new Date().toISOString().slice(0,10);
       this.ajustarFechas();
     });
-    // Removed fetching of all reservas (UI section removed)
   }
 
   private ajustarFechas() {
-    // Garantiza que fecha_caducidad > fecha_reserva y recalcula noches
     if (this.fecha_caducidad <= this.fecha_reserva) {
       const d = new Date(this.fecha_reserva);
       d.setDate(d.getDate() + 1);
@@ -129,23 +103,39 @@ export class ReservaComponent implements OnInit {
     this.ajustarFechas();
   }
 
-  //Validacion simple
-   pagoInvalido() {
+  pagoInvalido() {
     return !(new RegExp(/^\d{4} \d{4} \d{4} \d{4}$/).exec(this.tarjeta)) ||
            !this.nombre.trim() ||
            !(new RegExp(/^(0[1-9]|1[0-2])\/(\d{2})$/).exec(this.expiracion)) ||
            !(new RegExp(/^\d{3}$/).exec(this.cvv));
   }
 
+  onTarjetaInput(event: any) {
+    let value = event.target.value.replace(/\D/g, '');
+    value = value.substring(0, 16);
+    let formatted = '';
+    for (let i = 0; i < value.length; i += 4) {
+      if (i > 0) formatted += ' ';
+      formatted += value.substring(i, i + 4);
+    }
+    this.tarjeta = formatted;
+  }
+
+  onExpiracionInput(event: any) {
+    let value = event.target.value.replace(/[^\d]/g, '');
+    if (value.length > 4) value = value.substring(0, 4);
+    if (value.length >= 3) {
+      value = value.substring(0, 2) + '/' + value.substring(2);
+    }
+    this.expiracion = value;
+  }
+
   confirmarPago() {
-    // Evita doble envío si ya está procesando
     if (this.creating) return;
-    // Simulación: solo valida formato básico y crea el pago
     if (!this.tarjeta.trim() || !this.nombre.trim() || !this.expiracion.trim() || !this.cvv.trim()) {
       this.lanzarError('Completa todos los campos para simular el pago.');
       return;
     }
-    // Paso 1: Revalidar disponibilidad actualizada (doble verificación)
     const num = this.Habitacion.num;
     if (!num) {
       alert('No se encontró la habitación.');
@@ -154,7 +144,7 @@ export class ReservaComponent implements OnInit {
     this.creating = true;
     this.habitacionService.getDisponibilidadHabitacion(num).subscribe({
       next: disp => {
-        const conflicto = disp.intervalos_reservados.some(i =>
+        const conflicto = disp.intervalos_reservados.some((i: any) =>
           this.fecha_reserva <= i.fin && this.fecha_caducidad >= i.inicio
         );
         if (conflicto) {
@@ -163,7 +153,6 @@ export class ReservaComponent implements OnInit {
           this.creating = false;
           return;
         }
-        // Paso 2: Crear pago tras validar disponibilidad vigente
         const hoy = new Date().toISOString().slice(0, 10);
         const pago: Pago = {
           tipo_pago: 'tarjeta',
@@ -173,12 +162,14 @@ export class ReservaComponent implements OnInit {
         };
         this.pagoService.crearPago(pago).subscribe({
           next: (res) => {
-            const reserva = {
+            // Obtener usuario real desde AuthService
+            const usuario = this.authService.getUser();
+            const reserva: Partial<Reserva> = {
               fecha_reserva: this.fecha_reserva,
               fecha_caducidad: this.fecha_caducidad,
               num_habitacion: this.Habitacion.num,
               codigo_hotel: Number(this.Habitacion.hotel),
-              ci_usuario: 1,
+              id_usuario: usuario?.id,
               id_pago: res.id_pago
             };
             this.reservasService.crearReserva(reserva).subscribe({
@@ -207,19 +198,16 @@ export class ReservaComponent implements OnInit {
     });
   }
 
-  // confirmarReserva removed (no longer needed)
-
   cerrarSuccess() {
     this.showSuccessModal = false;
-    // Reset sensitive fields
     this.tarjeta = '';
     this.nombre = '';
     this.expiracion = '';
     this.cvv = '';
     this.creating = false;
-    // Navigate to home after short microtask to ensure modal closes cleanly
     setTimeout(()=> this.router.navigate(['']), 0);
   }
+
   cerrarConflict() { this.showConflictModal = false; }
   usarFechaSugerida() {
     if (this.conflictNextAvailable) {

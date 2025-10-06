@@ -21,16 +21,14 @@ export class Habitaciones implements OnInit {
   hoteles: number[] = [];
   cargando = false;
   error = '';
-  isSuperAdmin = false;
 
   constructor(
     private habitacionService: HabitacionService,
-    private authService: AuthService
+    public authService: AuthService
   ) {}
 
   ngOnInit() {
     this.cargando = true;
-    this.isSuperAdmin = this.authService.isLoggedIn();
     this.habitacionService.getHabitaciones().subscribe({
       next: habitaciones => {
         this.habitaciones = habitaciones;
@@ -47,23 +45,25 @@ export class Habitaciones implements OnInit {
     });
   }
 
+  get isSuperAdmin(): boolean {
+    return this.authService.isSuperadmin();
+  }
+
   aplicarFiltros() {
     let filtrados = this.habitaciones;
-
     if (this.disponibleSeleccionado) {
       const disponible = this.disponibleSeleccionado === 'true';
       filtrados = filtrados.filter(h => h.disponible === disponible);
     }
-
     if (this.hotelSeleccionado) {
       const hotelId = Number(this.hotelSeleccionado);
       filtrados = filtrados.filter(h => h.codigo_hotel === hotelId);
     }
-
     this.habitacionesFiltradas = filtrados;
   }
 
   onAgregarHabitacion() {
+    if (!this.isSuperAdmin) return;
     const num = prompt('Número de habitación:')?.trim();
     const codigo_hotel = Number(prompt('Código hotel:'));
     const caracteristicas = prompt('Características:');
@@ -91,6 +91,7 @@ export class Habitaciones implements OnInit {
   }
 
   onEditarHabitacion(habitacion: Habitacion) {
+    if (!this.isSuperAdmin) return;
     const num = prompt('Nuevo número:', habitacion.num)?.trim();
     const codigo_hotel = Number(prompt('Nuevo código hotel:', habitacion.codigo_hotel.toString()));
     const caracteristicas = prompt('Nuevas características:', habitacion.caracteristicas);
@@ -119,6 +120,7 @@ export class Habitaciones implements OnInit {
   }
 
   onEliminarHabitacion(habitacion: Habitacion) {
+    if (!this.isSuperAdmin) return;
     if (confirm('¿Eliminar habitación?')) {
       this.habitacionService.eliminarHabitacion(Number(habitacion.num)).subscribe({
         next: () => {
