@@ -12,11 +12,42 @@
   display: flex;
   align-items: center;
   color: #fff;
-  background:
-    linear-gradient(0deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)),
-    url('https://boliviamia.net/Images/Tourpics/atop-uyuni-06.jpg') center/cover no-repeat #dfefff;
   min-height: 420px;
+  background: 
+    linear-gradient(0deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)),
+    url("https://boliviamia.net/Images/Tourpics/atop-uyuni-01.jpg") center/cover no-repeat;
+  animation: slideshow 15s infinite;
 }
+
+/* Animación que cambia las imágenes */
+@keyframes slideshow {
+  0%, 20% {
+    background-image: 
+      linear-gradient(0deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)),
+      url("https://boliviamia.net/Images/Tourpics/atop-uyuni-06.jpg");
+  }
+  21%, 40% {
+    background-image: 
+      linear-gradient(0deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)),
+      url("https://i.natgeofe.com/n/857a969e-9fe6-4b5e-959f-157ad9fdf7f9/reflection-salar-de-uyuni-bolivia.jpg");
+  }
+  41%, 60% {
+    background-image: 
+      linear-gradient(0deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)),
+      url("https://www.arttravel.no/wp-content/uploads/2021/03/bolivia-las-yungas-landskap.jpg") top/cover no-repeat;
+  }
+  61%, 80% {
+    background-image: 
+      linear-gradient(0deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)),
+      url("https://res.cloudinary.com/dj5uzus8e/image/upload/v1759409725/atxmsay01eua7ugxdwfs.jpg");
+  }
+  81%, 100% {
+    background-image: 
+      linear-gradient(0deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)),
+      url("https://camarahoteleradesantacruz.org/wp-content/uploads/2023/11/guembe2.jpg");
+  }
+}
+
 
 .hero__inner {
   position: relative;
@@ -250,4 +281,11 @@ p {
   .card__text {
     font-size: 13px;
   }
+}
+
+a.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: default;
+  text-decoration: none;
 }

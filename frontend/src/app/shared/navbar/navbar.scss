@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 50px;
+  padding: 1.5rem 2rem;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -121,7 +121,7 @@ h1 {
   }
 
   /* Mostrar contenido cuando toggle está activo */
-  .menu-toggle:checked + .hamburger  {
+  .menu-toggle:checked+.hamburger {
     display: flex;
   }
 
@@ -159,7 +159,12 @@ h1 {
     margin: 0 0 5px 0;
   }
 }
+
 .logo a {
   text-decoration: none;
   color: inherit;
+}
+
+.logo {
+  font-size: 2rem;
 }

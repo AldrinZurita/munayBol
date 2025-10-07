@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HotelService } from '../../services/hotel.service';
 import { AuthService } from '../../services/auth.service';
 import { Hotel } from '../../interfaces/hotel.interface';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-hoteles',
@@ -25,7 +26,8 @@ export class Hoteles implements OnInit {
 
   constructor(
     private hotelService: HotelService,
-    public authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -40,6 +42,12 @@ export class Hoteles implements OnInit {
           .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
         this.hotelesFiltrados = [...this.hoteles];
         this.cargando = false;
+        // aplicar filtro con dpto seleccionado desde inicio
+        this.route.queryParams.subscribe(params => {
+        this.ciudadSeleccionada = params['departamento'] ?? null;
+        this.aplicarFiltros();
+      });
+
       },
       error: () => {
         this.error = 'No se pudo cargar la lista de hoteles';
