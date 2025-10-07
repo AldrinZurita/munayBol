@@ -1,0 +1,90 @@
+.hotel-detalle-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 32px 18px 18px 18px;
+}
+
+.estado {
+  color: #0f172a;
+  padding: 12px 0;
+  text-align: center;
+  &.error {
+    color: #dc2626;
+  }
+}
+
+.hotel-card {
+  display: flex;
+  gap: 28px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 2px 10px 0 rgba(0,0,0,0.05);
+  @media (max-width: 750px) {
+    flex-direction: column;
+    gap: 18px;
+    padding: 16px;
+  }
+}
+
+.hotel-img-box {
+  flex-shrink: 0;
+  img {
+    width: 240px;
+    max-width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: #f1f5f9;
+    display: block;
+  }
+}
+
+.hotel-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  h1 {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0 0 10px 0;
+    color: #0f172a;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    font-size: 16px;
+    color: #334155;
+    margin-bottom: 8px;
+    span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
+  .fecha-creacion {
+    margin-top: 16px;
+    font-size: 14px;
+    color: #64748b;
+  }
+  .estado-hotel {
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    &.activo {
+      background: #d1fae5;
+      color: #047857;
+      border: 1px solid #10b981;
+    }
+    &.inactivo {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #ef4444;
+    }
+  }
+}

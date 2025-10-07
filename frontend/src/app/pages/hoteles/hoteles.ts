@@ -2,18 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HotelService } from '../../services/hotel.service';
-import { AdminAuthService } from '../../services/admin-auth.service';
+import { AuthService } from '../../services/auth.service';
+import { Hotel } from '../../interfaces/hotel.interface';
 import { ActivatedRoute } from '@angular/router';
-
-export interface Hotel {
-  id_hotel: number;
-  nombre: string;
-  departamento: string;
-  ubicacion: string;
-  calificacion: number;
-  estado: boolean;
-  fecha_creacion: string;
-}
 
 @Component({
   selector: 'app-hoteles',
@@ -33,35 +24,23 @@ export class Hoteles implements OnInit {
 
   cargando = false;
   error = '';
-  isSuperAdmin = false;
 
   constructor(
     private hotelService: HotelService,
-    private authService: AdminAuthService,
+    private authService: AuthService,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.cargando = true;
-    this.isSuperAdmin = this.authService.isLoggedIn();
-
-    // Leer el departamento desde los query params
-    this.route.queryParams.subscribe(params => {
-      this.departamentoSeleccionado = params['departamento'] ?? null;
-      this.aplicarFiltros(); // aplicar filtros con el departamento recibido
-    });
-
     this.hotelService.getHoteles().subscribe({
       next: (hoteles) => {
         this.hoteles = hoteles;
-
         const allCities = this.hoteles
           .map(h => String(h.departamento ?? '').trim())
           .filter(s => s.length > 0);
-
         this.ciudades = Array.from(new Set(allCities))
           .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
-
         this.hotelesFiltrados = [...this.hoteles];
         this.cargando = false;
         // aplicar filtro con dpto seleccionado desde inicio
@@ -78,16 +57,18 @@ export class Hoteles implements OnInit {
     });
   }
 
+  get isSuperAdmin(): boolean {
+    return this.authService.isSuperadmin();
+  }
+
   aplicarFiltros() {
     let filtrados = this.hoteles;
-
-    if (this.departamentoSeleccionado) {
-      const departamento = this.departamentoSeleccionado.trim().toLowerCase();
+    if (this.ciudadSeleccionada) {
+      const ciudad = this.ciudadSeleccionada.trim().toLowerCase();
       filtrados = filtrados.filter(h =>
-        String(h.departamento ?? '').trim().toLowerCase() === departamento
+        String(h.departamento ?? '').trim().toLowerCase() === ciudad
       );
     }
-
     if (this.calificacionSeleccionada) {
       const calif = Number(this.calificacionSeleccionada);
       if (!Number.isNaN(calif)) {
@@ -96,7 +77,6 @@ export class Hoteles implements OnInit {
         );
       }
     }
-
     this.hotelesFiltrados = filtrados;
   }
 
@@ -105,6 +85,7 @@ export class Hoteles implements OnInit {
   }
 
   onAgregarHotel() {
+    if (!this.isSuperAdmin) return;
     const nombre = prompt('Nombre del hotel:');
     const departamento = prompt('Departamento:');
     const ubicacion = prompt('Ubicación:');
@@ -130,6 +111,7 @@ export class Hoteles implements OnInit {
   }
 
   onEditarHotel(hotel: Hotel) {
+    if (!this.isSuperAdmin) return;
     const nombre = prompt('Nuevo nombre:', hotel.nombre);
     const departamento = prompt('Nuevo departamento:', hotel.departamento);
     const ubicacion = prompt('Nueva ubicación:', hotel.ubicacion);
@@ -156,6 +138,7 @@ export class Hoteles implements OnInit {
   }
 
   onEliminarHotel(hotel: Hotel) {
+    if (!this.isSuperAdmin) return;
     if (confirm('¿Eliminar hotel?')) {
       this.hotelService.eliminarHotel(hotel.id_hotel).subscribe({
         next: () => {
@@ -173,12 +156,11 @@ export class Hoteles implements OnInit {
     return Math.round((s / 2) * 2) / 2;
   }
 
-  getStarIcons(score10: number): ('full' | 'half' | 'empty')[] {
+  getStarIcons(score10: number): ('full'|'half'|'empty')[] {
     const score5 = this.toStarScore10to5(score10);
     const full = Math.floor(score5);
     const half = score5 - full >= 0.5 ? 1 : 0;
     const empty = 5 - full - half;
-
     return [
       ...Array(full).fill('full'),
       ...Array(half).fill('half'),
