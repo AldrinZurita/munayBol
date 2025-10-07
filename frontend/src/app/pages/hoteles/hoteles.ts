@@ -16,7 +16,6 @@ import { ActivatedRoute } from '@angular/router';
 export class Hoteles implements OnInit {
   hoteles: Hotel[] = [];
   hotelesFiltrados: Hotel[] = [];
-  departamentoSeleccionado: string | null = null;
 
   ciudades: string[] = [];
   ciudadSeleccionada = '';
@@ -45,7 +44,7 @@ export class Hoteles implements OnInit {
         this.cargando = false;
         // aplicar filtro con dpto seleccionado desde inicio
         this.route.queryParams.subscribe(params => {
-        this.departamentoSeleccionado = params['departamento'] ?? null;
+        this.ciudadSeleccionada = params['departamento'] ?? null;
         this.aplicarFiltros();
       });
 

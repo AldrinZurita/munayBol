@@ -6,4 +6,5 @@ export interface Hotel{
     calificacion: number;
     estado: boolean;
     fecha_creacion: string;
+    url_imagen_hotel: string;
 }
