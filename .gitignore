@@ -204,3 +204,5 @@ llm_service/venv/
 # Entornos virtuales
 .venv/
 venv/
+
+.ollama/
