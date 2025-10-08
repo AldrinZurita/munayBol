@@ -1,5 +1,7 @@
 # Local Ollama model cache (for dockerized ollama)
-/.ollama/# =========================
+/.ollama/
+
+# =========================
 # GLOBAL SETTINGS
 # =========================
 
@@ -198,6 +200,19 @@ llm_service/venv/
 # Ignore SQL dumps and other backups
 *.sql
 *.dump
+
+# =========================
+# FINETUNE ARTIFACTS
+# =========================
+finetune/outputs/
+finetune/*.gguf
+finetune/*.safetensors
+finetune/*.bin
+finetune/*.pt
+finetune/dataset/*.parquet
+finetune/dataset/*.csv
+finetune/dataset/*.json
+finetune/dataset/*.jsonl.backup
 
 # VS Code workspace files (again, in case)
 .vscode/
