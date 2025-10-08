@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpHeaders} from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { LugarTuristico } from '../interfaces/lugar-turistico.interface';
+import { AuthService } from './auth.service';
 
 // DTO para crear (el backend pone id_lugar y fecha_creacion)
 export type CrearLugarDTO = Pick<
@@ -17,9 +18,22 @@ export type ActualizarLugarDTO = Partial<Pick<
 
 @Injectable({ providedIn: 'root' })
 export class LugaresService {
-  private readonly baseUrl = '/api/lugares';
+  private readonly baseUrl = '/api/lugares/';
 
-  constructor(private http: HttpClient) {}
+
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+
+  ) {}
+
+private getAuthOptions(): { headers?: HttpHeaders } {
+    const token = this.authService.getToken();
+    console.log('Token enviado en petición:', token);
+    return token
+      ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
+      : {};
+  }
 
   getLugares(): Observable<LugarTuristico[]> {
     return this.http.get<LugarTuristico[]>(this.baseUrl);
@@ -32,19 +46,18 @@ export class LugaresService {
   }
 
   getLugarById(id: number): Observable<LugarTuristico> {
-    return this.http.get<LugarTuristico>(`${this.baseUrl}/${id}`);
+    return this.http.get<LugarTuristico>(`${this.baseUrl}${id}/`);
   }
 
-  agregarLugar(data: CrearLugarDTO): Observable<LugarTuristico> {
-    return this.http.post<LugarTuristico>(this.baseUrl, data);
+  agregarLugar(lugar:Partial<LugarTuristico>): Observable<LugarTuristico> {
+    return this.http.post<LugarTuristico>(this.baseUrl, lugar,this.getAuthOptions());
   }
 
-  actualizarLugar(id: number, cambios: ActualizarLugarDTO): Observable<LugarTuristico> {
-    // No enviamos fecha_creacion ni id_lugar aquí.
-    return this.http.put<LugarTuristico>(`${this.baseUrl}/${id}`, cambios);
+  actualizarLugar(lugar: LugarTuristico): Observable<LugarTuristico> {
+    return this.http.put<LugarTuristico>(`${this.baseUrl}${lugar.id_lugar}/`,lugar,this.getAuthOptions());
   }
 
   eliminarLugar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    return this.http.delete<void>(`${this.baseUrl}${id}/`,this.getAuthOptions());
   }
 }
