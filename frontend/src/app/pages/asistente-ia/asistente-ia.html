@@ -27,6 +27,7 @@
   </div>
 
   <div class="input-container">
+    <button class="reset" (click)="nuevoChat()" title="Nuevo chat">⟲</button>
     <input type="text" [(ngModel)]="prompt" (keyup.enter)="enviar()" placeholder="Escribe tu consulta, e.g., 'Quiero ir a Cochabamba'..." />
     <button (click)="enviar()">➤</button>
   </div>

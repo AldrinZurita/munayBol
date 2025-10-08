@@ -9,7 +9,7 @@ from .serializers import (
     LoginSerializer, RegistroSerializer
 )
 from .permissions import IsSuperAdmin, IsUsuario
-from .llm_client import get_llm_response
+from .llm_client import get_llm_response, send_message
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from datetime import date, timedelta
@@ -318,5 +318,8 @@ class LLMGenerateView(APIView):
     permission_classes = [AllowAny]  
     def post(self, request):
         prompt = request.data.get('prompt', '')
-        result = get_llm_response(prompt)
-        return Response({'result': result})
+        chat_id = request.data.get('chat_id')
+        # attach user if authenticated for per-user memory
+        user = request.user if getattr(request.user, 'is_authenticated', False) else None
+        result, chat_id = send_message(prompt, chat_id=chat_id, usuario=user)
+        return Response({'result': result, 'chat_id': chat_id})
