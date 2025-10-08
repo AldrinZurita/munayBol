@@ -2,6 +2,7 @@ import os
 from typing import Optional, Tuple, List, Dict
 from django.utils import timezone
 from .models import ChatSession, Usuario
+from .rag_index import retrieve_context
 
 # LlamaIndex + Ollama
 from llama_index.llms.ollama import Ollama
@@ -65,8 +66,14 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
     # update history with user message
     _append_history(session, "user", prompt)
 
-    # build messages
+    # build messages with RAG context
     messages = _history_to_messages(session.history)
+    try:
+        context_block = retrieve_context(prompt, top_k=4)
+    except Exception:
+        context_block = ""
+    if context_block:
+        messages.append(ChatMessage(role=MessageRole.SYSTEM, content=context_block))
 
     llm = _get_llm()
     try:
