@@ -24,9 +24,9 @@ export class Paquetes implements OnInit {
   error = '';
 
   mostrarModalEditar = false;
+  mostrarModalCrear = false; // ✅ NUEVO: controla el modal de creación
   paqueteEditando: Paquete | null = null;
 
-  // NUEVO: para formulario de alta de paquete
   paqueteNuevo: Partial<Paquete> = {
     nombre: '',
     tipo: '',
@@ -49,7 +49,7 @@ export class Paquetes implements OnInit {
         this.paquetesFiltrados = [...this.paquetes];
         this.cargando = false;
       },
-      error: (err) => {
+      error: () => {
         this.error = 'No se pudo cargar la lista de paquetes';
         this.cargando = false;
       }
@@ -83,20 +83,19 @@ export class Paquetes implements OnInit {
     this.paquetesFiltrados = filtrados;
   }
 
-  // NUEVO: guardar paquete desde formulario
   crearPaquete() {
     if (!this.isSuperAdmin) return;
-    // Validación mínima
+
     if (!this.paqueteNuevo.nombre || !this.paqueteNuevo.tipo || !this.paqueteNuevo.precio || !this.paqueteNuevo.id_hotel || !this.paqueteNuevo.id_lugar) {
       alert('Completa todos los campos obligatorios.');
       return;
     }
+
     this.paqueteService.crearPaquete(this.paqueteNuevo).subscribe({
       next: (paquete) => {
         this.paquetes.push(paquete);
         this.aplicarFiltros();
         alert('Paquete agregado correctamente');
-        // Limpiar formulario
         this.paqueteNuevo = {
           nombre: '',
           tipo: '',
@@ -105,6 +104,7 @@ export class Paquetes implements OnInit {
           id_lugar: undefined,
           estado: true
         };
+        this.mostrarModalCrear = false; // ✅ Cierra el modal al guardar
       },
       error: () => alert('Error al agregar paquete')
     });
@@ -123,6 +123,7 @@ export class Paquetes implements OnInit {
 
   guardarEdicion() {
     if (!this.paqueteEditando || !this.isSuperAdmin) return;
+
     this.paqueteService.actualizarPaquete(this.paqueteEditando).subscribe({
       next: (actualizado) => {
         const idx = this.paquetes.findIndex(p => p.id_paquete === actualizado.id_paquete);
@@ -139,6 +140,7 @@ export class Paquetes implements OnInit {
 
   onEliminarPaquete(paquete: Paquete) {
     if (!this.isSuperAdmin) return;
+
     if (confirm('¿Eliminar paquete?')) {
       this.paqueteService.eliminarPaquete(paquete.id_paquete).subscribe({
         next: () => {

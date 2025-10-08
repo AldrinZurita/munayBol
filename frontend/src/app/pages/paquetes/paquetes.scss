@@ -300,13 +300,14 @@
   }
 
   .form-row {
-    display: flex;
-    gap: 1rem;
+  display: flex;
+  gap: 1rem;
 
-    .form-group {
-      flex: 1;
-    }
+  .form-group {
+    flex: 1;
   }
+}
+
 
   .checkbox-group {
     label {
@@ -395,5 +396,114 @@
     top: 0.5rem;
     right: 0.5rem;
     font-size: 1.25rem;
+  }
+}
+
+
+/* FORMULARIO DE CREACIÓN (mismo estilo que edición) */
+.form-crear {
+  padding: 2rem;
+
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #555;
+      font-size: 1rem;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      background-color: #f9f9f9;
+      transition: border-color 0.2s;
+
+      &:focus {
+        outline: none;
+        border-color: #999;
+        background-color: #fff;
+      }
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+  }
+
+  .form-row {
+    display: flex;
+    gap: 1rem;
+
+    .form-group {
+      flex: 1;
+    }
+  }
+
+  .checkbox-group {
+    label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: #555;
+    }
+
+    input[type="checkbox"] {
+      width: auto;
+      transform: scale(1.2);
+    }
+  }
+}
+
+.header-acciones {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 22px;
+
+  .btn-primary {
+    background-color: #016d2e;
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #15803d;
+    }
+
+    .material-symbols-outlined {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+.btn-danger {
+  background: #fee2e2;
+  color: #dc2626; // $danger-color equivalente
+  padding: 0.45rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: #fecaca;
   }
 }
