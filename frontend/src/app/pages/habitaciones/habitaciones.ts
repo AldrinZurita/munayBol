@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { HabitacionService } from '../../services/habitacion.service';
+import { ActualizarLugarDTO, HabitacionService } from '../../services/habitacion.service';
 import { Habitacion } from '../../interfaces/habitacion.interface';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -21,11 +21,24 @@ export class Habitaciones implements OnInit {
   hoteles: number[] = [];
   cargando = false;
   error = '';
+  showEditModal = false;
+  savingEdit = false;
+  editModel: Habitacion = {
+    num: '',
+    caracteristicas: '',
+    precio: 0,
+    codigo_hotel: 0,
+    disponible: false,
+    fecha_creacion: '',
+    cant_huespedes: 0
+  }
 
+  private _editTargetRef: Habitacion | null = null;
+  
   constructor(
     private habitacionService: HabitacionService,
     public authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.cargando = true;
@@ -90,33 +103,57 @@ export class Habitaciones implements OnInit {
     }
   }
 
-  onEditarHabitacion(habitacion: Habitacion) {
+
+  openEditModal(habitacion: Habitacion) {
     if (!this.isSuperAdmin) return;
-    const num = prompt('Nuevo número:', habitacion.num)?.trim();
-    const codigo_hotel = Number(prompt('Nuevo código hotel:', habitacion.codigo_hotel.toString()));
-    const caracteristicas = prompt('Nuevas características:', habitacion.caracteristicas);
-    const precio = Number(prompt('Nuevo precio:', habitacion.precio.toString()));
-    const cant_huespedes = Number(prompt('Nueva cantidad de huéspedes:', habitacion.cant_huespedes.toString()));
-    const disponible = confirm('¿Disponible?');
-    if (num && !isNaN(codigo_hotel) && caracteristicas && !isNaN(precio) && !isNaN(cant_huespedes)) {
-      const habitacionActualizada: Habitacion = {
-        ...habitacion,
-        num,
-        codigo_hotel,
-        caracteristicas,
-        precio,
-        cant_huespedes,
-        disponible
-      };
-      this.habitacionService.actualizarHabitacion(habitacionActualizada).subscribe({
-        next: h => {
-          Object.assign(habitacion, h);
-          this.aplicarFiltros();
-          alert('Habitación actualizada');
-        },
-        error: err => alert('Error al actualizar habitación')
-      });
-    }
+    this._editTargetRef = habitacion;
+    this.editModel = {
+      num: habitacion.num,
+      caracteristicas: habitacion.caracteristicas ?? '',
+      precio: habitacion.precio ?? '',
+      codigo_hotel: habitacion.codigo_hotel ?? '',
+      disponible: habitacion.disponible ?? '',
+      fecha_creacion: habitacion.fecha_creacion ?? '',
+      cant_huespedes: habitacion.cant_huespedes ?? ''
+    };
+    this.showEditModal = true;
+    document.body.classList.add('no-scroll');
+    this.savingEdit = false;
+  }
+
+  closeEditModal(discard = true) {
+    if (this.savingEdit) return;
+    this.showEditModal = false;
+    document.body.classList.remove('no-scroll');
+    if (discard) this._editTargetRef = null;
+  }
+
+  saveEdit(form: any) {
+    if (!form.valid || !this._editTargetRef || !this.isSuperAdmin) return;
+    this.savingEdit = true;
+    const cambios: ActualizarLugarDTO = {
+      num: this.editModel.num,
+      caracteristicas: this.editModel.caracteristicas,
+      precio: this.editModel.precio,
+      codigo_hotel: this.editModel.codigo_hotel,
+      disponible: this.editModel.disponible,
+      fecha_creacion: this.editModel.fecha_creacion,
+      cant_huespedes: this.editModel.cant_huespedes
+    };
+    this.habitacionService.actualizarHabitacion(this.editModel.num, cambios).subscribe({
+      next: (resp) => {
+        Object.assign(this._editTargetRef!, resp);
+        this.aplicarFiltros();
+        this.savingEdit = false;
+        this.closeEditModal(false);
+        alert('Lugar turístico actualizado');
+        this._editTargetRef = null;
+      },
+      error: () => {
+        this.savingEdit = false;
+        alert('Error al actualizar el lugar turístico');
+      }
+    });
   }
 
   onEliminarHabitacion(habitacion: Habitacion) {

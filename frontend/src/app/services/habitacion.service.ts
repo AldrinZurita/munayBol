@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { Habitacion } from '../interfaces/habitacion.interface';
+import { AuthService } from './auth.service';
 
 export interface IntervaloReservado {
   inicio: string;
@@ -17,11 +18,40 @@ export interface DisponibilidadHabitacionResponse {
   ventana_consulta: { desde: string; hasta: string };
 }
 
+  // num: string;
+  // caracteristicas: string;
+  // precio: number;
+  // codigo_hotel: number; 
+  // disponible: boolean;
+  // fecha_creacion: string;
+  // cant_huespedes: number;
+
+export type CrearHabitacionDTO = Pick<
+  Habitacion,
+  'num' | 'caracteristicas' | 'precio' | 'codigo_hotel' | 'disponible' | 'fecha_creacion' | 'cant_huespedes'
+>;
+
+// DTO para actualizar (enviamos solo los campos editables)
+export type ActualizarLugarDTO = Partial<Pick<
+  Habitacion,
+  'num' | 'caracteristicas' | 'precio' | 'codigo_hotel' | 'disponible' | 'fecha_creacion' | 'cant_huespedes'
+>>;
+
 @Injectable({ providedIn: 'root' })
 export class HabitacionService {
   private readonly apiUrl = environment.apiUrl;
+  private readonly baseUrl = '/api/habitaciones/';
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient, private authService: AuthService) { }
+
+
+  private getAuthOptions(): { headers?: HttpHeaders } {
+    const token = this.authService.getToken();
+    console.log('Token enviado en petición:', token);
+    return token
+      ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
+      : {};
+  }
 
   getHabitaciones(): Observable<Habitacion[]> {
     return this.http.get<Habitacion[]>(`${this.apiUrl}habitaciones/`);
@@ -31,8 +61,8 @@ export class HabitacionService {
     return this.http.post<Habitacion>(`${this.apiUrl}habitaciones/`, habitacion);
   }
 
-  actualizarHabitacion(habitacion: Habitacion): Observable<Habitacion> {
-    return this.http.put<Habitacion>(`${this.apiUrl}habitaciones/${habitacion.num}/`, habitacion);
+  actualizarHabitacion(habitacion: string, data: ActualizarLugarDTO): Observable<Habitacion> {
+    return this.http.put<Habitacion>(`${this.baseUrl}${habitacion}/`, data, this.getAuthOptions());
   }
 
   eliminarHabitacion(id_habitacion: number): Observable<any> {
@@ -40,7 +70,7 @@ export class HabitacionService {
   }
 
   getHabitacionesPorHotel(codigo_hotel: number): Observable<Habitacion[]> {
-  return this.http.get<Habitacion[]>(`${this.apiUrl}habitaciones/?codigo_hotel=${codigo_hotel}`);
+    return this.http.get<Habitacion[]>(`${this.apiUrl}habitaciones/?codigo_hotel=${codigo_hotel}`);
   }
 
   getHabitacionByNum(num: string): Observable<Habitacion> {
@@ -54,5 +84,5 @@ export class HabitacionService {
     const qs = params.length ? `?${params.join('&')}` : '';
     return this.http.get<DisponibilidadHabitacionResponse>(`${this.apiUrl}habitaciones/${num}/disponibilidad/${qs}`);
   }
-  
+
 }
