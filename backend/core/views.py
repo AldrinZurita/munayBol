@@ -315,6 +315,7 @@ class SugerenciasViewSet(viewsets.ModelViewSet):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class LLMGenerateView(APIView):
+    permission_classes = [AllowAny]  
     def post(self, request):
         prompt = request.data.get('prompt', '')
         result = get_llm_response(prompt)
