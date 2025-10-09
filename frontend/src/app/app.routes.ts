@@ -14,6 +14,7 @@ import { PaqueteDetalle } from './pages/paquete-detalle/paquete-detalle';
 import { CrearPaquete } from './pages/crear-paquete/crear-paquete';
 import { Registrarse } from './pages/registrarse/registrarse';
 import { HotelDetalleComponent } from './pages/hotel-detalle/hotel-detalle';
+import {Perfil} from './pages/perfil/perfil';
 
 // Guards
 import { adminGuard } from './guards/admin.guard';
@@ -40,6 +41,7 @@ export const routes: Routes = [
   { path: 'reservas/:id', component: ReservaDetalleComponent, canActivate: [userGuard] },
   { path: 'paquetes/nuevo-paquete', component: CrearPaquete, canActivate: [adminGuard] },
   { path: 'asistente-ia', component: AsistenteIa, canActivate: [userGuard] },
+  { path: 'perfil', component: Perfil, canActivate: [userGuard] },
 
   // Rutas exclusivas admin (superadmin)
   { path: 'admin', component: Hoteles, canActivate: [adminGuard] },

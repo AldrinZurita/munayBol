@@ -1,0 +1,140 @@
+// --- Design System Variables ---
+$primary-text: #0f172a;
+$secondary-text: #334155;
+$light-text: #64748b;
+$border-color: #e5e7eb;
+$card-bg: #fff;
+$primary-color: #16a34a;
+$danger-color: #dc2626;
+$page-bg: #f8fafc;
+
+:host {
+  display: block;
+  background-color: $page-bg;
+  min-height: 100vh;
+}
+
+// --- Main Layout ---
+.perfil-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 24px;
+
+  .title {
+    font-weight: 800;
+    font-size: 32px;
+    color: $primary-text;
+    margin-bottom: 28px;
+  }
+}
+
+// --- Status Indicators ---
+.estado {
+  text-align: center;
+  padding: 40px;
+  color: $secondary-text;
+  font-size: 16px;
+  &.error {
+    color: $danger-color;
+  }
+}
+
+// --- Profile Card ---
+.perfil-card {
+  background: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 32px;
+  overflow: hidden; // Ensures child elements respect the border radius
+}
+
+// --- Profile Header Section ---
+.perfil-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 28px;
+  border-bottom: 1px solid $border-color;
+  background-color: #f9fafb; // A slightly different background for the header
+}
+
+.avatar-placeholder {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: $primary-color;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: 600;
+}
+
+.info-principal {
+  .nombre-usuario {
+    margin: 0 0 4px;
+    font-size: 24px;
+    font-weight: 700;
+    color: $primary-text;
+  }
+  .rol-usuario {
+    margin: 0;
+    font-size: 16px;
+    color: $secondary-text;
+  }
+}
+
+// --- Profile Body Section (Details) ---
+.perfil-body {
+  padding: 16px 28px;
+  display: grid;
+  gap: 20px;
+}
+
+.detalle-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid $border-color;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .label {
+    font-weight: 500;
+    color: $secondary-text;
+  }
+
+  .valor {
+    font-weight: 600;
+    color: $primary-text;
+
+    &.activo {
+      color: $primary-color;
+    }
+    &.inactivo {
+      color: $danger-color;
+    }
+  }
+}
+
+// --- Placeholder for Future Sections ---
+.seccion-futura {
+  background: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: 16px;
+  padding: 28px;
+  text-align: center;
+  color: $light-text;
+
+  h2 {
+    margin: 0 0 12px;
+    font-size: 20px;
+    color: $secondary-text;
+  }
+}
