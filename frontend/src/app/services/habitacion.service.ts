@@ -58,7 +58,7 @@ export class HabitacionService {
   }
 
   eliminarHabitacion(id_habitacion: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}habitaciones/${id_habitacion}/`);
+    return this.http.delete<any>(`${this.apiUrl}habitaciones/${id_habitacion}/` ,this.getAuthOptions());
   }
 
   getHabitacionesPorHotel(codigo_hotel: number): Observable<Habitacion[]> {
