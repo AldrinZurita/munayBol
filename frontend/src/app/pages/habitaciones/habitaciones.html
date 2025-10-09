@@ -74,9 +74,46 @@
       </div>
       <div class="card-right">
         <a class="btn btn-accent" [routerLink]="['/habitaciones', habitacion.num]">Ver Detalle</a>
-        <button *ngIf="isSuperAdmin" class="btn btn-secondary" (click)="onEditarHabitacion(habitacion)">Editar</button>
+        <button *ngIf="isSuperAdmin" class="btn btn-secondary" (click)="openEditModal(habitacion)" aria-label="Cerrar">Editar</button>
         <button *ngIf="isSuperAdmin" class="btn btn-danger" (click)="onEliminarHabitacion(habitacion)">Eliminar</button>
       </div>
     </div>
   </section>
+  
+  <!-- Modal Edición -->
+  <div class="modal-backdrop" *ngIf="showEditModal" (click)="closeEditModal(false)" aria-hidden="true"></div>
+  <div class="modal-root" *ngIf="showEditModal" role="dialog" aria-modal="true" aria-labelledby="editLugarTitle" (click)="closeEditModal(false)">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3 id="editLugarTitle">Editar lugar</h3>
+        <button class="icon-btn" (click)="closeEditModal(false)" aria-label="Cerrar">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form #editForm="ngForm" (ngSubmit)="saveEdit(editForm)" novalidate>
+        <div class="modal-body">
+          <label class="form-label" for="nombre">Número de Habitación *</label>
+          <input id="nombre" name="nombre" type="text" class="form-input" [(ngModel)]="editModel.num" required />
+          <label class="form-label" for="departamento">Características *</label>
+          <input id="departamento" name="departamento" type="text" class="form-input" [(ngModel)]="editModel.caracteristicas" required />
+          <label class="form-label" for="tipo">Precio *</label>
+          <input id="tipo" name="tipo" type="text" class="form-input" [(ngModel)]="editModel.precio" required />
+          <label class="form-label" for="ubicacion">Código de Hotel*</label>
+          <textarea id="ubicacion" name="ubicacion" class="form-textarea" rows="3" [(ngModel)]="editModel.codigo_hotel" required></textarea>
+          <label class="form-label" for="horario">¿Disponible? TRUE/FALSE</label>
+          <input id="horario" name="horario" type="text" class="form-input" [(ngModel)]="editModel.disponible" />
+          <label class="form-label" for="descripcion">Fecha de creación</label>
+          <input id="date" name="date" type="datetime" class="form-input" [(ngModel)]="editModel.fecha_creacion" />
+          <label class="form-label" for="img">Cantidad de Huéspedes</label>
+          <input id="cant_huespedes" name="cant_huespedes" type="number" class="form-input" [(ngModel)]="editModel.cant_huespedes" />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeEditModal(false)">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid || savingEdit">
+            {{ savingEdit ? 'Guardando…' : 'Guardar cambios' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

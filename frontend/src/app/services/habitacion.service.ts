@@ -18,14 +18,6 @@ export interface DisponibilidadHabitacionResponse {
   ventana_consulta: { desde: string; hasta: string };
 }
 
-  // num: string;
-  // caracteristicas: string;
-  // precio: number;
-  // codigo_hotel: number; 
-  // disponible: boolean;
-  // fecha_creacion: string;
-  // cant_huespedes: number;
-
 export type CrearHabitacionDTO = Pick<
   Habitacion,
   'num' | 'caracteristicas' | 'precio' | 'codigo_hotel' | 'disponible' | 'fecha_creacion' | 'cant_huespedes'
