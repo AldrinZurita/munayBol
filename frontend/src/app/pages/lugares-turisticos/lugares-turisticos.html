@@ -1,13 +1,16 @@
+<!-- Main container for the page -->
 <div class="lugares-container">
   <h1 class="title">Lugares Turísticos de Bolivia</h1>
 
+  <!-- Header for main actions, like the add button -->
   <div class="header-acciones">
-    <button *ngIf="isSuperAdmin" class="btn btn-primary" (click)="onAgregarLugar()">
+    <button *ngIf="isSuperAdmin" class="btn btn-primary" (click)="openAddModal()">
       <span class="material-symbols-outlined icon-ms">add</span>
       Agregar Lugar Turístico
     </button>
   </div>
 
+  <!-- Filters card section -->
   <section class="filtros-card">
     <h4>Filtros de búsqueda</h4>
     <div class="filtros-grid solo-uno">
@@ -29,6 +32,7 @@
     </div>
   </section>
 
+  <!-- Status display for loading, errors, or no results -->
   <div class="estado" role="status" aria-live="polite">
     <div *ngIf="cargando">Cargando lugares…</div>
     <div *ngIf="error" class="error">{{ error }}</div>
@@ -37,8 +41,10 @@
     </div>
   </div>
 
+  <!-- List of tourist location cards -->
   <section class="lista">
     <article *ngFor="let l of lugaresFiltrados; trackBy: trackByLugar" class="card-lugar">
+      <!-- Left column: Information -->
       <div class="card-left">
         <div *ngIf="l.url_image_lugar_turistico" class="imagen-lugar">
           <img [src]="l.url_image_lugar_turistico" [alt]="'Imagen de ' + l.nombre" (error)="onImageError($event)" />
@@ -49,13 +55,14 @@
             <span class="material-symbols-outlined">location_on</span>
             {{ l.departamento }}
           </li>
-          <li class="meta-item">
+          <li class="meta-item" *ngIf="l.tipo">
             <span class="material-symbols-outlined">sell</span>
             {{ l.tipo }}
           </li>
         </ul>
         <p class="descripcion" *ngIf="l.ubicacion">{{ l.ubicacion }}</p>
       </div>
+      <!-- Right column: Action buttons -->
       <div class="card-right">
         <a class="btn btn-accent" [routerLink]="['/lugares-turisticos', l.id_lugar]">Ver Detalles</a>
         <button *ngIf="isSuperAdmin" class="btn btn-secondary" (click)="openEditModal(l)">Editar</button>
@@ -64,38 +71,38 @@
     </article>
   </section>
 
-  <!-- Modal Edición -->
-  <div class="modal-backdrop" *ngIf="showEditModal" (click)="closeEditModal(false)" aria-hidden="true"></div>
-  <div class="modal-root" *ngIf="showEditModal" role="dialog" aria-modal="true" aria-labelledby="editLugarTitle" (click)="closeEditModal(false)">
+  <!-- Edit Modal -->
+  <div class="modal-backdrop" *ngIf="showEditModal" (click)="closeEditModal()" aria-hidden="true"></div>
+  <div class="modal-root" *ngIf="showEditModal" role="dialog" aria-modal="true" aria-labelledby="editLugarTitle" (click)="closeEditModal()">
     <div class="modal-card" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3 id="editLugarTitle">Editar lugar</h3>
-        <button class="icon-btn" (click)="closeEditModal(false)" aria-label="Cerrar">
+        <button class="icon-btn" (click)="closeEditModal()" aria-label="Cerrar">
           <span class="material-symbols-outlined">close</span>
         </button>
       </div>
       <form #editForm="ngForm" (ngSubmit)="saveEdit(editForm)" novalidate>
         <div class="modal-body">
-          <label class="form-label" for="nombre">Nombre *</label>
-          <input id="nombre" name="nombre" type="text" class="form-input" [(ngModel)]="editModel.nombre" required />
-          <label class="form-label" for="departamento">Departamento *</label>
-          <input id="departamento" name="departamento" type="text" class="form-input" [(ngModel)]="editModel.departamento" required />
-          <label class="form-label" for="tipo">Tipo *</label>
-          <input id="tipo" name="tipo" type="text" class="form-input" [(ngModel)]="editModel.tipo" required />
-          <label class="form-label" for="ubicacion">Ubicación *</label>
-          <textarea id="ubicacion" name="ubicacion" class="form-textarea" rows="3" [(ngModel)]="editModel.ubicacion" required></textarea>
-          <label class="form-label" for="horario">Horario</label>
-          <input id="horario" name="horario" type="text" class="form-input" [(ngModel)]="editModel.horario" />
-          <label class="form-label" for="descripcion">Descripción</label>
-          <textarea id="descripcion" name="descripcion" class="form-textarea" rows="3" [(ngModel)]="editModel.descripcion"></textarea>
-          <label class="form-label" for="img">URL de imagen</label>
-          <input id="img" name="img" type="url" class="form-input" [(ngModel)]="editModel.url_image_lugar_turistico" />
+          <label class="form-label" for="edit_nombre">Nombre *</label>
+          <input id="edit_nombre" name="nombre" type="text" class="form-input" [(ngModel)]="editModel.nombre" required />
+          <label class="form-label" for="edit_departamento">Departamento *</label>
+          <input id="edit_departamento" name="departamento" type="text" class="form-input" [(ngModel)]="editModel.departamento" required />
+          <label class="form-label" for="edit_tipo">Tipo *</label>
+          <input id="edit_tipo" name="tipo" type="text" class="form-input" [(ngModel)]="editModel.tipo" required />
+          <label class="form-label" for="edit_ubicacion">Ubicación *</label>
+          <textarea id="edit_ubicacion" name="ubicacion" class="form-textarea" rows="3" [(ngModel)]="editModel.ubicacion" required></textarea>
+          <label class="form-label" for="edit_horario">Horario</label>
+          <input id="edit_horario" name="horario" type="text" class="form-input" [(ngModel)]="editModel.horario" />
+          <label class="form-label" for="edit_descripcion">Descripción</label>
+          <textarea id="edit_descripcion" name="descripcion" class="form-textarea" rows="3" [(ngModel)]="editModel.descripcion"></textarea>
+          <label class="form-label" for="edit_img">URL de imagen</label>
+          <input id="edit_img" name="img" type="url" class="form-input" [(ngModel)]="editModel.url_image_lugar_turistico" />
           <div class="img-preview" *ngIf="editModel.url_image_lugar_turistico">
             <img [src]="editModel.url_image_lugar_turistico" alt="Vista previa" (error)="onImageError($event)" />
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeEditModal(false)">Cancelar</button>
+          <button type="button" class="btn btn-secondary" (click)="closeEditModal()">Cancelar</button>
           <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid || savingEdit">
             {{ savingEdit ? 'Guardando…' : 'Guardar cambios' }}
           </button>
@@ -103,4 +110,47 @@
       </form>
     </div>
   </div>
+
+  <!-- Add Modal -->
+  <div class="modal-backdrop" *ngIf="showAddModal" (click)="closeAddModal()" aria-hidden="true"></div>
+  <div class="modal-root" *ngIf="showAddModal" role="dialog" aria-modal="true" aria-labelledby="addLugarTitle" (click)="closeAddModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3 id="addLugarTitle">Agregar Nuevo Lugar</h3>
+        <button class="icon-btn" (click)="closeAddModal()" aria-label="Cerrar">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form #addForm="ngForm" (ngSubmit)="saveNewLugar(addForm)" novalidate>
+        <div class="modal-body">
+          <label class="form-label" for="add_id_lugar">ID Lugar *</label>
+          <input id="add_id_lugar" name="id_lugar" type="number" class="form-input" [(ngModel)]="addModel.id_lugar" required />
+          <label class="form-label" for="add-nombre">Nombre *</label>
+          <input id="add-nombre" name="nombre" type="text" class="form-input" [(ngModel)]="addModel.nombre" required />
+          <label class="form-label" for="add-departamento">Departamento *</label>
+          <input id="add-departamento" name="departamento" type="text" class="form-input" [(ngModel)]="addModel.departamento" required />
+          <label class="form-label" for="add-tipo">Tipo *</label>
+          <input id="add-tipo" name="tipo" type="text" class="form-input" [(ngModel)]="addModel.tipo" required />
+          <label class="form-label" for="add-ubicacion">Ubicación *</label>
+          <textarea id="add-ubicacion" name="ubicacion" class="form-textarea" rows="3" [(ngModel)]="addModel.ubicacion" required></textarea>
+          <label class="form-label" for="add-horario">Horario</label>
+          <input id="add-horario" name="horario" type="text" class="form-input" [(ngModel)]="addModel.horario" />
+          <label class="form-label" for="add-descripcion">Descripción</label>
+          <textarea id="add-descripcion" name="descripcion" class="form-textarea" rows="3" [(ngModel)]="addModel.descripcion"></textarea>
+          <label class="form-label" for="add-img">URL de imagen</label>
+          <input id="add-img" name="img" type="url" class="form-input" [(ngModel)]="addModel.url_image_lugar_turistico" />
+          <div class="img-preview" *ngIf="addModel.url_image_lugar_turistico">
+            <img [src]="addModel.url_image_lugar_turistico" alt="Vista previa" (error)="onImageError($event)" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeAddModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="addForm.invalid || savingAdd">
+            {{ savingAdd ? 'Guardando…' : 'Crear Lugar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
+

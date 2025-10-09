@@ -1,170 +1,187 @@
+// --- Variables for easy customization ---
+$navbar-bg: #ffffff;
+$text-color: #0f172a;
+$primary-color: #2e7d32;
+$border-color: #e5e7eb;
+$hover-bg: #f1f5f9;
+
+// --- Main Navbar Styles ---
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: relative;
-  flex-wrap: wrap;
-}
-
-h1 {
-  color: #016d2e;
-  font-size: 1.8em;
-  margin: 0;
-}
-
-/* Ocultar checkbox */
-.menu-toggle {
-  display: none;
-}
-
-/* Icono hamburguesa */
-.hamburger {
-  display: none;
-  font-size: 2rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #016d2e;
-}
-
-/* Contenedor de nav + login */
-.nav-content {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-}
-
-/* Lista de navegación */
-.nav-list {
-  list-style: none;
-  display: flex;
-  margin: 0;
-  padding: 0;
-  gap: 30px;
-}
-
-.nav-list a {
-  text-decoration: none;
-  color: #333;
-  font-size: large;
-  transition: color 0.3s ease;
-}
-
-.nav-list a.active {
-  color: #016d2e;
-  font-weight: 600;
-}
-
-/* Botones */
-.login-btn {
-  background-color: #016d2e;
-  color: #fff;
-  border: none;
   padding: 12px 24px;
-  border-radius: 50px;
-  font-weight: bold;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.login-btn:hover {
-  background-color: #66BB6A;
-}
-
-.logout-btn {
-  background-color: transparent;
-  color: #016d2e;
-  border: 2px solid #016d2e;
-  padding: 12px 24px;
-  border-radius: 50px;
-  font-weight: bold;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.logout-btn:hover {
-  background-color: #016d2e;
-  color: white;
-}
-
-.username {
-  margin-right: 10px;
-  font-weight: 500;
-  color: #016d2e;
-}
-
-.session-actions {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-/* ------------------------- */
-/* 📱 RESPONSIVE - MÓVIL */
-/* ------------------------- */
-@media (max-width: 768px) {
-  .hamburger {
-    display: block;
-  }
-
-  .nav-content {
-    width: 100%;
-    flex-direction: column;
-    align-items: flex-start;
-    display: none;
-    margin-top: 10px;
-  }
-
-  /* Mostrar contenido cuando toggle está activo */
-  .menu-toggle:checked+.hamburger {
-    display: flex;
-  }
-
-  .nav-list {
-    flex-direction: column;
-    width: 100%;
-    gap: 15px;
-  }
-
-  .nav-list li {
-    width: 100%;
-    text-align: left;
-  }
-
-  .nav-list a {
-    font-size: 1.1em;
-    padding: 10px 0;
-    display: block;
-  }
-
-  .session-actions {
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-    margin-top: 10px;
-  }
-
-  .login-btn,
-  .logout-btn {
-    width: 100%;
-    text-align: left;
-  }
-
-  .username {
-    margin: 0 0 5px 0;
-  }
+  background-color: $navbar-bg;
+  border-bottom: 1px solid $border-color;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
 .logo a {
+  font-size: 24px;
+  font-weight: 800;
+  color: $text-color;
   text-decoration: none;
-  color: inherit;
 }
 
-.logo {
-  font-size: 2rem;
+// --- Navigation Links ---
+.nav-list {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  a {
+    text-decoration: none;
+    color: #475569;
+    font-weight: 600;
+    padding: 8px 0;
+    position: relative;
+    transition: color 0.2s ease;
+
+    &.active {
+      color: $primary-color;
+      font-weight: 700;
+    }
+
+    &:hover {
+      color: $primary-color;
+    }
+  }
+}
+
+// --- Session Actions (Login/User Menu) ---
+.session-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .login-btn {
+    background-color: $primary-color;
+    color: #fff;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: darken($primary-color, 5%);
+    }
+  }
+}
+
+// --- NEW: User Dropdown Menu Styles ---
+.user-menu {
+  position: relative; // Anchor for the dropdown
+
+  .user-menu-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    .username {
+      font-weight: 600;
+      color: $text-color;
+    }
+
+    .chevron {
+      transition: transform 0.2s ease-in-out;
+    }
+
+    &:hover {
+      background-color: $hover-bg;
+    }
+  }
+
+  .user-menu-content {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    background-color: $navbar-bg;
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    min-width: 200px;
+    padding: 8px;
+    z-index: 100;
+
+    // Hide by default, show on hover
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  }
+
+  // Show dropdown on hover
+  &:hover .user-menu-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  // Rotate chevron on hover
+  &:hover .user-menu-trigger .chevron {
+    transform: rotate(180deg);
+  }
+
+  .user-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: $text-color;
+    font-weight: 500;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+
+    .material-symbols-outlined {
+      font-size: 20px;
+    }
+
+    &:hover {
+      background-color: $hover-bg;
+      color: $primary-color;
+    }
+  }
+}
+
+// --- Hamburger Menu (for mobile) ---
+.menu-toggle {
+  display: none;
+}
+.hamburger {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .nav-list {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background-color: $navbar-bg;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 16px 0;
+  }
+  .hamburger {
+    display: block;
+  }
+  .menu-toggle:checked ~ .nav-list {
+    display: flex;
+  }
 }

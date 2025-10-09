@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+import uuid
 
 class UsuarioManager(BaseUserManager):
     def create_user(self, correo, contrasenia=None, **extra_fields):
@@ -132,3 +133,12 @@ class Sugerencias(models.Model):
     preferencias = models.TextField()
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     fecha_creacion = models.DateField()
+
+class ChatSession(models.Model):
+    """Persist chat memory for LLM conversations."""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    usuario = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True, db_constraint=False)
+    # list of {role, content, timestamp}
+    history = models.JSONField(default=list)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

@@ -34,4 +34,9 @@ export class AsistenteIa {
     this.prompt = msg;
     this.enviar();
   }
+
+  nuevoChat() {
+    this.iaService.resetChat();
+    this.respuestas = [];
+  }
 }

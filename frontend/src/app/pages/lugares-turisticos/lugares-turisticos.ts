@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
 import { LugarTuristico } from '../../interfaces/lugar-turistico.interface';
 import { AuthService } from '../../services/auth.service';
-import { LugaresService, CrearLugarDTO, ActualizarLugarDTO } from '../../services/lugares.service';
+import { LugaresService, ActualizarLugarDTO } from '../../services/lugares.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-lugares-turisticos',
@@ -22,10 +22,9 @@ export class LugaresTuristicos implements OnInit {
   cargando = false;
   error = '';
 
-  // Modal
+  // Modal Editar
   showEditModal = false;
   savingEdit = false;
-
   editModel: LugarTuristico = {
     id_lugar: 0,
     nombre: '',
@@ -38,6 +37,20 @@ export class LugaresTuristicos implements OnInit {
     url_image_lugar_turistico: ''
   };
   private _editTargetRef: LugarTuristico | null = null;
+
+  // Modal Agregar
+  showAddModal = false;
+  savingAdd = false;
+  addModel: Partial<LugarTuristico> = {
+    id_lugar: 0,
+    nombre: '',
+    ubicacion: '',
+    departamento: '',
+    tipo: '',
+    horario: '',
+    descripcion: '',
+    url_image_lugar_turistico: ''
+  };
 
   constructor(
     private lugaresService: LugaresService,
@@ -75,30 +88,6 @@ export class LugaresTuristicos implements OnInit {
     this.lugaresFiltrados = filtrados;
   }
 
-  onAgregarLugar(): void {
-    if (!this.isSuperAdmin) return;
-    const nombre = prompt('Nombre del lugar:')?.trim();
-    const ubicacion = prompt('Ubicación o dirección:')?.trim();
-    const departamento = prompt('Departamento:')?.trim();
-    const tipo = prompt('Tipo (ej. Museo, Parque Nacional):')?.trim();
-    const horario = prompt('Horario (opcional):')?.trim() || undefined;
-    const descripcion = prompt('Descripción (opcional):')?.trim() || undefined;
-    const url_image_lugar_turistico = prompt('URL de la imagen (opcional):')?.trim() || undefined;
-    if (nombre && ubicacion && departamento && tipo) {
-      const nuevo: CrearLugarDTO = {
-        nombre, ubicacion, departamento, tipo, horario, descripcion, url_image_lugar_turistico
-      };
-      this.lugaresService.agregarLugar(nuevo).subscribe({
-        next: (lugarAgregado) => {
-          this.lugares.push(lugarAgregado);
-          this.aplicarFiltros();
-          alert('Lugar turístico agregado correctamente');
-        },
-        error: () => alert('Error al agregar el lugar turístico'),
-      });
-    }
-  }
-
   onEliminarLugar(lugar: LugarTuristico): void {
     if (!this.isSuperAdmin) return;
     if (confirm(`¿Estás seguro de que quieres eliminar "${lugar.nombre}"?`)) {
@@ -113,20 +102,11 @@ export class LugaresTuristicos implements OnInit {
     }
   }
 
+  // --- Métodos para Modal de Edición ---
   openEditModal(lugar: LugarTuristico) {
     if (!this.isSuperAdmin) return;
     this._editTargetRef = lugar;
-    this.editModel = {
-      id_lugar: lugar.id_lugar,
-      nombre: lugar.nombre ?? '',
-      ubicacion: lugar.ubicacion ?? '',
-      departamento: lugar.departamento ?? '',
-      tipo: lugar.tipo ?? '',
-      fecha_creacion: lugar.fecha_creacion ?? '',
-      horario: lugar.horario ?? '',
-      descripcion: lugar.descripcion ?? '',
-      url_image_lugar_turistico: lugar.url_image_lugar_turistico ?? ''
-    };
+    this.editModel = { ...lugar };
     this.showEditModal = true;
     document.body.classList.add('no-scroll');
     this.savingEdit = false;
@@ -142,16 +122,8 @@ export class LugaresTuristicos implements OnInit {
   saveEdit(form: any) {
     if (!form.valid || !this._editTargetRef || !this.isSuperAdmin) return;
     this.savingEdit = true;
-    const cambios: ActualizarLugarDTO = {
-      nombre: this.editModel.nombre,
-      ubicacion: this.editModel.ubicacion,
-      departamento: this.editModel.departamento,
-      tipo: this.editModel.tipo,
-      horario: this.editModel.horario,
-      descripcion: this.editModel.descripcion,
-      url_image_lugar_turistico: this.editModel.url_image_lugar_turistico
-    };
-    this.lugaresService.actualizarLugar(this.editModel.id_lugar, cambios).subscribe({
+    
+    this.lugaresService.actualizarLugar(this.editModel).subscribe({
       next: (resp) => {
         Object.assign(this._editTargetRef!, resp);
         this.aplicarFiltros();
@@ -160,9 +132,75 @@ export class LugaresTuristicos implements OnInit {
         alert('Lugar turístico actualizado');
         this._editTargetRef = null;
       },
-      error: () => {
+      error: (err: HttpErrorResponse) => {
         this.savingEdit = false;
-        alert('Error al actualizar el lugar turístico');
+        console.error('Error al actualizar:', err.error);
+        alert(`Error al actualizar el lugar turístico. Causa: ${JSON.stringify(err.error)}`);
+      }
+    });
+  }
+
+  // --- Métodos para Modal de Agregar ---
+  openAddModal() {
+    if (!this.isSuperAdmin) return;
+    this.addModel = {
+      id_lugar: undefined,
+      nombre: '',
+      ubicacion: '',
+      departamento: '',
+      tipo: '',
+      horario: '',
+      descripcion: '',
+      url_image_lugar_turistico: ''
+    };
+    this.showAddModal = true;
+    document.body.classList.add('no-scroll');
+    this.savingAdd = false;
+  }
+
+  closeAddModal(discard = true) {
+    if (this.savingAdd) return;
+    this.showAddModal = false;
+    document.body.classList.remove('no-scroll');
+  }
+
+  saveNewLugar(form: any) {
+    if (!form.valid || !this.isSuperAdmin) return;
+    
+    if (!this.addModel.id_lugar || !this.addModel.nombre || !this.addModel.ubicacion || !this.addModel.departamento || !this.addModel.tipo) {
+      alert('Completa todos los campos obligatorios (ID, Nombre, Ubicación, Departamento, Tipo).');
+      return;
+    }
+    
+    this.savingAdd = true;
+
+    const today = new Date();
+    const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+
+    const payload: Partial<LugarTuristico> = {
+      ...this.addModel,
+      fecha_creacion: formattedDate
+    };
+    
+    this.lugaresService.agregarLugar(payload).subscribe({
+      next: (lugarAgregado) => {
+        this.lugares.unshift(lugarAgregado);
+        this.aplicarFiltros();
+        this.savingAdd = false;
+        this.closeAddModal();
+        alert('Lugar turístico agregado correctamente');
+      },
+      error: (err: HttpErrorResponse) => {
+        this.savingAdd = false;
+        console.error('Error al agregar:', err);
+
+        if (err.error && err.error.nombre) {
+          alert(`Error: ${err.error.nombre[0]}`);
+        } else if (err.error && err.error.id_lugar) {
+           alert(`Error: ${err.error.id_lugar[0]}`);
+        } else {
+          alert(`Error al agregar el lugar turístico. Por favor, revisa los datos.`);
+        }
       }
     });
   }
@@ -181,3 +219,4 @@ export class LugaresTuristicos implements OnInit {
       );
   }
 }
+

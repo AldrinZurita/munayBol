@@ -1,6 +1,13 @@
 <div class="paquetes-container">
   <h1>Paquetes Turísticos</h1>
 
+  <div class="header-acciones">
+    <button *ngIf="isSuperAdmin" class="btn btn-primary" (click)="mostrarModalCrear = true">
+      <span class="material-symbols-outlined icon-ms">add</span>
+      Agregar Paquete Turístico
+    </button>
+  </div>
+
   <div class="filtros">
     <h4>Filtros de búsqueda</h4>
     <div class="filtro-row">
@@ -32,35 +39,6 @@
     <button class="aplicar-btn" (click)="aplicarFiltros()">Aplicar Filtros</button>
   </div>
 
-  <!-- FORMULARIO DE CREACIÓN SOLO PARA SUPERADMIN -->
-  <div *ngIf="isSuperAdmin" class="form-crear-paquete">
-    <h2>Crear Paquete</h2>
-    <form (ngSubmit)="crearPaquete()" #paqueteForm="ngForm">
-      <label>Nombre:</label>
-      <input type="text" [(ngModel)]="paqueteNuevo.nombre" name="nombre" required />
-
-      <label>Tipo:</label>
-      <input type="text" [(ngModel)]="paqueteNuevo.tipo" name="tipo" required />
-
-      <label>Precio:</label>
-      <input type="number" [(ngModel)]="paqueteNuevo.precio" name="precio" required />
-
-      <label>ID Hotel:</label>
-      <input type="number" [(ngModel)]="paqueteNuevo.id_hotel" name="id_hotel" required />
-
-      <label>ID Lugar Turístico:</label>
-      <input type="number" [(ngModel)]="paqueteNuevo.id_lugar" name="id_lugar" required />
-
-      <label>
-        <input type="checkbox" [(ngModel)]="paqueteNuevo.estado" name="estado" />
-        Disponible
-      </label>
-
-      <button type="submit">Guardar Paquete</button>
-    </form>
-  </div>
-  <!-- FIN FORMULARIO DE CREACIÓN -->
-
   <p *ngIf="cargando">Cargando paquetes...</p>
   <p *ngIf="error">{{ error }}</p>
   <p *ngIf="!cargando && !error && paquetesFiltrados.length === 0">No hay paquetes que coincidan con el filtro.</p>
@@ -90,6 +68,58 @@
   </div>
 </div>
 
+<!-- MODAL PARA CREAR -->
+<div class="modal-overlay" *ngIf="mostrarModalCrear" (click)="mostrarModalCrear = false">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Nuevo Paquete Turístico</h2>
+      <button class="close-btn" (click)="mostrarModalCrear = false">&times;</button>
+    </div>
+    <form class="form-crear" (ngSubmit)="crearPaquete()">
+      <div class="form-group">
+        <label>Nombre:</label>
+        <input type="text" [(ngModel)]="paqueteNuevo.nombre" name="nombre" required />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tipo de Paquete:</label>
+          <select [(ngModel)]="paqueteNuevo.tipo" name="tipo" required>
+            <option value="">Seleccionar tipo</option>
+            <option value="aventura">Aventura</option>
+            <option value="cultural">Cultural</option>
+            <option value="naturaleza">Naturaleza</option>
+            <option value="historico">Histórico</option>
+            <option value="gastronomico">Gastronómico</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Precio (BOB):</label>
+          <input type="number" [(ngModel)]="paqueteNuevo.precio" name="precio" step="0.01" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>ID Hotel:</label>
+        <input type="number" [(ngModel)]="paqueteNuevo.id_hotel" name="id_hotel" required />
+      </div>
+      <div class="form-group">
+        <label>ID Lugar Turístico:</label>
+        <input type="number" [(ngModel)]="paqueteNuevo.id_lugar" name="id_lugar" required />
+      </div>
+      <div class="form-group checkbox-group">
+        <label>
+          <input type="checkbox" [(ngModel)]="paqueteNuevo.estado" name="estado" />
+          Paquete disponible
+        </label>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancelar" (click)="mostrarModalCrear = false">Cancelar</button>
+        <button type="submit" class="btn-guardar">Guardar Paquete</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL PARA EDITAR -->
 <!-- MODAL PARA EDITAR -->
 <div class="modal-overlay" *ngIf="mostrarModalEditar" (click)="cerrarModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
@@ -119,6 +149,16 @@
           <input type="number" [(ngModel)]="paqueteEditando!.precio" name="precio" step="0.01" required>
         </div>
       </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>ID Hotel:</label>
+          <input type="number" [(ngModel)]="paqueteEditando!.id_hotel" name="id_hotel" required />
+        </div>
+        <div class="form-group">
+          <label>ID Lugar Turístico:</label>
+          <input type="number" [(ngModel)]="paqueteEditando!.id_lugar" name="id_lugar" required />
+        </div>
+      </div>
       <div class="form-group checkbox-group">
         <label>
           <input type="checkbox" [(ngModel)]="paqueteEditando!.estado" name="estado">
@@ -132,3 +172,4 @@
     </form>
   </div>
 </div>
+

@@ -20,16 +20,9 @@ services:
       DJANGO_SECRET_KEY: $^%pi-f!4s2z*o!+-um9)n6fe^xh!hf96ql41ml#g-$g%qqgg1
       DJANGO_DEBUG: "True"
       DJANGO_ALLOWED_HOSTS: "localhost 127.0.0.1 backend 0.0.0.0"
-    networks:
-      - turismo-net
-
-  llm:
-    build: ./llm_service
-    command: python app.py
-    ports:
-      - "5000:5000"
-    volumes:
-      - ./llm_service:/app
+      # Ollama / LLM
+      OLLAMA_BASE_URL: "http://host.docker.internal:11434"
+      OLLAMA_MODEL: "llama3"
     networks:
       - turismo-net
 
@@ -42,7 +35,6 @@ services:
       - ./frontend:/app
     depends_on:
       - backend
-      - llm
     networks:
       - turismo-net
 
