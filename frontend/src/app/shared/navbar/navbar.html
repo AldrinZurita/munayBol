@@ -1,8 +1,7 @@
 <nav class="navbar">
   <h1 class="logo">
-  <a routerLink="/">🧭MunayBol</a>
-</h1>
-
+    <a routerLink="/">MunayBol</a>
+  </h1>
 
   <input type="checkbox" id="menu-toggle" class="menu-toggle" />
   <label for="menu-toggle" class="hamburger">☰</label>
@@ -16,11 +15,28 @@
 
   <div class="session-actions">
     <ng-container *ngIf="isLoggedIn; else showLogin">
-      <span class="username">{{ username }}</span>
-      <button (click)="logout()" class="logout-btn">Cerrar Sesión</button>
+      <!-- New User Dropdown Menu -->
+      <div class="user-menu">
+        <div class="user-menu-trigger">
+          <span class="material-symbols-outlined">person</span>
+          <span class="username">{{ username }}</span>
+          <span class="material-symbols-outlined chevron">expand_more</span>
+        </div>
+        <div class="user-menu-content">
+          <a routerLink="/perfil" class="user-menu-item">
+            <span class="material-symbols-outlined">account_circle</span>
+            Mi Perfil
+          </a>
+          <button (click)="logout()" class="user-menu-item">
+            <span class="material-symbols-outlined">logout</span>
+            Cerrar Sesión
+          </button>
+        </div>
+      </div>
     </ng-container>
     <ng-template #showLogin>
       <button class="login-btn" routerLink="/login">Iniciar Sesión</button>
     </ng-template>
   </div>
 </nav>
+
