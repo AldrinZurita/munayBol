@@ -1,0 +1,57 @@
+<!-- Main container for the profile page -->
+<div class="perfil-container">
+    <h1 class="title">Mi Perfil</h1>
+  
+    <!-- Loading and error states -->
+    <div *ngIf="cargando" class="estado">Cargando perfil...</div>
+    <div *ngIf="!cargando && !usuario" class="estado error">
+      No se pudo cargar la información del usuario. Por favor, inicia sesión de nuevo.
+    </div>
+  
+    <!-- Profile card shown when user data is available -->
+    <section *ngIf="usuario" class="perfil-card">
+      <div class="perfil-header">
+        <div class="avatar-placeholder">
+          <span>{{ usuario.nombre.charAt(0).toUpperCase() }}</span>
+        </div>
+        <div class="info-principal">
+          <h2 class="nombre-usuario">{{ usuario.nombre }}</h2>
+          <p class="rol-usuario">{{ usuario.rol | titlecase }}</p>
+        </div>
+      </div>
+  
+      <div class="perfil-body">
+        <div class="detalle-item">
+          <span class="label">Correo Electrónico</span>
+          <span class="valor">{{ usuario.correo }}</span>
+        </div>
+        <div class="detalle-item">
+          <span class="label">País</span>
+          <span class="valor">{{ usuario.pais }}</span>
+        </div>
+        <div class="detalle-item">
+          <span class="label">Pasaporte</span>
+          <span class="valor">{{ usuario.pasaporte }}</span>
+        </div>
+        <!-- Only display the creation date if it exists -->
+        <div *ngIf="usuario.fecha_creacion" class="detalle-item">
+          <span class="label">Miembro Desde</span>
+          <span class="valor">{{ usuario.fecha_creacion | date:'longDate' }}</span>
+        </div>
+        <div class="detalle-item">
+          <span class="label">Estado de la Cuenta</span>
+          <span class="valor" [ngClass]="{'activo': usuario.estado, 'inactivo': !usuario.estado}">
+            {{ usuario.estado ? 'Activo' : 'Inactivo' }}
+          </span>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Placeholder for future sections like 'Mis Reservas' -->
+    <section *ngIf="usuario" class="seccion-futura">
+      <h2>Mis Reservas</h2>
+      <p>Próximamente: Aquí podrás ver el historial de tus reservas.</p>
+    </section>
+  </div>
+  
+  
