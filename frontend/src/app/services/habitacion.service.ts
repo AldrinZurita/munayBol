@@ -50,7 +50,7 @@ export class HabitacionService {
   }
 
   agregarHabitacion(habitacion: Partial<Habitacion>): Observable<Habitacion> {
-    return this.http.post<Habitacion>(`${this.apiUrl}habitaciones/`, habitacion);
+    return this.http.post<Habitacion>(`${this.baseUrl}`, habitacion, this.getAuthOptions());
   }
 
   actualizarHabitacion(habitacion: string, data: ActualizarLugarDTO): Observable<Habitacion> {

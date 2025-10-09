@@ -2,12 +2,11 @@
   <h1 class="title">Administración de Habitaciones</h1>
 
   <div class="header-acciones">
-    <button *ngIf="isSuperAdmin" class="btn btn-primary" (click)="onAgregarHabitacion()">
+    <button *ngIf="isSuperAdmin" class="btn btn-primary" (click)="openAddModal()">
       <span class="material-symbols-outlined icon-ms">add</span>
       Agregar Habitación
     </button>
   </div>
-
   <section class="filtros-card">
     <h4>Filtros de búsqueda</h4>
     <div class="filtros-grid">
@@ -32,7 +31,7 @@
             <option *ngFor="let id of hoteles" [value]="id">{{ id }}</option>
           </select>
           <div class="chevron-icon">
-             <span class="material-symbols-outlined">expand_more</span>
+            <span class="material-symbols-outlined">expand_more</span>
           </div>
         </div>
       </div>
@@ -45,7 +44,8 @@
   <div class="estado">
     <div *ngIf="cargando">Cargando habitaciones...</div>
     <div *ngIf="error" class="error">{{ error }}</div>
-    <div *ngIf="!cargando && habitacionesFiltradas.length === 0 && !error">No hay habitaciones que coincidan con el filtro.</div>
+    <div *ngIf="!cargando && habitacionesFiltradas.length === 0 && !error">No hay habitaciones que coincidan con el
+      filtro.</div>
   </div>
 
   <section class="lista-habitaciones">
@@ -55,7 +55,8 @@
         <p class="descripcion">{{ habitacion.caracteristicas }}</p>
         <ul class="meta">
           <li class="meta-item">
-            <span class="status-dot" [class.disponible]="habitacion.disponible" [class.no-disponible]="!habitacion.disponible"></span>
+            <span class="status-dot" [class.disponible]="habitacion.disponible"
+              [class.no-disponible]="!habitacion.disponible"></span>
             {{ habitacion.disponible ? 'Disponible' : 'No disponible' }}
           </li>
           <li class="meta-item">
@@ -66,7 +67,7 @@
             <span class="material-symbols-outlined">group</span>
             {{ habitacion.cant_huespedes }} Huéspedes
           </li>
-           <li class="meta-item">
+          <li class="meta-item">
             <span class="material-symbols-outlined">payments</span>
             {{ habitacion.precio | number:'1.2-2' }} BOB
           </li>
@@ -74,18 +75,72 @@
       </div>
       <div class="card-right">
         <a class="btn btn-accent" [routerLink]="['/habitaciones', habitacion.num]">Ver Detalle</a>
-        <button *ngIf="isSuperAdmin" class="btn btn-secondary" (click)="openEditModal(habitacion)" aria-label="Cerrar">Editar</button>
+        <button *ngIf="isSuperAdmin" class="btn btn-secondary" (click)="openEditModal(habitacion)"
+          aria-label="Cerrar">Editar</button>
         <button *ngIf="isSuperAdmin" class="btn btn-danger" (click)="onEliminarHabitacion(habitacion)">Eliminar</button>
       </div>
     </div>
   </section>
-  
-  <!-- Modal Edición -->
-  <div class="modal-backdrop" *ngIf="showEditModal" (click)="closeEditModal(false)" aria-hidden="true"></div>
-  <div class="modal-root" *ngIf="showEditModal" role="dialog" aria-modal="true" aria-labelledby="editLugarTitle" (click)="closeEditModal(false)">
+
+  <!-- Modal Agregar -->
+  <div class="modal-backdrop" *ngIf="showEditModal" (click)="closeAddModal(false)" aria-hidden="true"></div>
+  <div class="modal-root" *ngIf="showAddModal" role="dialog" aria-modal="true" aria-labelledby="editLugarTitle"
+    (click)="closeAddModal(false)">
     <div class="modal-card" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h3 id="editLugarTitle">Editar lugar</h3>
+        <h3 id="editLugarTitle">Agregar habitación</h3>
+        <button class="icon-btn" (click)="closeAddModal(false)" aria-label="Cerrar">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form #addForm="ngForm" (ngSubmit)="saveAdd(addForm)" novalidate>
+        <div class="modal-body">
+          <label class="form-label" for="num">Número de Habitación </label>
+          <input id="nombre" name="nombre" type="text" class="form-input" [(ngModel)]="newModel.num" required />
+
+          <label class="form-label" for="caracteristicas">Características </label>
+          <input id="caracteristicas" name="caracteristicas" type="text" class="form-input"
+            [(ngModel)]="newModel.caracteristicas" required />
+
+          <label class="form-label" for="precio">Precio </label>
+          <input id="precio" name="precio" type="number" class="form-input" [(ngModel)]="newModel.precio" required />
+
+          <label class="form-label" for="codigo_hotel">Código de Hotel </label>
+          <input id="codigo_hotel" name="codigo_hotel" type="number" class="form-input"
+            [(ngModel)]="newModel.codigo_hotel" required />
+          <label class="form-label" for="horario">¿Disponible? TRUE/FALSE</label>
+          <input id="horario" name="horario" type="text" class="form-input" [(ngModel)]="newModel.disponible" />
+
+          <label class="form-label" for="cant_huespedes">Cantidad de Huéspedes</label>
+          <input id="cant_huespedes" name="cant_huespedes" type="number" class="form-input"
+            [(ngModel)]="newModel.cant_huespedes" />
+
+          <label class="form-label" for="fecha_creacion">Fecha de creación</label>
+          <input id="fecha_creacion" name="fecha_creacion" type="datetime" class="form-input"
+            [(ngModel)]="newModel.fecha_creacion" />
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeAddModal(false)">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="addForm.invalid || savingAdd">
+            {{ savingAdd ? 'Guardando…' : 'Agregar habitación' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
+
+
+  <!-- Modal Edición -->
+  <div class="modal-backdrop" *ngIf="showEditModal" (click)="closeEditModal(false)" aria-hidden="true"></div>
+  <div class="modal-root" *ngIf="showEditModal" role="dialog" aria-modal="true" aria-labelledby="editLugarTitle"
+    (click)="closeEditModal(false)">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="editLugarTitle">Editar habitación</h3>
         <button class="icon-btn" (click)="closeEditModal(false)" aria-label="Cerrar">
           <span class="material-symbols-outlined">close</span>
         </button>
@@ -95,17 +150,20 @@
           <label class="form-label" for="nombre">Número de Habitación *</label>
           <input id="nombre" name="nombre" type="text" class="form-input" [(ngModel)]="editModel.num" required />
           <label class="form-label" for="departamento">Características *</label>
-          <input id="departamento" name="departamento" type="text" class="form-input" [(ngModel)]="editModel.caracteristicas" required />
+          <input id="departamento" name="departamento" type="text" class="form-input"
+            [(ngModel)]="editModel.caracteristicas" required />
           <label class="form-label" for="tipo">Precio *</label>
           <input id="tipo" name="tipo" type="text" class="form-input" [(ngModel)]="editModel.precio" required />
           <label class="form-label" for="ubicacion">Código de Hotel*</label>
-          <textarea id="ubicacion" name="ubicacion" class="form-textarea" rows="3" [(ngModel)]="editModel.codigo_hotel" required></textarea>
+          <textarea id="ubicacion" name="ubicacion" class="form-textarea" rows="3" [(ngModel)]="editModel.codigo_hotel"
+            required></textarea>
           <label class="form-label" for="horario">¿Disponible? TRUE/FALSE</label>
           <input id="horario" name="horario" type="text" class="form-input" [(ngModel)]="editModel.disponible" />
           <label class="form-label" for="descripcion">Fecha de creación</label>
           <input id="date" name="date" type="datetime" class="form-input" [(ngModel)]="editModel.fecha_creacion" />
           <label class="form-label" for="img">Cantidad de Huéspedes</label>
-          <input id="cant_huespedes" name="cant_huespedes" type="number" class="form-input" [(ngModel)]="editModel.cant_huespedes" />
+          <input id="cant_huespedes" name="cant_huespedes" type="number" class="form-input"
+            [(ngModel)]="editModel.cant_huespedes" />
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" (click)="closeEditModal(false)">Cancelar</button>

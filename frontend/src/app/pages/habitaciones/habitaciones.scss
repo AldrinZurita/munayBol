@@ -236,4 +236,118 @@ $secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
       justify-content: center;
     }
   }
+
+}
+/* ===== Backdrop ===== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.55);
+  backdrop-filter: blur(3px);
+  z-index: 9998;
+}
+
+/* ===== Root: centers card and allows viewport scrolling if needed ===== */
+.modal-root {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 9999;
+
+  /* If the card is taller than the viewport, let the page scroll */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===== Card: flex column, header/footer fixed, body scrolls ===== */
+.modal-card {
+  width: 100%;
+  max-width: 640px;
+  max-height: min(90vh, 720px); /* cap height; below, body will scroll */
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+
+  /* Keep rounded corners; we'll avoid outer focus glows so no clipping issues */
+  overflow: hidden;
+  animation: modalIn 160ms ease-out both;
+}
+
+@keyframes modalIn {
+  from { transform: translateY(-10px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+  flex-shrink: 0;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex; align-items: center; justify-content: space-between;
+
+  h3 { margin: 0; font-size: 18px; font-weight: 800; color: #0f172a; }
+  .icon-btn { border: 0; background: transparent; padding: 6px; border-radius: 8px; cursor: pointer; }
+  .icon-btn:hover { background: #f1f5f9; }
+}
+
+.modal-body {
+  flex: 1 1 auto;
+  min-height: 0;                /* Safari fix so overflow works */
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px 20px;
+  display: grid;
+  gap: 12px;
+}
+
+.modal-footer {
+  flex-shrink: 0;
+  padding: 14px 20px;
+  border-top: 1px solid #e5e7eb;
+  display: flex; justify-content: flex-end; gap: 10px;
+}
+
+/* Form controls */
+.form-label { font-size: 12px; font-weight: 600; color: #64748b; }
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #0f172a;
+  background: #fff;
+
+  /* Avoid outer glow that gets clipped by rounded container */
+  &:focus {
+    outline: none;
+    border-color: #16a34a;
+    box-shadow: inset 0 0 0 2px rgba(22, 163, 74, 0.35); /* inner ring */
+  }
+}
+
+.form-textarea { resize: vertical; }
+
+.img-preview {
+  margin-top: 8px;
+  img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: #f1f5f9;
+  }
+}
+
+body.no-scroll { overflow: hidden; }
+form{
+  overflow-y: scroll;
 }
