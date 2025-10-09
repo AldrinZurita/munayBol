@@ -1,30 +1,22 @@
-@use 'sass:color';
+@use "sass:color";
 
-:host { display: block; }
-
-debug-banner {
-  background: #fde68a;
-  color: #92400e;
-  border: 1px solid #f59e0b;
-  padding: 6px 10px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  font-size: 12px;
+:host {
+  display: block;
 }
 
-/* Tokens */
+// --- Sistema de Diseño (Variables para consistencia) ---
 $primary-text: #0f172a;
 $secondary-text: #334155;
 $light-text: #64748b;
 $border-color: #e5e7eb;
 $card-bg: #fff;
-$primary-color: #16a34a;
-$accent-color: #16a34a;
-$danger-color: #dc2626;
-$secondary-btn-bg: #f1f5f9;
+$primary-color: #16a34a; // Verde para acciones principales
+$accent-color: #16a34a;  // Azul para "Ver Detalle"
+$danger-color: #dc2626;  // Rojo para "Eliminar" y estado "No disponible"
+$secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
 
-/* Container */
-.lugares-container {
+// --- Contenedor Principal ---
+.habitaciones-container {
   max-width: 1100px;
   margin: 0 auto;
   padding: 24px;
@@ -37,13 +29,14 @@ $secondary-btn-bg: #f1f5f9;
   }
 }
 
+// --- Encabezado de Acciones ---
 .header-acciones {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 22px;
 }
 
-/* Buttons */
+// --- Estilos de Botones Unificados ---
 .btn {
   display: inline-flex;
   align-items: center;
@@ -64,27 +57,31 @@ $secondary-btn-bg: #f1f5f9;
   }
 
   &.btn-primary {
-    background: $primary-color; color: #fff;
-    &:hover { background: color.adjust($primary-color, $lightness: -5%); }
+    background: $primary-color;
+    color: #fff;
+    &:hover { background-color: color.adjust(#016d2e, $lightness: -10%); }
   }
 
   &.btn-accent {
-    background: $accent-color; color: #fff;
-    &:hover { background: color.adjust($accent-color, $lightness: -5%); }
+    background: $accent-color;
+    color: #fff;
+    &:hover { background-color: color.adjust(#016d2e, $lightness: -10%); }
   }
 
   &.btn-secondary {
-    background: $secondary-btn-bg; color: $primary-text;
-    &:hover { background: color.adjust($secondary-btn-bg, $lightness: -5%); }
+    background: $secondary-btn-bg;
+    color: $primary-text;
+    &:hover { background-color: color.adjust(#016d2e, $lightness: -10%); }
   }
 
   &.btn-danger {
-    background: #fee2e2; color: $danger-color;
+    background: #fee2e2;
+    color: $danger-color;
     &:hover { background: #fecaca; }
   }
 }
 
-/* Filtros */
+// --- Tarjeta de Filtros ---
 .filtros-card {
   background: $card-bg;
   border: 1px solid $border-color;
@@ -100,21 +97,24 @@ $secondary-btn-bg: #f1f5f9;
   }
 
   .filtros-grid {
-    display: grid; gap: 16px; align-items: end;
-
-    &.solo-uno {
-      grid-template-columns: 1fr auto;
-      @media (max-width: 560px) { grid-template-columns: 1fr; }
-    }
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    align-items: end;
 
     .filtro {
-      display: flex; flex-direction: column; gap: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
 
-      label { font-size: 12px; font-weight: 500; color: $light-text; }
+      label {
+        font-size: 12px;
+        font-weight: 500;
+        color: $light-text;
+      }
 
       .select-wrapper {
         position: relative;
-
         select {
           width: 100%;
           appearance: none;
@@ -126,194 +126,114 @@ $secondary-btn-bg: #f1f5f9;
           color: $secondary-text;
           cursor: pointer;
         }
-
         .chevron-icon {
-          position: absolute; right: 12px; top: 50%;
+          position: absolute;
+          right: 12px;
+          top: 50%;
           transform: translateY(-50%);
-          pointer-events: none; color: #94a3b8;
+          pointer-events: none;
+          color: #94a3b8;
         }
       }
     }
 
-    .acciones { .btn { width: 100%; } }
+    .acciones {
+      .btn {
+        width: 100%; // Botón ocupa todo el ancho en su celda de la grilla
+      }
+    }
   }
 }
 
-/* Estado */
+// --- Indicador de Estado (Cargando, Error) ---
 .estado {
   color: $primary-text;
   padding: 10px 0;
   min-height: 24px;
   font-weight: 500;
-
-  .error { color: $danger-color; }
+  &.error { color: $danger-color; }
 }
 
-/* Lista */
-.lista { display: grid; gap: 18px; }
+// --- Lista y Tarjetas de Habitación ---
+.lista-habitaciones {
+  display: grid;
+  gap: 18px;
+}
 
-/* Card */
-.card-lugar {
-  display: grid; grid-template-columns: 1fr; gap: 16px;
-  background: $card-bg; border: 1px solid $border-color;
-  border-radius: 14px; padding: 20px;
+.habitacion-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  background: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: 14px;
+  padding: 20px;
   transition: box-shadow 0.2s ease, border-color 0.2s ease;
 
   &:hover {
-    border-color: color.adjust($border-color, $lightness: -5%);
+    border-color: color.adjust(#016d2e, $lightness: -10%);
     box-shadow: 0 4px 12px rgba(40, 92, 145, 0.06);
   }
 
-  @media (min-width: 768px) { grid-template-columns: 1fr auto; }
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 200px; // Dos columnas en pantallas más grandes
+  }
 
   .card-left {
-    display: flex; flex-direction: column; min-width: 0;
-
-    .imagen-lugar {
-      margin-bottom: 12px;
-
-      img {
-        width: 100%; max-width: 320px; height: 180px;
-        object-fit: cover; border-radius: 10px;
-        border: 1px solid $border-color; background: #f1f5f9;
-      }
-    }
-
-    .lugar-nombre {
-      margin: 0 0 8px; font-size: 20px; color: $primary-text; font-weight: 800;
-    }
-
-    .meta {
-      display: flex; flex-wrap: wrap; gap: 10px 20px;
-      padding: 0; margin: 0 0 14px; list-style: none;
-      color: $secondary-text; font-size: 14px;
-
-      .meta-item { display: inline-flex; align-items: center; gap: 8px; }
+    h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      color: $primary-text;
+      font-weight: 800;
     }
 
     .descripcion {
-      margin: 0; color: $secondary-text; line-height: 1.5; font-size: 14px;
+      margin: 0 0 14px;
+      color: $secondary-text;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      color: $secondary-text;
+      font-size: 14px;
+
+      .meta-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        .status-dot {
+          width: 9px;
+          height: 9px;
+          border-radius: 50%;
+          &.disponible { background-color: $primary-color; }
+          &.no-disponible { background-color: $danger-color; }
+        }
+      }
     }
   }
 
   .card-right {
-    display: flex; flex-direction: column; gap: 10px; justify-content: center;
-    .btn { width: 100%; }
-    @media (min-width: 768px) { width: 200px; align-items: flex-end; }
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+
+    // Los botones ocupan todo el ancho en su contenedor
+    .btn {
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      align-items: flex-end; // Botones a la derecha en escritorio
+      justify-content: center;
+    }
   }
-}
-
-/* ===== Backdrop ===== */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(2, 6, 23, 0.55);
-  backdrop-filter: blur(3px);
-  z-index: 9998;
-}
-
-/* ===== Root: centers card and allows viewport scrolling if needed ===== */
-.modal-root {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  z-index: 9999;
-
-  /* If the card is taller than the viewport, let the page scroll */
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* ===== Card: flex column, header/footer fixed, body scrolls ===== */
-.modal-card {
-  width: 100%;
-  max-width: 640px;
-  max-height: min(90vh, 720px); /* cap height; below, body will scroll */
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-  display: flex;
-  flex-direction: column;
-
-  /* Keep rounded corners; we'll avoid outer focus glows so no clipping issues */
-  overflow: hidden;
-  animation: modalIn 160ms ease-out both;
-}
-
-@keyframes modalIn {
-  from { transform: translateY(-10px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
-}
-
-.modal-header {
-  flex-shrink: 0;
-  padding: 16px 20px;
-  border-bottom: 1px solid #e5e7eb;
-  display: flex; align-items: center; justify-content: space-between;
-
-  h3 { margin: 0; font-size: 18px; font-weight: 800; color: #0f172a; }
-  .icon-btn { border: 0; background: transparent; padding: 6px; border-radius: 8px; cursor: pointer; }
-  .icon-btn:hover { background: #f1f5f9; }
-}
-
-/* KEY: allow the middle section to scroll inside the card */
-.modal-body {
-  flex: 1 1 auto;
-  min-height: 0;                /* Safari fix so overflow works */
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 16px 20px;
-  display: grid;
-  gap: 12px;
-}
-
-.modal-footer {
-  flex-shrink: 0;
-  padding: 14px 20px;
-  border-top: 1px solid #e5e7eb;
-  display: flex; justify-content: flex-end; gap: 10px;
-}
-
-/* Form controls */
-.form-label { font-size: 12px; font-weight: 600; color: #64748b; }
-
-.form-input,
-.form-textarea {
-  width: 100%;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 14px;
-  color: #0f172a;
-  background: #fff;
-
-  /* Avoid outer glow that gets clipped by rounded container */
-  &:focus {
-    outline: none;
-    border-color: #16a34a;
-    box-shadow: inset 0 0 0 2px rgba(22, 163, 74, 0.35); /* inner ring */
-  }
-}
-
-.form-textarea { resize: vertical; }
-
-.img-preview {
-  margin-top: 8px;
-  img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-radius: 10px;
-    border: 1px solid #e5e7eb;
-    background: #f1f5f9;
-  }
-}
-
-body.no-scroll { overflow: hidden; }
-form{
-  overflow-y: scroll;
 }
