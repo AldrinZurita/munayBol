@@ -42,6 +42,7 @@ export class LugaresTuristicos implements OnInit {
   showAddModal = false;
   savingAdd = false;
   addModel: Partial<LugarTuristico> = {
+    id_lugar: 0,
     nombre: '',
     ubicacion: '',
     departamento: '',
@@ -143,6 +144,7 @@ export class LugaresTuristicos implements OnInit {
   openAddModal() {
     if (!this.isSuperAdmin) return;
     this.addModel = {
+      id_lugar: undefined,
       nombre: '',
       ubicacion: '',
       departamento: '',
@@ -165,24 +167,21 @@ export class LugaresTuristicos implements OnInit {
   saveNewLugar(form: any) {
     if (!form.valid || !this.isSuperAdmin) return;
     
-    if (!this.addModel.nombre || !this.addModel.ubicacion || !this.addModel.departamento || !this.addModel.tipo) {
-      alert('Completa todos los campos obligatorios (Nombre, Ubicación, Departamento, Tipo).');
+    if (!this.addModel.id_lugar || !this.addModel.nombre || !this.addModel.ubicacion || !this.addModel.departamento || !this.addModel.tipo) {
+      alert('Completa todos los campos obligatorios (ID, Nombre, Ubicación, Departamento, Tipo).');
       return;
     }
     
     this.savingAdd = true;
 
-    // --- FIX: Send null for id_lugar to satisfy the backend's requirement ---
     const today = new Date();
     const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
 
-    // We cast the payload to 'any' to allow 'id_lugar' to be null, satisfying the backend.
-    const payload: any = {
+    const payload: Partial<LugarTuristico> = {
       ...this.addModel,
-      id_lugar: null, // This signals to the backend to create a new ID.
       fecha_creacion: formattedDate
     };
-
+    
     this.lugaresService.agregarLugar(payload).subscribe({
       next: (lugarAgregado) => {
         this.lugares.unshift(lugarAgregado);
@@ -193,8 +192,15 @@ export class LugaresTuristicos implements OnInit {
       },
       error: (err: HttpErrorResponse) => {
         this.savingAdd = false;
-        console.error('Error al agregar:', err.error);
-        alert(`Error al agregar el lugar turístico. Causa: ${JSON.stringify(err.error)}`);
+        console.error('Error al agregar:', err);
+
+        if (err.error && err.error.nombre) {
+          alert(`Error: ${err.error.nombre[0]}`);
+        } else if (err.error && err.error.id_lugar) {
+           alert(`Error: ${err.error.id_lugar[0]}`);
+        } else {
+          alert(`Error al agregar el lugar turístico. Por favor, revisa los datos.`);
+        }
       }
     });
   }
