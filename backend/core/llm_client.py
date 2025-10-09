@@ -1,4 +1,5 @@
 import os
+<<<<<<< HEAD
 import json
 from typing import Optional, Tuple, List, Dict
 from django.utils import timezone
@@ -13,11 +14,24 @@ import weaviate
 from .models import ChatSession, Usuario
 
 # === CONFIGURACIÓN ===
+=======
+from typing import Optional, Tuple, List, Dict
+from django.utils import timezone
+from .models import ChatSession, Usuario
+from .rag_index import retrieve_context
+
+# LlamaIndex + Ollama
+from llama_index.llms.ollama import Ollama
+from llama_index.core.llms import ChatMessage, MessageRole
+
+
+>>>>>>> f78c6c5bb8367f99105b0b5bd6e7c0939a4d0a5a
 SYSTEM_PROMPT = (
     "Eres MunayBot, un agente de viajes de Bolivia. Hablas en español de forma amable y concisa. "
     "Ayudas a planificar itinerarios, recomendar hoteles y lugares turísticos en Bolivia. "
     "Haz preguntas de clarificación cuando falte información (fechas, presupuesto, intereses) y entrega respuestas estructuradas."
 )
+<<<<<<< HEAD
 DATA_PATH = os.path.join(os.path.dirname(__file__), '../data/munaybol_data.json')
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.2:1b")
@@ -106,6 +120,19 @@ def _history_to_messages(history: List[Dict]) -> List[ChatMessage]:
     messages: List[ChatMessage] = [ChatMessage(role=MessageRole.SYSTEM, content=SYSTEM_PROMPT)]
     # Solo el último mensaje para máxima rapidez
     for item in history[-1:]:
+=======
+
+
+def _get_llm() -> Ollama:
+    base_url = os.getenv("OLLAMA_BASE_URL", "http://host.docker.internal:11434")
+    model = os.getenv("OLLAMA_MODEL", "llama3")
+    return Ollama(model=model, base_url=base_url, request_timeout=120.0)
+
+
+def _history_to_messages(history: List[Dict]) -> List[ChatMessage]:
+    messages: List[ChatMessage] = [ChatMessage(role=MessageRole.SYSTEM, content=SYSTEM_PROMPT)]
+    for item in history:
+>>>>>>> f78c6c5bb8367f99105b0b5bd6e7c0939a4d0a5a
         role = item.get("role", "user")
         content = item.get("content", "")
         if not content:
@@ -116,6 +143,10 @@ def _history_to_messages(history: List[Dict]) -> List[ChatMessage]:
             messages.append(ChatMessage(role=MessageRole.USER, content=content))
     return messages
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f78c6c5bb8367f99105b0b5bd6e7c0939a4d0a5a
 def _append_history(session: ChatSession, role: str, content: str) -> None:
     session.history.append({
         "role": role,
@@ -124,14 +155,27 @@ def _append_history(session: ChatSession, role: str, content: str) -> None:
     })
     session.save(update_fields=["history", "updated_at"])
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f78c6c5bb8367f99105b0b5bd6e7c0939a4d0a5a
 def start_chat(usuario: Optional[Usuario] = None) -> str:
     session = ChatSession.objects.create(usuario=usuario)
     return str(session.id)
 
+<<<<<<< HEAD
 def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[Usuario] = None) -> Tuple[str, str]:
     if not prompt.strip():
         return "Por favor, escribe tu pregunta o mensaje.", chat_id or ""
 
+=======
+
+def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[Usuario] = None) -> Tuple[str, str]:
+    """
+    Send a user prompt and get assistant reply.
+    Returns (reply, chat_id).
+    """
+>>>>>>> f78c6c5bb8367f99105b0b5bd6e7c0939a4d0a5a
     if chat_id:
         try:
             session = ChatSession.objects.get(id=chat_id)
@@ -140,11 +184,21 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
     else:
         session = ChatSession.objects.create(usuario=usuario)
 
+<<<<<<< HEAD
     _append_history(session, "user", prompt)
 
     messages = _history_to_messages(session.history)
     try:
         context_block = retrieve_context(prompt, top_k=1)
+=======
+    # update history with user message
+    _append_history(session, "user", prompt)
+
+    # build messages with RAG context
+    messages = _history_to_messages(session.history)
+    try:
+        context_block = retrieve_context(prompt, top_k=4)
+>>>>>>> f78c6c5bb8367f99105b0b5bd6e7c0939a4d0a5a
     except Exception:
         context_block = ""
     if context_block:
@@ -161,9 +215,19 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
             f"Detalle: {e}"
         )
 
+<<<<<<< HEAD
     _append_history(session, "assistant", reply)
     return reply, str(session.id)
 
+=======
+    # append assistant reply
+    _append_history(session, "assistant", reply)
+
+    return reply, str(session.id)
+
+
+# Backwards-compatible wrapper
+>>>>>>> f78c6c5bb8367f99105b0b5bd6e7c0939a4d0a5a
 def get_llm_response(prompt: str) -> str:
     reply, _ = send_message(prompt)
     return reply
