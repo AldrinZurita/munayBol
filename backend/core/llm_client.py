@@ -18,7 +18,7 @@ SYSTEM_PROMPT = (
 
 def _get_llm() -> Ollama:
     base_url = os.getenv("OLLAMA_BASE_URL", "http://host.docker.internal:11434")
-    model = os.getenv("OLLAMA_MODEL", "llama3")
+    model = os.getenv("OLLAMA_MODEL", "llama3.2:1b")
     return Ollama(model=model, base_url=base_url, request_timeout=120.0)
 
 
