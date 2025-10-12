@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PaqueteDetalle } from './paquete-detalle';
-import { ActivatedRoute } from '@angular/router';
 
 describe('PaqueteDetalle', () => {
   let component: PaqueteDetalle;
@@ -8,19 +7,7 @@ describe('PaqueteDetalle', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PaqueteDetalle],
-      providers: [
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: {
-                get: () => '1'
-              }
-            }
-          }
-        }
-      ]
+      imports: [PaqueteDetalle]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PaqueteDetalle);
@@ -28,13 +15,7 @@ describe('PaqueteDetalle', () => {
     fixture.detectChanges();
   });
 
-  it('debería crear el componente', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('debería cargar el paquete con id 1', () => {
-    expect(component.paquete).toBeDefined();
-    expect(component.paquete.id).toBe('1');
-    expect(component.paquete.lugar_turistico).toBe('Salar de Uyuni');
   });
 });

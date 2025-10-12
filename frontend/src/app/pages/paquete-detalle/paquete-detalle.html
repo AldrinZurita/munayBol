@@ -1,21 +1,52 @@
 <div class="paquete-detalle" *ngIf="paquete">
-  <h2 class="package-title">{{ paquete.lugar?.nombre }} + {{ paquete.hotel?.nombre }}</h2>
+  <div class="content-container">
+    <div class="info-section">
+      <div class="header-section">
+        <h2 class="package-title">{{ paquete.lugar?.nombre }} + {{ paquete.hotel?.nombre }}</h2>
+        <div class="price-block">
+          <div class="price-value">{{ paquete?.precio?.toFixed(2) }} BOB</div>
+          <div class="price-label">Precio por paquete</div>
+        </div>
+      </div>
 
-  <p class="package-description">{{ paquete.lugar?.descripcion }}</p>
+      <p class="package-description">{{ paquete.lugar?.descripcion }}</p>
 
-  <p><strong>Ubicación:</strong> {{ paquete.lugar?.ubicacion }}</p>
-  <p><strong>Departamento:</strong> {{ paquete.lugar?.departamento }}</p>
-  <p><strong>Disponible:</strong> {{ paquete.estado ? 'Sí' : 'No' }}</p>
+      <p><strong>Ubicación:</strong> {{ paquete.lugar?.ubicacion }}</p>
+      <p><strong>Departamento:</strong> {{ paquete.lugar?.departamento }}</p>
+      <p><strong>Disponible:</strong> {{ paquete.estado ? 'Sí' : 'No' }}</p>
+      <p><strong>Hotel asignado:</strong> {{ paquete.hotel?.nombre }}</p>
 
-  <div class="map-location">{{ paquete.lugar?.ubicacion }}</div>
+      <div class="imagen-lugar">
+        <img [src]="paquete.lugar?.url_image_lugar_turistico" alt="Imagen lugar" />
+      </div>
 
-  <div class="price">
-    <div class="price-value">{{ paquete?.precio?.toFixed(2) }} BOB</div>
-  </div>
+      <div class="location-section">
+        <h3>Ubicación</h3>
+        <div class="location-box">
+          <div class="location-icon">📍</div>
+          <div class="location-text">
+            <div class="map-label">Dirección</div>
+            <div class="map-location">{{ paquete.lugar?.ubicacion }}</div>
+          </div>
+        </div>
+      </div>
 
-  <p>Hotel asignado: {{ paquete.hotel?.nombre }}</p>
+      <div class="itinerary-section" *ngIf="itinerario.length">
+        <h3>Itinerario</h3>
+        <div class="itinerary-list">
+          <div class="itinerary-day" *ngFor="let dia of itinerario; let i = index">
+            <div class="day-number">Día {{ i + 1 }}</div>
+            <div class="day-description">{{ dia }}</div>
+          </div>
+        </div>
+      </div>
 
-  <div class="imagen-lugar">
-    <img [src]="paquete.lugar?.url_image_lugar_turistico" alt="Imagen lugar" />
+      <div class="important-info-section" *ngIf="infoImportante.length">
+        <h3>Información importante</h3>
+        <ul>
+          <li *ngFor="let info of infoImportante">{{ info }}</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
