@@ -1,5 +1,5 @@
 export interface Habitacion {
-  num: string;
+  num: number | string;
   caracteristicas: string;
   precio: number;
   codigo_hotel: number; 
