@@ -192,7 +192,13 @@ class PagoViewSet(viewsets.ModelViewSet):
     serializer_class = PagoSerializer
 
     def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+        # Permisos:
+        # - create: usuario autenticado (pago propio)
+        # - update/partial_update/destroy: solo superadmin
+        # - list/retrieve: por ahora público (como estaba); ajustar si se requiere
+        if self.action == 'create':
+            return [IsAuthenticated()]
+        if self.action in ['update', 'partial_update', 'destroy']:
             return [IsSuperAdmin()]
         return [AllowAny()]
 
@@ -245,13 +251,14 @@ class ReservaViewSet(viewsets.ModelViewSet):
         if not user.is_authenticated:
             return Response({"error": "No autenticado"}, status=401)
         data = request.data.copy()
-        data["id_usuario"] = user.id
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        # Asignar el usuario autenticado mediante save(), dado que id_usuario es read_only en el serializer
+        instance = serializer.save(id_usuario=user)
+        output = self.get_serializer(instance)
         return Response({
             "message": "Reserva creada correctamente",
-            "reserva": serializer.data
+            "reserva": output.data
         }, status=status.HTTP_201_CREATED)
 
     def partial_update(self, request, *args, **kwargs):

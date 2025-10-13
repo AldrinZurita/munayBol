@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Reserva } from '../interfaces/reserva.interface'; // Ensure you have this interface file
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ReservasService {
-  private apiUrl = '/api/reservas/';
+  private readonly apiUrl = `${environment.apiUrl}reservas/`;
 
   constructor(
-    private http: HttpClient,
-    private authService: AuthService
+    private readonly http: HttpClient,
+    private readonly authService: AuthService
   ) {}
 
   // --- FIX: A single, unified function to build all necessary headers dynamically ---
@@ -39,14 +40,21 @@ export class ReservasService {
   
   crearReserva(reserva: Partial<Reserva>): Observable<Reserva> {
     // --- FIX: Dynamically get the user ID if it's not already set ---
-    if (!reserva.id_usuario) {
-      const user = this.authService.getUser();
-      if (user) {
-        reserva.id_usuario = user.id;
-      }
-    }
-    
-    return this.http.post<Reserva>(this.apiUrl, reserva, { headers: this.getHeaders() });
+    // Backend asigna id_usuario desde el token; no es necesario enviarlo
+    const payload = { ...reserva };
+    delete (payload as any).id_usuario;
+
+    return this.http.post<any>(this.apiUrl, payload, { headers: this.getHeaders() })
+      .pipe(
+        map((resp: any) => {
+          // Aceptar tanto respuesta directa de Reserva como envoltura { message, reserva }
+          if (resp && typeof resp === 'object') {
+            if ('id_reserva' in resp) return resp as Reserva;
+            if ('reserva' in resp) return resp.reserva as Reserva;
+          }
+          return resp as Reserva;
+        })
+      );
   }
 }
 
