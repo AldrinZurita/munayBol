@@ -221,3 +221,4 @@ finetune/dataset/*.jsonl.backup
 # Entornos virtuales
 .venv/
 venv/
+venv
