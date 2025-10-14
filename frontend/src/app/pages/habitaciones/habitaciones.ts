@@ -5,7 +5,6 @@ import { ActualizarLugarDTO, HabitacionService } from '../../services/habitacion
 import { Habitacion } from '../../interfaces/habitacion.interface';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { empty } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -26,7 +25,7 @@ export class Habitaciones implements OnInit {
   showEditModal = false;
   savingEdit = false;
   editModel: Habitacion = {
-    num: '',
+    num: '' as unknown as number,
     caracteristicas: '',
     precio: 0,
     codigo_hotel: 0,
@@ -36,8 +35,8 @@ export class Habitaciones implements OnInit {
   }
 
   private _editTargetRef: Habitacion | null = null;
-    newModel: Habitacion = {
-    num: '',
+  newModel: Habitacion = {
+  num: '' as unknown as number,
     caracteristicas: '',
     precio: 0,
     codigo_hotel: 0,
@@ -50,7 +49,7 @@ export class Habitaciones implements OnInit {
   savingAdd: boolean | undefined;
   
   constructor(
-    private habitacionService: HabitacionService,
+  private readonly habitacionService: HabitacionService,
     public authService: AuthService
   ) { }
 
@@ -113,21 +112,21 @@ openAddModal() {
   }
 
   saveAdd(form: any) {
- if (!form.valid || !this.isSuperAdmin) return;
-    
-    if (!this.newModel.num || !this.newModel.caracteristicas || !this.newModel.precio || !this.newModel.codigo_hotel || !this.newModel.disponible || !this.newModel.fecha_creacion ||!this.newModel.cant_huespedes) {
+    if (!form.valid || !this.isSuperAdmin) return;
+
+    if (!this.newModel.caracteristicas || !this.newModel.precio || !this.newModel.codigo_hotel || !this.newModel.cant_huespedes) {
       alert('Completa todos los campos obligatorios ');
       return;
     }
     
     this.savingAdd = true;
 
-    const today = new Date();
-    const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
-
     const payload: Partial<Habitacion> = {
-      ...this.newModel,
-      fecha_creacion: formattedDate
+      caracteristicas: this.newModel.caracteristicas,
+      precio: this.newModel.precio,
+      codigo_hotel: this.newModel.codigo_hotel,
+      disponible: this.newModel.disponible,
+      cant_huespedes: this.newModel.cant_huespedes
     };
 
     this.habitacionService.agregarHabitacion(payload).subscribe({
@@ -142,9 +141,7 @@ openAddModal() {
         this.savingAdd = false;
         console.error('Error al agregar:', err);
 
-        if (err.error && err.error.nombre) {
-          alert(`Error: ${err.error.nombre[0]}`);
-        } else if (err.error && err.error.num) {
+        if (err?.error?.num?.[0]) {
            alert(`Error: ${err.error.num[0]}`);
         } else {
           alert(`Error al agregar habitación. Por favor, revisa los datos.`);
@@ -181,12 +178,10 @@ openAddModal() {
     if (!form.valid || !this._editTargetRef || !this.isSuperAdmin) return;
     this.savingEdit = true;
     const cambios: ActualizarLugarDTO = {
-      num: this.editModel.num,
       caracteristicas: this.editModel.caracteristicas,
       precio: this.editModel.precio,
       codigo_hotel: this.editModel.codigo_hotel,
       disponible: this.editModel.disponible,
-      fecha_creacion: this.editModel.fecha_creacion,
       cant_huespedes: this.editModel.cant_huespedes
     };
     this.habitacionService.actualizarHabitacion(this.editModel.num, cambios).subscribe({
@@ -208,7 +203,7 @@ openAddModal() {
   onEliminarHabitacion(habitacion: Habitacion) {
     if (!this.isSuperAdmin) return;
     if (confirm('¿Eliminar habitación?')) {
-      this.habitacionService.eliminarHabitacion(Number(habitacion.num)).subscribe({
+      this.habitacionService.eliminarHabitacion(habitacion.num).subscribe({
         next: () => {
           this.habitaciones = this.habitaciones.filter(h => h.num !== habitacion.num);
           this.aplicarFiltros();

@@ -55,7 +55,7 @@ export class HabitacionDetalle implements OnInit {
 	) {}
 
 	ngOnInit() {
-		const num = this.route.snapshot.paramMap.get('num');
+		const numParam = this.route.snapshot.paramMap.get('num');
 		// Inicializar fechas (hoy y mañana)
 		const hoy = new Date();
 		const manana = new Date(hoy.getTime() + 24 * 60 * 60 * 1000);
@@ -63,19 +63,37 @@ export class HabitacionDetalle implements OnInit {
 		this.fechaCaducidad = manana.toISOString().slice(0, 10);
 		this.minFecha = this.fechaReserva;
 		this.minFechaSalida = this.fechaCaducidad;
-		if (num) {
+		if (numParam) {
 			this.habitacionService.getHabitaciones().subscribe({
 				next: habitaciones => {
-					this.habitacion = habitaciones.find(h => h.num === num) || null;
+					this.habitacion = habitaciones.find(h => String(h.num) === String(numParam)) || null;
 					this.generarReviewsFake();
 					if (this.habitacion) {
 						this.procesarAmenidades(this.habitacion.caracteristicas);
-						this.cargarDisponibilidad(this.habitacion.num);
+						this.cargarDisponibilidad(String(this.habitacion.num));
 						// Cargar info del hotel para cabecera enriquecida
 						this.loadingHotel = true;
 						this.hotelService.getHotelById(this.habitacion.codigo_hotel as unknown as number).subscribe({
 							next: h => { this.hotel = h; this.loadingHotel = false; },
 							error: () => { this.loadingHotel = false; }
+						});
+					} else {
+						// Fallback: intentar cargar la habitación directamente por num
+						this.habitacionService.getHabitacionByNum(String(numParam)).subscribe({
+							next: hab => {
+								this.habitacion = hab;
+								this.generarReviewsFake();
+								this.procesarAmenidades(hab.caracteristicas);
+								this.cargarDisponibilidad(String(hab.num));
+								this.loadingHotel = true;
+								this.hotelService.getHotelById(hab.codigo_hotel as unknown as number).subscribe({
+									next: h => { this.hotel = h; this.loadingHotel = false; },
+									error: () => { this.loadingHotel = false; }
+								});
+							},
+							error: () => {
+								// dejar habitacion en null si no se encuentra
+							}
 						});
 					}
 				}

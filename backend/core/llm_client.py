@@ -154,6 +154,15 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
     try:
         resp = llm.chat(messages)
         reply = resp.message.content if hasattr(resp, "message") else str(resp)
+        # Enforce brevity limits if configured
+        max_chars = int(os.getenv("MUNAY_MAX_CHARS", "0") or 0)
+        max_lines = int(os.getenv("MUNAY_MAX_LINES", "0") or 0)
+        if max_lines and reply:
+            lines = reply.splitlines()
+            if len(lines) > max_lines:
+                reply = "\n".join(lines[:max_lines]).rstrip() + "\n…"
+        if max_chars and reply and len(reply) > max_chars:
+            reply = reply[:max_chars].rstrip() + "…"
     except Exception as e:
         reply = (
             "Lo siento, no puedo responder ahora mismo. "

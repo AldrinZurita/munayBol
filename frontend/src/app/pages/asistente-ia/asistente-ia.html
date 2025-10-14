@@ -11,7 +11,14 @@
     <!-- Muestra el historial de mensajes -->
     <div *ngFor="let r of respuestas" [ngClass]="{'message': true, 'ia': r.from==='ia', 'user': r.from==='user'}">
       <div class="icon">{{ r.from === 'ia' ? '🤖' : '🧑' }}</div>
-      <div class="text"><p>{{ r.text }}</p></div>
+      <div class="text">
+        <ng-container *ngIf="r.from==='ia'; else userPlain">
+          <div [innerHTML]="renderMarkdown(r.text)"></div>
+        </ng-container>
+        <ng-template #userPlain>
+          <p>{{ r.text }}</p>
+        </ng-template>
+      </div>
     </div>
     <!-- Mensaje de bienvenida fijo solo si no hay mensajes -->
     <div class="message ia" *ngIf="respuestas.length === 0">

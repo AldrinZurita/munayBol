@@ -32,7 +32,7 @@ export type ActualizarLugarDTO = Partial<Pick<
 @Injectable({ providedIn: 'root' })
 export class HabitacionService {
   private readonly apiUrl = environment.apiUrl;
-  private readonly baseUrl = '/api/habitaciones/';
+  private readonly baseUrl = `${this.apiUrl}habitaciones/`;
 
   constructor(private readonly http: HttpClient, private authService: AuthService) { }
 
@@ -50,31 +50,35 @@ export class HabitacionService {
   }
 
   agregarHabitacion(habitacion: Partial<Habitacion>): Observable<Habitacion> {
-    return this.http.post<Habitacion>(`${this.baseUrl}`, habitacion, this.getAuthOptions());
+    // Si el PK es autogenerado (BigAutoField), no enviar 'num' desde el frontend
+    const { num, ...rest } = habitacion;
+    return this.http.post<Habitacion>(`${this.baseUrl}`, rest, this.getAuthOptions());
   }
 
-  actualizarHabitacion(habitacion: string, data: ActualizarLugarDTO): Observable<Habitacion> {
-    return this.http.put<Habitacion>(`${this.baseUrl}${habitacion}/`, data, this.getAuthOptions());
+  actualizarHabitacion(habitacionNum: string | number, data: ActualizarLugarDTO): Observable<Habitacion> {
+    const id = String(habitacionNum);
+    return this.http.put<Habitacion>(`${this.baseUrl}${id}/`, data, this.getAuthOptions());
   }
 
-  eliminarHabitacion(id_habitacion: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}habitaciones/${id_habitacion}/` ,this.getAuthOptions());
+  eliminarHabitacion(id_habitacion: number | string): Observable<any> {
+    const id = String(id_habitacion);
+    return this.http.delete<any>(`${this.baseUrl}${id}/` ,this.getAuthOptions());
   }
 
   getHabitacionesPorHotel(codigo_hotel: number): Observable<Habitacion[]> {
     return this.http.get<Habitacion[]>(`${this.apiUrl}habitaciones/?codigo_hotel=${codigo_hotel}`);
   }
 
-  getHabitacionByNum(num: string): Observable<Habitacion> {
-    return this.http.get<Habitacion>(`${this.apiUrl}habitaciones/${num}/`);
+  getHabitacionByNum(num: string | number): Observable<Habitacion> {
+    return this.http.get<Habitacion>(`${this.baseUrl}${String(num)}/`);
   }
 
-  getDisponibilidadHabitacion(num: string, desde?: string, hasta?: string): Observable<DisponibilidadHabitacionResponse> {
+  getDisponibilidadHabitacion(num: string | number, desde?: string, hasta?: string): Observable<DisponibilidadHabitacionResponse> {
     const params: string[] = [];
     if (desde) params.push(`desde=${desde}`);
     if (hasta) params.push(`hasta=${hasta}`);
     const qs = params.length ? `?${params.join('&')}` : '';
-    return this.http.get<DisponibilidadHabitacionResponse>(`${this.apiUrl}habitaciones/${num}/disponibilidad/${qs}`);
+    return this.http.get<DisponibilidadHabitacionResponse>(`${this.baseUrl}${String(num)}/disponibilidad/${qs}`);
   }
 
 }
