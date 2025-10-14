@@ -6,4 +6,3 @@ requests
 djangorestframework-simplejwt
 llama-index-core==0.12.5
 llama-index-llms-ollama==0.5.4
-llama-index-embeddings-ollama

@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   backend:
     build: ./backend
@@ -9,22 +7,21 @@ services:
     volumes:
       - ./backend:/app
     environment:
-      # NeonDB 
       USE_NEON: "True"
       NEON_DB: "neondb"
       NEON_USER: "neondb_owner"
       NEON_PASSWORD: "npg_crb8OuHVzx5Y"
       NEON_HOST: "ep-long-dust-a8ys3fe8-pooler.eastus2.azure.neon.tech"
       NEON_PORT: "5432"
-      # Django settings
       DJANGO_SECRET_KEY: $^%pi-f!4s2z*o!+-um9)n6fe^xh!hf96ql41ml#g-$g%qqgg1
       DJANGO_DEBUG: "True"
       DJANGO_ALLOWED_HOSTS: "localhost 127.0.0.1 backend 0.0.0.0"
-      # Ollama / LLM
-      OLLAMA_BASE_URL: "http://host.docker.internal:11434"
+      OLLAMA_BASE_URL: "http://ollama:11434"
       OLLAMA_MODEL: "llama3.2:1b"
     networks:
       - turismo-net
+    depends_on:
+      - ollama
 
   frontend:
     build: ./frontend
@@ -35,6 +32,21 @@ services:
       - ./frontend:/app
     depends_on:
       - backend
+    networks:
+      - turismo-net
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - /home/lautaro/.ollama/models:/root/.ollama/models
+    healthcheck:
+      test: curl -f http://localhost:11434/api/version || exit 1
+      interval: 10s
+      timeout: 10s
+      start_period: 60s
+      retries: 10
     networks:
       - turismo-net
 

@@ -33,6 +33,7 @@ testem.log
 .env.development.local
 .env.test.local
 .env.production.local
+.venv
 
 # Database and backup files
 *.db
