@@ -33,4 +33,42 @@
       </div>
     </div>
   </ng-container>
-</div>
+  </div>
+  <h2>Habitaciones del {{hotel?.nombre}}</h2>
+    <div class="estado">
+    <div *ngIf="cargandoHabitaciones">Cargando habitaciones del hotel...</div>
+    <div *ngIf="error" class="error">{{ error }}</div>
+    <div *ngIf="!cargandoHabitaciones && habitaciones.length === 0 && !error">No hay habitaciones añadidas a este hotel</div>
+  </div>
+  
+
+    <section class="lista-habitaciones">
+    <div *ngFor="let habitacion of habitaciones" class="habitacion-card">
+      <div class="card-left">
+        <h3>Habitación #{{ habitacion.num }}</h3>
+        <p class="descripcion">{{ habitacion.caracteristicas }}</p>
+        <ul class="meta">
+          <li class="meta-item">
+            <span class="status-dot" [class.disponible]="habitacion.disponible"
+              [class.no-disponible]="!habitacion.disponible"></span>
+            {{ habitacion.disponible ? 'Disponible' : 'No disponible' }}
+          </li>
+          <li class="meta-item">
+            <span class="material-symbols-outlined">hotel</span>
+            Hotel: {{ habitacion.codigo_hotel }}
+          </li>
+          <li class="meta-item">
+            <span class="material-symbols-outlined">group</span>
+            {{ habitacion.cant_huespedes }} Huéspedes
+          </li>
+          <li class="meta-item">
+            <span class="material-symbols-outlined">payments</span>
+            {{ habitacion.precio | number:'1.2-2' }} BOB
+          </li>
+        </ul>
+      </div>
+      <div class="card-right">
+        <!-- <a class="btn btn-accent" [routerLink]="['/habitaciones', habitacion.num]">Ver Detalle</a> -->
+      </div>
+    </div>
+  </section>
