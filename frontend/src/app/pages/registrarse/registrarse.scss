@@ -73,13 +73,16 @@ $sombra-input: 0 0 0 2px rgba(21, 128, 61, 0.1);
           display: flex;
           flex-direction: column;
 
-          .registro__label {
+          label {
             font-weight: 500;
             margin-bottom: 0.25rem;
             color: $color-texto;
           }
 
-          .registro__input {
+          input[type="text"],
+          input[type="email"],
+          input[type="password"],
+          input[type="checkbox"] {
             padding: 0.6rem;
             border: 1px solid #ccc;
             border-radius: $radio-borde;
