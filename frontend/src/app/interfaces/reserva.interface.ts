@@ -1,3 +1,5 @@
+import { Hotel } from './hotel.interface';
+
 export interface Reserva {
   id_reserva: number;
   fecha_reserva: string;        
@@ -9,4 +11,5 @@ export interface Reserva {
   id_pago: number;           
   estado: boolean;
   id_paquete?: number | null;  
+  hotel?: Hotel;
 }
