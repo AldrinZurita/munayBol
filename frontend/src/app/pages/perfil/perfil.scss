@@ -1,4 +1,6 @@
-// --- Design System Variables ---
+@use 'sass:color';
+
+// --- Variables del Sistema de Diseño ---
 $primary-text: #0f172a;
 $secondary-text: #334155;
 $light-text: #64748b;
@@ -14,7 +16,7 @@ $page-bg: #f8fafc;
   min-height: 100vh;
 }
 
-// --- Main Layout ---
+// --- Layout Principal ---
 .perfil-container {
   max-width: 900px;
   margin: 0 auto;
@@ -28,7 +30,7 @@ $page-bg: #f8fafc;
   }
 }
 
-// --- Status Indicators ---
+// --- Indicadores de Estado ---
 .estado {
   text-align: center;
   padding: 40px;
@@ -39,7 +41,7 @@ $page-bg: #f8fafc;
   }
 }
 
-// --- Profile Card ---
+// --- Tarjeta de Perfil ---
 .perfil-card {
   background: $card-bg;
   border: 1px solid $border-color;
@@ -49,7 +51,7 @@ $page-bg: #f8fafc;
   overflow: hidden;
 }
 
-// --- Profile Header Section ---
+// --- Encabezado del Perfil ---
 .perfil-header {
   display: flex;
   align-items: center;
@@ -87,7 +89,7 @@ $page-bg: #f8fafc;
   }
 }
 
-// --- Profile Body Section (Details) ---
+// --- Cuerpo del Perfil (Detalles) ---
 .perfil-body {
   padding: 16px 28px;
   display: grid;
@@ -124,14 +126,14 @@ $page-bg: #f8fafc;
   }
 }
 
-// --- "Mis Reservas" Section Styles ---
+// --- NUEVO: Estilos para la sección "Mis Reservas" ---
 .reservas-section {
   margin-top: 40px;
 
   h2 {
     font-size: 24px;
     font-weight: 700;
-    color: $primary-text; // FIX: Was $text-color, now uses your variable
+    color: $primary-text;
     margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 1px solid $border-color;
@@ -166,7 +168,7 @@ $page-bg: #f8fafc;
       transition: background-color 0.2s;
 
       &:hover {
-        background-color: darken($primary-color, 5%);
+        background-color: color.adjust($primary-color, $lightness: -5%);
       }
     }
   }
@@ -182,26 +184,29 @@ $page-bg: #f8fafc;
     border-radius: 12px;
     padding: 20px;
     transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
 
     &:hover {
-      border-color: darken($border-color, 3%);
+      border-color: color.adjust($border-color, $lightness: -5%);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
   }
 
   .reserva-header {
+    flex-shrink: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-bottom: 12px;
     margin-bottom: 12px;
-    border-bottom: 1px solid $page-bg;
+    border-bottom: 1px solid #f1f5f9;
 
     h3 {
       margin: 0;
       font-size: 18px;
       font-weight: 700;
-      color: $primary-text;
+      color: #1e293b;
     }
   }
 
@@ -222,6 +227,7 @@ $page-bg: #f8fafc;
   }
 
   .reserva-body {
+    flex-grow: 1;
     display: grid;
     gap: 12px;
   }
@@ -244,6 +250,30 @@ $page-bg: #f8fafc;
         font-weight: 600;
         color: $primary-text;
       }
+    }
+  }
+
+  .reserva-footer {
+    flex-shrink: 0;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .btn-detalle {
+    background-color: $primary-color;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background-color 0.2s, color 0.2s;
+
+    &:hover {
+      background-color: color.adjust($primary-color, $lightness: -5%);
     }
   }
 }
