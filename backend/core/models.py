@@ -4,6 +4,9 @@ import uuid
 
 class UsuarioManager(BaseUserManager):
     def create_user(self, correo, contrasenia=None, **extra_fields):
+        extra_fields.setdefault('rol', 'usuario')
+        extra_fields.setdefault('is_superuser', False)
+        extra_fields.setdefault('is_staff', False)
         if not correo:
             raise ValueError('El usuario debe tener un correo')
         correo = self.normalize_email(correo)
@@ -29,7 +32,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     pasaporte = models.CharField(max_length=50)
     estado = models.BooleanField(default=True)
     fecha_creacion = models.DateField(auto_now_add=True)
-    is_staff = models.BooleanField(default=False)  # Necesario para admin
+    is_staff = models.BooleanField(default=False) 
 
     USERNAME_FIELD = 'correo'
     REQUIRED_FIELDS = ['nombre', 'pais', 'pasaporte']
@@ -127,7 +130,7 @@ class Reserva(models.Model):
     codigo_hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     fecha_creacion = models.DateField(auto_now_add=True)
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    id_pago = models.ForeignKey(Pago, on_delete=models.CASCADE)
+    id_pago = models.ForeignKey(Pago, on_delete=models.CASCADE, null=True)
     estado = models.BooleanField(default=True)
     id_paquete = models.ForeignKey(Paquete, on_delete=models.SET_NULL, null=True, blank=True)
 

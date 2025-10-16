@@ -47,7 +47,7 @@
     <ng-container *ngFor="let paquete of paquetesFiltrados">
       <div class="paquete-card">
         <div class="paquete-header">
-          <h3 class="paquete-nombre">{{ paquete.nombre }}<span *ngIf="paquete.hotel"> + {{ paquete.hotel.nombre }}</span></h3>
+          <h3 class="paquete-nombre">{{ paquete.nombre }}<span *ngIf="paquete.hotel">: {{ paquete.hotel.nombre }}</span><span *ngIf="paquete.lugar"> + {{ paquete.lugar.nombre }}</span></h3>
           <span class="paquete-etiqueta">{{ paquete.tipo | titlecase }}</span>
         </div>
         <div class="paquete-meta">

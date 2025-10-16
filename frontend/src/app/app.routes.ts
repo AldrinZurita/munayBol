@@ -30,15 +30,16 @@ export const routes: Routes = [
   { path: 'lugares-turisticos/:id', component: LugaresTuristicosDetalle },
   { path: 'hoteles', component: Hoteles},
   { path: 'hoteles/:id', component: HotelDetalleComponent},
+  { path: 'habitaciones', component: Habitaciones },
+  { path: 'habitaciones/:num', component: HabitacionDetalle },
+  { path: 'paquetes', component: Paquetes},
+  { path: 'paquetes/:id', component: PaqueteDetalle},
+  //{ path: 'asistente-ia', component: AsistenteIa},
 
   // Rutas protegidas para usuarios autenticados (usuario o superadmin)
   { path: 'reservas', component: ReservaComponent, canActivate: [userGuard] },
   { path: 'reservas/:id', component: ReservaDetalleComponent, canActivate: [userGuard] },
-  { path: 'habitaciones', component: Habitaciones, canActivate: [userGuard] },
-  { path: 'habitaciones/:num', component: HabitacionDetalle, canActivate: [userGuard] },
-  { path: 'paquetes', component: Paquetes, canActivate: [userGuard] },
-  { path: 'paquetes/:id', component: PaqueteDetalle, canActivate: [userGuard] },
-  { path: 'paquetes/nuevo-paquete', component: CrearPaquete, canActivate: [adminGuard] }, // Solo superadmin puede crear paquetes
+  { path: 'paquetes/nuevo-paquete', component: CrearPaquete, canActivate: [adminGuard] },
   { path: 'asistente-ia', component: AsistenteIa, canActivate: [userGuard] },
   { path: 'perfil', component: Perfil, canActivate: [userGuard] },
 

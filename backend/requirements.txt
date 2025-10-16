@@ -4,5 +4,7 @@ psycopg2-binary==2.9.10
 django-cors-headers==4.8.0
 requests
 djangorestframework-simplejwt
-llama-index-core==0.12.5
-llama-index-llms-ollama==0.5.4
+llama-index-core==0.10.32
+llama-index-llms-ollama==0.2.2
+llama-index-vector-stores-weaviate==0.1.5
+weaviate-client>=3.26.7,<4.0.0

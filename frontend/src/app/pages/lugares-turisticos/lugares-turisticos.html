@@ -14,10 +14,11 @@
   <section class="filtros-card">
     <h4>Filtros de búsqueda</h4>
     <div class="filtros-grid solo-uno">
+      <!-- Filtro 1: Departamento -->
       <div class="filtro">
         <label for="ciudad">Departamento</label>
         <div class="select-wrapper">
-          <select id="ciudad" [(ngModel)]="ciudadSeleccionada" (change)="aplicarFiltros()">
+          <select id="ciudad" [(ngModel)]="ciudadSeleccionada">
             <option value="">Todos los departamentos</option>
             <option *ngFor="let ciudad of ciudades" [value]="ciudad">{{ ciudad }}</option>
           </select>
@@ -26,6 +27,7 @@
           </div>
         </div>
       </div>
+      <!-- Botón de acción para aplicar filtros -->
       <div class="acciones">
         <button class="btn btn-primary" (click)="aplicarFiltros()">Aplicar</button>
       </div>
@@ -47,7 +49,7 @@
       <!-- Left column: Information -->
       <div class="card-left">
         <div *ngIf="l.url_image_lugar_turistico" class="imagen-lugar">
-          <img [src]="l.url_image_lugar_turistico" [alt]="'Imagen de ' + l.nombre" (error)="onImageError($event)" />
+          <img [src]="l.url_image_lugar_turistico" [alt]="'Imagen de ' + l.nombre" />
         </div>
         <h3 class="lugar-nombre">{{ l.nombre }}</h3>
         <ul class="meta">
@@ -65,11 +67,13 @@
       <!-- Right column: Action buttons -->
       <div class="card-right">
         <a class="btn btn-accent" [routerLink]="['/lugares-turisticos', l.id_lugar]">Ver Detalles</a>
+        <!-- Botones de administración que solo se muestran si isSuperAdmin es true -->
         <button *ngIf="isSuperAdmin" class="btn btn-secondary" (click)="openEditModal(l)">Editar</button>
         <button *ngIf="isSuperAdmin" class="btn btn-danger" (click)="onEliminarLugar(l)">Eliminar</button>
       </div>
     </article>
   </section>
+</div>
 
   <!-- Edit Modal -->
   <div class="modal-backdrop" *ngIf="showEditModal" (click)="closeEditModal()" aria-hidden="true"></div>
@@ -109,6 +113,33 @@
         </div>
       </form>
     </div>
+    <form #addForm="ngForm" (ngSubmit)="saveNewLugar(addForm)" novalidate>
+      <div class="modal-body">
+        <label class="form-label" for="add-nombre">Nombre *</label>
+        <input id="add-nombre" name="nombre" type="text" class="form-input" [(ngModel)]="addModel.nombre" required />
+        <label class="form-label" for="add-departamento">Departamento *</label>
+        <input id="add-departamento" name="departamento" type="text" class="form-input" [(ngModel)]="addModel.departamento" required />
+        <label class="form-label" for="add-tipo">Tipo *</label>
+        <input id="add-tipo" name="tipo" type="text" class="form-input" [(ngModel)]="addModel.tipo" required />
+        <label class="form-label" for="add-ubicacion">Ubicación *</label>
+        <textarea id="add-ubicacion" name="ubicacion" class="form-textarea" rows="3" [(ngModel)]="addModel.ubicacion" required></textarea>
+        <label class="form-label" for="add-horario">Horario</label>
+        <input id="add-horario" name="horario" type="text" class="form-input" [(ngModel)]="addModel.horario" />
+        <label class="form-label" for="add-descripcion">Descripción</label>
+        <textarea id="add-descripcion" name="descripcion" class="form-textarea" rows="3" [(ngModel)]="addModel.descripcion"></textarea>
+        <label class="form-label" for="add-img">URL de imagen</label>
+        <input id="add-img" name="img" type="url" class="form-input" [(ngModel)]="addModel.url_image_lugar_turistico" />
+        <div class="img-preview" *ngIf="addModel.url_image_lugar_turistico">
+          <img [src]="addModel.url_image_lugar_turistico" alt="Vista previa" (error)="onImageError($event)" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeAddModal(false)">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="addForm.invalid || savingAdd">
+          {{ savingAdd ? 'Guardando…' : 'Crear Lugar' }}
+        </button>
+      </div>
+    </form>
   </div>
 
   <!-- Add Modal -->
@@ -152,5 +183,4 @@
       </form>
     </div>
   </div>
-</div>
 
