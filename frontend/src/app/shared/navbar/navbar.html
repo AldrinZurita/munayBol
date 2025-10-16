@@ -18,6 +18,7 @@
     <ng-container *ngIf="isLoggedIn; else showLogin">
       <!-- New User Dropdown Menu -->
       <div class="user-menu">
+        <app-notification></app-notification>
         <div class="user-menu-trigger">
           <span class="material-symbols-outlined">person</span>
           <span class="username">{{ username }}</span>
