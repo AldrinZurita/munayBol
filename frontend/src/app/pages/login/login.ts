@@ -4,11 +4,12 @@ import { AuthService } from '../../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule], // <- AGREGA ESTO
+  imports: [CommonModule, FormsModule, RouterModule], // ← Aquí lo agregas
   templateUrl: './login.html',
   styleUrls: ['./login.scss']
 })
