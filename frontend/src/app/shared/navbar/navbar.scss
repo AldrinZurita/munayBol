@@ -83,6 +83,9 @@ $primary-hover-bg: #eaf5ea; // New light green for hover states
 // --- User Dropdown Menu Styles ---
 .user-menu {
   position: relative; // Anchor for the dropdown
+  display: flex;
+  align-items: center;
+  gap: 16px;
 
   .user-menu-trigger {
     display: flex;
