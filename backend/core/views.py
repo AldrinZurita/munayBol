@@ -2,11 +2,11 @@ from rest_framework import viewsets, status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse
-from .models import Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias
+from .models import Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias, Notification
 from .serializers import (
     UsuarioSerializer, HotelSerializer, LugarTuristicoSerializer, PagoSerializer,
     HabitacionSerializer, ReservaSerializer, PaqueteSerializer, SugerenciasSerializer,
-    LoginSerializer, RegistroSerializer, SuperUsuarioRegistroSerializer
+    LoginSerializer, RegistroSerializer, SuperUsuarioRegistroSerializer, NotificationSerializer
 )
 from .permissions import IsSuperAdmin, IsUsuario
 from .llm_client import get_llm_response, send_message
@@ -16,6 +16,7 @@ from datetime import date, timedelta
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.hashers import check_password
+from rest_framework.decorators import action
 
 def home(request):
     return HttpResponse("Bienvenido a la API MunayBol")
@@ -329,6 +330,38 @@ class SugerenciasViewSet(viewsets.ModelViewSet):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
             return [IsAuthenticated()]
         return [AllowAny()]
+
+class NotificationViewSet(viewsets.ModelViewSet):
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if not getattr(user, 'is_authenticated', False):
+            return Notification.objects.none()
+        return Notification.objects.filter(usuario=user).order_by('-created_at')
+
+    @action(detail=False, methods=['get'])
+    def unread_count(self, request):
+        cnt = self.get_queryset().filter(read=False).count()
+        return Response({"unread": cnt})
+
+    @action(detail=False, methods=['post'])
+    def mark_all_as_read(self, request):
+        qs = self.get_queryset().filter(read=False)
+        updated = qs.update(read=True)
+        return Response({"updated": updated})
+
+    @action(detail=True, methods=['post'])
+    def mark_as_read(self, request, pk=None):
+        try:
+            notif = self.get_queryset().get(pk=pk)
+        except Notification.DoesNotExist:
+            return Response({"error": "Notificación no encontrada"}, status=404)
+        if not notif.read:
+            notif.read = True
+            notif.save(update_fields=['read'])
+        return Response({"status": "ok"})
 
 @method_decorator(csrf_exempt, name='dispatch')
 class LLMGenerateView(APIView):
