@@ -321,6 +321,40 @@ class PaqueteViewSet(viewsets.ModelViewSet):
         paquete.save()
         return Response({"message": "Paquete desactivado correctamente"}, status=status.HTTP_200_OK)
 
+    def create(self, request, *args, **kwargs):
+        # Solo superadmin crea; permisos ya lo controlan
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        paquete = serializer.save()
+
+        # Notificar a todos los usuarios activos
+        usuarios = Usuario.objects.filter(estado=True, rol='usuario')
+        notifs = []
+        try:
+            lugar_nombre = getattr(paquete.id_lugar, 'nombre', '')
+        except Exception:
+            lugar_nombre = ''
+        title = f"Nuevo paquete: {paquete.nombre}" if paquete.nombre else "Nuevo paquete disponible"
+        msg_base = f"{paquete.nombre}"
+        if lugar_nombre:
+            msg_base += f" — {lugar_nombre}"
+        try:
+            precio_txt = f" desde {paquete.precio:.2f} BOB" if paquete.precio is not None else ""
+        except Exception:
+            precio_txt = ""
+        message = (msg_base + precio_txt).strip()
+        for u in usuarios:
+            notifs.append(Notification(usuario=u, title=title, message=message, link='/paquetes'))
+        if notifs:
+            Notification.objects.bulk_create(notifs, ignore_conflicts=True)
+
+        output = self.get_serializer(paquete)
+        return Response({
+            "message": "Paquete creado correctamente",
+            "paquete": output.data,
+            "notified_users": usuarios.count()
+        }, status=status.HTTP_201_CREATED)
+
 class SugerenciasViewSet(viewsets.ModelViewSet):
     queryset = Sugerencias.objects.all()
     serializer_class = SugerenciasSerializer

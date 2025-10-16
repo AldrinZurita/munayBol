@@ -1,69 +1,59 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, map, tap } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Notification } from '../interfaces/notification.interface';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
-  private notifications = new BehaviorSubject<Notification[]>([]);
-  notifications$ = this.notifications.asObservable();
+  private readonly notifications = new BehaviorSubject<Notification[]>([]);
+  readonly notifications$ = this.notifications.asObservable();
 
-  private mockNotifications: Notification[] = [
-    {
-      id: 1,
-      title: 'Reserva Confirmada',
-      message: 'Tu reserva para el Hotel "El Dorado" ha sido confirmada.',
-      read: false,
-      createdAt: new Date(),
-      link: '/mis-reservas'
-    },
-    {
-      id: 2,
-      title: 'Nuevo Paquete Turístico',
-      message: '¡Descubre el Salar de Uyuni con nuestro nuevo paquete!',
-      read: true,
-      createdAt: new Date(Date.now() - 86400000), // 1 day ago
-      link: '/paquetes'
-    },
-    {
-      id: 3,
-      title: 'Oferta Especial',
-      message: '20% de descuento en tu próximo viaje a Cochabamba.',
-      read: false,
-      createdAt: new Date(Date.now() - 172800000), // 2 days ago
-    }
-  ];
+  constructor(private readonly http: HttpClient, private readonly auth: AuthService) {}
 
-  constructor() {
-    // Simulate fetching notifications
-    this.notifications.next(this.mockNotifications);
+  private authOptions() {
+    const token = this.auth.getToken();
+    return token ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) } : {};
+  }
+
+  // Fetch list from backend and normalize dates
+  fetchNotifications(): Observable<Notification[]> {
+  return this.http.get<any[]>('/api/notifications/', this.authOptions()).pipe(
+      map(list => list.map(n => ({
+        id: n.id,
+        title: n.title,
+        message: n.message,
+        read: n.read,
+        createdAt: new Date(n.created_at),
+        link: n.link,
+      }) as Notification)),
+      tap(list => this.notifications.next(list))
+    );
   }
 
   getNotifications(): Observable<Notification[]> {
+    // Ensure we have latest list, but also return stream for subscribers
+    this.fetchNotifications().subscribe();
     return this.notifications$;
   }
 
-  markAsRead(notificationId: number): void {
-    const updatedNotifications = this.notifications.getValue().map(n => {
-      if (n.id === notificationId) {
-        return { ...n, read: true };
-      }
-      return n;
-    });
-    this.notifications.next(updatedNotifications);
-  }
-
-  markAllAsRead(): void {
-    const updatedNotifications = this.notifications.getValue().map(n => ({ ...n, read: true }));
-    this.notifications.next(updatedNotifications);
-  }
-
   getUnreadCount(): Observable<number> {
-    return new Observable(subscriber => {
-      this.notifications$.subscribe(notifications => {
-        subscriber.next(notifications.filter(n => !n.read).length);
-      });
-    });
+  return this.http.get<{ unread: number }>('/api/notifications/unread_count/', this.authOptions()).pipe(
+      map(r => r.unread)
+    );
+  }
+
+  markAsRead(notificationId: number): Observable<any> {
+  return this.http.post(`/api/notifications/${notificationId}/mark_as_read/`, {}, this.authOptions()).pipe(
+      tap(() => this.fetchNotifications().subscribe())
+    );
+  }
+
+  markAllAsRead(): Observable<any> {
+  return this.http.post('/api/notifications/mark_all_as_read/', {}, this.authOptions()).pipe(
+      tap(() => this.fetchNotifications().subscribe())
+    );
   }
 }
