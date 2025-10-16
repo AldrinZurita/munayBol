@@ -11,7 +11,7 @@ class UsuarioManager(BaseUserManager):
             raise ValueError('El usuario debe tener un correo')
         correo = self.normalize_email(correo)
         user = self.model(correo=correo, **extra_fields)
-        user.set_password(contrasenia)
+        user.set_password(contrasenia)  # Solo el manager hashea
         user.save(using=self._db)
         return user
 
@@ -20,7 +20,6 @@ class UsuarioManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
         return self.create_user(correo, contrasenia, **extra_fields)
-
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
     id = models.BigAutoField(primary_key=True)
@@ -32,7 +31,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     pasaporte = models.CharField(max_length=50)
     estado = models.BooleanField(default=True)
     fecha_creacion = models.DateField(auto_now_add=True)
-    is_staff = models.BooleanField(default=False) 
+    is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'correo'
     REQUIRED_FIELDS = ['nombre', 'pais', 'pasaporte']
@@ -54,6 +53,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         from django.contrib.auth.hashers import check_password
         return check_password(raw_password, self.contrasenia)
 
+# Los demás modelos igual que tu versión original
 
 class Hotel(models.Model):
     id_hotel = models.BigAutoField(primary_key=True)
@@ -66,7 +66,6 @@ class Hotel(models.Model):
     url = models.CharField(max_length=255, default="")
     url_imagen_hotel = models.TextField(blank=True)
 
-
 class LugarTuristico(models.Model):
     id_lugar = models.BigAutoField(primary_key=True)
     nombre = models.CharField(max_length=255)
@@ -78,7 +77,6 @@ class LugarTuristico(models.Model):
     descripcion = models.TextField(blank=True, default="")
     url_image_lugar_turistico = models.TextField(blank=True, default="")
     estado = models.BooleanField(default=True)
-
 
 class Pago(models.Model):
     id_pago = models.BigAutoField(primary_key=True)
@@ -97,7 +95,6 @@ class Pago(models.Model):
 
     estado = models.CharField(max_length=15, choices=Estado.choices, default=Estado.PENDIENTE)
 
-
 class Habitacion(models.Model):
     num = models.BigAutoField(primary_key=True)
     caracteristicas = models.TextField()
@@ -106,7 +103,6 @@ class Habitacion(models.Model):
     disponible = models.BooleanField(default=True)
     fecha_creacion = models.DateField(auto_now_add=True)
     cant_huespedes = models.IntegerField()
-
 
 class Paquete(models.Model):
     id_paquete = models.BigAutoField(primary_key=True)
@@ -120,7 +116,6 @@ class Paquete(models.Model):
 
     def __str__(self):
         return f"{self.nombre} ({self.tipo})"
-
 
 class Reserva(models.Model):
     id_reserva = models.BigAutoField(primary_key=True)
@@ -139,16 +134,13 @@ class Reserva(models.Model):
             models.Index(fields=["num_habitacion", "fecha_reserva", "fecha_caducidad"]),
         ]
 
-
 class Sugerencias(models.Model):
     id_sugerencia = models.BigAutoField(primary_key=True)
     preferencias = models.TextField()
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     fecha_creacion = models.DateField(auto_now_add=True)
 
-
 class ChatSession(models.Model):
-    """Persist chat memory for LLM conversations."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     usuario = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True, db_constraint=False)
     history = models.JSONField(default=list)

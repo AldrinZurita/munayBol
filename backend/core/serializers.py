@@ -10,6 +10,18 @@ class UsuarioSerializer(serializers.ModelSerializer):
             'contrasenia': {'write_only': True}
         }
 
+class SuperUsuarioRegistroSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Usuario
+        fields = ['id', 'nombre', 'correo', 'contrasenia', 'pais', 'pasaporte']
+        extra_kwargs = {
+            'contrasenia': {'write_only': True}
+        }
+    def create(self, validated_data):
+        validated_data['rol'] = 'superadmin'
+        # No hash aquí, el manager lo hace
+        return Usuario.objects.create_superuser(**validated_data)
+
 class RegistroSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
@@ -17,12 +29,10 @@ class RegistroSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'contrasenia': {'write_only': True}
         }
-
     def create(self, validated_data):
-        from django.contrib.auth.hashers import make_password
         validated_data['rol'] = 'usuario'
-        validated_data['contrasenia'] = make_password(validated_data['contrasenia'])
-        return Usuario.objects.create(**validated_data)
+        # No hash aquí, el manager lo hace
+        return Usuario.objects.create_user(**validated_data)
 
 class HotelSerializer(serializers.ModelSerializer):
     class Meta:

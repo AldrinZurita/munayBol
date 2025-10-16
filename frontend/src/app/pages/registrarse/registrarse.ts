@@ -61,6 +61,7 @@ export class Registrarse implements OnInit {
 
       console.log('✅ Datos enviados al backend:', datos);
       // Aquí podrías enviar los datos al backend con HttpClient
+
     } else {
       console.warn('⚠️ Formulario inválido');
       this.form.markAllAsTouched();
