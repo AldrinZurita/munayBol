@@ -101,6 +101,17 @@ $sombra-input: 0 0 0 2px rgba(21, 128, 61, 0.1);
           }
         }
 
+        .registro__mensaje-error {
+          background-color: rgba($color-error, 0.1);
+          color: $color-error;
+          border: 1px solid $color-error;
+          border-radius: $radio-borde;
+          padding: 0.75rem;
+          font-size: 0.95rem;
+          font-weight: 500;
+          text-align: center;
+        }
+
         .registro__submit-btn {
           background-color: $color-principal;
           color: white;
@@ -119,14 +130,4 @@ $sombra-input: 0 0 0 2px rgba(21, 128, 61, 0.1);
       }
     }
   }
-}
-.registro__mensaje-error {
-  background-color: rgba($color-error, 0.1);
-  color: $color-error;
-  border: 1px solid $color-error;
-  border-radius: $radio-borde;
-  padding: 0.75rem;
-  font-size: 0.95rem;
-  font-weight: 500;
-  text-align: center;
 }

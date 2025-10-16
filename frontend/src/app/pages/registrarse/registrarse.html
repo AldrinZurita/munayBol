@@ -38,10 +38,14 @@
           </div>
         </div>
 
-        <div *ngIf="form.invalid && form.touched" class="registro__mensaje-error">
-  No se puede crear la cuenta. Verifica los campos obligatorios y que las contraseñas coincidan.
-</div>
+        <div class="registro__campo">
+          <label class="registro__label" for="pasaporte">Pasaporte</label>
+          <input class="registro__input" type="text" id="pasaporte" formControlName="pasaporte" placeholder="Número de pasaporte" autocomplete="off" />
+        </div>
 
+        <div *ngIf="form.invalid && intentadoEnviar" class="registro__mensaje-error">
+          No se puede crear la cuenta. Verifica los campos obligatorios y que las contraseñas coincidan.
+        </div>
 
         <button class="registro__submit-btn" type="submit">Crear Cuenta</button>
       </form>
