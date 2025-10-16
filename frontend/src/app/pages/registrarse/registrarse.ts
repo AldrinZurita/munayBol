@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+  ReactiveFormsModule
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -12,12 +19,7 @@ import { RouterModule } from '@angular/router';
 })
 export class Registrarse implements OnInit {
   form!: FormGroup;
-
-  roles = [
-    { label: 'Usuario Normal', value: 'normal' },
-    { label: 'Admin de Hotel', value: 'hotelAdmin' },
-    { label: 'Super Administrador', value: 'superAdmin' },
-  ];
+  intentadoEnviar = false;
 
   constructor(private fb: FormBuilder) {}
 
@@ -28,7 +30,7 @@ export class Registrarse implements OnInit {
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
-        role: ['normal', Validators.required],
+        pasaporte: ['', Validators.required],
       },
       { validators: this.passwordsMatchValidator }
     );
@@ -41,9 +43,24 @@ export class Registrarse implements OnInit {
   }
 
   onSubmit(): void {
+    this.intentadoEnviar = true;
+
     if (this.form.valid) {
-      console.log('✅ Datos del formulario:', this.form.value);
-      // Aquí podrías enviar los datos al backend o mostrar un mensaje de éxito
+      const passwordValue = this.form.value.password;
+
+      const datos = {
+        nombre: this.form.value.name,
+        correo: this.form.value.email,
+        contrasenia: passwordValue,       // ✅ requerido por tu modelo
+        password: passwordValue,          // ✅ requerido por Django internamente
+        pasaporte: this.form.value.pasaporte,
+        pais: 'Bolivia',                  // ✅ valor fijo
+        rol: 'Usuario',                   // ✅ valor por defecto
+        estado: true                      // ✅ valor por defecto
+      };
+
+      console.log('✅ Datos enviados al backend:', datos);
+      // Aquí podrías enviar los datos al backend con HttpClient
     } else {
       console.warn('⚠️ Formulario inválido');
       this.form.markAllAsTouched();

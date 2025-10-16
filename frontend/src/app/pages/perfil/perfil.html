@@ -1,57 +1,92 @@
 <!-- Main container for the profile page -->
 <div class="perfil-container">
-    <h1 class="title">Mi Perfil</h1>
-  
-    <!-- Loading and error states -->
-    <div *ngIf="cargando" class="estado">Cargando perfil...</div>
-    <div *ngIf="!cargando && !usuario" class="estado error">
-      No se pudo cargar la información del usuario. Por favor, inicia sesión de nuevo.
-    </div>
-  
-    <!-- Profile card shown when user data is available -->
-    <section *ngIf="usuario" class="perfil-card">
-      <div class="perfil-header">
-        <div class="avatar-placeholder">
-          <span>{{ usuario.nombre.charAt(0).toUpperCase() }}</span>
-        </div>
-        <div class="info-principal">
-          <h2 class="nombre-usuario">{{ usuario.nombre }}</h2>
-          <p class="rol-usuario">{{ usuario.rol | titlecase }}</p>
-        </div>
+  <h1 class="title">Mi Perfil</h1>
+
+  <!-- Profile card remains the same -->
+  <section *ngIf="usuario" class="perfil-card">
+    <div class="perfil-header">
+      <div class="avatar-placeholder">
+        <span>{{ usuario.nombre.charAt(0).toUpperCase() }}</span>
       </div>
-  
-      <div class="perfil-body">
-        <div class="detalle-item">
-          <span class="label">Correo Electrónico</span>
-          <span class="valor">{{ usuario.correo }}</span>
-        </div>
-        <div class="detalle-item">
-          <span class="label">País</span>
-          <span class="valor">{{ usuario.pais }}</span>
-        </div>
-        <div class="detalle-item">
-          <span class="label">Pasaporte</span>
-          <span class="valor">{{ usuario.pasaporte }}</span>
-        </div>
-        <!-- Only display the creation date if it exists -->
-        <div *ngIf="usuario.fecha_creacion" class="detalle-item">
-          <span class="label">Miembro Desde</span>
-          <span class="valor">{{ usuario.fecha_creacion | date:'longDate' }}</span>
-        </div>
-        <div class="detalle-item">
-          <span class="label">Estado de la Cuenta</span>
-          <span class="valor" [ngClass]="{'activo': usuario.estado, 'inactivo': !usuario.estado}">
-            {{ usuario.estado ? 'Activo' : 'Inactivo' }}
+      <div class="info-principal">
+        <h2 class="nombre-usuario">{{ usuario.nombre }}</h2>
+        <p class="rol-usuario">{{ usuario.rol | titlecase }}</p>
+      </div>
+    </div>
+
+    <div class="perfil-body">
+      <div class="detalle-item">
+        <span class="label">Correo Electrónico</span>
+        <span class="valor">{{ usuario.correo }}</span>
+      </div>
+      <div class="detalle-item">
+        <span class="label">País</span>
+        <span class="valor">{{ usuario.pais }}</span>
+      </div>
+      <div class="detalle-item">
+        <span class="label">Pasaporte</span>
+        <span class="valor">{{ usuario.pasaporte }}</span>
+      </div>
+      <div *ngIf="usuario.fecha_creacion" class="detalle-item">
+        <span class="label">Miembro Desde</span>
+        <span class="valor">{{ usuario.fecha_creacion | date:'longDate' }}</span>
+      </div>
+      <div class="detalle-item">
+        <span class="label">Estado de la Cuenta</span>
+        <span class="valor" [ngClass]="{'activo': usuario.estado, 'inactivo': !usuario.estado}">
+          {{ usuario.estado ? 'Activo' : 'Inactivo' }}
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- "Mis Reservas" section -->
+  <section *ngIf="usuario" class="reservas-section">
+    <h2>Mis Reservas</h2>
+    
+    <!-- Loading, error, and empty states -->
+    <div *ngIf="cargandoReservas" class="estado">Cargando tus reservas...</div>
+    <div *ngIf="errorReservas" class="estado error">{{ errorReservas }}</div>
+    <div *ngIf="!cargandoReservas && reservas.length === 0 && !errorReservas" class="estado-vacio">
+      <span class="material-symbols-outlined">luggage</span>
+      <p>Aún no tienes ninguna reserva.</p>
+      <a routerLink="/paquetes" class="btn-explorar">Explorar Paquetes</a>
+    </div>
+
+    <!-- List of reservation cards -->
+    <div *ngIf="reservas.length > 0" class="lista-reservas">
+      <article *ngFor="let reserva of reservas" class="reserva-card">
+        <div class="reserva-header">
+          <h3>Reserva #{{ reserva.id_reserva }}</h3>
+          <span class="status-badge" [ngClass]="{ 'activa': reserva.estado, 'cancelada': !reserva.estado }">
+            {{ reserva.estado ? 'Activa' : 'Cancelada' }}
           </span>
         </div>
-      </div>
-    </section>
-  
-    <!-- Placeholder for future sections like 'Mis Reservas' -->
-    <section *ngIf="usuario" class="seccion-futura">
-      <h2>Mis Reservas</h2>
-      <p>Próximamente: Aquí podrás ver el historial de tus reservas.</p>
-    </section>
-  </div>
-  
-  
+        <div class="reserva-body">
+          <div class="detalle-reserva">
+            <span class="material-symbols-outlined">bed</span>
+            <p><strong>Habitación:</strong> {{ reserva.num_habitacion }}</p>
+          </div>
+          <!-- --- THE CHANGE IS HERE --- -->
+          <div class="detalle-reserva">
+            <span class="material-symbols-outlined">hotel</span>
+            <!-- Show the hotel name if it exists, otherwise show the ID as a fallback -->
+            <p><strong>Hotel:</strong> {{ reserva.hotel?.nombre || 'ID: ' + reserva.codigo_hotel }}</p>
+          </div>
+          <div class="detalle-reserva">
+            <span class="material-symbols-outlined">calendar_month</span>
+            <p><strong>Check-in:</strong> {{ reserva.fecha_reserva | date:'fullDate' }}</p>
+          </div>
+          <div class="detalle-reserva">
+            <span class="material-symbols-outlined">event</span>
+            <p><strong>Check-out:</strong> {{ reserva.fecha_caducidad | date:'fullDate' }}</p>
+          </div>
+        </div>
+        <div class="reserva-footer">
+          <a [routerLink]="['/reservas', reserva.id_reserva]" class="btn-detalle">Ver Detalle</a>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>
+

@@ -1,8 +1,9 @@
 <div class="reserva-detalle-container" *ngIf="!loading && reserva">
   <div class="header">
-    <button class="btn-volver" (click)="volverAMisReservas()">
-      ← Volver a Mis Reservas
-    </button>
+    <a class="btn-volver" routerLink="/perfil">
+  ← Volver a Mi Perfil
+</a>
+
     <h1 class="titulo">Detalles de Reserva</h1>
     <div class="reserva-id">Reserva #BK{{ reserva.id_reserva.toString().padStart(3, '0') }}</div>
     <span class="badge-estado" [class.confirmada]="obtenerEstadoReserva() === 'Confirmado'">
@@ -17,8 +18,9 @@
       <div class="info-item">
         <div class="info-label">Habitación en "{{ reserva.hotel_nombre || 'Cargando...' }}"</div>
         <div class="info-location">
-          <span class="icon-location">📍</span> La Paz, Bolivia
-        </div>
+  <span class="icon-location">📍</span> {{ reserva.ubicacion_hotel || 'Ubicación no disponible' }}
+</div>
+
       </div>
       <div class="info-item">
         <div class="info-label">Hotel: {{ reserva.hotel_nombre || 'Cargando...' }}</div>
@@ -51,20 +53,29 @@
 
     <!-- Resumen de Precio -->
     <div class="card card-precio">
-      <h2 class="card-titulo">Resumen de Precio</h2>
-      <div class="precio-item">
-        <span class="precio-label">Precio por noche</span>
-        <span class="precio-valor">{{ reserva.habitacion_precio || 398.75 }} BOB</span>
-      </div>
-      <div class="precio-item">
-        <span class="precio-label">{{ calcularNoches() }} noches</span>
-        <span class="precio-valor">{{ calcularPrecioTotal() }} BOB</span>
-      </div>
-      <div class="precio-total">
-        <span class="total-label">Total</span>
-        <span class="total-valor">{{ calcularPrecioTotal() }} BOB</span>
-      </div>
-    </div>
+  <h2 class="card-titulo">Resumen de Precio</h2>
+
+  <div class="precio-item">
+    <span class="precio-label">Precio por noche</span>
+    <span class="precio-valor">{{ reserva.habitacion_precio || 398.75 }} BOB</span>
+  </div>
+
+  <div class="precio-item">
+    <span class="precio-label">Subtotal ({{ calcularNoches() }} noches)</span>
+    <span class="precio-valor">{{ calcularSubtotal() }} BOB</span>
+  </div>
+
+  <div class="precio-item">
+    <span class="precio-label">IVA (13%)</span>
+    <span class="precio-valor">{{ calcularIVA() }} BOB</span>
+  </div>
+
+  <div class="precio-total">
+    <span class="total-label">Total</span>
+    <span class="total-valor">{{ calcularTotal() }} BOB</span>
+  </div>
+</div>
+
 
     <!-- Información de Reserva -->
     <div class="card">

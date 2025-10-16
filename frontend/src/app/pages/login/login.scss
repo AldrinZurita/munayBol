@@ -1,11 +1,13 @@
+@use 'sass:color'; // 1. Import the modern Sass color module
+
 // --- Variables for consistency ---
-$primary-color: #2e7d32;
+$primary-color: #16a34a;
 $text-color: #0f172a;
 $secondary-text: #64748b;
 $border-color: #e5e7eb;
 $danger-color: #dc2626;
 $card-bg: #ffffff;
-$body-bg: #f8fafc; // A light grey for the page background
+$body-bg: #f8fafc;
 
 // --- Main container to center the form ---
 .login-container {
@@ -94,7 +96,8 @@ form {
     margin-top: 8px;
 
     &:hover:not(:disabled) {
-      background-color: darken($primary-color, 5%);
+      // 2. Use the modern color.adjust() function
+      background-color: color.adjust($primary-color, $lightness: -5%);
     }
 
     &:disabled {
@@ -105,8 +108,9 @@ form {
 
   .error {
     color: $danger-color;
-    background-color: lighten($danger-color, 38%);
-    border: 1px solid lighten($danger-color, 25%);
+    // 3. Use the modern color.adjust() function
+    background-color: color.adjust($danger-color, $lightness: 38%);
+    border: 1px solid color.adjust($danger-color, $lightness: 25%);
     text-align: center;
     padding: 10px;
     border-radius: 8px;
@@ -148,3 +152,4 @@ form {
     }
   }
 }
+

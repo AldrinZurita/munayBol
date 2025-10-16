@@ -6,8 +6,6 @@ from .models import Hotel, LugarTuristico
 
 # LlamaIndex core + embeddings
 from llama_index.core import Document, VectorStoreIndex, Settings
-from llama_index.embeddings.ollama import OllamaEmbedding
-
 
 _INDEX: Optional[VectorStoreIndex] = None
 
@@ -62,16 +60,28 @@ def init_index(force_rebuild: bool = False) -> VectorStoreIndex:
     return _INDEX
 
 
-def retrieve_context(query: str, top_k: int = 4) -> str:
+def retrieve_context(query: str, top_k: int = 2) -> str:
     index = init_index()
     retriever = index.as_retriever(similarity_top_k=top_k)
     nodes = retriever.retrieve(query)
     if not nodes:
         return ""
-    # Format concise context block in Spanish
+    # Contexto factual relevante (más corto)
     lines: List[str] = ["Contexto factual relevante:"]
     for n in nodes:
         md = n.metadata or {}
         tipo = md.get("tipo", "")
-        lines.append(f"- ({tipo}) {n.text.strip()[:500]}")
+        lines.append(f"- ({tipo}) {n.text.strip()[:150]}")  # Solo 150 caracteres
     return "\n".join(lines)
+
+
+def build_prompt(query: str) -> str:
+    """
+    Construye el prompt para la IA solicitando que la respuesta sea breve y directa.
+    """
+    contexto = retrieve_context(query)
+    return (
+        f"{contexto}\n\n"
+        f"Pregunta: {query}\n"
+        f"Responde de forma breve y directa, en una sola frase si es posible."
+    )

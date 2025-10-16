@@ -1,3 +1,20 @@
+@use "sass:color";
+// --- Sistema de Diseño (Variables para consistencia) ---
+$primary-text: #0f172a;
+$secondary-text: #334155;
+$light-text: #64748b;
+$border-color: #e5e7eb;
+$card-bg: #fff;
+$primary-color: #16a34a; // Verde para acciones principales
+$accent-color: #16a34a; // Azul para "Ver Detalle"
+$danger-color: #dc2626; // Rojo para "Eliminar" y estado "No disponible"
+$secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
+
+h2 {
+  display: flex;
+  justify-content: center;
+}
+
 .hotel-detalle-container {
   max-width: 700px;
   margin: 0 auto;
@@ -8,6 +25,7 @@
   color: #0f172a;
   padding: 12px 0;
   text-align: center;
+
   &.error {
     color: #dc2626;
   }
@@ -20,7 +38,8 @@
   border: 1px solid #e5e7eb;
   border-radius: 14px;
   padding: 24px;
-  box-shadow: 0 2px 10px 0 rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.05);
+
   @media (max-width: 750px) {
     flex-direction: column;
     gap: 18px;
@@ -30,6 +49,7 @@
 
 .hotel-img-box {
   flex-shrink: 0;
+
   img {
     width: 240px;
     max-width: 100%;
@@ -47,12 +67,14 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+
   h1 {
     font-size: 28px;
     font-weight: 800;
     margin: 0 0 10px 0;
     color: #0f172a;
   }
+
   .meta {
     display: flex;
     flex-wrap: wrap;
@@ -60,31 +82,139 @@
     font-size: 16px;
     color: #334155;
     margin-bottom: 8px;
+
     span {
       display: flex;
       align-items: center;
       gap: 4px;
     }
   }
+
   .fecha-creacion {
     margin-top: 16px;
     font-size: 14px;
     color: #64748b;
   }
+
   .estado-hotel {
     padding: 2px 8px;
     border-radius: 8px;
     font-size: 13px;
     font-weight: 600;
+
     &.activo {
       background: #d1fae5;
       color: #047857;
       border: 1px solid #10b981;
     }
+
     &.inactivo {
       background: #fee2e2;
       color: #b91c1c;
       border: 1px solid #ef4444;
     }
   }
+}
+
+// --- Lista y Tarjetas de Habitación ---
+.lista-habitaciones {
+  display: grid;
+  gap: 18px;
+}
+
+.habitacion-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  background: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: 14px;
+  padding: 20px;
+  margin-left: 3rem;
+  margin-right: 3rem;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    border-color: color.adjust(#016d2e, $lightness: -10%);
+    box-shadow: 0 4px 12px rgba(40, 92, 145, 0.06);
+  }
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 200px; // Dos columnas en pantallas más grandes
+  }
+
+  .card-left {
+    h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      color: $primary-text;
+      font-weight: 800;
+    }
+
+    .descripcion {
+      margin: 0 0 14px;
+      color: $secondary-text;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      color: $secondary-text;
+      font-size: 14px;
+
+      .meta-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        .status-dot {
+          width: 9px;
+          height: 9px;
+          border-radius: 50%;
+
+          &.disponible {
+            background-color: $primary-color;
+          }
+
+          &.no-disponible {
+            background-color: $danger-color;
+          }
+        }
+      }
+    }
+  }
+
+  .card-right {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+
+    // Los botones ocupan todo el ancho en su contenedor
+    .btn {
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      align-items: flex-end; // Botones a la derecha en escritorio
+      justify-content: center;
+    }
+  }
+}
+
+.btn-primary {
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
 }
