@@ -69,7 +69,7 @@ export class Registrarse implements OnInit {
         pais: 'Bolivia'
       };
 
-<<<<<<< HEAD
+
       this.registroService.registrarUsuario(datos).subscribe({
         next: (res) => {
           console.log('✅ Usuario creado:', res);
@@ -79,11 +79,11 @@ export class Registrarse implements OnInit {
           console.error('❌ Error al registrar:', err);
         }
       });
-=======
-      console.log('✅ Datos enviados al backend:', datos);
-      // Aquí podrías enviar los datos al backend con HttpClient
 
->>>>>>> 2cf04bdfe05d8ded626665fa0c6d9e05f98fc71b
+      console.log('✅ Datos enviados al backend:', datos);
+      
+
+
     } else {
       console.warn('⚠️ Formulario inválido');
       this.form.markAllAsTouched();
