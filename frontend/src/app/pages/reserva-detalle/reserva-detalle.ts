@@ -5,6 +5,7 @@ import { ReservasService } from '../../services/reservas.service';
 import { HotelService } from '../../services/hotel.service';
 import { HabitacionService } from '../../services/habitacion.service';
 import { PagoService, Pago } from '../../services/pago.service';
+import { RouterModule } from '@angular/router'; 
 
 interface ReservaDetalle {
   id_reserva: number;
@@ -12,6 +13,7 @@ interface ReservaDetalle {
   fecha_caducidad: string;
   num_habitacion: string;
   codigo_hotel: number;
+  ubicacion_hotel: string;
   fecha_creacion: string;
   ci_usuario: number;
   id_pago: number;
@@ -27,13 +29,17 @@ interface ReservaDetalle {
   templateUrl: './reserva-detalle.html',
   styleUrls: ['./reserva-detalle.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, RouterModule]
 })
+
+
+// ...importaciones y definición del componente sin cambios...
+
 export class ReservaDetalleComponent implements OnInit {
   reserva: ReservaDetalle | null = null;
   loading: boolean = true;
   error: string = '';
-  
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -45,7 +51,6 @@ export class ReservaDetalleComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Solo cargar datos en el navegador, no durante SSR
     if (isPlatformBrowser(this.platformId)) {
       const id = this.route.snapshot.paramMap.get('id');
       if (id) {
@@ -59,17 +64,18 @@ export class ReservaDetalleComponent implements OnInit {
     this.reservasService.getReservaById(id).subscribe({
       next: (reserva: any) => {
         this.reserva = reserva;
-        // Cargar información adicional del hotel
+
         if (reserva.codigo_hotel) {
           this.hotelService.getHotelById(reserva.codigo_hotel).subscribe({
             next: (hotel: any) => {
               if (this.reserva) {
                 this.reserva.hotel_nombre = hotel.nombre;
+                this.reserva.ubicacion_hotel = hotel.ubicacion;
               }
             }
           });
         }
-        // Cargar información de la habitación
+
         if (reserva.num_habitacion) {
           this.habitacionService.getHabitacionByNum(reserva.num_habitacion).subscribe({
             next: (habitacion: any) => {
@@ -81,7 +87,7 @@ export class ReservaDetalleComponent implements OnInit {
             }
           });
         }
-        // Cargar información del pago
+
         if (reserva.id_pago) {
           this.pagoService.getPagoById(reserva.id_pago).subscribe({
             next: (pago: any) => {
@@ -91,6 +97,7 @@ export class ReservaDetalleComponent implements OnInit {
             }
           });
         }
+
         this.loading = false;
       },
       error: (err: any) => {
@@ -110,9 +117,18 @@ export class ReservaDetalleComponent implements OnInit {
     return diffDays;
   }
 
-  calcularPrecioTotal(): number {
+  calcularSubtotal(): number {
     if (!this.reserva?.habitacion_precio) return 0;
-    return this.reserva.habitacion_precio * this.calcularNoches();
+    return Math.round(this.reserva.habitacion_precio * this.calcularNoches() * 100) / 100;
+  }
+
+  calcularIVA(): number {
+    const subtotal = this.calcularSubtotal();
+    return Math.round(subtotal * 0.13 * 100) / 100;
+  }
+
+  calcularTotal(): number {
+    return Math.round((this.calcularSubtotal() + this.calcularIVA()) * 100) / 100;
   }
 
   formatearFecha(fecha: string): string {
@@ -141,13 +157,11 @@ export class ReservaDetalleComponent implements OnInit {
   }
 
   modificarReserva() {
-    // Implementar lógica de modificación
     console.log('Modificar reserva', this.reserva?.id_reserva);
   }
 
   cancelarReserva() {
     if (confirm('¿Está seguro que desea cancelar esta reserva?')) {
-      // Implementar lógica de cancelación
       console.log('Cancelar reserva', this.reserva?.id_reserva);
     }
   }

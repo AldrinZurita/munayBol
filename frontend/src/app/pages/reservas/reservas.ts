@@ -25,15 +25,21 @@ export class ReservaComponent implements OnInit {
   minFechaReserva: string = '';
   minFechaCaducidad: string = '';
 
-  get subtotal() {
-    return this.Habitacion.precio * this.noches;
-  }
-  get iva() {
-    return Math.round(this.subtotal * 0.13);
-  }
-  get total() {
-    return this.subtotal + this.iva;
-  }
+// ✅ Subtotal: precio por noche × noches
+get subtotal(): number {
+  return Math.round(this.hotel.precio * this.noches * 100) / 100;
+}
+
+// ✅ IVA: 13% del subtotal, con dos decimales
+get iva(): number {
+  return Math.round(this.subtotal * 0.13 * 100) / 100;
+}
+
+// ✅ Total: subtotal + IVA, con dos decimales
+get total(): number {
+  return Math.round((this.subtotal + this.iva) * 100) / 100;
+}
+
 
   showSuccessModal: boolean = false;
   showConflictModal: boolean = false;
