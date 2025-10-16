@@ -21,16 +21,16 @@ export class AsistenteIa {
   renderMarkdown(text: string): SafeHtml {
     if (!text) return '' as unknown as SafeHtml;
     try {
-      // Parse Markdown to HTML (inline for chat)
-      const html = marked.parseInline(text);
-      // If marked returns a Promise (shouldn't in sync mode), fallback to plain text
-      if (typeof html !== 'string') return text;
+      // Parse Markdown to HTML (use full block parser so lists, headings, etc. work)
+      const html = marked.parse(text);
+      // If marked returns a non-string (shouldn't happen), fallback to plain text
+      if (typeof html !== 'string') return this.sanitizer.bypassSecurityTrustHtml(String(text));
       // Sanitize HTML to prevent XSS
       const clean = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
       // Trust sanitized HTML for Angular binding
       return this.sanitizer.bypassSecurityTrustHtml(clean);
     } catch {
-      return text;
+      return this.sanitizer.bypassSecurityTrustHtml(String(text));
     }
   }
 

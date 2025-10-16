@@ -1,5 +1,6 @@
 import os
 import json
+import re
 from typing import Optional, Tuple, List, Dict
 from django.utils import timezone
 
@@ -13,11 +14,22 @@ import weaviate
 from .models import ChatSession, Usuario
 
 # === CONFIGURACIÓN ===
-SYSTEM_PROMPT = (
+# Load a richer system prompt from file if available (contains instructions to ALWAYS respond in Markdown)
+DEFAULT_SYSTEM_PROMPT = (
     "Eres MunayBot, un agente de viajes de Bolivia. Hablas en español de forma amable y concisa. "
     "Ayudas a planificar itinerarios, recomendar hoteles y lugares turísticos en Bolivia. "
     "Haz preguntas de clarificación cuando falte información (fechas, presupuesto, intereses) y entrega respuestas estructuradas."
 )
+
+try:
+    SYSTEM_PROMPT_PATH = os.path.join(os.path.dirname(__file__), 'system_prompt.md')
+    if os.path.exists(SYSTEM_PROMPT_PATH):
+        with open(SYSTEM_PROMPT_PATH, 'r', encoding='utf-8') as f:
+            SYSTEM_PROMPT = f.read().strip()
+    else:
+        SYSTEM_PROMPT = DEFAULT_SYSTEM_PROMPT
+except Exception:
+    SYSTEM_PROMPT = DEFAULT_SYSTEM_PROMPT
 DATA_PATH = os.path.join(os.path.dirname(__file__), '../data/munaybol_data.json')
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.2:1b")
@@ -169,6 +181,26 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
             "Verifica que Ollama esté ejecutándose y que el modelo esté disponible. "
             f"Detalle: {e}"
         )
+    # Normalize common non-markdown markers the model may insert (BBCode-like tags, simple list markers)
+    def _normalize_reply(text: str) -> str:
+        if not text:
+            return text
+        # BBCode-like bold/italic -> Markdown
+        text = re.sub(r"\[b\](.*?)\[/b\]", r"**\1**", text, flags=re.IGNORECASE | re.DOTALL)
+        text = re.sub(r"\[i\](.*?)\[/i\]", r"*\1*", text, flags=re.IGNORECASE | re.DOTALL)
+        # Unescape common escaped markdown characters (\* \_ \`)
+        text = re.sub(r"\\([*_`~])", r"\1", text)
+        # Convert common list bullets (•, ·, ◦) at start of line to markdown '- '
+        text = re.sub(r"^[ \t]*[•·◦]\s+", "- ", text, flags=re.MULTILINE)
+        # Convert [ul][li]...[/li][/ul] patterns to markdown lists
+        text = re.sub(r"\[li\](.*?)\[/li\]", r"- \1", text, flags=re.IGNORECASE | re.DOTALL)
+        # Replace HTML <br> with newline
+        text = re.sub(r"<br\s*/?>", "\n", text, flags=re.IGNORECASE)
+        # Trim repeated empty lines
+        text = re.sub(r"\n{3,}", "\n\n", text)
+        return text.strip()
+
+    reply = _normalize_reply(reply)
 
     _append_history(session, "assistant", reply)
     return reply, str(session.id)
