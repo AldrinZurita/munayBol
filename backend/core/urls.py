@@ -3,7 +3,7 @@ from rest_framework import routers
 
 from .views import (
     UsuarioViewSet, HotelViewSet, LugarTuristicoViewSet,
-    PagoViewSet, HabitacionViewSet, ReservaViewSet, PaqueteViewSet, SugerenciasViewSet, home, LLMGenerateView,
+    PagoViewSet, HabitacionViewSet, ReservaViewSet, PaqueteViewSet, SugerenciasViewSet, NotificationViewSet, home, LLMGenerateView,
     HabitacionDisponibilidadView, RegistroView, LoginView, SuperUsuarioRegistroView
 )
 
@@ -16,6 +16,7 @@ router.register(r'habitaciones', HabitacionViewSet)
 router.register(r'reservas', ReservaViewSet)
 router.register(r'paquetes', PaqueteViewSet)
 router.register(r'sugerencias', SugerenciasViewSet)
+router.register(r'notifications', NotificationViewSet, basename='notifications')
 
 urlpatterns = [
     path('', home, name='home'),
