@@ -1,7 +1,7 @@
 services:
   backend:
     build: ./backend
-    command: python manage.py runserver 0.0.0.0:8000
+    command: daphne -b 0.0.0.0 -p 8000 config.asgi:application
     ports:
       - "8000:8000"
     volumes:
@@ -13,7 +13,7 @@ services:
       NEON_PASSWORD: "npg_crb8OuHVzx5Y"
       NEON_HOST: "ep-long-dust-a8ys3fe8-pooler.eastus2.azure.neon.tech"
       NEON_PORT: "5432"
-      DJANGO_SECRET_KEY: $^%pi-f!4s2z*o!+-um9)n6fe^xh!hf96ql41ml#g-$g%qqgg1
+      DJANGO_SECRET_KEY: "$$^%pi-f!4s2z*o!+-um9)n6fe^xh!hf96ql41ml#g-$$g%qqgg1"
       DJANGO_DEBUG: "True"
       DJANGO_ALLOWED_HOSTS: "localhost 127.0.0.1 backend 0.0.0.0"
       OLLAMA_BASE_URL: "http://ollama:11434"

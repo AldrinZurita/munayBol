@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Notification } from '../interfaces/notification.interface';
 import { AuthService } from './auth.service';
@@ -10,8 +10,19 @@ import { AuthService } from './auth.service';
 export class NotificationService {
   private readonly notifications = new BehaviorSubject<Notification[]>([]);
   readonly notifications$ = this.notifications.asObservable();
+  private ws?: WebSocket;
 
-  constructor(private readonly http: HttpClient, private readonly auth: AuthService) {}
+  constructor(private readonly http: HttpClient, private readonly auth: AuthService) {
+    // React to auth state changes
+    this.auth.user$.subscribe(user => {
+      if (user) {
+        this.connectSocket();
+      } else {
+        this.disconnectSocket();
+        this.notifications.next([]);
+      }
+    });
+  }
 
   private authOptions() {
     const token = this.auth.getToken();
@@ -29,7 +40,11 @@ export class NotificationService {
         createdAt: new Date(n.created_at),
         link: n.link,
       }) as Notification)),
-      tap(list => this.notifications.next(list))
+      tap(list => this.notifications.next(list)),
+      catchError(() => {
+        this.notifications.next([]);
+        return of([]);
+      })
     );
   }
 
@@ -41,19 +56,57 @@ export class NotificationService {
 
   getUnreadCount(): Observable<number> {
   return this.http.get<{ unread: number }>('/api/notifications/unread_count/', this.authOptions()).pipe(
-      map(r => r.unread)
+      map(r => r.unread),
+      catchError(() => of(0))
     );
   }
 
   markAsRead(notificationId: number): Observable<any> {
   return this.http.post(`/api/notifications/${notificationId}/mark_as_read/`, {}, this.authOptions()).pipe(
-      tap(() => this.fetchNotifications().subscribe())
+      tap(() => this.fetchNotifications().subscribe()),
+      catchError(() => of(null))
     );
   }
 
   markAllAsRead(): Observable<any> {
   return this.http.post('/api/notifications/mark_all_as_read/', {}, this.authOptions()).pipe(
-      tap(() => this.fetchNotifications().subscribe())
+      tap(() => this.fetchNotifications().subscribe()),
+      catchError(() => of(null))
     );
+  }
+
+  // WebSocket connection for real-time updates
+  connectSocket(): void {
+    // Avoid SSR and duplicate connections
+    if (typeof window === 'undefined' || this.ws) return;
+    const token = this.auth.getToken();
+    if (!token) return;
+    const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const host = window.location.host; // Will be proxied to backend in dev if needed
+    // If running via Angular dev server with proxy, use same host and path /ws/notifications/
+    const url = `${proto}://${host}/ws/notifications/?token=${encodeURIComponent(token)}`;
+    try {
+      this.ws = new WebSocket(url);
+      this.ws.onopen = () => {};
+      this.ws.onmessage = () => {
+        // On any event, refetch notifications
+        this.fetchNotifications().subscribe();
+      };
+      this.ws.onclose = () => {
+        this.ws = undefined;
+      };
+      this.ws.onerror = () => {
+        // No-op; will rely on polling via UI
+      };
+    } catch {}
+  }
+
+  private disconnectSocket(): void {
+    try {
+      if (this.ws) {
+        this.ws.close();
+      }
+    } catch {}
+    this.ws = undefined;
   }
 }

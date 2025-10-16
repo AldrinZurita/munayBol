@@ -17,6 +17,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.hashers import check_password
 from rest_framework.decorators import action
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 def home(request):
     return HttpResponse("Bienvenido a la API MunayBol")
@@ -267,6 +269,24 @@ class ReservaViewSet(viewsets.ModelViewSet):
         # Asignar el usuario autenticado mediante save(), dado que id_usuario es read_only en el serializer
         instance = serializer.save(id_usuario=user)
         output = self.get_serializer(instance)
+
+        # Crear notificación para el usuario
+        from .models import Notification
+        from asgiref.sync import async_to_sync
+        from channels.layers import get_channel_layer
+        notif = Notification.objects.create(
+            usuario=user,
+            title="Reserva exitosa",
+            message=f"Tu reserva #{instance.id_reserva} fue creada correctamente.",
+            link="/reservas"
+        )
+        # Emitir evento WS
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f"user_{user.id}",
+            {"type": "notify", "payload": {"event": "new_reserva", "title": notif.title, "message": notif.message}}
+        )
+
         return Response({
             "message": "Reserva creada correctamente",
             "reserva": output.data
@@ -347,6 +367,13 @@ class PaqueteViewSet(viewsets.ModelViewSet):
             notifs.append(Notification(usuario=u, title=title, message=message, link='/paquetes'))
         if notifs:
             Notification.objects.bulk_create(notifs, ignore_conflicts=True)
+            # Emitir evento WS por usuario
+            channel_layer = get_channel_layer()
+            for u in usuarios:
+                async_to_sync(channel_layer.group_send)(
+                    f"user_{u.id}",
+                    {"type": "notify", "payload": {"event": "new_package", "title": title, "message": message}}
+                )
 
         output = self.get_serializer(paquete)
         return Response({
@@ -384,6 +411,12 @@ class NotificationViewSet(viewsets.ModelViewSet):
     def mark_all_as_read(self, request):
         qs = self.get_queryset().filter(read=False)
         updated = qs.update(read=True)
+        # Emitir evento de actualización de contador
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f"user_{request.user.id}",
+            {"type": "notify", "payload": {"event": "mark_all_read"}}
+        )
         return Response({"updated": updated})
 
     @action(detail=True, methods=['post'])
@@ -395,6 +428,12 @@ class NotificationViewSet(viewsets.ModelViewSet):
         if not notif.read:
             notif.read = True
             notif.save(update_fields=['read'])
+        # Emitir evento de actualización de contador
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f"user_{request.user.id}",
+            {"type": "notify", "payload": {"event": "mark_read", "id": notif.id}}
+        )
         return Response({"status": "ok"})
 
 @method_decorator(csrf_exempt, name='dispatch')

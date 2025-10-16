@@ -8,3 +8,5 @@ llama-index-core==0.10.32
 llama-index-llms-ollama==0.2.2
 llama-index-vector-stores-weaviate==0.1.5
 weaviate-client>=3.26.7,<4.0.0
+channels==4.0.0
+daphne==4.0.0
