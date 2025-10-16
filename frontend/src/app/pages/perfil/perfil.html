@@ -1,8 +1,8 @@
-<!-- Contenedor principal para la página de perfil -->
+<!-- Main container for the profile page -->
 <div class="perfil-container">
   <h1 class="title">Mi Perfil</h1>
 
-  <!-- La tarjeta de perfil se mantiene igual -->
+  <!-- Profile card remains the same -->
   <section *ngIf="usuario" class="perfil-card">
     <div class="perfil-header">
       <div class="avatar-placeholder">
@@ -40,24 +40,20 @@
     </div>
   </section>
 
-  <!-- --- NUEVO: Sección para mostrar las reservas del usuario --- -->
+  <!-- "Mis Reservas" section -->
   <section *ngIf="usuario" class="reservas-section">
     <h2>Mis Reservas</h2>
     
-    <!-- Estado de carga -->
+    <!-- Loading, error, and empty states -->
     <div *ngIf="cargandoReservas" class="estado">Cargando tus reservas...</div>
-    
-    <!-- Estado de error -->
     <div *ngIf="errorReservas" class="estado error">{{ errorReservas }}</div>
-    
-    <!-- Estado vacío (cuando no hay reservas) -->
     <div *ngIf="!cargandoReservas && reservas.length === 0 && !errorReservas" class="estado-vacio">
       <span class="material-symbols-outlined">luggage</span>
       <p>Aún no tienes ninguna reserva.</p>
       <a routerLink="/paquetes" class="btn-explorar">Explorar Paquetes</a>
     </div>
 
-    <!-- Lista de tarjetas de reserva -->
+    <!-- List of reservation cards -->
     <div *ngIf="reservas.length > 0" class="lista-reservas">
       <article *ngFor="let reserva of reservas" class="reserva-card">
         <div class="reserva-header">
@@ -71,9 +67,11 @@
             <span class="material-symbols-outlined">bed</span>
             <p><strong>Habitación:</strong> {{ reserva.num_habitacion }}</p>
           </div>
+          <!-- --- THE CHANGE IS HERE --- -->
           <div class="detalle-reserva">
             <span class="material-symbols-outlined">hotel</span>
-            <p><strong>Hotel ID:</strong> {{ reserva.codigo_hotel }}</p>
+            <!-- Show the hotel name if it exists, otherwise show the ID as a fallback -->
+            <p><strong>Hotel:</strong> {{ reserva.hotel?.nombre || 'ID: ' + reserva.codigo_hotel }}</p>
           </div>
           <div class="detalle-reserva">
             <span class="material-symbols-outlined">calendar_month</span>
@@ -84,9 +82,8 @@
             <p><strong>Check-out:</strong> {{ reserva.fecha_caducidad | date:'fullDate' }}</p>
           </div>
         </div>
-        <!-- --- NUEVO: Footer de la tarjeta con el botón de detalles --- -->
         <div class="reserva-footer">
-          <a [routerLink]="['/reservas', reserva.id_reserva]" class="btn-detalle">Ver Reserva</a>
+          <a [routerLink]="['/reservas', reserva.id_reserva]" class="btn-detalle">Ver Detalle</a>
         </div>
       </article>
     </div>
