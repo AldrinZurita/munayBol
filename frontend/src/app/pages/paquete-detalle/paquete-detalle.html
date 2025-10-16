@@ -4,7 +4,7 @@
       <div class="header-section">
         <h2 class="package-title">{{ paquete.lugar?.nombre }} + {{ paquete.hotel?.nombre }}</h2>
         <div class="price-block">
-          <div class="price-value">{{ paquete?.precio?.toFixed(2) }} BOB</div>
+          <div class="price-value">{{ paquete.precio.toFixed(2) }} BOB</div>
           <div class="price-label">Precio por paquete</div>
         </div>
       </div>
@@ -15,21 +15,6 @@
       <p><strong>Departamento:</strong> {{ paquete.lugar?.departamento }}</p>
       <p><strong>Disponible:</strong> {{ paquete.estado ? 'Sí' : 'No' }}</p>
       <p><strong>Hotel asignado:</strong> {{ paquete.hotel?.nombre }}</p>
-
-      <div class="imagen-lugar">
-        <img [src]="paquete.lugar?.url_image_lugar_turistico" alt="Imagen lugar" />
-      </div>
-
-      <div class="location-section">
-        <h3>Ubicación</h3>
-        <div class="location-box">
-          <div class="location-icon">📍</div>
-          <div class="location-text">
-            <div class="map-label">Dirección</div>
-            <div class="map-location">{{ paquete.lugar?.ubicacion }}</div>
-          </div>
-        </div>
-      </div>
 
       <div class="itinerary-section" *ngIf="itinerario.length">
         <h3>Itinerario</h3>
@@ -48,5 +33,9 @@
         </ul>
       </div>
     </div>
+    <div class="imagen-lugar">
+      <img [src]="paquete.lugar?.url_image_lugar_turistico" alt="Imagen lugar" />
+    </div>
+    <button class="btn">Reservar Paquete</button>
   </div>
 </div>

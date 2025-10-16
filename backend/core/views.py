@@ -6,7 +6,7 @@ from .models import Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, P
 from .serializers import (
     UsuarioSerializer, HotelSerializer, LugarTuristicoSerializer, PagoSerializer,
     HabitacionSerializer, ReservaSerializer, PaqueteSerializer, SugerenciasSerializer,
-    LoginSerializer, RegistroSerializer
+    LoginSerializer, RegistroSerializer, SuperUsuarioRegistroSerializer
 )
 from .permissions import IsSuperAdmin, IsUsuario
 from .llm_client import get_llm_response, send_message
@@ -84,7 +84,7 @@ class LoginView(APIView):
         correo = serializer.validated_data["correo"]
         contrasenia = serializer.validated_data["contrasenia"]
         usuario = Usuario.objects.filter(correo__iexact=correo, estado=True).first()
-        if usuario and check_password(contrasenia, usuario.contrasenia):
+        if usuario and usuario.check_password(contrasenia):  # <---- CAMBIA AQUÍ
             refresh = RefreshToken.for_user(usuario)
             return Response({
                 "refresh": str(refresh),
@@ -144,6 +144,16 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         if hasattr(user, "is_authenticated") and user.is_authenticated:
             return Usuario.objects.filter(id=user.id)
         return Usuario.objects.none()
+
+class SuperUsuarioRegistroView(APIView):
+    permission_classes = [AllowAny]  # Cambia esto si quieres proteger el endpoint
+
+    def post(self, request):
+        serializer = SuperUsuarioRegistroSerializer(data=request.data)
+        if serializer.is_valid():
+            usuario = serializer.save()
+            return Response({"msg": "Superusuario registrado correctamente"}, status=201)
+        return Response(serializer.errors, status=400)
 
 class HotelViewSet(viewsets.ModelViewSet):
     queryset = Hotel.objects.all()
