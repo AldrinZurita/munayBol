@@ -1,16 +1,44 @@
+.delete-btn {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 4px;
+  margin-left: 8px;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.delete-btn:hover {
+  background: #ffeaea;
+  color: #d32f2f;
+}
 :host {
   position: relative;
   display: inline-block;
 }
 
 .notification-bell {
+  background: none;
+  border: none;
+  box-shadow: none;
+  color: #333;
   cursor: pointer;
   position: relative;
-  color: #333;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  display: flex;
+  align-items: center;
 }
 
-.notification-bell:hover {
+.notification-bell:hover, .notification-bell:focus {
   color: #007bff;
+  background: none;
+  border: none;
+  outline: none;
 }
 
 .badge {

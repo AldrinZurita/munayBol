@@ -85,6 +85,13 @@ export class NotificationService {
     );
   }
 
+  deleteNotification(notificationId: number): Observable<any> {
+    return this.http.delete(`/api/notifications/${notificationId}/delete_notification/`, this.authOptions()).pipe(
+      tap(() => this.fetchNotifications().subscribe()),
+      catchError(() => of(null))
+    );
+  }
+
   // WebSocket connection for real-time updates
   connectSocket(): void {
     // Avoid SSR and duplicate connections
@@ -96,7 +103,10 @@ export class NotificationService {
     const url = `${proto}://${window.location.host}/ws/notifications/?token=${encodeURIComponent(token)}`;
     try {
       this.ws = new WebSocket(url);
-      this.ws.onopen = () => {};
+      this.ws.onopen = () => {
+        // Al conectar, traer la lista actual para mostrar el punto rojo si corresponde
+        this.fetchNotifications().subscribe();
+      };
       this.ws.onmessage = () => {
         // On any event, refetch notifications
         this.fetchNotifications().subscribe();
