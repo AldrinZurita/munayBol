@@ -1,9 +1,3 @@
-  deleteNotification(notificationId: number): Observable<any> {
-    return this.http.delete(`/api/notifications/${notificationId}/delete_notification/`, this.authOptions()).pipe(
-      tap(() => this.fetchNotifications().subscribe()),
-      catchError(() => of(null))
-    );
-  }
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -76,6 +70,13 @@ export class NotificationService {
 
   markAllAsRead(): Observable<any> {
   return this.http.post('/api/notifications/mark_all_as_read/', {}, this.authOptions()).pipe(
+      tap(() => this.fetchNotifications().subscribe()),
+      catchError(() => of(null))
+    );
+  }
+
+  deleteNotification(notificationId: number): Observable<any> {
+    return this.http.delete(`/api/notifications/${notificationId}/delete_notification/`, this.authOptions()).pipe(
       tap(() => this.fetchNotifications().subscribe()),
       catchError(() => of(null))
     );

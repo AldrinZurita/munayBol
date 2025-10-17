@@ -44,4 +44,7 @@ export class NotificationComponent implements OnInit {
   markAllAsRead(): void {
     this.notificationService.markAllAsRead().subscribe();
   }
+  onDeleteNotification(notificationId: number): void {
+    this.notificationService.deleteNotification(notificationId).subscribe();
+  }
 }
