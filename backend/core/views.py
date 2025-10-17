@@ -278,7 +278,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
             usuario=user,
             title="Reserva exitosa",
             message=f"Tu reserva #{instance.id_reserva} fue creada correctamente.",
-            link="/reservas"
+            link=f"/reservas/{instance.id_reserva}"
         )
         # Emitir evento WS
         channel_layer = get_channel_layer()

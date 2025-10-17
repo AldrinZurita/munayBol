@@ -94,7 +94,10 @@ export class NotificationService {
     const url = `${proto}://${host}/ws/notifications/?token=${encodeURIComponent(token)}`;
     try {
       this.ws = new WebSocket(url);
-      this.ws.onopen = () => {};
+      this.ws.onopen = () => {
+        // Al conectar, traer la lista actual para mostrar el punto rojo si corresponde
+        this.fetchNotifications().subscribe();
+      };
       this.ws.onmessage = () => {
         // On any event, refetch notifications
         this.fetchNotifications().subscribe();
