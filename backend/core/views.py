@@ -393,6 +393,15 @@ class SugerenciasViewSet(viewsets.ModelViewSet):
         return [AllowAny()]
 
 class NotificationViewSet(viewsets.ModelViewSet):
+    @action(detail=True, methods=['delete'])
+    def delete_notification(self, request, pk=None):
+        user = request.user
+        try:
+            notif = self.get_queryset().get(pk=pk)
+        except Notification.DoesNotExist:
+            return Response({"error": "Notificación no encontrada"}, status=404)
+        notif.delete()
+        return Response({"status": "deleted"})
     serializer_class = NotificationSerializer
     permission_classes = [IsAuthenticated]
 

@@ -61,9 +61,11 @@ class PagoSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 class HabitacionSerializer(serializers.ModelSerializer):
+    codigo_hotel = serializers.PrimaryKeyRelatedField(read_only=True)
+    hotel = HotelSerializer(source='codigo_hotel', read_only=True)
     class Meta:
         model = Habitacion
-        fields = '__all__'
+        fields = ['num', 'caracteristicas', 'precio', 'codigo_hotel', 'hotel', 'disponible', 'fecha_creacion', 'cant_huespedes']
 
 class ReservaSerializer(serializers.ModelSerializer):
     class Meta:

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HotelService } from '../../services/hotel.service';
 import { AuthService } from '../../services/auth.service';
 import { Hotel } from '../../interfaces/hotel.interface';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-hoteles',
@@ -27,7 +27,8 @@ export class Hoteles implements OnInit {
   constructor(
     private hotelService: HotelService,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -80,7 +81,7 @@ export class Hoteles implements OnInit {
   }
 
   onVerDetalles(id_hotel: number) {
-    window.location.href = `/hoteles/${id_hotel}`;
+    this.router.navigate(['/hoteles', id_hotel]);
   }
 
   onAgregarHotel() {

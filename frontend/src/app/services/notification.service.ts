@@ -1,3 +1,9 @@
+  deleteNotification(notificationId: number): Observable<any> {
+    return this.http.delete(`/api/notifications/${notificationId}/delete_notification/`, this.authOptions()).pipe(
+      tap(() => this.fetchNotifications().subscribe()),
+      catchError(() => of(null))
+    );
+  }
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
