@@ -31,7 +31,7 @@ export class NotificationService {
 
   // Fetch list from backend and normalize dates
   fetchNotifications(): Observable<Notification[]> {
-  return this.http.get<any[]>('/api/notifications/', this.authOptions()).pipe(
+    return this.http.get<any[]>('/api/notifications/', this.authOptions()).pipe(
       map(list => list.map(n => ({
         id: n.id,
         title: n.title,
@@ -41,7 +41,8 @@ export class NotificationService {
         link: n.link,
       }) as Notification)),
       tap(list => this.notifications.next(list)),
-      catchError(() => {
+      catchError((err) => {
+        console.error('[NotificationService] Error en fetchNotifications:', err);
         this.notifications.next([]);
         return of([]);
       })
@@ -55,23 +56,32 @@ export class NotificationService {
   }
 
   getUnreadCount(): Observable<number> {
-  return this.http.get<{ unread: number }>('/api/notifications/unread_count/', this.authOptions()).pipe(
+    return this.http.get<{ unread: number }>('/api/notifications/unread_count/', this.authOptions()).pipe(
       map(r => r.unread),
-      catchError(() => of(0))
+      catchError((err) => {
+        console.error('[NotificationService] Error en getUnreadCount:', err);
+        return of(0);
+      })
     );
   }
 
   markAsRead(notificationId: number): Observable<any> {
-  return this.http.post(`/api/notifications/${notificationId}/mark_as_read/`, {}, this.authOptions()).pipe(
+    return this.http.post(`/api/notifications/${notificationId}/mark_as_read/`, {}, this.authOptions()).pipe(
       tap(() => this.fetchNotifications().subscribe()),
-      catchError(() => of(null))
+      catchError((err) => {
+        console.error('[NotificationService] Error en markAsRead:', err);
+        return of(null);
+      })
     );
   }
 
   markAllAsRead(): Observable<any> {
-  return this.http.post('/api/notifications/mark_all_as_read/', {}, this.authOptions()).pipe(
+    return this.http.post('/api/notifications/mark_all_as_read/', {}, this.authOptions()).pipe(
       tap(() => this.fetchNotifications().subscribe()),
-      catchError(() => of(null))
+      catchError((err) => {
+        console.error('[NotificationService] Error en markAllAsRead:', err);
+        return of(null);
+      })
     );
   }
 
@@ -82,9 +92,8 @@ export class NotificationService {
     const token = this.auth.getToken();
     if (!token) return;
     const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const host = window.location.host; // Will be proxied to backend in dev if needed
-    // If running via Angular dev server with proxy, use same host and path /ws/notifications/
-    const url = `${proto}://${host}/ws/notifications/?token=${encodeURIComponent(token)}`;
+    // Usar el host del frontend, el proxy de Angular lo enviará al backend (según proxy.conf.json)
+    const url = `${proto}://${window.location.host}/ws/notifications/?token=${encodeURIComponent(token)}`;
     try {
       this.ws = new WebSocket(url);
       this.ws.onopen = () => {};
@@ -95,10 +104,14 @@ export class NotificationService {
       this.ws.onclose = () => {
         this.ws = undefined;
       };
-      this.ws.onerror = () => {
-        // No-op; will rely on polling via UI
+      this.ws.onerror = (e) => {
+        // Solo loguear el error, no bloquear la app
+        console.warn('WebSocket error (not critical):', e);
       };
-    } catch {}
+    } catch (e) {
+      // Captura cualquier error de conexión y loguea
+      console.warn('WebSocket connection error (not critical):', e);
+    }
   }
 
   private disconnectSocket(): void {
