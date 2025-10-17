@@ -347,39 +347,12 @@ class PaqueteViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         paquete = serializer.save()
 
-        # Notificar a todos los usuarios activos
-        usuarios = Usuario.objects.filter(estado=True, rol='usuario')
-        notifs = []
-        try:
-            lugar_nombre = getattr(paquete.id_lugar, 'nombre', '')
-        except Exception:
-            lugar_nombre = ''
-        title = f"Nuevo paquete: {paquete.nombre}" if paquete.nombre else "Nuevo paquete disponible"
-        msg_base = f"{paquete.nombre}"
-        if lugar_nombre:
-            msg_base += f" — {lugar_nombre}"
-        try:
-            precio_txt = f" desde {paquete.precio:.2f} BOB" if paquete.precio is not None else ""
-        except Exception:
-            precio_txt = ""
-        message = (msg_base + precio_txt).strip()
-        for u in usuarios:
-            notifs.append(Notification(usuario=u, title=title, message=message, link='/paquetes'))
-        if notifs:
-            Notification.objects.bulk_create(notifs, ignore_conflicts=True)
-            # Emitir evento WS por usuario
-            channel_layer = get_channel_layer()
-            for u in usuarios:
-                async_to_sync(channel_layer.group_send)(
-                    f"user_{u.id}",
-                    {"type": "notify", "payload": {"event": "new_package", "title": title, "message": message}}
-                )
+
 
         output = self.get_serializer(paquete)
         return Response({
             "message": "Paquete creado correctamente",
-            "paquete": output.data,
-            "notified_users": usuarios.count()
+            "paquete": output.data
         }, status=status.HTTP_201_CREATED)
 
 class SugerenciasViewSet(viewsets.ModelViewSet):
@@ -395,7 +368,6 @@ class SugerenciasViewSet(viewsets.ModelViewSet):
 class NotificationViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['delete'])
     def delete_notification(self, request, pk=None):
-        user = request.user
         try:
             notif = self.get_queryset().get(pk=pk)
         except Notification.DoesNotExist:
