@@ -2,11 +2,11 @@ from rest_framework import viewsets, status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse
-from .models import Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias
+from .models import Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias, Notification
 from .serializers import (
     UsuarioSerializer, HotelSerializer, LugarTuristicoSerializer, PagoSerializer,
     HabitacionSerializer, ReservaSerializer, PaqueteSerializer, SugerenciasSerializer,
-    LoginSerializer, RegistroSerializer, SuperUsuarioRegistroSerializer
+    LoginSerializer, RegistroSerializer, SuperUsuarioRegistroSerializer, NotificationSerializer
 )
 from .permissions import IsSuperAdmin, IsUsuario
 from .llm_client import get_llm_response, send_message
@@ -16,6 +16,9 @@ from datetime import date, timedelta
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.hashers import check_password
+from rest_framework.decorators import action
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 def home(request):
     return HttpResponse("Bienvenido a la API MunayBol")
@@ -266,6 +269,24 @@ class ReservaViewSet(viewsets.ModelViewSet):
         # Asignar el usuario autenticado mediante save(), dado que id_usuario es read_only en el serializer
         instance = serializer.save(id_usuario=user)
         output = self.get_serializer(instance)
+
+        # Crear notificación para el usuario
+        from .models import Notification
+        from asgiref.sync import async_to_sync
+        from channels.layers import get_channel_layer
+        notif = Notification.objects.create(
+            usuario=user,
+            title="Reserva exitosa",
+            message=f"Tu reserva #{instance.id_reserva} fue creada correctamente.",
+            link=f"/reservas/{instance.id_reserva}"
+        )
+        # Emitir evento WS
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f"user_{user.id}",
+            {"type": "notify", "payload": {"event": "new_reserva", "title": notif.title, "message": notif.message}}
+        )
+
         return Response({
             "message": "Reserva creada correctamente",
             "reserva": output.data
@@ -320,6 +341,20 @@ class PaqueteViewSet(viewsets.ModelViewSet):
         paquete.save()
         return Response({"message": "Paquete desactivado correctamente"}, status=status.HTTP_200_OK)
 
+    def create(self, request, *args, **kwargs):
+        # Solo superadmin crea; permisos ya lo controlan
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        paquete = serializer.save()
+
+
+
+        output = self.get_serializer(paquete)
+        return Response({
+            "message": "Paquete creado correctamente",
+            "paquete": output.data
+        }, status=status.HTTP_201_CREATED)
+
 class SugerenciasViewSet(viewsets.ModelViewSet):
     queryset = Sugerencias.objects.all()
     serializer_class = SugerenciasSerializer
@@ -329,6 +364,58 @@ class SugerenciasViewSet(viewsets.ModelViewSet):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
             return [IsAuthenticated()]
         return [AllowAny()]
+
+class NotificationViewSet(viewsets.ModelViewSet):
+    @action(detail=True, methods=['delete'])
+    def delete_notification(self, request, pk=None):
+        try:
+            notif = self.get_queryset().get(pk=pk)
+        except Notification.DoesNotExist:
+            return Response({"error": "Notificación no encontrada"}, status=404)
+        notif.delete()
+        return Response({"status": "deleted"})
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if not getattr(user, 'is_authenticated', False):
+            return Notification.objects.none()
+        return Notification.objects.filter(usuario=user).order_by('-created_at')
+
+    @action(detail=False, methods=['get'])
+    def unread_count(self, request):
+        cnt = self.get_queryset().filter(read=False).count()
+        return Response({"unread": cnt})
+
+    @action(detail=False, methods=['post'])
+    def mark_all_as_read(self, request):
+        qs = self.get_queryset().filter(read=False)
+        updated = qs.update(read=True)
+        # Emitir evento de actualización de contador
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f"user_{request.user.id}",
+            {"type": "notify", "payload": {"event": "mark_all_read"}}
+        )
+        return Response({"updated": updated})
+
+    @action(detail=True, methods=['post'])
+    def mark_as_read(self, request, pk=None):
+        try:
+            notif = self.get_queryset().get(pk=pk)
+        except Notification.DoesNotExist:
+            return Response({"error": "Notificación no encontrada"}, status=404)
+        if not notif.read:
+            notif.read = True
+            notif.save(update_fields=['read'])
+        # Emitir evento de actualización de contador
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f"user_{request.user.id}",
+            {"type": "notify", "payload": {"event": "mark_read", "id": notif.id}}
+        )
+        return Response({"status": "ok"})
 
 @method_decorator(csrf_exempt, name='dispatch')
 class LLMGenerateView(APIView):

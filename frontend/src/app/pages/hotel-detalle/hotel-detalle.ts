@@ -19,6 +19,7 @@ export class HotelDetalleComponent implements OnInit {
   cargando = false;
   cargandoHabitaciones = false;
   error = '';
+  errorHabitaciones = ''; // Para separar errores
 
   constructor(
     private route: ActivatedRoute,
@@ -28,49 +29,50 @@ export class HotelDetalleComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargando = true;
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    if (!id) {
+    const idStr = this.route.snapshot.paramMap.get('id');
+    const id = Number(idStr);
+    console.log('[HotelDetalle] ID recibido:', idStr, '->', id);
+
+    if (!id || isNaN(id)) {
       this.error = 'ID de hotel no válido.';
       this.cargando = false;
       return;
     }
     this.hotelService.getHotelById(id).subscribe({
       next: (hotel) => {
+        console.log('[HotelDetalle] Hotel recibido:', hotel);
         this.hotel = hotel;
         this.cargando = false;
         this.getHabitaciones();
       },
       error: (e) => {
+        console.error('[HotelDetalle] Error al cargar hotel:', e);
         this.error = 'No se pudo cargar el hotel.';
         this.cargando = false;
       }
     });
-    
-    
-
   }
 
-
-  
   getHabitaciones(): void {
     if (!this.hotel || !this.hotel.id_hotel) {
-      this.error = 'No se ha seleccionado un hotel válido';
+      this.errorHabitaciones = 'No se ha seleccionado un hotel válido';
       return;
     }
 
     this.cargandoHabitaciones = true;
+    this.errorHabitaciones = '';
     this.habitacionService.getHabitacionesPorHotel(this.hotel.id_hotel).subscribe({
-    next: (habitaciones: Habitacion[]) => {
-      this.habitaciones = habitaciones;
-      this.cargandoHabitaciones = false;
-    },
-    error: (err) => {
-      console.error('Error al obtener habitaciones:', err);
-      this.error = 'No se pudo cargar la lista de habitaciones';
-      this.cargandoHabitaciones = false;
-    }
-  });
-
+      next: (habitaciones: Habitacion[]) => {
+        console.log('[HotelDetalle] Habitaciones recibidas:', habitaciones);
+        this.habitaciones = habitaciones;
+        this.cargandoHabitaciones = false;
+      },
+      error: (err) => {
+        console.error('[HotelDetalle] Error al obtener habitaciones:', err);
+        this.errorHabitaciones = 'No se pudo cargar la lista de habitaciones';
+        this.cargandoHabitaciones = false;
+      }
+    });
   }
 
 }

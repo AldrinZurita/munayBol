@@ -6,7 +6,7 @@ import { Hotel } from '../interfaces/hotel.interface';
 
 @Injectable({ providedIn: 'root' })
 export class HotelService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = environment.apiUrl; // Debe terminar con '/api/' o '/api/', EJ: 'http://localhost:8000/api/'
 
   constructor(private http: HttpClient) {}
 
@@ -27,6 +27,7 @@ export class HotelService {
   }
 
   getHotelById(id: number): Observable<Hotel> {
-  return this.http.get<Hotel>(`${this.apiUrl}hoteles/${id}/`);
+    // Asegúrate que apiUrl termina en '/'
+    return this.http.get<Hotel>(`${this.apiUrl}hoteles/${id}/`);
   }
 }

@@ -79,6 +79,12 @@ $primary-hover-bg: #eaf5ea;
   }
 }
 
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 // --- User Dropdown Menu Styles ---
 .user-menu {
   position: relative;

@@ -16,22 +16,25 @@
 
   <div class="session-actions">
     <ng-container *ngIf="isLoggedIn; else showLogin">
-      <!-- New User Dropdown Menu -->
-      <div class="user-menu">
-        <div class="user-menu-trigger">
-          <span class="material-symbols-outlined">person</span>
-          <span class="username">{{ username }}</span>
-          <span class="material-symbols-outlined chevron">expand_more</span>
-        </div>
-        <div class="user-menu-content">
-          <a routerLink="/perfil" class="user-menu-item">
-            <span class="material-symbols-outlined">account_circle</span>
-            Mi Perfil
-          </a>
-          <button (click)="logout()" class="user-menu-item">
-            <span class="material-symbols-outlined">logout</span>
-            Cerrar Sesión
-          </button>
+      <div class="user-actions">
+        <app-notification></app-notification>
+        <!-- New User Dropdown Menu -->
+        <div class="user-menu">
+          <div class="user-menu-trigger">
+            <span class="material-symbols-outlined">person</span>
+            <span class="username">{{ username }}</span>
+            <span class="material-symbols-outlined chevron">expand_more</span>
+          </div>
+          <div class="user-menu-content">
+            <a routerLink="/perfil" class="user-menu-item">
+              <span class="material-symbols-outlined">account_circle</span>
+              Mi Perfil
+            </a>
+            <button (click)="logout()" class="user-menu-item">
+              <span class="material-symbols-outlined">logout</span>
+              Cerrar Sesión
+            </button>
+          </div>
         </div>
       </div>
     </ng-container>

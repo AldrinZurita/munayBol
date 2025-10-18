@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias
+from .models import Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias, Notification
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -61,9 +61,11 @@ class PagoSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 class HabitacionSerializer(serializers.ModelSerializer):
+    codigo_hotel = serializers.PrimaryKeyRelatedField(read_only=True)
+    hotel = HotelSerializer(source='codigo_hotel', read_only=True)
     class Meta:
         model = Habitacion
-        fields = '__all__'
+        fields = ['num', 'caracteristicas', 'precio', 'codigo_hotel', 'hotel', 'disponible', 'fecha_creacion', 'cant_huespedes']
 
 class ReservaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -117,3 +119,8 @@ class SugerenciasSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     correo = serializers.EmailField()
     contrasenia = serializers.CharField()
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ['id', 'title', 'message', 'read', 'created_at', 'link']

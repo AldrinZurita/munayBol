@@ -4,10 +4,12 @@ import { RouterModule, Router } from '@angular/router'; // 1. Import Router
 import { AuthService } from '../../services/auth.service';
 import { Usuario } from '../../interfaces/usuario.interface';
 
+import { NotificationComponent } from '../components/notification/notification.component';
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule], 
+  imports: [CommonModule, RouterModule, NotificationComponent], 
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.scss']
 })
