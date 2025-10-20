@@ -40,11 +40,13 @@ $primary-hover-bg: #eaf5ea;
 
   a {
     text-decoration: none;
-    color: #475569;
-    font-weight: 600;
-    padding: 8px 0;
+    color: #1e293b; // darker gray for better contrast
+    font-weight: 700;
+    font-size: 17px; // larger and more professional
+    letter-spacing: 0.2px;
+    padding: 10px 0;
     position: relative;
-    transition: color 0.2s ease;
+    transition: color 0.25s ease, transform 0.25s ease;
 
     &.active {
       color: $primary-color;
@@ -53,6 +55,7 @@ $primary-hover-bg: #eaf5ea;
 
     &:hover {
       color: $primary-color;
+      transform: translateY(-1px);
     }
   }
 }
@@ -148,7 +151,7 @@ $primary-hover-bg: #eaf5ea;
   }
 
   .user-menu-item {
-    box-sizing: border-box; // ADDED: This is the fix
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -195,6 +198,11 @@ $primary-hover-bg: #eaf5ea;
     background-color: $navbar-bg;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 16px 0;
+
+    a {
+      font-size: 18px;
+      padding: 12px 0;
+    }
   }
   .hamburger {
     display: block;
@@ -203,4 +211,3 @@ $primary-hover-bg: #eaf5ea;
     display: flex;
   }
 }
-
