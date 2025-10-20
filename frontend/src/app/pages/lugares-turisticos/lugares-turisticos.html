@@ -18,7 +18,7 @@
       <div class="filtro">
         <label for="ciudad">Departamento</label>
         <div class="select-wrapper">
-          <select id="ciudad" [(ngModel)]="ciudadSeleccionada">
+          <select id="ciudad" [(ngModel)]="ciudadSeleccionada" (change)="aplicarFiltros()">
             <option value="">Todos los departamentos</option>
             <option *ngFor="let ciudad of ciudades" [value]="ciudad">{{ ciudad }}</option>
           </select>
@@ -67,9 +67,15 @@
       <!-- Right column: Action buttons -->
       <div class="card-right">
         <a class="btn btn-accent" [routerLink]="['/lugares-turisticos', l.id_lugar]">Ver Detalles</a>
-        <!-- Botones de administración que solo se muestran si isSuperAdmin es true -->
-        <button *ngIf="isSuperAdmin" class="btn btn-secondary" (click)="openEditModal(l)">Editar</button>
-        <button *ngIf="isSuperAdmin" class="btn btn-danger" (click)="onEliminarLugar(l)">Eliminar</button>
+        <!-- --- UPDATED BUTTONS --- -->
+        <div class="admin-actions" *ngIf="isSuperAdmin">
+          <button class="btn btn-secondary btn-icon" (click)="openEditModal(l)" aria-label="Editar Lugar">
+            <span class="material-symbols-outlined">edit</span>
+          </button>
+          <button class="btn btn-danger btn-icon" (click)="onEliminarLugar(l)" aria-label="Eliminar Lugar">
+            <span class="material-symbols-outlined">delete</span>
+          </button>
+        </div>
       </div>
     </article>
   </section>
@@ -113,33 +119,6 @@
         </div>
       </form>
     </div>
-    <form #addForm="ngForm" (ngSubmit)="saveNewLugar(addForm)" novalidate>
-      <div class="modal-body">
-        <label class="form-label" for="add-nombre">Nombre *</label>
-        <input id="add-nombre" name="nombre" type="text" class="form-input" [(ngModel)]="addModel.nombre" required />
-        <label class="form-label" for="add-departamento">Departamento *</label>
-        <input id="add-departamento" name="departamento" type="text" class="form-input" [(ngModel)]="addModel.departamento" required />
-        <label class="form-label" for="add-tipo">Tipo *</label>
-        <input id="add-tipo" name="tipo" type="text" class="form-input" [(ngModel)]="addModel.tipo" required />
-        <label class="form-label" for="add-ubicacion">Ubicación *</label>
-        <textarea id="add-ubicacion" name="ubicacion" class="form-textarea" rows="3" [(ngModel)]="addModel.ubicacion" required></textarea>
-        <label class="form-label" for="add-horario">Horario</label>
-        <input id="add-horario" name="horario" type="text" class="form-input" [(ngModel)]="addModel.horario" />
-        <label class="form-label" for="add-descripcion">Descripción</label>
-        <textarea id="add-descripcion" name="descripcion" class="form-textarea" rows="3" [(ngModel)]="addModel.descripcion"></textarea>
-        <label class="form-label" for="add-img">URL de imagen</label>
-        <input id="add-img" name="img" type="url" class="form-input" [(ngModel)]="addModel.url_image_lugar_turistico" />
-        <div class="img-preview" *ngIf="addModel.url_image_lugar_turistico">
-          <img [src]="addModel.url_image_lugar_turistico" alt="Vista previa" (error)="onImageError($event)" />
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeAddModal(false)">Cancelar</button>
-        <button type="submit" class="btn btn-primary" [disabled]="addForm.invalid || savingAdd">
-          {{ savingAdd ? 'Guardando…' : 'Crear Lugar' }}
-        </button>
-      </div>
-    </form>
   </div>
 
   <!-- Add Modal -->
