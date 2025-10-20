@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router'; // 1. Import Router
 import { AuthService } from '../../services/auth.service';
 import { Usuario } from '../../interfaces/usuario.interface';
 
@@ -13,11 +13,14 @@ import { NotificationComponent } from '../components/notification/notification.c
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.scss']
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit { // Re-added OnInit for best practice
   isLoggedIn = false;
   username = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router // 2. Inject Router
+  ) {}
 
   ngOnInit() {
     this.authService.user$.subscribe((user: Usuario | null) => {
@@ -28,5 +31,7 @@ export class NavbarComponent {
 
   logout() {
     this.authService.logout();
+    this.router.navigate(['/']); // 3. Add redirection to homepage
   }
 }
+

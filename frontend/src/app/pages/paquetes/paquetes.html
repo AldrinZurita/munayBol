@@ -60,8 +60,15 @@
         <div class="paquete-footer">
           <span class="paquete-precio">{{ paquete.precio }} BOB</span>
           <a class="ver-detalle-btn" [routerLink]="['/paquetes', paquete.id_paquete]">Ver Detalles</a>
-          <button class="editar-btn" (click)="onEditarPaquete(paquete)" *ngIf="isSuperAdmin">Editar</button>
-          <button class="btn btn-danger" (click)="onEliminarPaquete(paquete)" *ngIf="isSuperAdmin">Eliminar</button>
+          <!-- --- UPDATED BUTTONS --- -->
+          <div class="admin-actions" *ngIf="isSuperAdmin">
+            <button class="btn btn-secondary btn-icon" (click)="onEditarPaquete(paquete)" aria-label="Editar Paquete">
+              <span class="material-symbols-outlined">edit</span>
+            </button>
+            <button class="btn btn-danger btn-icon" (click)="onEliminarPaquete(paquete)" aria-label="Eliminar Paquete">
+              <span class="material-symbols-outlined">delete</span>
+            </button>
+          </div>
         </div>
       </div>
     </ng-container>
@@ -120,7 +127,6 @@
 </div>
 
 <!-- MODAL PARA EDITAR -->
-<!-- MODAL PARA EDITAR -->
 <div class="modal-overlay" *ngIf="mostrarModalEditar" (click)="cerrarModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
@@ -172,4 +178,3 @@
     </form>
   </div>
 </div>
-

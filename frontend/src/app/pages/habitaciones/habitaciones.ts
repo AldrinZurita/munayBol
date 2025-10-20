@@ -190,12 +190,12 @@ openAddModal() {
         this.aplicarFiltros();
         this.savingEdit = false;
         this.closeEditModal(false);
-        alert('Lugar turístico actualizado');
+        alert('Habitacion actualizada');
         this._editTargetRef = null;
       },
       error: () => {
         this.savingEdit = false;
-        alert('Error al actualizar el lugar turístico');
+        alert('Error al actualizar la habitacion');
       }
     });
   }

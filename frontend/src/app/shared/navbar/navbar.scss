@@ -1,4 +1,4 @@
-@use 'sass:color'; // 1. Import the modern Sass color module
+@use 'sass:color';
 
 // --- Variables for easy customization ---
 $navbar-bg: #ffffff;
@@ -6,7 +6,7 @@ $text-color: #0f172a;
 $primary-color: #2e7d32;
 $border-color: #e5e7eb;
 $hover-bg: #f1f5f9;
-$primary-hover-bg: #eaf5ea; // New light green for hover states
+$primary-hover-bg: #eaf5ea;
 
 // --- Main Navbar Styles ---
 .navbar {
@@ -74,7 +74,6 @@ $primary-hover-bg: #eaf5ea; // New light green for hover states
     transition: background-color 0.2s ease;
 
     &:hover {
-      // 2. Use the modern color.adjust() function instead of darken()
       background-color: color.adjust($primary-color, $lightness: -5%);
     }
   }
@@ -88,7 +87,7 @@ $primary-hover-bg: #eaf5ea; // New light green for hover states
 
 // --- User Dropdown Menu Styles ---
 .user-menu {
-  position: relative; // Anchor for the dropdown
+  position: relative;
 
   .user-menu-trigger {
     display: flex;
@@ -111,9 +110,9 @@ $primary-hover-bg: #eaf5ea; // New light green for hover states
     }
 
     &:hover {
-      background-color: $primary-hover-bg; // Use new light green
+      background-color: $primary-hover-bg;
       .username, .chevron {
-        color: $primary-color; // Change username and chevron to primary green
+        color: $primary-color;
       }
     }
   }
@@ -130,26 +129,26 @@ $primary-hover-bg: #eaf5ea; // New light green for hover states
     padding: 8px;
     z-index: 100;
 
-    // Hide by default, show on hover
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
     transform: translateY(-10px);
     transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
   }
 
-  // Show dropdown on hover
   &:hover .user-menu-content {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
     transform: translateY(0);
   }
 
-  // Rotate chevron on hover
   &:hover .user-menu-trigger .chevron {
     transform: rotate(180deg);
   }
 
   .user-menu-item {
+    box-sizing: border-box; // ADDED: This is the fix
     display: flex;
     align-items: center;
     gap: 12px;
@@ -169,7 +168,7 @@ $primary-hover-bg: #eaf5ea; // New light green for hover states
     }
 
     &:hover {
-      background-color: $primary-hover-bg; // Use consistent light green on hover
+      background-color: $primary-hover-bg;
       color: $primary-color;
     }
   }

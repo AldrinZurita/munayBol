@@ -82,6 +82,17 @@ $secondary-btn-bg: #f1f5f9;
     background: #fee2e2; color: $danger-color;
     &:hover { background: #fecaca; }
   }
+
+  // --- NEW: Styles for Icon-Only Buttons ---
+  &.btn-icon {
+    padding: 10px; // Make it square
+    width: 40px;
+    height: 40px;
+
+    .material-symbols-outlined {
+      font-size: 20px;
+    }
+  }
 }
 
 /* Filtros */
@@ -146,7 +157,7 @@ $secondary-btn-bg: #f1f5f9;
   min-height: 24px;
   font-weight: 500;
 
-  .error { color: $danger-color; }
+  &.error { color: $danger-color; }
 }
 
 /* Lista */
@@ -197,9 +208,24 @@ $secondary-btn-bg: #f1f5f9;
   }
 
   .card-right {
-    display: flex; flex-direction: column; gap: 10px; justify-content: center;
-    .btn { width: 100%; }
-    @media (min-width: 768px) { width: 200px; align-items: flex-end; }
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    
+    @media (min-width: 768px) {
+      width: 200px;
+      align-items: flex-end;
+    }
+
+    // --- NEW: Styles for Admin Action Buttons ---
+    .admin-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      width: 100%; // Ensure container takes full width
+      justify-content: flex-end; // Align buttons to the right
+    }
   }
 }
 
