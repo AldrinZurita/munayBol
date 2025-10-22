@@ -176,8 +176,10 @@ get total(): number {
               num_habitacion: this.Habitacion.num,
               codigo_hotel: Number(this.Habitacion.hotel),
               id_usuario: usuario?.id,
-              id_pago: res.id_pago
-            };
+              id_pago: res.id_pago,
+              id_paquete: this.route.snapshot.queryParams['id_paquete'] || null
+          };
+
             this.reservasService.crearReserva(reserva).subscribe({
               next: (r) => {
                 this.successCodigo = '#MNY' + r.id_reserva.toString(36).toUpperCase();

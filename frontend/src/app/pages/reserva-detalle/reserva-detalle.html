@@ -1,9 +1,6 @@
 <div class="reserva-detalle-container" *ngIf="!loading && reserva">
   <div class="header">
-    <a class="btn-volver" routerLink="/perfil">
-  ← Volver a Mi Perfil
-</a>
-
+    <a class="btn-volver" routerLink="/perfil">← Volver a Mi Perfil</a>
     <h1 class="titulo">Detalles de Reserva</h1>
     <div class="reserva-id">Reserva #BK{{ reserva.id_reserva.toString().padStart(3, '0') }}</div>
     <span class="badge-estado" [class.confirmada]="obtenerEstadoReserva() === 'Confirmado'">
@@ -15,18 +12,32 @@
     <!-- Información General -->
     <div class="card">
       <h2 class="card-titulo">Información General</h2>
-      <div class="info-item">
-        <div class="info-label">Habitación en "{{ reserva.hotel_nombre || 'Cargando...' }}"</div>
-        <div class="info-location">
-  <span class="icon-location">📍</span> {{ reserva.ubicacion_hotel || 'Ubicación no disponible' }}
-</div>
 
+      <div class="info-item">
+        <div class="info-label">
+          <ng-container *ngIf="esPaquete(); else soloHotel">
+            <div class="info-label">
+              Paquete turístico: {{ paquete?.lugar?.nombre || 'Destino turístico' }}
+            </div>
+          </ng-container>
+
+          <ng-template #soloHotel>
+            <div class="info-label">
+              Habitación en "{{ reserva.hotel_nombre || 'Cargando...' }}"
+            </div>
+           </ng-template>
+
+        </div>
+        <div class="info-location">
+          <span class="icon-location">📍</span> {{ reserva.ubicacion_hotel || 'Ubicación no disponible' }}
+        </div>
       </div>
+
       <div class="info-item">
         <div class="info-label">Hotel: {{ reserva.hotel_nombre || 'Cargando...' }}</div>
         <div class="info-sublabel">Tipo: Habitación</div>
       </div>
-      
+
       <div class="fechas-container">
         <div class="fecha-box">
           <div class="fecha-label">Check-in</div>
@@ -53,29 +64,28 @@
 
     <!-- Resumen de Precio -->
     <div class="card card-precio">
-  <h2 class="card-titulo">Resumen de Precio</h2>
+      <h2 class="card-titulo">Resumen de Precio</h2>
 
-  <div class="precio-item">
-    <span class="precio-label">Precio por noche</span>
-    <span class="precio-valor">{{ reserva.habitacion_precio || 398.75 }} BOB</span>
-  </div>
+      <div class="precio-item">
+        <span class="precio-label">Precio por noche</span>
+        <span class="precio-valor">{{ reserva.habitacion_precio || 398.75 }} BOB</span>
+      </div>
 
-  <div class="precio-item">
-    <span class="precio-label">Subtotal ({{ calcularNoches() }} noches)</span>
-    <span class="precio-valor">{{ calcularSubtotal() }} BOB</span>
-  </div>
+      <div class="precio-item">
+        <span class="precio-label">Subtotal ({{ calcularNoches() }} noches)</span>
+        <span class="precio-valor">{{ calcularSubtotal() }} BOB</span>
+      </div>
 
-  <div class="precio-item">
-    <span class="precio-label">IVA (13%)</span>
-    <span class="precio-valor">{{ calcularIVA() }} BOB</span>
-  </div>
+      <div class="precio-item">
+        <span class="precio-label">IVA (13%)</span>
+        <span class="precio-valor">{{ calcularIVA() }} BOB</span>
+      </div>
 
-  <div class="precio-total">
-    <span class="total-label">Total</span>
-    <span class="total-valor">{{ calcularTotal() }} BOB</span>
-  </div>
-</div>
-
+      <div class="precio-total">
+        <span class="total-label">Total</span>
+        <span class="total-valor">{{ calcularTotal() }} BOB</span>
+      </div>
+    </div>
 
     <!-- Información de Reserva -->
     <div class="card">
@@ -97,15 +107,11 @@
       <h2 class="card-titulo">Información de Contacto</h2>
       <div class="info-item">
         <div class="info-label">Teléfono de emergencia</div>
-        <div class="info-valor">
-          📞 +591 2 234-5678
-        </div>
+        <div class="info-valor">📞 +591 2 234-5678</div>
       </div>
       <div class="info-item">
         <div class="info-label">Email de soporte</div>
-        <div class="info-valor">
-          ✉️ soporte@munaybol.com
-        </div>
+        <div class="info-valor">✉️ soporte@munaybol.com</div>
       </div>
     </div>
 
@@ -130,12 +136,8 @@
 
     <!-- Acciones -->
     <div class="acciones">
-      <button class="btn btn-modificar" (click)="modificarReserva()">
-        Modificar Reserva
-      </button>
-      <button class="btn btn-cancelar" (click)="cancelarReserva()">
-        Cancelar Reserva
-      </button>
+      <button class="btn btn-modificar" (click)="modificarReserva()">Modificar Reserva</button>
+      <button class="btn btn-cancelar" (click)="cancelarReserva()">Cancelar Reserva</button>
     </div>
   </div>
 </div>

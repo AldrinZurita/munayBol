@@ -268,4 +268,126 @@
   text-decoration: none;
   transition: all 0.2s ease;
   background-color: #016d2e;
+  color: #fff !important;
+
 }
+/* ✅ Estilos para el modal emergente */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 480px;
+  width: 90%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  text-align: center;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #0f172a;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #444;
+    margin-bottom: 1rem;
+  }
+
+  .fecha-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+
+    label {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    input[type="date"] {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fff;
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    border-color: #016d2e;
+    outline: none;
+  }
+}
+
+
+    button {
+      margin-top: 0.5rem;
+      background-color: #016d2e;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  }
+
+  .mensaje-validacion {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #016d2e;
+    margin-bottom: 1rem;
+  }
+    .modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+
+    .btn-principal {
+      background-color: #016d2e;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #014f21;
+      }
+    }
+
+    .btn-cancelar {
+      background-color: #ccc;
+      color: #333;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #b3b3b3;
+      }
+    }
+  }
+}
+

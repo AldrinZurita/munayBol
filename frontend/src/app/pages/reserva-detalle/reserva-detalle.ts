@@ -5,7 +5,9 @@ import { ReservasService } from '../../services/reservas.service';
 import { HotelService } from '../../services/hotel.service';
 import { HabitacionService } from '../../services/habitacion.service';
 import { PagoService, Pago } from '../../services/pago.service';
-import { RouterModule } from '@angular/router'; 
+import { RouterModule } from '@angular/router';
+import { PaqueteService } from '../../services/paquete.service';
+import { Paquete } from '../../interfaces/paquete.interface';
 
 interface ReservaDetalle {
   id_reserva: number;
@@ -22,6 +24,8 @@ interface ReservaDetalle {
   habitacion_precio?: number;
   habitacion_huespedes?: number;
   pago_info?: Pago;
+  id_paquete?: number;
+  nombre_lugar?: string;
 }
 
 @Component({
@@ -31,12 +35,9 @@ interface ReservaDetalle {
   standalone: true,
   imports: [CommonModule, RouterModule]
 })
-
-
-// ...importaciones y definición del componente sin cambios...
-
 export class ReservaDetalleComponent implements OnInit {
   reserva: ReservaDetalle | null = null;
+  paquete: Paquete | null = null;
   loading: boolean = true;
   error: string = '';
 
@@ -47,6 +48,7 @@ export class ReservaDetalleComponent implements OnInit {
     private readonly hotelService: HotelService,
     private readonly habitacionService: HabitacionService,
     private readonly pagoService: PagoService,
+    private readonly paqueteService: PaqueteService,
     @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {}
 
@@ -64,6 +66,18 @@ export class ReservaDetalleComponent implements OnInit {
     this.reservasService.getReservaById(id).subscribe({
       next: (reserva: any) => {
         this.reserva = reserva;
+        console.log('Reserva cargada:', this.reserva);
+
+        if (reserva.id_paquete) {
+          this.paqueteService.getPaqueteById(reserva.id_paquete).subscribe({
+            next: (paq: Paquete) => {
+              this.paquete = paq;
+            },
+            error: (err) => {
+              console.warn('No se pudo cargar el paquete:', err);
+            }
+          });
+        }
 
         if (reserva.codigo_hotel) {
           this.hotelService.getHotelById(reserva.codigo_hotel).subscribe({
@@ -108,6 +122,10 @@ export class ReservaDetalleComponent implements OnInit {
     });
   }
 
+  esPaquete(): boolean {
+    return !!this.reserva?.id_paquete;
+  }
+
   calcularNoches(): number {
     if (!this.reserva) return 0;
     const fechaInicio = new Date(this.reserva.fecha_reserva);
@@ -132,11 +150,11 @@ export class ReservaDetalleComponent implements OnInit {
   }
 
   formatearFecha(fecha: string): string {
-    const opciones: Intl.DateTimeFormatOptions = { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
+    const opciones: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     };
     const fechaObj = new Date(fecha);
     return fechaObj.toLocaleDateString('es-BO', opciones);

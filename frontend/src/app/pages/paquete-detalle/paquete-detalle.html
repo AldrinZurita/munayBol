@@ -33,9 +33,35 @@
         </ul>
       </div>
     </div>
+
     <div class="imagen-lugar">
       <img [src]="paquete.lugar?.url_image_lugar_turistico" alt="Imagen lugar" />
     </div>
-    <button class="btn">Reservar Paquete</button>
+
+    <!-- Botón de reserva -->
+    <button class="btn" (click)="reservarPaquete()">Reservar Paquete</button>
   </div>
+</div>
+
+<!-- Modal de selección de fechas -->
+<div class="modal-backdrop" *ngIf="showConflictModal">
+  <dialog class="modal-card warning" open aria-labelledby="conflictoTitulo">
+    <h2 id="conflictoTitulo">Selecciona tus fechas</h2>
+    <p>La fecha más próxima disponible es: <b>{{ formatearFecha(proxDisponible) }}</b></p>
+
+
+    <div class="fecha-selector">
+      <label>Fecha de entrada:</label>
+      <input type="date" [(ngModel)]="fechaReserva" (change)="onChangeFechaReserva()" />
+      <label>Fecha de salida:</label>
+      <input type="date" [(ngModel)]="fechaCaducidad" />
+      <button class="btn-sec" (click)="probarFechasPersonalizadas()">Probar fechas</button>
+    </div>
+
+    <p class="mensaje-validacion" *ngIf="mensajeFechaLibre">{{ mensajeFechaLibre }}</p>
+
+    <div class="modal-actions">
+      <button class="btn-cancelar" (click)="cancelarReserva()">Cancelar</button>
+    </div>
+  </dialog>
 </div>
