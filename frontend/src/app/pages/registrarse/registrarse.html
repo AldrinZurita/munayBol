@@ -54,3 +54,14 @@
     </div>
   </div>
 </div>
+
+<!-- Modal Éxito Registro -->
+<div class="modal-backdrop" *ngIf="showRegistroSuccessModal">
+  <dialog class="modal-card" open aria-labelledby="registroExitosoTitulo">
+    <div class="icon-circle success">✔</div>
+    <h2 id="registroExitosoTitulo">¡Registro Exitoso!</h2>
+    <p>Bienvenido, {{ successNombre }}. Tu cuenta ha sido creada correctamente.</p>
+    <p>Ya puedes iniciar sesión para acceder a tus beneficios exclusivos.</p>
+    <button class="btn-modal" (click)="cerrarRegistroSuccess()">Ir al Login</button>
+  </dialog>
+</div>

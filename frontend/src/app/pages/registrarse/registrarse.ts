@@ -19,7 +19,7 @@ import { RegistrarseService } from '../../services/registrarse.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule, // ✅ Necesario para [(ngModel)]
+    FormsModule,
     RouterModule,
     HttpClientModule
   ],
@@ -31,6 +31,10 @@ export class Registrarse implements OnInit {
   form!: FormGroup;
   intentadoEnviar = false;
   verContrasenia = false;
+
+  // ✅ NUEVAS propiedades para el modal
+  showRegistroSuccessModal = false;
+  successNombre = '';
 
   constructor(
     private fb: FormBuilder,
@@ -69,11 +73,11 @@ export class Registrarse implements OnInit {
         pais: 'Bolivia'
       };
 
-
       this.registroService.registrarUsuario(datos).subscribe({
         next: (res) => {
           console.log('✅ Usuario creado:', res);
-          this.router.navigate(['/login']);
+          this.successNombre = this.form.value.nombre;
+          this.showRegistroSuccessModal = true;
         },
         error: (err) => {
           console.error('❌ Error al registrar:', err);
@@ -81,12 +85,15 @@ export class Registrarse implements OnInit {
       });
 
       console.log('✅ Datos enviados al backend:', datos);
-      
-
-
     } else {
       console.warn('⚠️ Formulario inválido');
       this.form.markAllAsTouched();
     }
+  }
+
+  // ✅ NUEVO método para cerrar el modal y redirigir
+  cerrarRegistroSuccess(): void {
+    this.showRegistroSuccessModal = false;
+    this.router.navigate(['/login']);
   }
 }
