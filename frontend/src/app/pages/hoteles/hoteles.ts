@@ -5,11 +5,12 @@ import { HotelService } from '../../services/hotel.service';
 import { AuthService } from '../../services/auth.service';
 import { Hotel } from '../../interfaces/hotel.interface';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Loading } from "../../loading/loading";
 
 @Component({
   selector: 'app-hoteles',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Loading],
   templateUrl: './hoteles.html',
   styleUrls: ['./hoteles.scss']
 })

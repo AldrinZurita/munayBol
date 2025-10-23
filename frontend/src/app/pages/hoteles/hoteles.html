@@ -36,7 +36,7 @@
   </section>
 
   <!-- Estados -->
-  <div *ngIf="cargando" class="estado">Cargando hoteles...</div>
+  <app-loading *ngIf="cargando"></app-loading>
   <div *ngIf="error" class="estado error">{{ error }}</div>
   <div *ngIf="!cargando && hotelesFiltrados.length === 0 && !error" class="estado">
     No hay hoteles que coincidan con el filtro.

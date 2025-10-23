@@ -5,11 +5,12 @@ import { Hotel } from '../../interfaces/hotel.interface';
 import { HotelService } from '../../services/hotel.service';
 import { HabitacionService } from '../../services/habitacion.service';
 import { Habitacion } from '../../interfaces/habitacion.interface';
+import { Loading } from "../../loading/loading";
 
 @Component({
   selector: 'app-hotel-detalle',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Loading],
   templateUrl: './hotel-detalle.html',
   styleUrls: ['./hotel-detalle.scss'],
 })

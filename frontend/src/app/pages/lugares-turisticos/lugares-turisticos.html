@@ -35,14 +35,14 @@
   </section>
 
   <!-- Status display for loading, errors, or no results -->
-  <div class="estado" role="status" aria-live="polite">
+  <!-- <div class="estado" role="status" aria-live="polite">
     <div *ngIf="cargando">Cargando lugares…</div>
     <div *ngIf="error" class="error">{{ error }}</div>
     <div *ngIf="!cargando && lugaresFiltrados.length === 0 && !error">
       No hay lugares que coincidan con el filtro.
     </div>
-  </div>
-
+  </div> -->
+<app-loading *ngIf="cargando"></app-loading>
   <!-- List of tourist location cards -->
   <section class="lista">
     <article *ngFor="let l of lugaresFiltrados; trackBy: trackByLugar" class="card-lugar">

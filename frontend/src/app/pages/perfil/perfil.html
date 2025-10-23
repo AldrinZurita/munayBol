@@ -45,7 +45,7 @@
     <h2>Mis Reservas</h2>
     
     <!-- Loading, error, and empty states -->
-    <div *ngIf="cargandoReservas" class="estado">Cargando tus reservas...</div>
+    <app-loading *ngIf="cargandoReservas"></app-loading>
     <div *ngIf="errorReservas" class="estado error">{{ errorReservas }}</div>
     <div *ngIf="!cargandoReservas && reservas.length === 0 && !errorReservas" class="estado-vacio">
       <span class="material-symbols-outlined">luggage</span>

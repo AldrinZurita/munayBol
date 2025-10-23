@@ -8,11 +8,12 @@ import { RouterModule } from '@angular/router';
 import { HotelService } from '../../services/hotel.service'; // 1. Import HotelService
 import { forkJoin, of } from 'rxjs'; // 2. Import RxJS operators
 import { map, switchMap } from 'rxjs/operators';
+import { Loading } from "../../loading/loading";
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Loading],
   templateUrl: './perfil.html',
   styleUrls: ['./perfil.scss']
 })

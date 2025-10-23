@@ -1,7 +1,5 @@
 <div class="hotel-detalle-container">
-  <ng-container *ngIf="cargando">
-    <div class="estado">Cargando datos del hotel...</div>
-  </ng-container>
+  <app-loading *ngIf="cargando"></app-loading>
   <ng-container *ngIf="error">
     <div class="estado error">{{ error }}</div>
   </ng-container>
@@ -37,7 +35,7 @@
 
 <h2>Habitaciones del {{hotel?.nombre}}</h2>
 <div class="estado">
-  <div *ngIf="cargandoHabitaciones">Cargando habitaciones del hotel...</div>
+  <app-loading *ngIf="cargandoHabitaciones"></app-loading>
   <div *ngIf="errorHabitaciones" class="error">{{ errorHabitaciones }}</div>
   <div *ngIf="!cargandoHabitaciones && habitaciones.length === 0 && !errorHabitaciones">No hay habitaciones añadidas a este hotel</div>
 </div>

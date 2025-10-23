@@ -6,11 +6,12 @@ import { LugarTuristico } from '../../interfaces/lugar-turistico.interface';
 import { AuthService } from '../../services/auth.service';
 import { LugaresService, ActualizarLugarDTO } from '../../services/lugares.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Loading } from "../../loading/loading";
 
 @Component({
   selector: 'app-lugares-turisticos',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, Loading],
   templateUrl: './lugares-turisticos.html',
   styleUrls: ['./lugares-turisticos.scss'],
 })

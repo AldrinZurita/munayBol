@@ -39,7 +39,7 @@
     <button class="aplicar-btn" (click)="aplicarFiltros()">Aplicar Filtros</button>
   </div>
 
-  <p *ngIf="cargando">Cargando paquetes...</p>
+  <app-loading *ngIf="cargando"></app-loading>
   <p *ngIf="error">{{ error }}</p>
   <p *ngIf="!cargando && !error && paquetesFiltrados.length === 0">No hay paquetes que coincidan con el filtro.</p>
 

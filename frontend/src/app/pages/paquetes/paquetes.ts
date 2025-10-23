@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { PaqueteService } from '../../services/paquete.service';
 import { Paquete } from '../../interfaces/paquete.interface';
+import { Loading } from "../../loading/loading";
 
 @Component({
   selector: 'app-paquetes',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, Loading],
   templateUrl: './paquetes.html',
   styleUrls: ['./paquetes.scss']
 })
