@@ -202,218 +202,1865 @@
   "lugares_turisticos": [
     {
       "id_lugar": 1,
-      "nombre": "Parque Nacional Madidi",
-      "ubicacion": "Beni",
-      "departamento": "Beni",
-      "tipo": "Parque Nacional",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Una de las áreas protegidas con mayor biodiversidad del mundo. Paraíso para los amantes de la naturaleza, con gran variedad de flora y fauna.",
-      "url_image_lugar_turistico": "",
+      "nombre": "Salar de Uyuni",
+      "departamento": "Potosí",
+      "ubicacion": "20.1338° S, 67.4891° W",
+      "tipo": "Salar y desierto",
+      "descripcion": "El salar más grande del mundo (10,582 km²), con lagunas de colores, géiseres y flamencos; ideal para tours fotográficos.",
       "estado": true
     },
     {
       "id_lugar": 2,
-      "nombre": "Moxos y las llanuras de Moxos",
-      "ubicacion": "Beni",
-      "departamento": "Beni",
-      "tipo": "Llanuras Inundables",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Zona de llanuras inundables y sabanas en la cuenca del Amazonas, famosa por antiguas construcciones de montículos y canales.",
-      "url_image_lugar_turistico": "",
+      "nombre": "Lago Titicaca",
+      "departamento": "La Paz",
+      "ubicacion": "15.9254° S, 69.3354° W",
+      "tipo": "Lago navegable y cultural",
+      "descripcion": "Lago navegable más alto del mundo (3,812 m); hogar de la Isla del Sol y comunidades aimaras.",
       "estado": true
     },
     {
       "id_lugar": 3,
-      "nombre": "Sucre, la 'Ciudad Blanca'",
-      "ubicacion": "Sucre",
-      "departamento": "Chuquisaca",
-      "tipo": "Ciudad Patrimonio",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Capital constitucional de Bolivia y Patrimonio de la Humanidad por la Unesco. Destaca por su arquitectura colonial, iglesias y Casa de la Libertad.",
-      "url_image_lugar_turistico": "",
+      "nombre": "Isla del Sol",
+      "departamento": "La Paz",
+      "ubicacion": "16.0167° S, 69.1500° W",
+      "tipo": "Isla arqueológica",
+      "descripcion": "Sitio inca sagrado con ruinas, senderos y vistas al Titicaca; accesible desde Copacabana.",
       "estado": true
     },
     {
       "id_lugar": 4,
-      "nombre": "Parque Cretácico",
-      "ubicacion": "Cercanías de Sucre",
-      "departamento": "Chuquisaca",
-      "tipo": "Yacimiento Paleontológico",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Yacimiento paleontológico con la mayor cantidad de huellas de dinosaurios del mundo.",
-      "url_image_lugar_turistico": "",
+      "nombre": "Copacabana",
+      "departamento": "La Paz",
+      "ubicacion": "16.1667° S, 69.0833° W",
+      "tipo": "Pueblo lacustre y religioso",
+      "descripcion": "Ciudad junto al Titicaca con la Basílica de la Virgen; base para tours lacustres.",
       "estado": true
     },
     {
       "id_lugar": 5,
-      "nombre": "Cristo de la Concordia",
-      "ubicacion": "Cerro San Pedro, Cochabamba",
-      "departamento": "Cochabamba",
-      "tipo": "Monumento",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Estatua de 33 metros de altura que ofrece vista panorámica de la ciudad y los valles.",
-      "url_image_lugar_turistico": "",
+      "nombre": "Tiwanaku (Tiahuanaco)",
+      "departamento": "La Paz",
+      "ubicacion": "16.5547° S, 68.6734° W",
+      "tipo": "Ruinas arqueológicas",
+      "descripcion": "Sitio preincaico Patrimonio UNESCO; templos y monolitos de la cultura Tiwanaku.",
       "estado": true
     },
     {
       "id_lugar": 6,
-      "nombre": "Parque Nacional Toro Toro",
-      "ubicacion": "Toro Toro, Cochabamba",
-      "departamento": "Cochabamba",
-      "tipo": "Parque Nacional",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Famoso por cuevas, cañones, restos de dinosaurios y fósiles marinos. Destino para ecoturismo y aventura.",
-      "url_image_lugar_turistico": "",
+      "nombre": "Valle de la Luna",
+      "departamento": "La Paz",
+      "ubicacion": "16.5667° S, 68.0833° W (cerca de La Paz)",
+      "tipo": "Formación geológica",
+      "descripcion": "Formaciones rocosas erosionadas; senderismo cerca de la capital con paisajes lunares.",
       "estado": true
     },
     {
       "id_lugar": 7,
-      "nombre": "Valle de la Luna",
-      "ubicacion": "La Paz, zona sur",
-      "departamento": "La Paz",
-      "tipo": "Formación Geológica",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Formaciones geológicas de arcilla con paisaje similar al lunar. Ideal para paseos cortos.",
-      "url_image_lugar_turistico": "",
+      "nombre": "Potosí",
+      "departamento": "Potosí",
+      "ubicacion": "19.5836° S, 65.7531° W",
+      "tipo": "Ciudad minera histórica",
+      "descripcion": "Ciudad colonial con minas de plata; famosa por el Cerro Rico y tours históricos.",
       "estado": true
     },
     {
       "id_lugar": 8,
-      "nombre": "Teleférico de La Paz",
-      "ubicacion": "La Paz",
-      "departamento": "La Paz",
-      "tipo": "Transporte Turístico",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Sistema de transporte por cable más largo del mundo. Ofrece vistas espectaculares de la ciudad y el Illimani.",
-      "url_image_lugar_turistico": "",
+      "nombre": "Sucre",
+      "departamento": "Chuquisaca",
+      "ubicacion": "19.0333° S, 65.2627° W",
+      "tipo": "Ciudad colonial",
+      "descripcion": "Capital constitucional; edificios barrocos y museos como la Casa de la Libertad.",
       "estado": true
     },
     {
       "id_lugar": 9,
-      "nombre": "Carnaval de Oruro",
-      "ubicacion": "Oruro",
-      "departamento": "Oruro",
-      "tipo": "Evento Cultural",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Fiesta folclórica y religiosa, Patrimonio Cultural Inmaterial de la Humanidad por la Unesco.",
-      "url_image_lugar_turistico": "",
+      "nombre": "Toro Toro (Parque Nacional)",
+      "departamento": "Potosí",
+      "ubicacion": "18.1333° S, 65.7500° W",
+      "tipo": "Parque nacional y paleontológico",
+      "descripcion": "Huellas de dinosaurios, cuevas de Umajalanta y cañones; ideal para ecoturismo.",
       "estado": true
     },
     {
       "id_lugar": 10,
-      "nombre": "Santuario de la Virgen del Socavón",
-      "ubicacion": "Oruro",
-      "departamento": "Oruro",
-      "tipo": "Templo Religioso",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Importante templo y sitio cultural junto a la antigua mina del Socavón.",
-      "url_image_lugar_turistico": "",
+      "nombre": "Parque Nacional Madidi",
+      "departamento": "Beni",
+      "ubicacion": "13.8000° S, 68.3333° W (Rurrenabaque)",
+      "tipo": "Selva amazónica",
+      "descripcion": "Una de las áreas más biodiversas del mundo; jaguares, monos y tours indígenas.",
       "estado": true
     },
     {
       "id_lugar": 11,
-      "nombre": "Monumento a los Héroes de Bahía",
-      "ubicacion": "Cobija",
-      "departamento": "Pando",
-      "tipo": "Monumento Histórico",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Monumento que conmemora la batalla de Bahía, hito importante para la región.",
-      "url_image_lugar_turistico": "",
+      "nombre": "Rurrenabaque",
+      "departamento": "Beni",
+      "ubicacion": "14.4412° S, 67.5278° W",
+      "tipo": "Puerta a la Amazonía",
+      "descripcion": "Punto de partida para Madidi y pampas; tours de fauna como caimanes y delfines rosados.",
       "estado": true
     },
     {
       "id_lugar": 12,
-      "nombre": "Río Acre",
-      "ubicacion": "Pando",
-      "departamento": "Pando",
-      "tipo": "Río",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Importante río amazónico, frontera natural con Brasil. Se pueden realizar paseos en bote.",
-      "url_image_lugar_turistico": "",
+      "nombre": "Misiones Jesuíticas",
+      "departamento": "Santa Cruz",
+      "ubicacion": "16.0000° S, 61.0000° W (San Javier)",
+      "tipo": "Iglesias coloniales",
+      "descripcion": "Conjunto de misiones UNESCO; iglesias barrocas en San Javier y Concepción.",
       "estado": true
     },
     {
       "id_lugar": 13,
-      "nombre": "Cerro Rico",
-      "ubicacion": "Potosí",
-      "departamento": "Potosí",
-      "tipo": "Montaña",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Símbolo de Potosí, fuente de riqueza durante la colonia. Visitas guiadas a minas históricas.",
-      "url_image_lugar_turistico": "",
+      "nombre": "Samaipata",
+      "departamento": "Santa Cruz",
+      "ubicacion": "18.1811° S, 63.8755° W",
+      "tipo": "Pueblo colonial y ruinas",
+      "descripcion": "El Fuerte de Samaipata, sitio preincaico; clima subtropical y viñedos cercanos.",
       "estado": true
     },
     {
       "id_lugar": 14,
-      "nombre": "Salar de Uyuni",
-      "ubicacion": "Frontera Potosí-Oruro",
-      "departamento": "Potosí",
-      "tipo": "Desierto de Sal",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "El salar más grande del mundo, destino turístico principal en Bolivia.",
-      "url_image_lugar_turistico": "",
+      "nombre": "Tarija",
+      "departamento": "Tarija",
+      "ubicacion": "21.5355° S, 64.7296° W",
+      "tipo": "Valles vinícolas",
+      "descripcion": "Ruta del vino con bodegas; cultura andina y fiestas tradicionales.",
       "estado": true
     },
     {
       "id_lugar": 15,
       "nombre": "Parque Nacional Amboró",
-      "ubicacion": "Santa Cruz",
       "departamento": "Santa Cruz",
-      "tipo": "Parque Nacional",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Área protegida con gran diversidad de flora, fauna y ecosistemas.",
-      "url_image_lugar_turistico": "",
+      "ubicacion": "17.7500° S, 63.5000° W",
+      "tipo": "Bosque yunka",
+      "descripcion": "Reserva con orquídeas, mariposas y cascadas; treks en la serranía subtropical.",
       "estado": true
     },
     {
       "id_lugar": 16,
-      "nombre": "Samaipata",
-      "ubicacion": "Santa Cruz",
-      "departamento": "Santa Cruz",
-      "tipo": "Sitio Arqueológico",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Pueblo conocido por el Fuerte de Samaipata, Patrimonio de la Humanidad.",
-      "url_image_lugar_turistico": "",
+      "nombre": "Mi Teleférico",
+      "departamento": "La Paz",
+      "ubicacion": "16.5000° S, 68.1500° W (La Paz centro)",
+      "tipo": "Transporte urbano",
+      "descripcion": "Red de teleféricos con vistas panorámicas de la ciudad y montañas; solución al tráfico.",
       "estado": true
     },
     {
       "id_lugar": 17,
-      "nombre": "Valle de la Concepción",
-      "ubicacion": "Tarija",
-      "departamento": "Tarija",
-      "tipo": "Valle Vitivinícola",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Zona de viñedos, bodegas y producción de vinos. Ofrece degustaciones y experiencias enoturísticas.",
-      "url_image_lugar_turistico": "",
+      "nombre": "North Yungas Road (Death Road)",
+      "departamento": "La Paz",
+      "ubicacion": "16.3000° S, 67.8000° W (Yungas)",
+      "tipo": "Ruta de aventura",
+      "descripcion": "Camino más peligroso del mundo; ciclismo con vistas impresionantes y naturaleza.",
       "estado": true
     },
     {
       "id_lugar": 18,
-      "nombre": "Casa Dorada de Tarija",
-      "ubicacion": "Tarija",
+      "nombre": "Huayna Potosí",
+      "departamento": "La Paz",
+      "ubicacion": "16.2667° S, 68.1333° W",
+      "tipo": "Montaña y trekking",
+      "descripcion": "Pico de 6,088 m; excursiones de 3 días con crampones para montañistas principiantes.",
+      "estado": true
+    },
+    {
+      "id_lugar": 19,
+      "nombre": "Uma Jalanta Cave",
+      "departamento": "Cochabamba",
+      "ubicacion": "18.1333° S, 65.7500° W (Toro Toro)",
+      "tipo": "Cueva exploratoria",
+      "descripcion": "Caverna en Parque Toro Toro con estalactitas, estalagmitas y peces ciegos.",
+      "estado": true
+    },
+    {
+      "id_lugar": 20,
+      "nombre": "Calle Sagarnaga",
+      "departamento": "La Paz",
+      "ubicacion": "16.5100° S, 68.1400° W (La Paz)",
+      "tipo": "Mercado de souvenirs",
+      "descripcion": "Calle principal para artesanías de alpaca y aguayo; cerca de la Basílica San Francisco.",
+      "estado": true
+    },
+    {
+      "id_lugar": 21,
+      "nombre": "Takesi Trek (Inca Trail)",
+      "departamento": "La Paz",
+      "ubicacion": "Cerca de Palca (16.4000° S, 67.9000° W)",
+      "tipo": "Sendero incaico",
+      "descripcion": "Trek de 40 km de 2-3 días; de montañas a selva, gratuito y autoguiado.",
+      "estado": true
+    },
+    {
+      "id_lugar": 22,
+      "nombre": "Cerro Rico",
+      "departamento": "Potosí",
+      "ubicacion": "19.5836° S, 65.7531° W (Potosí)",
+      "tipo": "Mina histórica",
+      "descripcion": "Montaña de plata colonial; tours a minas activas con historia de explotación.",
+      "estado": true
+    },
+    {
+      "id_lugar": 23,
+      "nombre": "Vergel Canyon",
+      "departamento": "Cochabamba",
+      "ubicacion": "18.1333° S, 65.7500° W (Toro Toro)",
+      "tipo": "Cañón y hiking",
+      "descripcion": "Sendero en Toro Toro con puente colgante; avistamiento de guacamayos rojos.",
+      "estado": true
+    },
+    {
+      "id_lugar": 24,
+      "nombre": "La Senda Verde",
+      "departamento": "La Paz",
+      "ubicacion": "16.6000° S, 67.9000° W (cerca Coroico)",
+      "tipo": "Santuario de vida silvestre",
+      "descripcion": "Refugio para monos, osos y aves; voluntariado y restaurantes que apoyan rescate.",
+      "estado": true
+    },
+    {
+      "id_lugar": 25,
+      "nombre": "Jardín de las Delicias (Amboró)",
+      "departamento": "Santa Cruz",
+      "ubicacion": "17.7500° S, 63.5000° W",
+      "tipo": "Cataratas y natación",
+      "descripcion": "Trek a 3 cascadas en Amboró; tours multi-día desde Santa Cruz.",
+      "estado": true
+    },
+    {
+      "id_lugar": 26,
+      "nombre": "Coroico",
+      "departamento": "La Paz",
+      "ubicacion": "15.8333° S, 67.4667° W",
+      "tipo": "Pueblo de aventura",
+      "descripcion": "Fin de Death Road; rappel en cascadas y ecolodge Sol y Luna.",
+      "estado": true
+    },
+    {
+      "id_lugar": 27,
+      "nombre": "Valle de la Concepción",
       "departamento": "Tarija",
-      "tipo": "Monumento Histórico",
-      "fecha_creacion": "2025-10-09",
-      "horario": "",
-      "descripcion": "Edificio histórico con arquitectura art nouveau, actualmente funciona como centro cultural.",
-      "url_image_lugar_turistico": "",
+      "ubicacion": "21.5000° S, 64.7000° W (Tarija)",
+      "tipo": "Viñedos y singani",
+      "descripcion": "Región vinícola; catas de chuflay (singani con jengibre y lima).",
+      "estado": true
+    },
+    {
+      "id_lugar": 28,
+      "nombre": "Oruro Carnaval",
+      "departamento": "Oruro",
+      "ubicacion": "17.9833° S, 66.6167° W (Oruro)",
+      "tipo": "Festival cultural",
+      "descripcion": "Danza de diablos UNESCO; 30,000 bailarines en febrero, tributo a mineros.",
+      "estado": true
+    },
+    {
+      "id_lugar": 29,
+      "nombre": "San Felipe de Neri Monastery",
+      "departamento": "Chuquisaca",
+      "ubicacion": "19.0333° S, 65.2627° W (Sucre)",
+      "tipo": "Monasterio histórico",
+      "descripcion": "Vista panorámica de Sucre blanca; claustro neoclásico del s. XVIII.",
+      "estado": true
+    },
+    {
+      "id_lugar": 30,
+      "nombre": "Reserva Eduardo Avaroa",
+      "departamento": "Potosí",
+      "ubicacion": "22.2000° S, 67.8000° W (Sur Lipez)",
+      "tipo": "Reserva natural",
+      "descripcion": "Géiseres, volcanes y lagunas coloridas; parte de tour Salar Uyuni.",
+      "estado": true
+    },
+    {
+      "id_lugar": 31,
+      "nombre": "Misiones Jesuíticas de Chiquitos",
+      "departamento": "Santa Cruz",
+      "ubicacion": "18.0000° S, 60.7500° W (Concepción)",
+      "tipo": "Misiones históricas",
+      "descripcion": "Iglesias barrocas indígenas; arte guaraní en pueblos como Santa Ana.",
+      "estado": true
+    },
+    {
+      "id_lugar": 32,
+      "nombre": "Chacaltaya Ski Resort",
+      "departamento": "La Paz",
+      "ubicacion": "16.1167° S, 68.1333° W",
+      "tipo": "Estación de esquí abandonada",
+      "descripcion": "Pico más alto del mundo (5,421 m); ruinas con vistas andinas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 33,
+      "nombre": "El Fuerte de Samaipata",
+      "departamento": "Santa Cruz",
+      "ubicacion": "18.1811° S, 63.8755° W",
+      "tipo": "Ruinas precolombinas",
+      "descripcion": "Fortaleza inca con tallados misteriosos; vistas al valle subtropical.",
+      "estado": true
+    },
+    {
+      "id_lugar": 34,
+      "nombre": "Laguna Colorada",
+      "departamento": "Potosí",
+      "ubicacion": "22.1933° S, 67.7833° W",
+      "tipo": "Laguna colorida",
+      "descripcion": "Rojo por algas; flamingos resistentes a químicos; en Reserva Avaroa.",
+      "estado": true
+    },
+    {
+      "id_lugar": 35,
+      "nombre": "Cementerio de Trenes",
+      "departamento": "Potosí",
+      "ubicacion": "20.4667° S, 66.8333° W (Uyuni)",
+      "tipo": "Sitio abandonado",
+      "descripcion": "Museo al aire libre de locomotoras oxidadas; reliquias ferroviarias.",
+      "estado": true
+    },
+    {
+      "id_lugar": 36,
+      "nombre": "Isla de la Luna",
+      "departamento": "La Paz",
+      "ubicacion": "15.9500° S, 69.1167° W (Titicaca)",
+      "tipo": "Isla arqueológica",
+      "descripcion": "Ruinas incas femeninas; accesible por ferry desde Copacabana.",
+      "estado": true
+    },
+    {
+      "id_lugar": 37,
+      "nombre": "Villa Tunari",
+      "departamento": "Cochabamba",
+      "ubicacion": "17.5000° S, 65.5000° W",
+      "tipo": "Pueblo tropical",
+      "descripcion": "Gateway a Chapare; playas fluviales y parques como Carrasco.",
+      "estado": true
+    },
+    {
+      "id_lugar": 38,
+      "nombre": "Mina San José",
+      "departamento": "Oruro",
+      "ubicacion": "17.9833° S, 66.6167° W (cerca Oruro)",
+      "tipo": "Mina cultural",
+      "descripcion": "Tour por socavones con creencias místicas de mineros.",
+      "estado": true
+    },
+    {
+      "id_lugar": 39,
+      "nombre": "Chullpares de Macaya",
+      "departamento": "Oruro",
+      "ubicacion": "18.5000° S, 68.0000° W (Sajama)",
+      "tipo": "Sitios funerarios",
+      "descripcion": "Torres preincaicas de adobe (1200-1300 d.C.); bóvedas falsas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 40,
+      "nombre": "Hotel Palacio de Sal",
+      "departamento": "Potosí",
+      "ubicacion": "20.1338° S, 67.4891° W (Uyuni)",
+      "tipo": "Hotel temático",
+      "descripcion": "Construido de sal; lujo en el desierto con vistas al salar.",
+      "estado": true
+    },
+    {
+      "id_lugar": 41,
+      "nombre": "Quillacollo",
+      "departamento": "Cochabamba",
+      "ubicacion": "17.4167° S, 66.2833° W",
+      "tipo": "Pueblo festivo",
+      "descripcion": "Virgen de Urkupiña (15 ago.); integración cultural y mercados.",
+      "estado": true
+    },
+    {
+      "id_lugar": 42,
+      "nombre": "Aguas Termales de Liriuni",
+      "departamento": "Cochabamba",
+      "ubicacion": "17.4500° S, 66.3000° W (cerca Quillacollo)",
+      "tipo": "Baños termales",
+      "descripcion": "Aguas minerales terapéuticas; descanso en valles fértiles.",
+      "estado": true
+    },
+    {
+      "id_lugar": 43,
+      "nombre": "Cliza",
+      "departamento": "Cochabamba",
+      "ubicacion": "17.6333° S, 66.0333° W",
+      "tipo": "Pueblo agrícola",
+      "descripcion": "Feria de maíz y chicha; corazón del Valle Alto.",
+      "estado": true
+    },
+    {
+      "id_lugar": 44,
+      "nombre": "Totora",
+      "departamento": "Cochabamba",
+      "ubicacion": "17.7833° S, 65.5833° W",
+      "tipo": "Pueblo colonial",
+      "descripcion": "Arquitectura patrimonio nacional; historia independentista.",
+      "estado": true
+    },
+    {
+      "id_lugar": 45,
+      "nombre": "Padilla",
+      "departamento": "Chuquisaca",
+      "ubicacion": "19.3000° S, 64.3000° W",
+      "tipo": "Sitio histórico",
+      "descripcion": "Cuartel de guerrilleros; casa-museo de Juana Azurduy.",
+      "estado": true
+    },
+    {
+      "id_lugar": 46,
+      "nombre": "Cal Orck’o (Parque Cretácico)",
+      "departamento": "Chuquisaca",
+      "ubicacion": "19.0667° S, 65.2667° W (Sucre)",
+      "tipo": "Sitio paleontológico",
+      "descripcion": "5,000 huellas de dinosaurios (68M años); réplicas en farallón.",
+      "estado": true
+    },
+    {
+      "id_lugar": 47,
+      "nombre": "San Lorenzo",
+      "departamento": "Tarija",
+      "ubicacion": "21.5833° S, 64.5833° W",
+      "tipo": "Pueblo histórico",
+      "descripcion": "Casa-museo de Eustaquio Méndez; cangrejitos de río Guadalquivir.",
+      "estado": true
+    },
+    {
+      "id_lugar": 48,
+      "nombre": "Campiña Tarijeña",
+      "departamento": "Tarija",
+      "ubicacion": "21.5000° S, 64.7000° W (alrededores Tarija)",
+      "tipo": "Paisajes rurales",
+      "descripcion": "Coplas, aros y viñedos a 5-15 km de Tarija; belleza natural.",
+      "estado": true
+    },
+    {
+      "id_lugar": 49,
+      "nombre": "Valle de Calamuchita",
+      "departamento": "Tarija",
+      "ubicacion": "21.6000° S, 64.8000° W",
+      "tipo": "Valle vinícola",
+      "descripcion": "11,000 ha de uva; Casa Vieja para vinos tradicionales y fósiles.",
+      "estado": true
+    },
+    {
+      "id_lugar": 50,
+      "nombre": "Rujero",
+      "departamento": "Tarija",
+      "ubicacion": "21.7000° S, 64.6000° W (30 km Tarija)",
+      "tipo": "Sitio paleontológico",
+      "descripcion": "Restos de tortuga gigante pleistocénica; ruinas antiguas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 51,
+      "nombre": "Biocentro Güembé",
+      "departamento": "Santa Cruz",
+      "ubicacion": "17.8000° S, 63.2000° W (Santa Cruz)",
+      "tipo": "Jardín botánico",
+      "descripcion": "Mariposario más grande de Bolivia; paraíso natural subtropical.",
+      "estado": true
+    },
+    {
+      "id_lugar": 52,
+      "nombre": "Cotoca",
+      "departamento": "Santa Cruz",
+      "ubicacion": "17.7500° S, 62.5000° W",
+      "tipo": "Santuario religioso",
+      "descripcion": "Virgen de Cotoca, patrona; hospitalidad y patrimonio cultural.",
+      "estado": true
+    },
+    {
+      "id_lugar": 53,
+      "nombre": "Trinidad",
+      "departamento": "Beni",
+      "ubicacion": "14.8333° S, 64.7000° W",
+      "tipo": "Ciudad colonial",
+      "descripcion": "Catedral de 1931; plaza principal con artesanías y cristalería.",
+      "estado": true
+    },
+    {
+      "id_lugar": 54,
+      "nombre": "Puerto Capitán del Río Beni",
+      "departamento": "Beni",
+      "ubicacion": "14.8000° S, 64.7500° W (Trinidad)",
+      "tipo": "Puerto fluvial",
+      "descripcion": "Embarcaciones del río Beni; acceso a selva y cruceros.",
+      "estado": true
+    },
+    {
+      "id_lugar": 55,
+      "nombre": "Reserva Biosfera de Beni",
+      "departamento": "Beni",
+      "ubicacion": "14.0000° S, 65.0000° W (Yacuma-Ballivian)",
+      "tipo": "Reserva natural",
+      "descripcion": "1,352 km² UNESCO; fauna, flora y ríos para ecoturismo.",
+      "estado": true
+    },
+    {
+      "id_lugar": 56,
+      "nombre": "Parque Pantanal",
+      "departamento": "Beni",
+      "ubicacion": "14.5000° S, 64.5000° W (cerca Trinidad)",
+      "tipo": "Humedales",
+      "descripcion": "Caimanes, capibaras y aves; safaris en llanuras inundables.",
+      "estado": true
+    },
+    {
+      "id_lugar": 57,
+      "nombre": "Cobija",
+      "departamento": "Pando",
+      "ubicacion": "11.0333° S, 68.7667° W",
+      "tipo": "Ciudad amazónica",
+      "descripcion": "Capital pintoresca; puerta a la selva con gente cordial.",
+      "estado": true
+    },
+    {
+      "id_lugar": 58,
+      "nombre": "Reserva Manuripi-Heath",
+      "departamento": "Pando",
+      "ubicacion": "11.0000° S, 68.0000° W",
+      "tipo": "Reserva silvestre",
+      "descripcion": "Bosque tropical; Río Madre de Dios, Lago Bay y Manuripi.",
+      "estado": true
+    },
+    {
+      "id_lugar": 59,
+      "nombre": "Chive",
+      "departamento": "Pando",
+      "ubicacion": "10.8000° S, 68.5000° W",
+      "tipo": "Poblado natural",
+      "descripcion": "Naturaleza, oro y madera; ecoturismo amazónico.",
+      "estado": true
+    },
+    {
+      "id_lugar": 60,
+      "nombre": "Puerto Rico",
+      "departamento": "Pando",
+      "ubicacion": "10.9000° S, 68.2000° W",
+      "tipo": "Puerto pesquero",
+      "descripcion": "Primera capital (1938); pesca y productos locales.",
+      "estado": true
+    },
+    {
+      "id_lugar": 61,
+      "nombre": "Parque Piñata",
+      "departamento": "Pando",
+      "ubicacion": "11.0333° S, 68.7667° W (Cobija)",
+      "tipo": "Parque recreativo",
+      "descripcion": "Áreas para niños, deportes y comida típica; brisa nocturna.",
+      "estado": true
+    },
+    {
+      "id_lugar": 62,
+      "nombre": "Muela del Diablo",
+      "departamento": "La Paz",
+      "ubicacion": "16.5000° S, 68.1500° W (La Paz)",
+      "tipo": "Estatua histórica",
+      "descripcion": "Accesible por teleférico; subida a pie con vistas imponentes.",
+      "estado": true
+    },
+    {
+      "id_lugar": 63,
+      "nombre": "Mercado de las Brujas",
+      "departamento": "La Paz",
+      "ubicacion": "16.5100° S, 68.1400° W (La Paz)",
+      "tipo": "Mercado cultural",
+      "descripcion": "Pociónes y amuletos aimaras; parte de la calle Sagarnaga.",
+      "estado": true
+    },
+    {
+      "id_lugar": 64,
+      "nombre": "Reserva Nacional Sajama",
+      "departamento": "Oruro",
+      "ubicacion": "18.1167° S, 68.9833° W",
+      "tipo": "Parque nacional",
+      "descripcion": "Volcán Sajama (6,542 m); termales y vicuñas andinas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 65,
+      "nombre": "Cristo de la Concordia",
+      "departamento": "Cochabamba",
+      "ubicacion": "17.3833° S, 66.1667° W (Cochabamba)",
+      "tipo": "Estatua religiosa",
+      "descripcion": "34.2 m de altura; vistas panorámicas de la ciudad valle.",
+      "estado": true
+    },
+    {
+      "id_lugar": 66,
+      "nombre": "Palacio Portales",
+      "departamento": "Cochabamba",
+      "ubicacion": "17.3833° S, 66.1667° W (Cochabamba)",
+      "tipo": "Palacio histórico",
+      "descripcion": "Mansión estilo francés; museo con jardines y exposiciones.",
+      "estado": true
+    },
+    {
+      "id_lugar": 67,
+      "nombre": "La Cancha",
+      "departamento": "Cochabamba",
+      "ubicacion": "17.3833° S, 66.1667° W (Cochabamba)",
+      "tipo": "Mercado central",
+      "descripcion": "Mayor mercado al aire libre de Bolivia; gastronomía y artesanías.",
+      "estado": true
+    },
+    {
+      "id_lugar": 68,
+      "nombre": "Noel Kempff Mercado NP",
+      "departamento": "Santa Cruz",
+      "ubicacion": "14.0000° S, 60.8000° W",
+      "tipo": "Parque selvático",
+      "descripcion": "Cataratas y biodiversidad UNESCO; treks exigentes en Amazonía.",
+      "estado": true
+    },
+    {
+      "id_lugar": 69,
+      "nombre": "San Javier",
+      "departamento": "Santa Cruz",
+      "ubicacion": "16.0000° S, 61.0000° W",
+      "tipo": "Misión jesuítica",
+      "descripcion": "Iglesia barroca guaraní; parte de ruta Chiquitania.",
+      "estado": true
+    },
+    {
+      "id_lugar": 70,
+      "nombre": "Ichapequene Piesta",
+      "departamento": "Beni",
+      "ubicacion": "14.5000° S, 64.5000° W (Trinidad)",
+      "tipo": "Festival cultural",
+      "descripcion": "Fiesta misionera; música y danzas indígenas en Beni.",
+      "estado": true
+    },
+    {
+      "id_lugar": 71,
+      "nombre": "Plaza 25 de Mayo (Sucre)",
+      "departamento": "Chuquisaca",
+      "ubicacion": "19.0333° S, 65.2627° W",
+      "tipo": "Plaza histórica",
+      "descripcion": "Corazón de Sucre; rodeada de catedral y Casa de la Libertad.",
+      "estado": true
+    },
+    {
+      "id_lugar": 72,
+      "nombre": "Casa de la Libertad",
+      "departamento": "Chuquisaca",
+      "ubicacion": "19.0333° S, 65.2627° W (Sucre)",
+      "tipo": "Museo independentista",
+      "descripcion": "Declaración de independencia (1825); documentos históricos.",
+      "estado": true
+    },
+    {
+      "id_lugar": 73,
+      "nombre": "Plaza Luis de Fuentes",
+      "departamento": "Tarija",
+      "ubicacion": "21.5333° S, 64.7333° W (Tarija)",
+      "tipo": "Plaza central",
+      "descripcion": "Emblemática con monumentos; centro social de Tarija.",
+      "estado": true
+    },
+    {
+      "id_lugar": 74,
+      "nombre": "Museo Paleontológico Tarija",
+      "departamento": "Tarija",
+      "ubicacion": "21.5333° S, 64.7333° W",
+      "tipo": "Museo científico",
+      "descripcion": "Fósiles pleistocénicos; tortugas gigantes y ruinas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 75,
+      "nombre": "Plaza 10 de Noviembre (Potosí)",
+      "departamento": "Potosí",
+      "ubicacion": "19.5836° S, 65.7531° W",
+      "tipo": "Plaza colonial",
+      "descripcion": "Principal de Potosí; catedral y edificios virreinales.",
+      "estado": true
+    },
+    {
+      "id_lugar": 76,
+      "nombre": "Convento de Santa Teresa",
+      "departamento": "Potosí",
+      "ubicacion": "19.5836° S, 65.7531° W (Potosí)",
+      "tipo": "Convento histórico",
+      "descripcion": "Arquitectura barroca; museo con reliquias coloniales.",
+      "estado": true
+    },
+    {
+      "id_lugar": 77,
+      "nombre": "Sanctuary of Socavón",
+      "departamento": "Oruro",
+      "ubicacion": "17.9833° S, 66.6167° W (Oruro)",
+      "tipo": "Santuario minero",
+      "descripcion": "Virgen patrona de mineros; epicentro del Carnaval.",
+      "estado": true
+    },
+    {
+      "id_lugar": 78,
+      "nombre": "Volcán Thunupa",
+      "departamento": "Oruro",
+      "ubicacion": "18.5000° S, 67.8000° W (Sajama)",
+      "tipo": "Volcán y salar",
+      "descripcion": "Cuevas con momias preincaicas; vistas al Salar Coipasa.",
+      "estado": true
+    },
+    {
+      "id_lugar": 79,
+      "nombre": "Loma de San Juan",
+      "departamento": "Tarija",
+      "ubicacion": "21.5333° S, 64.7333° W (Tarija)",
+      "tipo": "Mirador natural",
+      "descripcion": "Vistas al río Guadalquivir; senderos y atardeceres.",
+      "estado": true
+    },
+    {
+      "id_lugar": 80,
+      "nombre": "Complejo Conventual San Francisco",
+      "departamento": "Tarija",
+      "ubicacion": "21.5333° S, 64.7333° W (Tarija)",
+      "tipo": "Convento histórico",
+      "descripcion": "Arquitectura colonial; exposiciones de arte sacro.",
+      "estado": true
+    },
+    {
+      "id_lugar": 81,
+      "nombre": "Parque Nacional Carrasco",
+      "departamento": "Cochabamba",
+      "ubicacion": "17.0000° S, 64.8000° W",
+      "tipo": "Parque selvático",
+      "descripcion": "Biodiversidad andina-amazónica; cascadas y orquídeas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 82,
+      "nombre": "Parque Nacional Tunari",
+      "departamento": "Cochabamba",
+      "ubicacion": "17.0000° S, 66.2000° W",
+      "tipo": "Parque montañoso",
+      "descripcion": "Nevados y lagunas; hiking cerca de Cochabamba.",
+      "estado": true
+    },
+    {
+      "id_lugar": 83,
+      "nombre": "Catedral de Trinidad",
+      "departamento": "Beni",
+      "ubicacion": "14.8333° S, 64.7000° W",
+      "tipo": "Catedral histórica",
+      "descripcion": "Estilo 1931; patrimonio con cristalería y artesanías.",
+      "estado": true
+    },
+    {
+      "id_lugar": 84,
+      "nombre": "Ruinas Arqueológicas Las Piedras",
+      "departamento": "Pando",
+      "ubicacion": "11.0000° S, 68.5000° W (Pando)",
+      "tipo": "Sitio arqueológico",
+      "descripcion": "Culturas amazónicas e incas; petroglifos antiguos.",
+      "estado": true
+    },
+    {
+      "id_lugar": 85,
+      "nombre": "Inca Ruins",
+      "departamento": "La Paz",
+      "ubicacion": "Departamento de La Paz",
+      "tipo": "Sitio histórico (ruinas pre-hispánicas)",
+      "descripcion": "Ruinas de culturas pre-hispánicas, como la inca.",
+      "estado": true
+    },
+    {
+      "id_lugar": 86,
+      "nombre": "Tiwanacota Ruins",
+      "departamento": "La Paz",
+      "ubicacion": "Departamento de La Paz",
+      "tipo": "Sitio histórico (ruinas pre-hispánicas)",
+      "descripcion": "Ruinas de la cultura Tiwanacota.",
+      "estado": true
+    },
+    {
+      "id_lugar": 87,
+      "nombre": "Church of Copacabana",
+      "departamento": "La Paz",
+      "ubicacion": "Town of Copacabana by Lake Titicaca",
+      "tipo": "Sitio histórico (iglesia colonial)",
+      "descripcion": "Iglesia en Copacabana junto al Lago Titicaca.",
+      "estado": true
+    },
+    {
+      "id_lugar": 88,
+      "nombre": "Cable Cars",
+      "departamento": "La Paz",
+      "ubicacion": "Departamento de La Paz",
+      "tipo": "Atracción moderna",
+      "descripcion": "Teleféricos como una de las atracciones principales.",
+      "estado": true
+    },
+    {
+      "id_lugar": 89,
+      "nombre": "Hot Springs",
+      "departamento": "Oruro",
+      "ubicacion": "High plateau",
+      "tipo": "Sitio natural",
+      "descripcion": "Riquezas naturales como aguas termales en el altiplano.",
+      "estado": true
+    },
+    {
+      "id_lugar": 90,
+      "nombre": "Volcanoes",
+      "departamento": "Oruro",
+      "ubicacion": "High plateau",
+      "tipo": "Sitio natural",
+      "descripcion": "Riquezas naturales como volcanes en el altiplano.",
+      "estado": true
+    },
+    {
+      "id_lugar": 91,
+      "nombre": "Poopó Lake",
+      "departamento": "Oruro",
+      "ubicacion": "High plateau",
+      "tipo": "Sitio natural (ecosistema lacustre)",
+      "descripcion": "Lago con presencia abundante de flamencos y avifauna acuática.",
+      "estado": true
+    },
+    {
+      "id_lugar": 92,
+      "nombre": "Coipasa Salt Flat",
+      "departamento": "Oruro",
+      "ubicacion": "Departamento de Oruro",
+      "tipo": "Sitio natural",
+      "descripcion": "Los grandes salares, el más importante el Salar de Coipasa.",
+      "estado": true
+    },
+    {
+      "id_lugar": 93,
+      "nombre": "Nevado Sajama",
+      "departamento": "Oruro",
+      "ubicacion": "Departamento de Oruro",
+      "tipo": "Sitio natural (pico montañoso)",
+      "descripcion": "El pico más alto de Bolivia, el Nevado Sajama.",
+      "estado": true
+    },
+    {
+      "id_lugar": 94,
+      "nombre": "The Mint",
+      "departamento": "Potosí",
+      "ubicacion": "Departamento de Potosí",
+      "tipo": "Sitio histórico",
+      "descripcion": "La Casa de la Moneda en Potosí.",
+      "estado": true
+    },
+    {
+      "id_lugar": 95,
+      "nombre": "Cathedral of Potosí",
+      "departamento": "Potosí",
+      "ubicacion": "Departamento de Potosí",
+      "tipo": "Sitio histórico (iglesia colonial)",
+      "descripcion": "La Catedral de Potosí.",
+      "estado": true
+    },
+    {
+      "id_lugar": 96,
+      "nombre": "House of Culture",
+      "departamento": "Cochabamba",
+      "ubicacion": "Departamento de Cochabamba",
+      "tipo": "Sitio cultural",
+      "descripcion": "Uno de los puntos turísticos en el departamento agrícola de Cochabamba.",
+      "estado": true
+    },
+    {
+      "id_lugar": 97,
+      "nombre": "Blue Castle",
+      "departamento": "Cochabamba",
+      "ubicacion": "Departamento de Cochabamba",
+      "tipo": "Sitio histórico/cultural",
+      "descripcion": "Uno de los puntos turísticos en Cochabamba.",
+      "estado": true
+    },
+    {
+      "id_lugar": 98,
+      "nombre": "Luis de Fuentes Square",
+      "departamento": "Cochabamba",
+      "ubicacion": "Departamento de Cochabamba",
+      "tipo": "Sitio cultural",
+      "descripcion": "Plaza en Cochabamba.",
+      "estado": true
+    },
+    {
+      "id_lugar": 99,
+      "nombre": "National Paleontological Museum",
+      "departamento": "Cochabamba",
+      "ubicacion": "Departamento de Cochabamba",
+      "tipo": "Museo (paleontológico)",
+      "descripcion": "Museo en Cochabamba.",
+      "estado": true
+    },
+    {
+      "id_lugar": 100,
+      "nombre": "Archaeological Flower Park",
+      "departamento": "Cochabamba",
+      "ubicacion": "Departamento de Cochabamba",
+      "tipo": "Sitio arqueológico/natural",
+      "descripcion": "Parque arqueológico en Cochabamba.",
+      "estado": true
+    },
+    {
+      "id_lugar": 101,
+      "nombre": "Tunari Park",
+      "departamento": "Cochabamba",
+      "ubicacion": "Departamento de Cochabamba",
+      "tipo": "Sitio natural (parque)",
+      "descripcion": "Parque Tunari en Cochabamba.",
+      "estado": true
+    },
+    {
+      "id_lugar": 102,
+      "nombre": "Carrasco Park",
+      "departamento": "Cochabamba",
+      "ubicacion": "Departamento de Cochabamba",
+      "tipo": "Sitio natural (parque)",
+      "descripcion": "Parque Carrasco en Cochabamba.",
+      "estado": true
+    },
+    {
+      "id_lugar": 103,
+      "nombre": "El Chapare",
+      "departamento": "Cochabamba",
+      "ubicacion": "Departamento de Cochabamba",
+      "tipo": "Sitios natural/agrícola",
+      "descripcion": "Regiones como El Chapare, Arani, Punata.",
+      "estado": true
+    },
+    {
+      "id_lugar": 104,
+      "nombre": "Tarata Inkachaka",
+      "departamento": "Cochabamba",
+      "ubicacion": "Departamento de Cochabamba",
+      "tipo": "Sitio histórico/natural",
+      "descripcion": "Tarata Inkachaka en Cochabamba.",
+      "estado": true
+    },
+    {
+      "id_lugar": 105,
+      "nombre": "Riberalta",
+      "departamento": "Beni",
+      "ubicacion": "Departamento de Beni",
+      "tipo": "Pueblo/atracción",
+      "descripcion": "Ciudad en Beni.",
+      "estado": true
+    },
+    {
+      "id_lugar": 106,
+      "nombre": "Guayaramerin",
+      "departamento": "Beni",
+      "ubicacion": "Departamento de Beni",
+      "tipo": "Pueblo/atracción",
+      "descripcion": "Ciudad en Beni.",
+      "estado": true
+    },
+    {
+      "id_lugar": 107,
+      "nombre": "Trinidad Cathedral",
+      "departamento": "Beni",
+      "ubicacion": "Departamento de Beni",
+      "tipo": "Sitio histórico (iglesia colonial)",
+      "descripcion": "Catedral de Trinidad.",
+      "estado": true
+    },
+    {
+      "id_lugar": 108,
+      "nombre": "Old Quarter",
+      "departamento": "Beni",
+      "ubicacion": "Trinidad",
+      "tipo": "Sitio histórico",
+      "descripcion": "Casco antiguo de Trinidad.",
+      "estado": true
+    },
+    {
+      "id_lugar": 109,
+      "nombre": "Loma Suarez",
+      "departamento": "Beni",
+      "ubicacion": "Departamento de Beni",
+      "tipo": "Sitio natural",
+      "descripcion": "Loma en Beni.",
+      "estado": true
+    },
+    {
+      "id_lugar": 110,
+      "nombre": "The Cachuelas",
+      "departamento": "Pando",
+      "ubicacion": "On the banks of the Manupiri River, province of Manupiri",
+      "tipo": "Sitio natural",
+      "descripcion": "En las orillas del Río Manupiri; lagunas para pesca.",
+      "estado": true
+    },
+    {
+      "id_lugar": 111,
+      "nombre": "The High Mountain",
+      "departamento": "Pando",
+      "ubicacion": "Departamento de Pando",
+      "tipo": "Sitio natural",
+      "descripcion": "Apto para turismo de aventura y caza.",
+      "estado": true
+    },
+    {
+      "id_lugar": 112,
+      "nombre": "The Bay Lake",
+      "departamento": "Pando",
+      "ubicacion": "On the Abuná River, provinces of Teniente General F. Román and Filadelfia",
+      "tipo": "Sitio natural (lago)",
+      "descripcion": "En el Río Abuná, 2 horas por agua.",
+      "estado": true
+    },
+    {
+      "id_lugar": 113,
+      "nombre": "Lagoons of the Tahuananu River",
+      "departamento": "Pando",
+      "ubicacion": "Departamento de Pando",
+      "tipo": "Sitio natural (lagunas)",
+      "descripcion": "Lagunas del Río Tahuananu.",
+      "estado": true
+    },
+    {
+      "id_lugar": 114,
+      "nombre": "Temples",
+      "departamento": "Chuquisaca",
+      "ubicacion": "Departamento de Chuquisaca",
+      "tipo": "Sitio histórico (colonial)",
+      "descripcion": "Templos que testifican el pasado colonial.",
+      "estado": true
+    },
+    {
+      "id_lugar": 115,
+      "nombre": "Monasteries",
+      "departamento": "Chuquisaca",
+      "ubicacion": "Departamento de Chuquisaca",
+      "tipo": "Sitio histórico (colonial)",
+      "descripcion": "Monasterios coloniales.",
+      "estado": true
+    },
+    {
+      "id_lugar": 116,
+      "nombre": "Large Houses (Converted into Museums)",
+      "departamento": "Chuquisaca",
+      "ubicacion": "Departamento de Chuquisaca",
+      "tipo": "Sitio histórico/cultural (museos)",
+      "descripcion": "Casas grandes convertidas en museos.",
+      "estado": true
+    },
+    {
+      "id_lugar": 117,
+      "nombre": "Dinosaur Tracks Deposits",
+      "departamento": "Chuquisaca",
+      "ubicacion": "Departamento de Chuquisaca",
+      "tipo": "Sitio paleontológico",
+      "descripcion": "Depósitos de huellas de dinosaurios.",
+      "estado": true
+    },
+    {
+      "id_lugar": 118,
+      "nombre": "Natural Parks",
+      "departamento": "Chuquisaca",
+      "ubicacion": "Departamento de Chuquisaca",
+      "tipo": "Sitio natural",
+      "descripcion": "Parques naturales espectaculares.",
+      "estado": true
+    },
+    {
+      "id_lugar": 119,
+      "nombre": "Rural Communities and Towns",
+      "departamento": "Chuquisaca",
+      "ubicacion": "Departamento de Chuquisaca",
+      "tipo": "Sitio cultural/histórico",
+      "descripcion": "Comunidades rurales y pueblos atascados en el tiempo colonial.",
+      "estado": true
+    },
+    {
+      "id_lugar": 120,
+      "nombre": "Parque Nacional Cotapata",
+      "departamento": "La Paz",
+      "ubicacion": "Cerca de La Paz",
+      "tipo": "Ecoturismo",
+      "descripcion": "Ecoturismo en Parque Nacional Cotapata.",
+      "estado": true
+    },
+    {
+      "id_lugar": 121,
+      "nombre": "Ruta de la Coca",
+      "departamento": "La Paz",
+      "ubicacion": "Yungas",
+      "tipo": "Ruta cultural",
+      "descripcion": "Ruta de la coca y cultura afroboliviana en Yungas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 122,
+      "nombre": "Ruta Café de Altura",
+      "departamento": "La Paz",
+      "ubicacion": "Yungas",
+      "tipo": "Ruta agrícola",
+      "descripcion": "Ruta del café de altura.",
+      "estado": true
+    },
+    {
+      "id_lugar": 123,
+      "nombre": "Cultura Afroboliviana",
+      "departamento": "La Paz",
+      "ubicacion": "Yungas",
+      "tipo": "Cultural",
+      "descripcion": "Cultura afroboliviana en Yungas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 124,
+      "nombre": "Trekking en los Caminos del Qhapaq Ñan",
+      "departamento": "La Paz",
+      "ubicacion": "La Paz",
+      "tipo": "Senderismo",
+      "descripcion": "Trekking en caminos del Qhapaq Ñan.",
+      "estado": true
+    },
+    {
+      "id_lugar": 125,
+      "nombre": "Ojo del Inca",
+      "departamento": "Potosí",
+      "ubicacion": "Cerca de Potosí",
+      "tipo": "Laguna termal",
+      "descripcion": "Laguna de aguas termales rodeada de montañas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 126,
+      "nombre": "Laguna Verde",
+      "departamento": "Potosí",
+      "ubicacion": "22.4333° S, 67.8167° W",
+      "tipo": "Laguna natural",
+      "descripcion": "Laguna esmeralda en Reserva Eduardo Avaroa; cerca de volcanes.",
+      "estado": true
+    },
+    {
+      "id_lugar": 127,
+      "nombre": "Tupiza",
+      "departamento": "Potosí",
+      "ubicacion": "21.4436° S, 65.7188° W",
+      "tipo": "Pueblo y cañones",
+      "descripcion": "Paisajes desérticos estilo western; cabalgatas y tours en jeep.",
+      "estado": true
+    },
+    {
+      "id_lugar": 128,
+      "nombre": "Vallegrande",
+      "departamento": "Santa Cruz",
+      "ubicacion": "18.4897° S, 64.1061° W",
+      "tipo": "Sitio histórico",
+      "descripcion": "Ruta del Che Guevara; cascadas y memoria revolucionaria.",
+      "estado": true
+    },
+    {
+      "id_lugar": 129,
+      "nombre": "San Ignacio de Velasco",
+      "departamento": "Santa Cruz",
+      "ubicacion": "16.3833° S, 60.9667° W",
+      "tipo": "Misión jesuítica",
+      "descripcion": "Iglesia barroca y cultura chiquitana; festival de música colonial.",
+      "estado": true
+    },
+    {
+      "id_lugar": 130,
+      "nombre": "San José de Chiquitos",
+      "departamento": "Santa Cruz",
+      "ubicacion": "17.8333° S, 60.7333° W",
+      "tipo": "Misión jesuítica",
+      "descripcion": "Patrimonio UNESCO; arquitectura barroca guaraní.",
+      "estado": true
+    },
+    {
+      "id_lugar": 131,
+      "nombre": "Santa Ana de Velasco",
+      "departamento": "Santa Cruz",
+      "ubicacion": "16.5833° S, 60.6833° W",
+      "tipo": "Misión jesuítica",
+      "descripcion": "Iglesia histórica en la Chiquitania; artesanías locales.",
+      "estado": true
+    },
+    {
+      "id_lugar": 132,
+      "nombre": "Concepción (Chiquitania)",
+      "departamento": "Santa Cruz",
+      "ubicacion": "16.1333° S, 62.0333° W",
+      "tipo": "Misión jesuítica",
+      "descripcion": "Catedral barroca; centro de la ruta jesuítica.",
+      "estado": true
+    },
+    {
+      "id_lugar": 133,
+      "nombre": "Tarabuco",
+      "departamento": "Chuquisaca",
+      "ubicacion": "19.1667° S, 64.9167° W",
+      "tipo": "Mercado indígena",
+      "descripcion": "Feria dominical de textiles quechua; cultura viva.",
+      "estado": true
+    },
+    {
+      "id_lugar": 134,
+      "nombre": "Pampas del Yacuma",
+      "departamento": "Beni",
+      "ubicacion": "13.5000° S, 66.5000° W",
+      "tipo": "Humedales",
+      "descripcion": "Safaris en bote; caimanes, capibaras y aves exóticas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 135,
+      "nombre": "Isla Incahuasi",
+      "departamento": "Potosí",
+      "ubicacion": "20.2436° S, 67.6250° W",
+      "tipo": "Isla en salar",
+      "descripcion": "Isla de cactus en medio del Salar de Uyuni; vistas 360°.",
+      "estado": true
+    },
+    {
+      "id_lugar": 136,
+      "nombre": "Salar de Coipasa",
+      "departamento": "Oruro",
+      "ubicacion": "19.3167° S, 68.1667° W",
+      "tipo": "Salar",
+      "descripcion": "Segundo salar más grande de Bolivia; menos visitado.",
+      "estado": true
+    },
+    {
+      "id_lugar": 137,
+      "nombre": "Laguna Hedionda",
+      "departamento": "Potosí",
+      "ubicacion": "21.5667° S, 68.0500° W",
+      "tipo": "Laguna natural",
+      "descripcion": "Hogar de flamencos andinos; parte de tours al salar.",
+      "estado": true
+    },
+    {
+      "id_lugar": 138,
+      "nombre": "Chochis",
+      "departamento": "Santa Cruz",
+      "ubicacion": "18.1500° S, 60.1333° W",
+      "tipo": "Santuario natural",
+      "descripcion": "Torre rocosa y santuario de la Virgen; paisajes únicos.",
+      "estado": true
+    },
+    {
+      "id_lugar": 139,
+      "nombre": "Pantanal Boliviano",
+      "departamento": "Santa Cruz",
+      "ubicacion": "16.5000° S, 58.5000° W",
+      "tipo": "Humedales",
+      "descripcion": "Biodiversidad similar al Pantanal brasileño; safaris de fauna.",
+      "estado": true
+    },
+    {
+      "id_lugar": 140,
+      "nombre": "Isiboro Sécure NP",
+      "departamento": "Beni",
+      "ubicacion": "15.5000° S, 66.5000° W",
+      "tipo": "Parque nacional",
+      "descripcion": "Selva y ríos; hogar de comunidades indígenas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 141,
+      "nombre": "San Miguel de Velasco",
+      "departamento": "Santa Cruz",
+      "ubicacion": "16.7000° S, 60.9667° W",
+      "tipo": "Misión jesuítica",
+      "descripcion": "Iglesia barroca; artesanías y festivales chiquitanos.",
+      "estado": true
+    },
+    {
+      "id_lugar": 142,
+      "nombre": "San Rafael de Velasco",
+      "departamento": "Santa Cruz",
+      "ubicacion": "16.7833° S, 60.6667° W",
+      "tipo": "Misión jesuítica",
+      "descripcion": "Patrimonio cultural; iglesia restaurada del s. XVIII.",
+      "estado": true
+    },
+    {
+      "id_lugar": 143,
+      "nombre": "Arani",
+      "departamento": "Cochabamba",
+      "ubicacion": "17.5667° S, 65.7667° W",
+      "tipo": "Pueblo agrícola",
+      "descripcion": "Famoso por su pan artesanal y ferias tradicionales.",
+      "estado": true
+    },
+    {
+      "id_lugar": 144,
+      "nombre": "Punata",
+      "departamento": "Cochabamba",
+      "ubicacion": "17.5500° S, 65.8333° W",
+      "tipo": "Pueblo agrícola",
+      "descripcion": "Mercado de chicha y productos del Valle Alto.",
+      "estado": true
+    },
+    {
+      "id_lugar": 145,
+      "nombre": "Inkallajta",
+      "departamento": "Cochabamba",
+      "ubicacion": "17.6667° S, 65.4000° W",
+      "tipo": "Ruinas arqueológicas",
+      "descripcion": "Fortaleza inca; sitio histórico en el altiplano.",
+      "estado": true
+    },
+    {
+      "id_lugar": 146,
+      "nombre": "Lago Uru Uru",
+      "departamento": "Oruro",
+      "ubicacion": "18.1333° S, 67.0833° W",
+      "tipo": "Lago y humedales",
+      "descripcion": "Hogar de aves migratorias; cerca de Oruro.",
+      "estado": true
+    },
+    {
+      "id_lugar": 147,
+      "nombre": "Aguas Termales de Polques",
+      "departamento": "Potosí",
+      "ubicacion": "22.5333° S, 67.5667° W",
+      "tipo": "Baños termales",
+      "descripcion": "Piscinas naturales en Reserva Eduardo Avaroa; vistas desérticas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 148,
+      "nombre": "Cañón de Palca",
+      "departamento": "La Paz",
+      "ubicacion": "16.5667° S, 67.8667° W",
+      "tipo": "Cañón natural",
+      "descripcion": "Formaciones rocosas; senderismo cerca de La Paz.",
+      "estado": true
+    },
+    {
+      "id_lugar": 149,
+      "nombre": "Illimani",
+      "departamento": "La Paz",
+      "ubicacion": "16.6333° S, 67.7833° W",
+      "tipo": "Montaña y trekking",
+      "descripcion": "Pico icónico de 6,438 m; rutas para montañistas expertos.",
+      "estado": true
+    },
+    {
+      "id_lugar": 150,
+      "nombre": "Challapata",
+      "departamento": "Oruro",
+      "ubicacion": "18.9000° S, 66.7667° W",
+      "tipo": "Pueblo cultural",
+      "descripcion": "Mercado tradicional y festividades andinas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 151,
+      "nombre": "Puerto Villarroel",
+      "departamento": "Cochabamba",
+      "ubicacion": "16.8667° S, 64.7833° W",
+      "tipo": "Puerto fluvial",
+      "descripcion": "Acceso al río Ichilo; base para tours amazónicos.",
+      "estado": true
+    },
+    {
+      "id_lugar": 152,
+      "nombre": "San Borja",
+      "departamento": "Beni",
+      "ubicacion": "14.8667° S, 66.7333° W",
+      "tipo": "Pueblo amazónico",
+      "descripcion": "Cultura moxeña; acceso a ríos y selva.",
+      "estado": true
+    },
+    {
+      "id_lugar": 153,
+      "nombre": "Porongo",
+      "departamento": "Santa Cruz",
+      "ubicacion": "17.8500° S, 63.3333° W",
+      "tipo": "Pueblo rural",
+      "descripcion": "Gastronomía cruceña y paisajes subtropicales.",
+      "estado": true
+    },
+    {
+      "id_lugar": 154,
+      "nombre": "Cueva de San Pedro",
+      "departamento": "Cochabamba",
+      "ubicacion": "18.1333° S, 65.7500° W (Toro Toro)",
+      "tipo": "Cueva natural",
+      "descripcion": "Exploración subterránea en Toro Toro; estalactitas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 155,
+      "nombre": "Ciudad de Itas",
+      "departamento": "Potosí",
+      "ubicacion": "18.2000° S, 65.7000° W",
+      "tipo": "Formaciones rocosas",
+      "descripcion": "Laberinto natural de roca en Toro Toro; senderismo.",
+      "estado": true
+    },
+    {
+      "id_lugar": 156,
+      "nombre": "Valle de las Ánimas",
+      "departamento": "La Paz",
+      "ubicacion": "16.5333° S, 68.0667° W",
+      "tipo": "Formación geológica",
+      "descripcion": "Picos rocosos cerca de La Paz; ideal para caminatas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 157,
+      "nombre": "Pumapunku",
+      "departamento": "La Paz",
+      "ubicacion": "16.5611° S, 68.6797° W",
+      "tipo": "Ruinas arqueológicas",
+      "descripcion": "Sitio preincaico cerca de Tiwanaku; misteriosas estructuras.",
+      "estado": true
+    },
+    {
+      "id_lugar": 158,
+      "nombre": "Laja",
+      "departamento": "La Paz",
+      "ubicacion": "16.5333° S, 68.3833° W",
+      "tipo": "Pueblo histórico",
+      "descripcion": "Primera catedral de Bolivia; legado colonial.",
+      "estado": true
+    },
+    {
+      "id_lugar": 159,
+      "nombre": "Puerto Almacén",
+      "departamento": "Beni",
+      "ubicacion": "14.9000° S, 64.8000° W",
+      "tipo": "Puerto fluvial",
+      "descripcion": "Acceso al río Mamoré; actividades de pesca.",
+      "estado": true
+    },
+    {
+      "id_lugar": 160,
+      "nombre": "Riberalta",
+      "departamento": "Beni",
+      "ubicacion": "11.0100° S, 66.0600° W",
+      "tipo": "Ciudad amazónica",
+      "descripcion": "Centro comercial de la castaña; cultura amazónica.",
+      "estado": true
+    },
+    {
+      "id_lugar": 161,
+      "nombre": "Guayaramerín",
+      "departamento": "Beni",
+      "ubicacion": "10.8000° S, 65.3500° W",
+      "tipo": "Ciudad fronteriza",
+      "descripcion": "Frontera con Brasil; mercado y cultura moxeña.",
+      "estado": true
+    },
+    {
+      "id_lugar": 162,
+      "nombre": "Loma Chuchini",
+      "departamento": "Beni",
+      "ubicacion": "14.7500° S, 64.9000° W",
+      "tipo": "Reserva ecológica",
+      "descripcion": "Lago artificial y fauna; tours de naturaleza.",
+      "estado": true
+    },
+    {
+      "id_lugar": 163,
+      "nombre": "Loma Suarez",
+      "departamento": "Beni",
+      "ubicacion": "14.8500° S, 64.7500° W",
+      "tipo": "Colina natural",
+      "descripcion": "Mirador con vistas al río Mamoré; cerca de Trinidad.",
+      "estado": true
+    },
+    {
+      "id_lugar": 164,
+      "nombre": "Cachuela Esperanza",
+      "departamento": "Beni",
+      "ubicacion": "10.8333° S, 65.6000° W",
+      "tipo": "Pueblo histórico",
+      "descripcion": "Antigua comunidad gomera; cascadas y río.",
+      "estado": true
+    },
+    {
+      "id_lugar": 165,
+      "nombre": "San Matías",
+      "departamento": "Santa Cruz",
+      "ubicacion": "16.3667° S, 58.4000° W",
+      "tipo": "Pueblo fronterizo",
+      "descripcion": "Puerta al Pantanal; fauna y cultura cruceña.",
+      "estado": true
+    },
+    {
+      "id_lugar": 166,
+      "nombre": "Tomina",
+      "departamento": "Chuquisaca",
+      "ubicacion": "19.2000° S, 64.4667° W",
+      "tipo": "Pueblo vinícola",
+      "descripcion": "Viñedos y festividades tradicionales; cerca de Sucre.",
+      "estado": true
+    },
+    {
+      "id_lugar": 167,
+      "nombre": "Zudáñez",
+      "departamento": "Chuquisaca",
+      "ubicacion": "19.1167° S, 64.7000° W",
+      "tipo": "Pueblo histórico",
+      "descripcion": "Legado independentista; arquitectura colonial.",
+      "estado": true
+    },
+    {
+      "id_lugar": 168,
+      "nombre": "Camargo",
+      "departamento": "Chuquisaca",
+      "ubicacion": "20.6333° S, 65.2000° W",
+      "tipo": "Pueblo vinícola",
+      "descripcion": "Ruta del vino; viñedos y singani tradicional.",
+      "estado": true
+    },
+    {
+      "id_lugar": 169,
+      "nombre": "Yotala",
+      "departamento": "Chuquisaca",
+      "ubicacion": "19.1667° S, 65.2667° W",
+      "tipo": "Pueblo colonial",
+      "descripcion": "Haciendas históricas y paisajes rurales.",
+      "estado": true
+    },
+    {
+      "id_lugar": 170,
+      "nombre": "Ojo del Inca",
+      "departamento": "Potosí",
+      "ubicacion": "19.6667° S, 65.7167° W",
+      "tipo": "Laguna termal",
+      "descripcion": "Aguas termales cerca de Potosí; relajación andina.",
+      "estado": true
+    },
+    {
+      "id_lugar": 171,
+      "nombre": "Laguna Chillata",
+      "departamento": "Oruro",
+      "ubicacion": "19.2000° S, 66.2500° W",
+      "tipo": "Laguna natural",
+      "descripcion": "Hogar de flamencos; vistas al altiplano.",
+      "estado": true
+    },
+    {
+      "id_lugar": 172,
+      "nombre": "Puka Puka",
+      "departamento": "Oruro",
+      "ubicacion": "18.3000° S, 68.0500° W",
+      "tipo": "Sitio arqueológico",
+      "descripcion": "Pinturas rupestres preincaicas; cerca de Sajama.",
+      "estado": true
+    },
+    {
+      "id_lugar": 173,
+      "nombre": "Curahuara de Carangas",
+      "departamento": "Oruro",
+      "ubicacion": "17.8667° S, 68.3167° W",
+      "tipo": "Iglesia colonial",
+      "descripcion": "Frescos coloniales; conocida como la Capilla Sixtina andina.",
+      "estado": true
+    },
+    {
+      "id_lugar": 174,
+      "nombre": "Llica",
+      "departamento": "Potosí",
+      "ubicacion": "19.8500° S, 68.2500° W",
+      "tipo": "Pueblo del salar",
+      "descripcion": "Comunidad aimara cerca del Salar de Uyuni.",
+      "estado": true
+    },
+    {
+      "id_lugar": 175,
+      "nombre": "Puerto Busch",
+      "departamento": "Santa Cruz",
+      "ubicacion": "19.5833° S, 57.8333° W",
+      "tipo": "Puerto fluvial",
+      "descripcion": "Acceso al río Paraguay; comercio y naturaleza.",
+      "estado": true
+    },
+    {
+      "id_lugar": 176,
+      "nombre": "San Juan de Chiquitos",
+      "departamento": "Santa Cruz",
+      "ubicacion": "18.3167° S, 59.9000° W",
+      "tipo": "Misión jesuítica",
+      "descripcion": "Iglesia barroca; parte de la ruta Chiquitania.",
+      "estado": true
+    },
+    {
+      "id_lugar": 177,
+      "nombre": "Roboré",
+      "departamento": "Santa Cruz",
+      "ubicacion": "18.3167° S, 59.7500° W",
+      "tipo": "Pueblo subtropical",
+      "descripcion": "Balnearios naturales y formaciones rocosas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 178,
+      "nombre": "Valle de los Cintis",
+      "departamento": "Chuquisaca",
+      "ubicacion": "20.8000° S, 65.1667° W",
+      "tipo": "Valle vinícola",
+      "descripcion": "Viñedos y singani; paisajes rurales.",
+      "estado": true
+    },
+    {
+      "id_lugar": 179,
+      "nombre": "Aiquile",
+      "departamento": "Cochabamba",
+      "ubicacion": "18.2000° S, 65.1833° W",
+      "tipo": "Pueblo cultural",
+      "descripcion": "Feria del charango; tradiciones musicales.",
+      "estado": true
+    },
+    {
+      "id_lugar": 180,
+      "nombre": "Mizque",
+      "departamento": "Cochabamba",
+      "ubicacion": "17.9333° S, 65.3167° W",
+      "tipo": "Pueblo colonial",
+      "descripcion": "Arquitectura colonial y mercados tradicionales.",
+      "estado": true
+    },
+    {
+      "id_lugar": 181,
+      "nombre": "San Buenaventura",
+      "departamento": "Beni",
+      "ubicacion": "14.4333° S, 67.5333° W",
+      "tipo": "Pueblo amazónico",
+      "descripcion": "Frente a Rurrenabaque; acceso al río Beni.",
+      "estado": true
+    },
+    {
+      "id_lugar": 182,
+      "nombre": "Puerto Evo",
+      "departamento": "Pando",
+      "ubicacion": "11.1667° S, 68.6667° W",
+      "tipo": "Puerto fluvial",
+      "descripcion": "Comunidad amazónica; pesca y ecoturismo.",
+      "estado": true
+    },
+    {
+      "id_lugar": 183,
+      "nombre": "Porvenir",
+      "departamento": "Pando",
+      "ubicacion": "11.0333° S, 68.7333° W",
+      "tipo": "Pueblo amazónico",
+      "descripcion": "Cultura pandina; acceso a selva y ríos.",
+      "estado": true
+    },
+    {
+      "id_lugar": 184,
+      "nombre": "Santos Reyes",
+      "departamento": "Beni",
+      "ubicacion": "14.1667° S, 67.5167° W",
+      "tipo": "Pueblo misionero",
+      "descripcion": "Cultura moxeña; iglesia histórica.",
+      "estado": true
+    },
+    {
+      "id_lugar": 185,
+      "nombre": "Santa Rosa del Yacuma",
+      "departamento": "Beni",
+      "ubicacion": "14.0667° S, 66.7833° W",
+      "tipo": "Pueblo amazónico",
+      "descripcion": "Safaris en pampas; fauna exótica.",
+      "estado": true
+    },
+    {
+      "id_lugar": 186,
+      "nombre": "Bella Vista",
+      "departamento": "Beni",
+      "ubicacion": "13.2167° S, 66.5167° W",
+      "tipo": "Pueblo natural",
+      "descripcion": "Ríos y lagunas; ecoturismo en Beni.",
+      "estado": true
+    },
+    {
+      "id_lugar": 187,
+      "nombre": "Parque Machía",
+      "departamento": "Cochabamba",
+      "ubicacion": "17.5167° S, 65.5167° W",
+      "tipo": "Santuario animal",
+      "descripcion": "Refugio de monos y aves en Villa Tunari.",
+      "estado": true
+    },
+    {
+      "id_lugar": 188,
+      "nombre": "Reserva Tariquía",
+      "departamento": "Tarija",
+      "ubicacion": "22.0000° S, 64.5000° W",
+      "tipo": "Reserva natural",
+      "descripcion": "Bosque subtropical; senderismo y fauna.",
+      "estado": true
+    },
+    {
+      "id_lugar": 189,
+      "nombre": "Cueva del Diablo",
+      "departamento": "Potosí",
+      "ubicacion": "21.6000° S, 65.0833° W",
+      "tipo": "Cueva natural",
+      "descripcion": "Exploración subterránea cerca de Tupiza.",
+      "estado": true
+    },
+    {
+      "id_lugar": 190,
+      "nombre": "Valle de las Rocas",
+      "departamento": "Potosí",
+      "ubicacion": "21.4333° S, 65.7167° W",
+      "tipo": "Formación geológica",
+      "descripcion": "Paisajes desérticos con rocas erosionadas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 191,
+      "nombre": "Lipez",
+      "departamento": "Potosí",
+      "ubicacion": "22.5000° S, 67.5000° W",
+      "tipo": "Región desértica",
+      "descripcion": "Cañones y paisajes remotos; tours de aventura.",
+      "estado": true
+    },
+    {
+      "id_lugar": 192,
+      "nombre": "San Vicente",
+      "departamento": "Potosí",
+      "ubicacion": "21.2667° S, 66.3167° W",
+      "tipo": "Pueblo histórico",
+      "descripcion": "Sitio de Butch Cassidy; historia del Viejo Oeste.",
+      "estado": true
+    },
+    {
+      "id_lugar": 193,
+      "nombre": "Lago Poopó",
+      "departamento": "Oruro",
+      "ubicacion": "18.9167° S, 66.9167° W",
+      "tipo": "Lago y humedales",
+      "descripcion": "Ecosistema altiplánico; aves migratorias.",
+      "estado": true
+    },
+    {
+      "id_lugar": 194,
+      "nombre": "Chipaya",
+      "departamento": "Oruro",
+      "ubicacion": "19.0000° S, 68.1667° W",
+      "tipo": "Comunidad indígena",
+      "descripcion": "Cultura uru-chipaya; arquitectura de adobe.",
+      "estado": true
+    },
+    {
+      "id_lugar": 195,
+      "nombre": "Jirira",
+      "departamento": "Potosí",
+      "ubicacion": "19.8333° S, 68.2500° W",
+      "tipo": "Pueblo aimara",
+      "descripcion": "Comunidad tradicional cerca del Salar de Uyuni.",
+      "estado": true
+    },
+    {
+      "id_lugar": 196,
+      "nombre": "Cueva de los Murciélagos",
+      "departamento": "Cochabamba",
+      "ubicacion": "18.1333° S, 65.7500° W (Toro Toro)",
+      "tipo": "Cueva natural",
+      "descripcion": "Hogar de murciélagos; exploración en Toro Toro.",
+      "estado": true
+    },
+    {
+      "id_lugar": 197,
+      "nombre": "Cañón de Iscayachi",
+      "departamento": "Tarija",
+      "ubicacion": "21.4667° S, 64.4167° W",
+      "tipo": "Cañón natural",
+      "descripcion": "Senderismo y paisajes en el valle tarijeño.",
+      "estado": true
+    },
+    {
+      "id_lugar": 198,
+      "nombre": "San Jacinto",
+      "departamento": "Tarija",
+      "ubicacion": "21.5333° S, 64.7333° W",
+      "tipo": "Laguna y viñedos",
+      "descripcion": "Laguna artificial; catas de vino cercanas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 199,
+      "nombre": "Reserva Biológica Cordillera de Sama",
+      "departamento": "Tarija",
+      "ubicacion": "21.4500° S, 65.0000° W",
+      "tipo": "Reserva natural",
+      "descripcion": "Flamencos y paisajes altiplánicos.",
+      "estado": true
+    },
+    {
+      "id_lugar": 200,
+      "nombre": "Chiflonkho",
+      "departamento": "Tarija",
+      "ubicacion": "21.5333° S, 64.7333° W",
+      "tipo": "Cueva y cascada",
+      "descripcion": "Cueva con cascadas; senderismo cerca de Tarija.",
+      "estado": true
+    },
+    {
+      "id_lugar": 201,
+      "nombre": "Cueva de Chiquil",
+      "departamento": "Cochabamba",
+      "ubicacion": "18.1333° S, 65.7500° W (Toro Toro)",
+      "tipo": "Cueva arqueológica",
+      "descripcion": "Pinturas rupestres en Toro Toro.",
+      "estado": true
+    },
+    {
+      "id_lugar": 202,
+      "nombre": "Reserva Kenneth Lee",
+      "departamento": "Santa Cruz",
+      "ubicacion": "18.1667° S, 63.8667° W",
+      "tipo": "Reserva arqueológica",
+      "descripcion": "Ruinas precolombinas en Samaipata.",
+      "estado": true
+    },
+    {
+      "id_lugar": 203,
+      "nombre": "Cataratas Arcoíris",
+      "departamento": "Santa Cruz",
+      "ubicacion": "14.5833° S, 60.8333° W",
+      "tipo": "Cataratas",
+      "descripcion": "Cascadas en Noel Kempff; treks en selva.",
+      "estado": true
+    },
+    {
+      "id_lugar": 204,
+      "nombre": "Cañón de la Angostura",
+      "departamento": "Tarija",
+      "ubicacion": "21.5333° S, 64.7333° W",
+      "tipo": "Cañón natural",
+      "descripcion": "Rutas de senderismo cerca de Tarija.",
+      "estado": true
+    },
+    {
+      "id_lugar": 205,
+      "nombre": "Salar de Empexa",
+      "departamento": "Oruro",
+      "ubicacion": "19.6667° S, 67.6667° W",
+      "tipo": "Salar menor",
+      "descripcion": "Salar pequeño cerca de Coipasa; paisajes remotos.",
+      "estado": true
+    },
+    {
+      "id_lugar": 206,
+      "nombre": "Puerto Fernández Alonso",
+      "departamento": "Santa Cruz",
+      "ubicacion": "15.8333° S, 64.9167° W",
+      "tipo": "Puerto fluvial",
+      "descripcion": "Acceso al río Mamoré; actividades acuáticas.",
+      "estado": true
+    },
+    {
+      "id_lugar": 207,
+      "nombre": "San Joaquín",
+      "departamento": "Beni",
+      "ubicacion": "13.0500° S, 64.8167° W",
+      "tipo": "Pueblo amazónico",
+      "descripcion": "Cultura moxeña; arquitectura colonial.",
       "estado": true
     }
   ]
