@@ -106,36 +106,14 @@ def _dataset_answer(prompt: str) -> Optional[str]:
     dep = _detect_departamento(prompt)
     # Si no detectamos departamento, aún podemos listar top del país, pero mantenemos breve
     seccion: List[str] = []
-    include_hoteles = es_hoteles or (es_lugares and dep)
-    if include_hoteles:
+    if es_hoteles:
         hoteles = _filter_hoteles(dep, limit=5)
         if not hoteles:
             return ""
         titulo = f"## Hoteles sugeridos{f' en {dep}' if dep else ''}"
         seccion.append(titulo)
-        # Clasificación por rango (sin inventar precios): usamos calificación como proxy
-        seleccion: List[tuple] = []
-        n = len(hoteles)
-        # Alto
-        if n >= 1:
-            seleccion.append(("Precio alto", hoteles[0]))
-        # Medio
-        if n >= 3:
-            mid = n // 2
-            seleccion.append(("Precio medio", hoteles[mid]))
-        elif n >= 2:
-            seleccion.append(("Precio medio", hoteles[1]))
-        # Barato
-        if n >= 2:
-            seleccion.append(("Barato", hoteles[-1]))
-        # Evitar duplicados por nombre
-        vistos = set()
-        for etiqueta, h in seleccion:
-            nombre = (h.get('nombre') or '').strip()
-            if not nombre or nombre.lower() in vistos:
-                continue
-            vistos.add(nombre.lower())
-            seccion.append(f"- {etiqueta}: {nombre} — {h.get('ubicacion')} ({h.get('departamento')}) · ⭐ {h.get('calificacion')}")
+        for h in hoteles[:5]:
+            seccion.append(f"- {h.get('nombre')} — {h.get('ubicacion')} ({h.get('departamento')}) · ⭐ {h.get('calificacion')}")
     if es_lugares:
         lugares = _filter_lugares(dep, limit=8)
         if not lugares and not es_hoteles:
@@ -144,6 +122,10 @@ def _dataset_answer(prompt: str) -> Optional[str]:
         seccion.append(titulo)
         for l in lugares[:8]:
             seccion.append(f"- {l.get('nombre')} — {l.get('tipo')} · {l.get('ubicacion')}")
+
+    # Nota de origen de datos
+    seccion.append("\n> Datos obtenidos directamente de la base interna (CSV).")
+    return "\n".join(seccion).strip()
 
 def _user_requested_days(prompt: str) -> Optional[int]:
     p = _norm(prompt)
