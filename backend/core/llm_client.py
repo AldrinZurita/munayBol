@@ -296,7 +296,20 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
         _append_history(session, "assistant", ds_reply)
         return ds_reply, str(session.id)
 
-    messages = _history_to_messages(session.history)
+    # Detectar si el usuario pide un nuevo destino y limpiar historial relevante
+    nuevo_dep = _detect_departamento(prompt)
+    ultimo_dep = None
+    if len(session.history) > 1:
+        for h in reversed(session.history):
+            if h["role"] == "user":
+                ultimo_dep = _detect_departamento(h["content"])
+                if ultimo_dep:
+                    break
+    # Si el destino actual es diferente al anterior, o si el prompt menciona explícitamente un nuevo destino, usa solo el mensaje actual
+    if nuevo_dep and (nuevo_dep != ultimo_dep or f"viajar a {nuevo_dep.lower()}" in _norm(prompt)):
+        messages = [ChatMessage(role=MessageRole.SYSTEM, content=SYSTEM_PROMPT), ChatMessage(role=MessageRole.USER, content=prompt)]
+    else:
+        messages = _history_to_messages(session.history)
     try:
         context_block = retrieve_context(prompt, top_k=1)
     except Exception:
@@ -318,21 +331,18 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
 
         def filtrar_lineas_lugares(lineas, lugares_validos):
             nuevas = []
-            lugares_bolivia = lugares_validos
+            # Normaliza nombres del dataset para comparación robusta
+            lugares_norm = {unicodedata.normalize('NFD', l).encode('ascii', 'ignore').decode('utf-8').lower().strip() for l in lugares_validos}
+            lugares_extranjeros = ["san pedro de atacama", "machu picchu", "cusco", "lima", "santiago", "quito", "buenos aires", "rio de janeiro", "bogotá", "caracas", "montevideo", "asunción", "guayaquil", "valparaíso", "cartagena", "medellín", "arequipa", "puno", "salta", "mendoza", "rosario", "cali", "mar del plata", "viña del mar", "antofagasta", "callao", "trujillo", "la serena", "valdivia", "chile", "perú", "argentina", "colombia", "ecuador", "venezuela", "brasil", "uruguay", "paraguay"]
             for linea in lineas:
-                encontrado = False
-                for nombre in lugares_bolivia:
-                    if nombre and nombre in linea.lower():
-                        encontrado = True
-                        break
-                # Si la línea menciona un lugar fuera de Bolivia conocido, omite y advierte
-                lugares_extranjeros = ["san pedro de atacama", "machu picchu", "cusco", "lima", "santiago", "quito", "buenos aires", "rio de janeiro", "bogotá", "caracas", "montevideo", "asunción", "guayaquil", "valparaíso", "cartagena", "medellín", "arequipa", "puno", "salta", "mendoza", "rosario", "cali", "mar del plata", "viña del mar", "antofagasta", "callao", "trujillo", "la serena", "valdivia", "chile", "perú", "argentina", "colombia", "ecuador", "venezuela", "brasil", "uruguay", "paraguay"]
-                extranjero = any(lugar in linea.lower() for lugar in lugares_extranjeros)
+                linea_norm = unicodedata.normalize('NFD', linea).encode('ascii', 'ignore').decode('utf-8').lower().strip()
+                encontrado = any(nombre in linea_norm for nombre in lugares_norm)
+                extranjero = any(lugar in linea_norm for lugar in lugares_extranjeros)
+                # Si la línea menciona un lugar fuera de Bolivia conocido, omite
                 if extranjero:
-                    # Omitir silenciosamente recomendaciones fuera de Bolivia
                     continue
-                elif ("lugar" in linea.lower() or "valle" in linea.lower() or "plaza" in linea.lower() or "catedral" in linea.lower() or "palacio" in linea.lower()) and not encontrado:
-                    # Omitir silenciosamente recomendaciones que no estén en el dataset
+                # Si la línea menciona palabras clave de lugares pero no está en el dataset, omite
+                elif ("lugar" in linea_norm or "valle" in linea_norm or "plaza" in linea_norm or "catedral" in linea_norm or "palacio" in linea_norm or "barrio" in linea_norm) and not encontrado:
                     continue
                 else:
                     nuevas.append(linea)
