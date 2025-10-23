@@ -1,11 +1,11 @@
 import os
 import json
 import re
+import unicodedata
 from typing import Optional, Tuple, List, Dict
 from django.utils import timezone
 
 from llama_index.core import Document, VectorStoreIndex, Settings
-# from llama_index.embeddings.ollama import OllamaEmbedding  # ELIMINADO
 from llama_index.vector_stores.weaviate import WeaviateVectorStore
 from llama_index.llms.ollama import Ollama
 from llama_index.core.llms import ChatMessage, MessageRole
@@ -40,6 +40,156 @@ WEAVIATE_URL = os.getenv("WEAVIATE_URL", "http://weaviate:8080")
 
 # === CACHE GLOBAL DE ÍNDICE ===
 _INDEX: Optional[VectorStoreIndex] = None
+
+# === CACHE DE DATOS E UTILIDADES ===
+_DATA_CACHE: Optional[Dict] = None
+
+def _load_data() -> Dict:
+    global _DATA_CACHE
+    if _DATA_CACHE is None:
+        with open(DATA_PATH, 'r', encoding='utf-8') as f:
+            _DATA_CACHE = json.load(f)
+    return _DATA_CACHE or {}
+
+def _norm(text: str) -> str:
+    if not text:
+        return ""
+    text = unicodedata.normalize('NFD', text)
+    text = ''.join(ch for ch in text if unicodedata.category(ch) != 'Mn')
+    return text.lower().strip()
+
+def _known_departamentos() -> List[str]:
+    data = _load_data()
+    deps = set()
+    for h in data.get("hoteles", []):
+        d = h.get("departamento", "")
+        if h.get("estado", False) and d:
+            deps.add(d)
+    for l in data.get("lugares_turisticos", []):
+        d = l.get("departamento", "")
+        if l.get("estado", True) and d:
+            deps.add(d)
+    # Orden estable para consistencia
+    return sorted(deps)
+
+def _detect_departamento(prompt: str) -> Optional[str]:
+    p = _norm(prompt)
+    for dep in _known_departamentos():
+        if _norm(dep) in p:
+            return dep
+    return None
+
+def _filter_hoteles(dep: Optional[str], limit: int = 5) -> List[Dict]:
+    data = _load_data()
+    hoteles = [h for h in data.get("hoteles", []) if h.get("estado", False)]
+    if dep:
+        hoteles = [h for h in hoteles if _norm(h.get("departamento", "")) == _norm(dep)]
+    hoteles.sort(key=lambda x: x.get("calificacion", 0), reverse=True)
+    return hoteles[:limit]
+
+def _filter_lugares(dep: Optional[str], limit: int = 8) -> List[Dict]:
+    data = _load_data()
+    lugares = [l for l in data.get("lugares_turisticos", []) if l.get("estado", True)]
+    if dep:
+        lugares = [l for l in lugares if _norm(l.get("departamento", "")) == _norm(dep)]
+    # Mantener orden original; opcional: priorizar por tipo o nombre
+    return lugares[:limit]
+
+def _dataset_answer(prompt: str) -> Optional[str]:
+    """Genera una respuesta determinística basada SOLO en el dataset cuando aplica."""
+    pnorm = _norm(prompt)
+    es_hoteles = any(k in pnorm for k in ["hotel", "hospedaje", "alojamiento"]) 
+    es_lugares = any(k in pnorm for k in ["lugar", "lugares", "visitar", "itinerario", "ruta", "qué ver", "que ver"]) 
+    if not (es_hoteles or es_lugares):
+        return None
+
+    dep = _detect_departamento(prompt)
+    # Si no detectamos departamento, aún podemos listar top del país, pero mantenemos breve
+    seccion: List[str] = []
+    include_hoteles = es_hoteles or (es_lugares and dep)
+    if include_hoteles:
+        hoteles = _filter_hoteles(dep, limit=5)
+        if not hoteles:
+            return ""
+        titulo = f"## Hoteles sugeridos{f' en {dep}' if dep else ''}"
+        seccion.append(titulo)
+        # Clasificación por rango (sin inventar precios): usamos calificación como proxy
+        seleccion: List[tuple] = []
+        n = len(hoteles)
+        # Alto
+        if n >= 1:
+            seleccion.append(("Precio alto", hoteles[0]))
+        # Medio
+        if n >= 3:
+            mid = n // 2
+            seleccion.append(("Precio medio", hoteles[mid]))
+        elif n >= 2:
+            seleccion.append(("Precio medio", hoteles[1]))
+        # Barato
+        if n >= 2:
+            seleccion.append(("Barato", hoteles[-1]))
+        # Evitar duplicados por nombre
+        vistos = set()
+        for etiqueta, h in seleccion:
+            nombre = (h.get('nombre') or '').strip()
+            if not nombre or nombre.lower() in vistos:
+                continue
+            vistos.add(nombre.lower())
+            seccion.append(f"- {etiqueta}: {nombre} — {h.get('ubicacion')} ({h.get('departamento')}) · ⭐ {h.get('calificacion')}")
+    if es_lugares:
+        lugares = _filter_lugares(dep, limit=8)
+        if not lugares and not es_hoteles:
+            return ""
+        titulo = f"## Lugares para visitar{f' en {dep}' if dep else ''}"
+        seccion.append(titulo)
+        for l in lugares[:8]:
+            seccion.append(f"- {l.get('nombre')} — {l.get('tipo')} · {l.get('ubicacion')}")
+
+def _user_requested_days(prompt: str) -> Optional[int]:
+    p = _norm(prompt)
+    # Buscar expresiones como "itinerario de 5 días", "3 dias", "una semana"
+    m = re.search(r"(\d+)\s*d[ií]as", p)
+    if m:
+        try:
+            return int(m.group(1))
+        except Exception:
+            return None
+    if "semana" in p:
+        return 7
+    return None
+
+def _cap_itinerary_days_if_needed(prompt: str, reply: str, max_days: int = 3) -> str:
+    requested = _user_requested_days(prompt)
+    if requested and requested > max_days:
+        return reply
+    # Cap a max_days
+    lines = reply.splitlines()
+    out = []
+    skipping_block = False
+    day_pattern = re.compile(r"^\s*(d[ií]a|day)\s*(\d+)", re.IGNORECASE)
+    for i, line in enumerate(lines):
+        m = day_pattern.match(line)
+        if m:
+            n = 0
+            try:
+                n = int(m.group(2))
+            except Exception:
+                n = 0
+            if n > max_days:
+                skipping_block = True
+                continue
+            else:
+                skipping_block = False
+        # Si encontramos una cabecera markdown, salimos del modo skip
+        if line.strip().startswith("## "):
+            skipping_block = False
+        # Heurística: si la línea inicia otra sección típica, dejar de omitir
+        if any(line.strip().lower().startswith(k) for k in ["presupuesto", "tips", "preguntas", "conclusión", "conclusion"]):
+            skipping_block = False
+        if skipping_block:
+            continue
+        out.append(line)
+    return "\n".join(out)
 
 # === FUNCIONES DE DOCUMENTOS ===
 def _build_documents_from_json() -> List[Document]:
@@ -76,8 +226,7 @@ def init_index(force_rebuild: bool = False) -> VectorStoreIndex:
     global _INDEX
     if _INDEX is not None and not force_rebuild:
         return _INDEX
-    # ELIMINADO: embed_model = OllamaEmbedding(model_name="nomic-embed-text", base_url=OLLAMA_BASE_URL)
-    # ELIMINADO: Settings.embed_model = embed_model
+    # Embedder configurado externamente si aplica (intencionado)
 
     client = weaviate.Client(WEAVIATE_URL)
     vector_store = WeaviateVectorStore(weaviate_client=client, index_name="munaybol")
@@ -154,6 +303,17 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
 
     _append_history(session, "user", prompt)
 
+    # Intento 1: Respuesta directa desde el dataset (sin LLM) cuando aplica
+    try:
+        ds_reply = _dataset_answer(prompt)
+    except Exception:
+        ds_reply = None
+    if ds_reply:
+        # Asegurar límite de 3 días por defecto en itinerarios
+        ds_reply = _cap_itinerary_days_if_needed(prompt, ds_reply, max_days=3)
+        _append_history(session, "assistant", ds_reply)
+        return ds_reply, str(session.id)
+
     messages = _history_to_messages(session.history)
     try:
         context_block = retrieve_context(prompt, top_k=1)
@@ -166,6 +326,59 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
     try:
         resp = llm.chat(messages)
         reply = resp.message.content if hasattr(resp, "message") else str(resp)
+
+        # Filtrado post-LLM para hoteles y lugares turísticos recomendados
+        with open(DATA_PATH, encoding="utf-8") as f:
+            data = json.load(f)
+            hoteles_validos = {h["nombre"].strip().lower() for h in data.get("hoteles", []) if h.get("estado", False)}
+            lugares_validos = {l["nombre"].strip().lower() for l in data.get("lugares_turisticos", []) if l.get("estado", True)}
+
+
+        def filtrar_lineas_lugares(lineas, lugares_validos):
+            nuevas = []
+            lugares_bolivia = lugares_validos
+            for linea in lineas:
+                encontrado = False
+                for nombre in lugares_bolivia:
+                    if nombre and nombre in linea.lower():
+                        encontrado = True
+                        break
+                # Si la línea menciona un lugar fuera de Bolivia conocido, omite y advierte
+                lugares_extranjeros = ["san pedro de atacama", "machu picchu", "cusco", "lima", "santiago", "quito", "buenos aires", "rio de janeiro", "bogotá", "caracas", "montevideo", "asunción", "guayaquil", "valparaíso", "cartagena", "medellín", "arequipa", "puno", "salta", "mendoza", "rosario", "cali", "mar del plata", "viña del mar", "antofagasta", "callao", "trujillo", "la serena", "valdivia", "chile", "perú", "argentina", "colombia", "ecuador", "venezuela", "brasil", "uruguay", "paraguay"]
+                extranjero = any(lugar in linea.lower() for lugar in lugares_extranjeros)
+                if extranjero:
+                    # Omitir silenciosamente recomendaciones fuera de Bolivia
+                    continue
+                elif ("lugar" in linea.lower() or "valle" in linea.lower() or "plaza" in linea.lower() or "catedral" in linea.lower() or "palacio" in linea.lower()) and not encontrado:
+                    # Omitir silenciosamente recomendaciones que no estén en el dataset
+                    continue
+                else:
+                    nuevas.append(linea)
+            return nuevas
+
+        def filtrar_lineas_hoteles(lineas, hoteles_validos):
+            nuevas = []
+            for linea in lineas:
+                encontrado = False
+                for nombre in hoteles_validos:
+                    if nombre and nombre in linea.lower():
+                        encontrado = True
+                        break
+                if "hotel" in linea.lower() and not encontrado:
+                    # Omitir silenciosamente hoteles no presentes en el dataset
+                    continue
+                else:
+                    nuevas.append(linea)
+            return nuevas
+
+        lineas = reply.splitlines()
+        lineas = filtrar_lineas_hoteles(lineas, hoteles_validos)
+        lineas = filtrar_lineas_lugares(lineas, lugares_validos)
+        reply = "\n".join(lineas)
+
+        # Limitar itinerarios a 3 días por defecto
+        reply = _cap_itinerary_days_if_needed(prompt, reply, max_days=3)
+
         # Enforce brevity limits if configured
         max_chars = int(os.getenv("MUNAY_MAX_CHARS", "0") or 0)
         max_lines = int(os.getenv("MUNAY_MAX_LINES", "0") or 0)
