@@ -269,6 +269,8 @@ def _append_history(session: ChatSession, role: str, content: str) -> None:
 
 def start_chat(usuario: Optional[Usuario] = None) -> str:
     session = ChatSession.objects.create(usuario=usuario)
+    session.history = []  # Borrar historial al iniciar
+    session.save(update_fields=["history"])
     return str(session.id)
 
 def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[Usuario] = None) -> Tuple[str, str]:
@@ -323,26 +325,37 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
         reply = resp.message.content if hasattr(resp, "message") else str(resp)
 
         # Filtrado post-LLM para hoteles y lugares turísticos recomendados
+
         with open(DATA_PATH, encoding="utf-8") as f:
             data = json.load(f)
             hoteles_validos = {h["nombre"].strip().lower() for h in data.get("hoteles", []) if h.get("estado", False)}
-            lugares_validos = {l["nombre"].strip().lower() for l in data.get("lugares_turisticos", []) if l.get("estado", True)}
+            # Diccionario: nombre -> departamento
+            lugares_validos = {l["nombre"].strip().lower(): l.get("departamento", "") for l in data.get("lugares_turisticos", []) if l.get("estado", True)}
 
+        # Detectar departamento solicitado
+        dep_solicitado = _detect_departamento(prompt)
 
-        def filtrar_lineas_lugares(lineas, lugares_validos):
+        def filtrar_lineas_lugares_departamento(lineas, lugares_validos, dep_solicitado):
             nuevas = []
-            # Normaliza nombres del dataset para comparación robusta
-            lugares_norm = {unicodedata.normalize('NFD', l).encode('ascii', 'ignore').decode('utf-8').lower().strip() for l in lugares_validos}
+            lugares_norm = {unicodedata.normalize('NFD', nombre).encode('ascii', 'ignore').decode('utf-8').lower().strip(): dep for nombre, dep in lugares_validos.items()}
             lugares_extranjeros = ["san pedro de atacama", "machu picchu", "cusco", "lima", "santiago", "quito", "buenos aires", "rio de janeiro", "bogotá", "caracas", "montevideo", "asunción", "guayaquil", "valparaíso", "cartagena", "medellín", "arequipa", "puno", "salta", "mendoza", "rosario", "cali", "mar del plata", "viña del mar", "antofagasta", "callao", "trujillo", "la serena", "valdivia", "chile", "perú", "argentina", "colombia", "ecuador", "venezuela", "brasil", "uruguay", "paraguay"]
             for linea in lineas:
                 linea_norm = unicodedata.normalize('NFD', linea).encode('ascii', 'ignore').decode('utf-8').lower().strip()
-                encontrado = any(nombre in linea_norm for nombre in lugares_norm)
+                # Buscar si la línea menciona algún lugar válido
+                encontrado = None
+                for nombre, dep in lugares_norm.items():
+                    if nombre in linea_norm:
+                        encontrado = (nombre, dep)
+                        break
                 extranjero = any(lugar in linea_norm for lugar in lugares_extranjeros)
                 # Si la línea menciona un lugar fuera de Bolivia conocido, omite
                 if extranjero:
                     continue
                 # Si la línea menciona palabras clave de lugares pero no está en el dataset, omite
                 elif ("lugar" in linea_norm or "valle" in linea_norm or "plaza" in linea_norm or "catedral" in linea_norm or "palacio" in linea_norm or "barrio" in linea_norm) and not encontrado:
+                    continue
+                # Si hay departamento solicitado, solo aceptar si el lugar es de ese departamento
+                elif dep_solicitado and encontrado and _norm(encontrado[1]) != _norm(dep_solicitado):
                     continue
                 else:
                     nuevas.append(linea)
@@ -357,7 +370,6 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
                         encontrado = True
                         break
                 if "hotel" in linea.lower() and not encontrado:
-                    # Omitir silenciosamente hoteles no presentes en el dataset
                     continue
                 else:
                     nuevas.append(linea)
@@ -365,7 +377,7 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
 
         lineas = reply.splitlines()
         lineas = filtrar_lineas_hoteles(lineas, hoteles_validos)
-        lineas = filtrar_lineas_lugares(lineas, lugares_validos)
+        lineas = filtrar_lineas_lugares_departamento(lineas, lugares_validos, dep_solicitado)
         reply = "\n".join(lineas)
 
         # Limitar itinerarios a 3 días por defecto
