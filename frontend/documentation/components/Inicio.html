@@ -1,0 +1,479 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>frontend-turismo-hoteleria documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">frontend-turismo-hoteleria documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  Inicio</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/inicio/inicio.ts</code>
+</p>
+
+
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-inicio</code></td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>RouterLink</code>
+                            <code>RouterLinkActive</code>
+                            <code>FormsModule</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./inicio.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./inicio.scss</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#departamentoSeleccionado" >departamentoSeleccionado</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+
+
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="departamentoSeleccionado"></a>
+                    <span class="name">
+                        <span ><b>departamentoSeleccionado</b></span>
+                        <a href="#departamentoSeleccionado"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>any | string</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/app/pages/inicio/inicio.ts:13</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &#x27;@angular/core&#x27;;
+import { FormsModule } from &#x27;@angular/forms&#x27;;
+import { RouterLink, RouterLinkActive } from &#x27;@angular/router&#x27;;
+
+@Component({
+  selector: &#x27;app-inicio&#x27;,
+  imports: [RouterLink, RouterLinkActive, FormsModule],
+  templateUrl: &#x27;./inicio.html&#x27;,
+  styleUrl: &#x27;./inicio.scss&#x27;
+})
+export class Inicio {
+[x: string]: string|string[];
+departamentoSeleccionado: any|string;
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;section class&#x3D;&quot;hero&quot;&gt;
+  &lt;div class&#x3D;&quot;hero__overlay&quot;&gt;&lt;/div&gt;
+  &lt;div class&#x3D;&quot;container hero__inner&quot;&gt;
+    &lt;h1 class&#x3D;&quot;hero__title&quot;&gt;Descubre las Maravillas de Bolivia&lt;/h1&gt;
+    &lt;p class&#x3D;&quot;hero__lead&quot;&gt;
+      Hoteles y paquetes turísticos en los mejores destinos bolivianos. Explora el Salar de Uyuni,
+      Lago Titicaca, La Paz y mucho más.
+    &lt;/p&gt;
+
+    &lt;div class&#x3D;&quot;hero__actions&quot;&gt;
+      &lt;div class&#x3D;&quot;filtro&quot;&gt;
+        &lt;label for&#x3D;&quot;departamento&quot; style&#x3D;&quot;font-size: large;&quot;&gt;¿Dónde?&lt;/label&gt;
+        &lt;select name&#x3D;&quot;departamento&quot; id&#x3D;&quot;departamento&quot; [(ngModel)]&#x3D;&quot;departamentoSeleccionado&quot;&gt;
+          &lt;option selected disabled&gt;Selecciona destino&lt;/option&gt;
+          &lt;option value&#x3D;&quot;Chuquisaca&quot;&gt;Chuquisaca&lt;/option&gt;
+          &lt;option value&#x3D;&quot;La Paz&quot;&gt;La Paz&lt;/option&gt;
+          &lt;option value&#x3D;&quot;Cochabamba&quot;&gt;Cochabamba&lt;/option&gt;
+          &lt;option value&#x3D;&quot;Oruro&quot;&gt;Oruro&lt;/option&gt;
+          &lt;option value&#x3D;&quot;Potosí&quot;&gt;Potosí&lt;/option&gt;
+          &lt;option value&#x3D;&quot;Tarija&quot;&gt;Tarija&lt;/option&gt;
+          &lt;option value&#x3D;&quot;Santa Cruz&quot;&gt;Santa Cruz&lt;/option&gt;
+          &lt;option value&#x3D;&quot;Beni&quot;&gt;Beni&lt;/option&gt;
+          &lt;option value&#x3D;&quot;Pando&quot;&gt;Pando&lt;/option&gt;
+        &lt;/select&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;botones&quot;&gt;
+        &lt;a class&#x3D;&quot;btn&quot; [routerLink]&#x3D;&quot;[&#x27;/hoteles&#x27;]&quot; [queryParams]&#x3D;&quot;{ departamento: departamentoSeleccionado }&quot;
+          [class.disabled]&#x3D;&quot;!departamentoSeleccionado&quot; routerLinkActive&#x3D;&quot;active&quot;&gt;
+          Buscar Hoteles
+        &lt;/a&gt;
+        &lt;a class&#x3D;&quot;btn&quot; [routerLink]&#x3D;&quot;[&#x27;/paquetes&#x27;]&quot; routerLinkActive&#x3D;&quot;active&quot;&gt;Explorar Tours&lt;/a&gt;
+      &lt;/div&gt;
+
+
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- ¿QUIÉNES SOMOS? --&gt;
+&lt;section class&#x3D;&quot;quienes&quot;&gt;
+  &lt;div class&#x3D;&quot;container&quot;&gt;
+    &lt;h2 class&#x3D;&quot;quienes__title&quot;&gt;¿Quiénes somos?&lt;/h2&gt;&lt;br&gt;
+    &lt;p class&#x3D;&quot;quienes__intro&quot;&gt;
+      MunayBol te conecta con la magia de Bolivia. Descubre paisajes únicos, cultura milenaria y experiencias
+      inolvidables en el corazón de Sudamérica.
+    &lt;/p&gt;
+
+    &lt;div class&#x3D;&quot;quienes__grid&quot;&gt;
+      &lt;article class&#x3D;&quot;card&quot;&gt;
+        &lt;div class&#x3D;&quot;card__icon&quot;&gt;🌄&lt;/div&gt;
+        &lt;h3 class&#x3D;&quot;card__title&quot;&gt;Destinos Únicos&lt;/h3&gt;
+        &lt;p class&#x3D;&quot;card__text&quot;&gt;Desde el Salar de Uyuni hasta el Lago Titicaca, descubre paisajes inolvidables.&lt;/p&gt;
+      &lt;/article&gt;
+
+      &lt;article class&#x3D;&quot;card&quot;&gt;
+        &lt;div class&#x3D;&quot;card__icon&quot;&gt;🏘️&lt;/div&gt;
+        &lt;h3 class&#x3D;&quot;card__title&quot;&gt;Expertos Locales&lt;/h3&gt;
+        &lt;p class&#x3D;&quot;card__text&quot;&gt;Operadores confiables y guías locales que conocen cada rincón del país.&lt;/p&gt;
+      &lt;/article&gt;
+
+      &lt;article class&#x3D;&quot;card&quot;&gt;
+        &lt;div class&#x3D;&quot;card__icon&quot;&gt;🛡️&lt;/div&gt;
+        &lt;h3 class&#x3D;&quot;card__title&quot;&gt;Reservas Seguras&lt;/h3&gt;
+        &lt;p class&#x3D;&quot;card__text&quot;&gt;Pagos protegidos y confirmaciones al instante para viajar con tranquilidad.&lt;/p&gt;
+      &lt;/article&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><section class="hero">  <div class="hero__overlay"></div>  <div class="container hero__inner">    <h1 class="hero__title">Descubre las Maravillas de Bolivia</h1>    <p class="hero__lead">      Hoteles y paquetes turísticos en los mejores destinos bolivianos. Explora el Salar de Uyuni,      Lago Titicaca, La Paz y mucho más.    </p>    <div class="hero__actions">      <div class="filtro">        <label for="departamento" style="font-size: large;">¿Dónde?</label>        <select name="departamento" id="departamento" [(ngModel)]="departamentoSeleccionado">          <option selected disabled>Selecciona destino</option>          <option value="Chuquisaca">Chuquisaca</option>          <option value="La Paz">La Paz</option>          <option value="Cochabamba">Cochabamba</option>          <option value="Oruro">Oruro</option>          <option value="Potosí">Potosí</option>          <option value="Tarija">Tarija</option>          <option value="Santa Cruz">Santa Cruz</option>          <option value="Beni">Beni</option>          <option value="Pando">Pando</option>        </select>      </div>      <div class="botones">        <a class="btn" [routerLink]="[\'/hoteles\']" [queryParams]="{ departamento: departamentoSeleccionado }"          [class.disabled]="!departamentoSeleccionado" routerLinkActive="active">          Buscar Hoteles        </a>        <a class="btn" [routerLink]="[\'/paquetes\']" routerLinkActive="active">Explorar Tours</a>      </div>    </div>  </div></section><!-- ¿QUIÉNES SOMOS? --><section class="quienes">  <div class="container">    <h2 class="quienes__title">¿Quiénes somos?</h2><br>    <p class="quienes__intro">      MunayBol te conecta con la magia de Bolivia. Descubre paisajes únicos, cultura milenaria y experiencias      inolvidables en el corazón de Sudamérica.    </p>    <div class="quienes__grid">      <article class="card">        <div class="card__icon">🌄</div>        <h3 class="card__title">Destinos Únicos</h3>        <p class="card__text">Desde el Salar de Uyuni hasta el Lago Titicaca, descubre paisajes inolvidables.</p>      </article>      <article class="card">        <div class="card__icon">🏘️</div>        <h3 class="card__title">Expertos Locales</h3>        <p class="card__text">Operadores confiables y guías locales que conocen cada rincón del país.</p>      </article>      <article class="card">        <div class="card__icon">🛡️</div>        <h3 class="card__title">Reservas Seguras</h3>        <p class="card__text">Pagos protegidos y confirmaciones al instante para viajar con tranquilidad.</p>      </article>    </div>  </div></section></div>'
+    var COMPONENTS = [{'name': 'App', 'selector': 'app-root'},{'name': 'AsistenteIa', 'selector': 'app-asistente-ia'},{'name': 'CrearPaquete', 'selector': 'crear-paquete'},{'name': 'Footer', 'selector': 'app-footer'},{'name': 'HabitacionDetalle', 'selector': 'app-habitacion-detalle'},{'name': 'Habitaciones', 'selector': 'app-habitaciones'},{'name': 'HotelDetalleComponent', 'selector': 'app-hotel-detalle'},{'name': 'Hoteles', 'selector': 'app-hoteles'},{'name': 'Inicio', 'selector': 'app-inicio'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LugaresTuristicos', 'selector': 'app-lugares-turisticos'},{'name': 'LugaresTuristicosDetalle', 'selector': 'app-lugares-turisticos-detalle'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PaqueteDetalle', 'selector': 'app-paquete-detalle'},{'name': 'Paquetes', 'selector': 'app-paquetes'},{'name': 'Perfil', 'selector': 'app-perfil'},{'name': 'Registrarse', 'selector': 'app-registrarse'},{'name': 'ReservaComponent', 'selector': 'app-reserva'},{'name': 'ReservaDetalleComponent', 'selector': 'app-reserva-detalle'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'Inicio'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'Inicio.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

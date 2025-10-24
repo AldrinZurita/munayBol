@@ -1,0 +1,2111 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>frontend-turismo-hoteleria documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">frontend-turismo-hoteleria documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  Paquetes</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/paquetes/paquetes.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-paquetes</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>CommonModule</code>
+                            <code>FormsModule</code>
+                            <code>RouterModule</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./paquetes.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./paquetes.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#authService" >authService</a>
+                            </li>
+                            <li>
+                                <a href="#cargando" >cargando</a>
+                            </li>
+                            <li>
+                                <a href="#departamentos" >departamentos</a>
+                            </li>
+                            <li>
+                                <a href="#departamentoSeleccionado" >departamentoSeleccionado</a>
+                            </li>
+                            <li>
+                                <a href="#disponibleSeleccionado" >disponibleSeleccionado</a>
+                            </li>
+                            <li>
+                                <a href="#error" >error</a>
+                            </li>
+                            <li>
+                                <a href="#mostrarModalCrear" >mostrarModalCrear</a>
+                            </li>
+                            <li>
+                                <a href="#mostrarModalEditar" >mostrarModalEditar</a>
+                            </li>
+                            <li>
+                                <a href="#paqueteEditando" >paqueteEditando</a>
+                            </li>
+                            <li>
+                                <a href="#paqueteNuevo" >paqueteNuevo</a>
+                            </li>
+                            <li>
+                                <a href="#paquetes" >paquetes</a>
+                            </li>
+                            <li>
+                                <a href="#paquetesFiltrados" >paquetesFiltrados</a>
+                            </li>
+                            <li>
+                                <a href="#tipoSeleccionado" >tipoSeleccionado</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#aplicarFiltros" >aplicarFiltros</a>
+                            </li>
+                            <li>
+                                <a href="#cerrarModal" >cerrarModal</a>
+                            </li>
+                            <li>
+                                <a href="#crearPaquete" >crearPaquete</a>
+                            </li>
+                            <li>
+                                <a href="#guardarEdicion" >guardarEdicion</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#onEditarPaquete" >onEditarPaquete</a>
+                            </li>
+                            <li>
+                                <a href="#onEliminarPaquete" >onEliminarPaquete</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#isSuperAdmin" >isSuperAdmin</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(authService: <a href="../injectables/AuthService.html" target="_self">AuthService</a>, paqueteService: <a href="../injectables/PaqueteService.html" target="_self">PaqueteService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/pages/paquetes/paquetes.ts:37</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>authService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AuthService.html" target="_self" >AuthService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>paqueteService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/PaqueteService.html" target="_self" >PaqueteService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="aplicarFiltros"></a>
+                    <span class="name">
+                        <span ><b>aplicarFiltros</b></span>
+                        <a href="#aplicarFiltros"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>aplicarFiltros()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="63"
+                                    class="link-to-prism">src/app/pages/paquetes/paquetes.ts:63</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cerrarModal"></a>
+                    <span class="name">
+                        <span ><b>cerrarModal</b></span>
+                        <a href="#cerrarModal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cerrarModal()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="119"
+                                    class="link-to-prism">src/app/pages/paquetes/paquetes.ts:119</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="crearPaquete"></a>
+                    <span class="name">
+                        <span ><b>crearPaquete</b></span>
+                        <a href="#crearPaquete"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>crearPaquete()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="86"
+                                    class="link-to-prism">src/app/pages/paquetes/paquetes.ts:86</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="guardarEdicion"></a>
+                    <span class="name">
+                        <span ><b>guardarEdicion</b></span>
+                        <a href="#guardarEdicion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>guardarEdicion()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="124"
+                                    class="link-to-prism">src/app/pages/paquetes/paquetes.ts:124</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="44"
+                                    class="link-to-prism">src/app/pages/paquetes/paquetes.ts:44</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onEditarPaquete"></a>
+                    <span class="name">
+                        <span ><b>onEditarPaquete</b></span>
+                        <a href="#onEditarPaquete"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onEditarPaquete(paquete: <a href="../interfaces/Paquete.html" target="_self">Paquete</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="113"
+                                    class="link-to-prism">src/app/pages/paquetes/paquetes.ts:113</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>paquete</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Paquete.html" target="_self" >Paquete</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onEliminarPaquete"></a>
+                    <span class="name">
+                        <span ><b>onEliminarPaquete</b></span>
+                        <a href="#onEliminarPaquete"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onEliminarPaquete(paquete: <a href="../interfaces/Paquete.html" target="_self">Paquete</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="141"
+                                    class="link-to-prism">src/app/pages/paquetes/paquetes.ts:141</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>paquete</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Paquete.html" target="_self" >Paquete</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authService"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>authService</b></span>
+                        <a href="#authService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../injectables/AuthService.html" target="_self" >AuthService</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/pages/paquetes/paquetes.ts:40</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargando"></a>
+                    <span class="name">
+                        <span ><b>cargando</b></span>
+                        <a href="#cargando"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/pages/paquetes/paquetes.ts:23</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="departamentos"></a>
+                    <span class="name">
+                        <span ><b>departamentos</b></span>
+                        <a href="#departamentos"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[&#x27;Cochabamba&#x27;, &#x27;Chuquisaca&#x27;, &#x27;Beni&#x27;, &#x27;Pando&#x27;, &#x27;Santa Cruz&#x27;, &#x27;Tarija&#x27;, &#x27;La Paz&#x27;, &#x27;Oruro&#x27;]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/pages/paquetes/paquetes.ts:22</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="departamentoSeleccionado"></a>
+                    <span class="name">
+                        <span ><b>departamentoSeleccionado</b></span>
+                        <a href="#departamentoSeleccionado"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/pages/paquetes/paquetes.ts:20</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="disponibleSeleccionado"></a>
+                    <span class="name">
+                        <span ><b>disponibleSeleccionado</b></span>
+                        <a href="#disponibleSeleccionado"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/pages/paquetes/paquetes.ts:19</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="error"></a>
+                    <span class="name">
+                        <span ><b>error</b></span>
+                        <a href="#error"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/pages/paquetes/paquetes.ts:24</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mostrarModalCrear"></a>
+                    <span class="name">
+                        <span ><b>mostrarModalCrear</b></span>
+                        <a href="#mostrarModalCrear"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/pages/paquetes/paquetes.ts:27</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mostrarModalEditar"></a>
+                    <span class="name">
+                        <span ><b>mostrarModalEditar</b></span>
+                        <a href="#mostrarModalEditar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/pages/paquetes/paquetes.ts:26</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="paqueteEditando"></a>
+                    <span class="name">
+                        <span ><b>paqueteEditando</b></span>
+                        <a href="#paqueteEditando"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Paquete.html" target="_self" >Paquete | null</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/pages/paquetes/paquetes.ts:28</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="paqueteNuevo"></a>
+                    <span class="name">
+                        <span ><b>paqueteNuevo</b></span>
+                        <a href="#paqueteNuevo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Paquete.html" target="_self" >Partial&lt;Paquete&gt;</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+    nombre: &#x27;&#x27;,
+    tipo: &#x27;&#x27;,
+    precio: 0,
+    id_hotel: undefined,
+    id_lugar: undefined,
+    estado: true
+  }</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/pages/paquetes/paquetes.ts:30</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="paquetes"></a>
+                    <span class="name">
+                        <span ><b>paquetes</b></span>
+                        <a href="#paquetes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Paquete.html" target="_self" >Paquete[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/pages/paquetes/paquetes.ts:17</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="paquetesFiltrados"></a>
+                    <span class="name">
+                        <span ><b>paquetesFiltrados</b></span>
+                        <a href="#paquetesFiltrados"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Paquete.html" target="_self" >Paquete[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/app/pages/paquetes/paquetes.ts:18</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="tipoSeleccionado"></a>
+                    <span class="name">
+                        <span ><b>tipoSeleccionado</b></span>
+                        <a href="#tipoSeleccionado"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/app/pages/paquetes/paquetes.ts:21</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="isSuperAdmin"></a>
+                        <span class="name"><b>isSuperAdmin</b><a href="#isSuperAdmin"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>isSuperAdmin()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/pages/paquetes/paquetes.ts:59</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { RouterModule } from &#x27;@angular/router&#x27;;
+import { FormsModule } from &#x27;@angular/forms&#x27;;
+import { AuthService } from &#x27;../../services/auth.service&#x27;;
+import { PaqueteService } from &#x27;../../services/paquete.service&#x27;;
+import { Paquete } from &#x27;../../interfaces/paquete.interface&#x27;;
+
+@Component({
+  selector: &#x27;app-paquetes&#x27;,
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
+  templateUrl: &#x27;./paquetes.html&#x27;,
+  styleUrls: [&#x27;./paquetes.scss&#x27;]
+})
+export class Paquetes implements OnInit {
+  paquetes: Paquete[] &#x3D; [];
+  paquetesFiltrados: Paquete[] &#x3D; [];
+  disponibleSeleccionado &#x3D; &#x27;&#x27;;
+  departamentoSeleccionado &#x3D; &#x27;&#x27;;
+  tipoSeleccionado &#x3D; &#x27;&#x27;;
+  departamentos: string[] &#x3D; [&#x27;Cochabamba&#x27;, &#x27;Chuquisaca&#x27;, &#x27;Beni&#x27;, &#x27;Pando&#x27;, &#x27;Santa Cruz&#x27;, &#x27;Tarija&#x27;, &#x27;La Paz&#x27;, &#x27;Oruro&#x27;];
+  cargando &#x3D; false;
+  error &#x3D; &#x27;&#x27;;
+
+  mostrarModalEditar &#x3D; false;
+  mostrarModalCrear &#x3D; false; // ✅ NUEVO: controla el modal de creación
+  paqueteEditando: Paquete | null &#x3D; null;
+
+  paqueteNuevo: Partial&lt;Paquete&gt; &#x3D; {
+    nombre: &#x27;&#x27;,
+    tipo: &#x27;&#x27;,
+    precio: 0,
+    id_hotel: undefined,
+    id_lugar: undefined,
+    estado: true
+  };
+
+  constructor(
+    public authService: AuthService,
+    private paqueteService: PaqueteService
+  ) {}
+
+  ngOnInit() {
+    this.cargando &#x3D; true;
+    this.paqueteService.getPaquetes().subscribe({
+      next: (data) &#x3D;&gt; {
+        this.paquetes &#x3D; data ?? [];
+        this.paquetesFiltrados &#x3D; [...this.paquetes];
+        this.cargando &#x3D; false;
+      },
+      error: () &#x3D;&gt; {
+        this.error &#x3D; &#x27;No se pudo cargar la lista de paquetes&#x27;;
+        this.cargando &#x3D; false;
+      }
+    });
+  }
+
+  get isSuperAdmin(): boolean {
+    return this.authService.isSuperadmin();
+  }
+
+  aplicarFiltros() {
+    let filtrados &#x3D; this.paquetes;
+
+    if (this.disponibleSeleccionado) {
+      const disponible &#x3D; this.disponibleSeleccionado &#x3D;&#x3D;&#x3D; &#x27;true&#x27;;
+      filtrados &#x3D; filtrados.filter(p &#x3D;&gt; p.estado &#x3D;&#x3D;&#x3D; disponible);
+    }
+
+    if (this.departamentoSeleccionado) {
+      filtrados &#x3D; filtrados.filter(p &#x3D;&gt;
+        p.hotel &amp;&amp; p.hotel.departamento
+          ? p.hotel.departamento &#x3D;&#x3D;&#x3D; this.departamentoSeleccionado
+          : false
+      );
+    }
+
+    if (this.tipoSeleccionado) {
+      filtrados &#x3D; filtrados.filter(p &#x3D;&gt; p.tipo &#x3D;&#x3D;&#x3D; this.tipoSeleccionado);
+    }
+
+    this.paquetesFiltrados &#x3D; filtrados;
+  }
+
+  crearPaquete() {
+    if (!this.isSuperAdmin) return;
+
+    if (!this.paqueteNuevo.nombre || !this.paqueteNuevo.tipo || !this.paqueteNuevo.precio || !this.paqueteNuevo.id_hotel || !this.paqueteNuevo.id_lugar) {
+      alert(&#x27;Completa todos los campos obligatorios.&#x27;);
+      return;
+    }
+
+    this.paqueteService.crearPaquete(this.paqueteNuevo).subscribe({
+      next: (paquete) &#x3D;&gt; {
+        this.paquetes.push(paquete);
+        this.aplicarFiltros();
+        alert(&#x27;Paquete agregado correctamente&#x27;);
+        this.paqueteNuevo &#x3D; {
+          nombre: &#x27;&#x27;,
+          tipo: &#x27;&#x27;,
+          precio: 0,
+          id_hotel: undefined,
+          id_lugar: undefined,
+          estado: true
+        };
+        this.mostrarModalCrear &#x3D; false; // ✅ Cierra el modal al guardar
+      },
+      error: () &#x3D;&gt; alert(&#x27;Error al agregar paquete&#x27;)
+    });
+  }
+
+  onEditarPaquete(paquete: Paquete) {
+    if (!this.isSuperAdmin) return;
+    this.paqueteEditando &#x3D; { ...paquete };
+    this.mostrarModalEditar &#x3D; true;
+  }
+
+  cerrarModal() {
+    this.mostrarModalEditar &#x3D; false;
+    this.paqueteEditando &#x3D; null;
+  }
+
+  guardarEdicion() {
+    if (!this.paqueteEditando || !this.isSuperAdmin) return;
+
+    this.paqueteService.actualizarPaquete(this.paqueteEditando).subscribe({
+      next: (actualizado) &#x3D;&gt; {
+        const idx &#x3D; this.paquetes.findIndex(p &#x3D;&gt; p.id_paquete &#x3D;&#x3D;&#x3D; actualizado.id_paquete);
+        if (idx !&#x3D;&#x3D; -1) {
+          this.paquetes[idx] &#x3D; actualizado;
+          this.aplicarFiltros();
+        }
+        this.cerrarModal();
+        alert(&#x27;Paquete actualizado correctamente&#x27;);
+      },
+      error: () &#x3D;&gt; alert(&#x27;Error al actualizar el paquete&#x27;)
+    });
+  }
+
+  onEliminarPaquete(paquete: Paquete) {
+    if (!this.isSuperAdmin) return;
+
+    if (confirm(&#x27;¿Eliminar paquete?&#x27;)) {
+      this.paqueteService.eliminarPaquete(paquete.id_paquete).subscribe({
+        next: () &#x3D;&gt; {
+          this.paquetes &#x3D; this.paquetes.filter(p &#x3D;&gt; p.id_paquete !&#x3D;&#x3D; paquete.id_paquete);
+          this.aplicarFiltros();
+          alert(&#x27;Paquete eliminado&#x27;);
+        },
+        error: () &#x3D;&gt; alert(&#x27;Error al eliminar paquete&#x27;)
+      });
+    }
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;paquetes-container&quot;&gt;
+  &lt;h1&gt;Paquetes Turísticos&lt;/h1&gt;
+
+  &lt;div class&#x3D;&quot;header-acciones&quot;&gt;
+    &lt;button *ngIf&#x3D;&quot;isSuperAdmin&quot; class&#x3D;&quot;btn btn-primary&quot; (click)&#x3D;&quot;mostrarModalCrear &#x3D; true&quot;&gt;
+      &lt;span class&#x3D;&quot;material-symbols-outlined icon-ms&quot;&gt;add&lt;/span&gt;
+      Agregar Paquete Turístico
+    &lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;filtros&quot;&gt;
+    &lt;h4&gt;Filtros de búsqueda&lt;/h4&gt;
+    &lt;div class&#x3D;&quot;filtro-row&quot;&gt;
+      &lt;label&gt;Disponibilidad:&lt;/label&gt;
+      &lt;select [(ngModel)]&#x3D;&quot;disponibleSeleccionado&quot;&gt;
+        &lt;option value&#x3D;&quot;&quot;&gt;Todas&lt;/option&gt;
+        &lt;option value&#x3D;&quot;true&quot;&gt;Disponibles&lt;/option&gt;
+        &lt;option value&#x3D;&quot;false&quot;&gt;No disponibles&lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;filtro-row&quot;&gt;
+      &lt;label&gt;Departamento:&lt;/label&gt;
+      &lt;select [(ngModel)]&#x3D;&quot;departamentoSeleccionado&quot;&gt;
+        &lt;option value&#x3D;&quot;&quot;&gt;Todos&lt;/option&gt;
+        &lt;option *ngFor&#x3D;&quot;let dep of departamentos&quot; [value]&#x3D;&quot;dep&quot;&gt;{{ dep }}&lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;filtro-row&quot;&gt;
+      &lt;label&gt;Tipo de paquete:&lt;/label&gt;
+      &lt;select [(ngModel)]&#x3D;&quot;tipoSeleccionado&quot;&gt;
+        &lt;option value&#x3D;&quot;&quot;&gt;Todos&lt;/option&gt;
+        &lt;option value&#x3D;&quot;aventura&quot;&gt;Aventura&lt;/option&gt;
+        &lt;option value&#x3D;&quot;cultural&quot;&gt;Cultural&lt;/option&gt;
+        &lt;option value&#x3D;&quot;naturaleza&quot;&gt;Naturaleza&lt;/option&gt;
+        &lt;option value&#x3D;&quot;historico&quot;&gt;Histórico&lt;/option&gt;
+        &lt;option value&#x3D;&quot;gastronomico&quot;&gt;Gastronómico&lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/div&gt;
+    &lt;button class&#x3D;&quot;aplicar-btn&quot; (click)&#x3D;&quot;aplicarFiltros()&quot;&gt;Aplicar Filtros&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;p *ngIf&#x3D;&quot;cargando&quot;&gt;Cargando paquetes...&lt;/p&gt;
+  &lt;p *ngIf&#x3D;&quot;error&quot;&gt;{{ error }}&lt;/p&gt;
+  &lt;p *ngIf&#x3D;&quot;!cargando &amp;&amp; !error &amp;&amp; paquetesFiltrados.length &#x3D;&#x3D;&#x3D; 0&quot;&gt;No hay paquetes que coincidan con el filtro.&lt;/p&gt;
+
+  &lt;div class&#x3D;&quot;lista-paquetes&quot;&gt;
+    &lt;ng-container *ngFor&#x3D;&quot;let paquete of paquetesFiltrados&quot;&gt;
+      &lt;div class&#x3D;&quot;paquete-card&quot;&gt;
+        &lt;div class&#x3D;&quot;paquete-header&quot;&gt;
+          &lt;h3 class&#x3D;&quot;paquete-nombre&quot;&gt;{{ paquete.nombre }}&lt;span *ngIf&#x3D;&quot;paquete.hotel&quot;&gt;: {{ paquete.hotel.nombre }}&lt;/span&gt;&lt;span *ngIf&#x3D;&quot;paquete.lugar&quot;&gt; + {{ paquete.lugar.nombre }}&lt;/span&gt;&lt;/h3&gt;
+          &lt;span class&#x3D;&quot;paquete-etiqueta&quot;&gt;{{ paquete.tipo | titlecase }}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class&#x3D;&quot;paquete-meta&quot;&gt;
+          &lt;p class&#x3D;&quot;meta-item&quot; *ngIf&#x3D;&quot;paquete.hotel&quot;&gt;&lt;strong&gt;Ubicación:&lt;/strong&gt; {{ paquete.hotel.ubicacion }}&lt;/p&gt;
+          &lt;p class&#x3D;&quot;meta-item&quot;&gt;&lt;strong&gt;Departamento:&lt;/strong&gt;
+            {{ paquete.hotel?.departamento || paquete.lugar?.departamento }}
+          &lt;/p&gt;
+        &lt;/div&gt;
+        &lt;p class&#x3D;&quot;paquete-descripcion&quot;&gt;{{ paquete.lugar?.descripcion }}&lt;/p&gt;
+        &lt;div class&#x3D;&quot;paquete-footer&quot;&gt;
+          &lt;span class&#x3D;&quot;paquete-precio&quot;&gt;{{ paquete.precio }} BOB&lt;/span&gt;
+          &lt;a class&#x3D;&quot;ver-detalle-btn&quot; [routerLink]&#x3D;&quot;[&#x27;/paquetes&#x27;, paquete.id_paquete]&quot;&gt;Ver Detalles&lt;/a&gt;
+          &lt;button class&#x3D;&quot;editar-btn&quot; (click)&#x3D;&quot;onEditarPaquete(paquete)&quot; *ngIf&#x3D;&quot;isSuperAdmin&quot;&gt;Editar&lt;/button&gt;
+          &lt;button class&#x3D;&quot;btn btn-danger&quot; (click)&#x3D;&quot;onEliminarPaquete(paquete)&quot; *ngIf&#x3D;&quot;isSuperAdmin&quot;&gt;Eliminar&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/ng-container&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- MODAL PARA CREAR --&gt;
+&lt;div class&#x3D;&quot;modal-overlay&quot; *ngIf&#x3D;&quot;mostrarModalCrear&quot; (click)&#x3D;&quot;mostrarModalCrear &#x3D; false&quot;&gt;
+  &lt;div class&#x3D;&quot;modal-content&quot; (click)&#x3D;&quot;$event.stopPropagation()&quot;&gt;
+    &lt;div class&#x3D;&quot;modal-header&quot;&gt;
+      &lt;h2&gt;Nuevo Paquete Turístico&lt;/h2&gt;
+      &lt;button class&#x3D;&quot;close-btn&quot; (click)&#x3D;&quot;mostrarModalCrear &#x3D; false&quot;&gt;&amp;times;&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;form class&#x3D;&quot;form-crear&quot; (ngSubmit)&#x3D;&quot;crearPaquete()&quot;&gt;
+      &lt;div class&#x3D;&quot;form-group&quot;&gt;
+        &lt;label&gt;Nombre:&lt;/label&gt;
+        &lt;input type&#x3D;&quot;text&quot; [(ngModel)]&#x3D;&quot;paqueteNuevo.nombre&quot; name&#x3D;&quot;nombre&quot; required /&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;form-row&quot;&gt;
+        &lt;div class&#x3D;&quot;form-group&quot;&gt;
+          &lt;label&gt;Tipo de Paquete:&lt;/label&gt;
+          &lt;select [(ngModel)]&#x3D;&quot;paqueteNuevo.tipo&quot; name&#x3D;&quot;tipo&quot; required&gt;
+            &lt;option value&#x3D;&quot;&quot;&gt;Seleccionar tipo&lt;/option&gt;
+            &lt;option value&#x3D;&quot;aventura&quot;&gt;Aventura&lt;/option&gt;
+            &lt;option value&#x3D;&quot;cultural&quot;&gt;Cultural&lt;/option&gt;
+            &lt;option value&#x3D;&quot;naturaleza&quot;&gt;Naturaleza&lt;/option&gt;
+            &lt;option value&#x3D;&quot;historico&quot;&gt;Histórico&lt;/option&gt;
+            &lt;option value&#x3D;&quot;gastronomico&quot;&gt;Gastronómico&lt;/option&gt;
+          &lt;/select&gt;
+        &lt;/div&gt;
+        &lt;div class&#x3D;&quot;form-group&quot;&gt;
+          &lt;label&gt;Precio (BOB):&lt;/label&gt;
+          &lt;input type&#x3D;&quot;number&quot; [(ngModel)]&#x3D;&quot;paqueteNuevo.precio&quot; name&#x3D;&quot;precio&quot; step&#x3D;&quot;0.01&quot; required /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;form-group&quot;&gt;
+        &lt;label&gt;ID Hotel:&lt;/label&gt;
+        &lt;input type&#x3D;&quot;number&quot; [(ngModel)]&#x3D;&quot;paqueteNuevo.id_hotel&quot; name&#x3D;&quot;id_hotel&quot; required /&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;form-group&quot;&gt;
+        &lt;label&gt;ID Lugar Turístico:&lt;/label&gt;
+        &lt;input type&#x3D;&quot;number&quot; [(ngModel)]&#x3D;&quot;paqueteNuevo.id_lugar&quot; name&#x3D;&quot;id_lugar&quot; required /&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;form-group checkbox-group&quot;&gt;
+        &lt;label&gt;
+          &lt;input type&#x3D;&quot;checkbox&quot; [(ngModel)]&#x3D;&quot;paqueteNuevo.estado&quot; name&#x3D;&quot;estado&quot; /&gt;
+          Paquete disponible
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;modal-actions&quot;&gt;
+        &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;btn-cancelar&quot; (click)&#x3D;&quot;mostrarModalCrear &#x3D; false&quot;&gt;Cancelar&lt;/button&gt;
+        &lt;button type&#x3D;&quot;submit&quot; class&#x3D;&quot;btn-guardar&quot;&gt;Guardar Paquete&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- MODAL PARA EDITAR --&gt;
+&lt;!-- MODAL PARA EDITAR --&gt;
+&lt;div class&#x3D;&quot;modal-overlay&quot; *ngIf&#x3D;&quot;mostrarModalEditar&quot; (click)&#x3D;&quot;cerrarModal()&quot;&gt;
+  &lt;div class&#x3D;&quot;modal-content&quot; (click)&#x3D;&quot;$event.stopPropagation()&quot;&gt;
+    &lt;div class&#x3D;&quot;modal-header&quot;&gt;
+      &lt;h2&gt;Editar Paquete Turístico&lt;/h2&gt;
+      &lt;button class&#x3D;&quot;close-btn&quot; (click)&#x3D;&quot;cerrarModal()&quot;&gt;&amp;times;&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;form class&#x3D;&quot;form-editar&quot; (ngSubmit)&#x3D;&quot;guardarEdicion()&quot;&gt;
+      &lt;div class&#x3D;&quot;form-group&quot;&gt;
+        &lt;label&gt;Nombre:&lt;/label&gt;
+        &lt;input type&#x3D;&quot;text&quot; [(ngModel)]&#x3D;&quot;paqueteEditando!.nombre&quot; name&#x3D;&quot;nombre&quot; required&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;form-row&quot;&gt;
+        &lt;div class&#x3D;&quot;form-group&quot;&gt;
+          &lt;label&gt;Tipo de Paquete:&lt;/label&gt;
+          &lt;select [(ngModel)]&#x3D;&quot;paqueteEditando!.tipo&quot; name&#x3D;&quot;tipo&quot; required&gt;
+            &lt;option value&#x3D;&quot;&quot;&gt;Seleccionar tipo&lt;/option&gt;
+            &lt;option value&#x3D;&quot;aventura&quot;&gt;Aventura&lt;/option&gt;
+            &lt;option value&#x3D;&quot;cultural&quot;&gt;Cultural&lt;/option&gt;
+            &lt;option value&#x3D;&quot;naturaleza&quot;&gt;Naturaleza&lt;/option&gt;
+            &lt;option value&#x3D;&quot;historico&quot;&gt;Histórico&lt;/option&gt;
+            &lt;option value&#x3D;&quot;gastronomico&quot;&gt;Gastronómico&lt;/option&gt;
+          &lt;/select&gt;
+        &lt;/div&gt;
+        &lt;div class&#x3D;&quot;form-group&quot;&gt;
+          &lt;label&gt;Precio (BOB):&lt;/label&gt;
+          &lt;input type&#x3D;&quot;number&quot; [(ngModel)]&#x3D;&quot;paqueteEditando!.precio&quot; name&#x3D;&quot;precio&quot; step&#x3D;&quot;0.01&quot; required&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;form-row&quot;&gt;
+        &lt;div class&#x3D;&quot;form-group&quot;&gt;
+          &lt;label&gt;ID Hotel:&lt;/label&gt;
+          &lt;input type&#x3D;&quot;number&quot; [(ngModel)]&#x3D;&quot;paqueteEditando!.id_hotel&quot; name&#x3D;&quot;id_hotel&quot; required /&gt;
+        &lt;/div&gt;
+        &lt;div class&#x3D;&quot;form-group&quot;&gt;
+          &lt;label&gt;ID Lugar Turístico:&lt;/label&gt;
+          &lt;input type&#x3D;&quot;number&quot; [(ngModel)]&#x3D;&quot;paqueteEditando!.id_lugar&quot; name&#x3D;&quot;id_lugar&quot; required /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;form-group checkbox-group&quot;&gt;
+        &lt;label&gt;
+          &lt;input type&#x3D;&quot;checkbox&quot; [(ngModel)]&#x3D;&quot;paqueteEditando!.estado&quot; name&#x3D;&quot;estado&quot;&gt;
+          Paquete disponible
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;modal-actions&quot;&gt;
+        &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;btn-cancelar&quot; (click)&#x3D;&quot;cerrarModal()&quot;&gt;Cancelar&lt;/button&gt;
+        &lt;button type&#x3D;&quot;submit&quot; class&#x3D;&quot;btn-guardar&quot;&gt;Guardar Cambios&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./paquetes.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">:host {
+  display: block;
+}
+
+.paquetes-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: &#x27;Segoe UI&#x27;, sans-serif;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 2rem;
+  }
+}
+
+.filtros {
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+  padding: 1.5rem 2rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-end;
+  justify-content: flex-start;
+
+  h4 {
+    width: 100%;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #333;
+    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
+    text-align: left;
+  }
+
+  .filtro-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 200px;
+    flex: 1;
+
+    label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #555;
+    }
+
+    select {
+      padding: 0.6rem 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      background-color: #f9f9f9;
+      color: #333;
+      font-family: inherit;
+      transition: border-color 0.2s;
+
+      &amp;:focus {
+        outline: none;
+        border-color: #999;
+      }
+    }
+  }
+
+  .aplicar-btn {
+    background-color: #016d2e;
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 1.5rem;
+    height: fit-content;
+
+    &amp;:hover {
+      background-color: #15803d;
+    }
+  }
+}
+
+.lista-paquetes {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+
+  gap: 24px;
+  font-family: &#x27;Segoe UI&#x27;, sans-serif;
+
+  .paquete-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .paquete-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      gap: 1rem;
+
+      .paquete-nombre {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #333;
+        margin: 0;
+        line-height: 1.4;
+        flex: 1;
+      }
+
+      .paquete-etiqueta {
+        background-color: #f0f0f0;
+        color: #555;
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+    }
+
+    .paquete-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      margin-bottom: 1rem;
+
+      .meta-item {
+        font-size: 1.1rem;
+        color: #666;
+        font-family: &#x27;Segoe UI&#x27;, sans-serif;
+        margin: 0;
+      }
+    }
+
+    .paquete-descripcion {
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .paquete-incluye {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.5rem 0;
+
+      li {
+        font-size: 1rem;
+        color: #666;
+        margin-bottom: 0.4rem;
+        padding-left: 1.2rem;
+        position: relative;
+
+        &amp;::before {
+          content: &#x27;✔&#x27;;
+          position: absolute;
+          left: 0;
+          color: #016d2e;
+          font-size: 0.9rem;
+        }
+      }
+    }
+
+    .paquete-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      gap: 1rem;
+
+      .paquete-precio {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #FF9800;
+      }
+
+      .ver-detalle-btn {
+        background-color: #016d2e;
+        color: #fff;
+        padding: 0.45rem 1rem;
+        border-radius: 0.5rem;
+        font-weight: bold;
+        font-size: 1rem;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        &amp;:hover {
+          background-color: #15803d;
+        }
+      }
+    }
+  }}
+.editar-btn {
+  background-color: #FF9800; // mismo color que el precio
+  color: #fff;
+  padding: 0.45rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &amp;:hover {
+    background-color: #fb8c00; // tono más oscuro al pasar el mouse
+  }
+}
+
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* FORMULARIO */
+.form-editar {
+  padding: 2rem;
+
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #555;
+      font-size: 1rem;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      background-color: #f9f9f9;
+      transition: border-color 0.2s;
+
+      &amp;:focus {
+        outline: none;
+        border-color: #999;
+        background-color: #fff;
+      }
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+  }
+
+  .form-row {
+  display: flex;
+  gap: 1rem;
+
+  .form-group {
+    flex: 1;
+  }
+}
+
+
+  .checkbox-group {
+    label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: #555;
+    }
+
+    input[type&#x3D;&quot;checkbox&quot;] {
+      width: auto;
+      transform: scale(1.2);
+    }
+  }
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+
+  button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.2s;
+  }
+}
+
+.btn-cancelar {
+  background: #6c757d;
+  color: white;
+
+  &amp;:hover {
+    background: #5a6268;
+      }
+}
+
+.btn-guardar {
+  background: #016d2e;
+  color: white;
+
+  &amp;:hover {
+    background: #15803d;
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    margin: 1rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .form-editar {
+    padding: 1.5rem;
+  }
+
+  .modal-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .close-btn {
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 1.25rem;
+  }
+}
+
+
+/* FORMULARIO DE CREACIÓN (mismo estilo que edición) */
+.form-crear {
+  padding: 2rem;
+
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #555;
+      font-size: 1rem;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      background-color: #f9f9f9;
+      transition: border-color 0.2s;
+
+      &amp;:focus {
+        outline: none;
+        border-color: #999;
+        background-color: #fff;
+      }
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+  }
+
+  .form-row {
+    display: flex;
+    gap: 1rem;
+
+    .form-group {
+      flex: 1;
+    }
+  }
+
+  .checkbox-group {
+    label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: #555;
+    }
+
+    input[type&#x3D;&quot;checkbox&quot;] {
+      width: auto;
+      transform: scale(1.2);
+    }
+  }
+}
+
+.header-acciones {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 22px;
+
+  .btn-primary {
+    background-color: #016d2e;
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s;
+
+    &amp;:hover {
+      background-color: #15803d;
+    }
+
+    .material-symbols-outlined {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+.btn-danger {
+  background: #fee2e2;
+  color: #dc2626; // $danger-color equivalente
+  padding: 0.45rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &amp;:hover {
+    background: #fecaca;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="paquetes-container">  <h1>Paquetes Turísticos</h1>  <div class="header-acciones">    <button *ngIf="isSuperAdmin" class="btn btn-primary" (click)="mostrarModalCrear = true">      <span class="material-symbols-outlined icon-ms">add</span>      Agregar Paquete Turístico    </button>  </div>  <div class="filtros">    <h4>Filtros de búsqueda</h4>    <div class="filtro-row">      <label>Disponibilidad:</label>      <select [(ngModel)]="disponibleSeleccionado">        <option value="">Todas</option>        <option value="true">Disponibles</option>        <option value="false">No disponibles</option>      </select>    </div>    <div class="filtro-row">      <label>Departamento:</label>      <select [(ngModel)]="departamentoSeleccionado">        <option value="">Todos</option>        <option *ngFor="let dep of departamentos" [value]="dep">{{ dep }}</option>      </select>    </div>    <div class="filtro-row">      <label>Tipo de paquete:</label>      <select [(ngModel)]="tipoSeleccionado">        <option value="">Todos</option>        <option value="aventura">Aventura</option>        <option value="cultural">Cultural</option>        <option value="naturaleza">Naturaleza</option>        <option value="historico">Histórico</option>        <option value="gastronomico">Gastronómico</option>      </select>    </div>    <button class="aplicar-btn" (click)="aplicarFiltros()">Aplicar Filtros</button>  </div>  <p *ngIf="cargando">Cargando paquetes...</p>  <p *ngIf="error">{{ error }}</p>  <p *ngIf="!cargando && !error && paquetesFiltrados.length === 0">No hay paquetes que coincidan con el filtro.</p>  <div class="lista-paquetes">    <ng-container *ngFor="let paquete of paquetesFiltrados">      <div class="paquete-card">        <div class="paquete-header">          <h3 class="paquete-nombre">{{ paquete.nombre }}<span *ngIf="paquete.hotel">: {{ paquete.hotel.nombre }}</span><span *ngIf="paquete.lugar"> + {{ paquete.lugar.nombre }}</span></h3>          <span class="paquete-etiqueta">{{ paquete.tipo | titlecase }}</span>        </div>        <div class="paquete-meta">          <p class="meta-item" *ngIf="paquete.hotel"><strong>Ubicación:</strong> {{ paquete.hotel.ubicacion }}</p>          <p class="meta-item"><strong>Departamento:</strong>            {{ paquete.hotel?.departamento || paquete.lugar?.departamento }}          </p>        </div>        <p class="paquete-descripcion">{{ paquete.lugar?.descripcion }}</p>        <div class="paquete-footer">          <span class="paquete-precio">{{ paquete.precio }} BOB</span>          <a class="ver-detalle-btn" [routerLink]="[\'/paquetes\', paquete.id_paquete]">Ver Detalles</a>          <button class="editar-btn" (click)="onEditarPaquete(paquete)" *ngIf="isSuperAdmin">Editar</button>          <button class="btn btn-danger" (click)="onEliminarPaquete(paquete)" *ngIf="isSuperAdmin">Eliminar</button>        </div>      </div>    </ng-container>  </div></div><!-- MODAL PARA CREAR --><div class="modal-overlay" *ngIf="mostrarModalCrear" (click)="mostrarModalCrear = false">  <div class="modal-content" (click)="$event.stopPropagation()">    <div class="modal-header">      <h2>Nuevo Paquete Turístico</h2>      <button class="close-btn" (click)="mostrarModalCrear = false">&times;</button>    </div>    <form class="form-crear" (ngSubmit)="crearPaquete()">      <div class="form-group">        <label>Nombre:</label>        <input type="text" [(ngModel)]="paqueteNuevo.nombre" name="nombre" required />      </div>      <div class="form-row">        <div class="form-group">          <label>Tipo de Paquete:</label>          <select [(ngModel)]="paqueteNuevo.tipo" name="tipo" required>            <option value="">Seleccionar tipo</option>            <option value="aventura">Aventura</option>            <option value="cultural">Cultural</option>            <option value="naturaleza">Naturaleza</option>            <option value="historico">Histórico</option>            <option value="gastronomico">Gastronómico</option>          </select>        </div>        <div class="form-group">          <label>Precio (BOB):</label>          <input type="number" [(ngModel)]="paqueteNuevo.precio" name="precio" step="0.01" required />        </div>      </div>      <div class="form-group">        <label>ID Hotel:</label>        <input type="number" [(ngModel)]="paqueteNuevo.id_hotel" name="id_hotel" required />      </div>      <div class="form-group">        <label>ID Lugar Turístico:</label>        <input type="number" [(ngModel)]="paqueteNuevo.id_lugar" name="id_lugar" required />      </div>      <div class="form-group checkbox-group">        <label>          <input type="checkbox" [(ngModel)]="paqueteNuevo.estado" name="estado" />          Paquete disponible        </label>      </div>      <div class="modal-actions">        <button type="button" class="btn-cancelar" (click)="mostrarModalCrear = false">Cancelar</button>        <button type="submit" class="btn-guardar">Guardar Paquete</button>      </div>    </form>  </div></div><!-- MODAL PARA EDITAR --><!-- MODAL PARA EDITAR --><div class="modal-overlay" *ngIf="mostrarModalEditar" (click)="cerrarModal()">  <div class="modal-content" (click)="$event.stopPropagation()">    <div class="modal-header">      <h2>Editar Paquete Turístico</h2>      <button class="close-btn" (click)="cerrarModal()">&times;</button>    </div>    <form class="form-editar" (ngSubmit)="guardarEdicion()">      <div class="form-group">        <label>Nombre:</label>        <input type="text" [(ngModel)]="paqueteEditando!.nombre" name="nombre" required>      </div>      <div class="form-row">        <div class="form-group">          <label>Tipo de Paquete:</label>          <select [(ngModel)]="paqueteEditando!.tipo" name="tipo" required>            <option value="">Seleccionar tipo</option>            <option value="aventura">Aventura</option>            <option value="cultural">Cultural</option>            <option value="naturaleza">Naturaleza</option>            <option value="historico">Histórico</option>            <option value="gastronomico">Gastronómico</option>          </select>        </div>        <div class="form-group">          <label>Precio (BOB):</label>          <input type="number" [(ngModel)]="paqueteEditando!.precio" name="precio" step="0.01" required>        </div>      </div>      <div class="form-row">        <div class="form-group">          <label>ID Hotel:</label>          <input type="number" [(ngModel)]="paqueteEditando!.id_hotel" name="id_hotel" required />        </div>        <div class="form-group">          <label>ID Lugar Turístico:</label>          <input type="number" [(ngModel)]="paqueteEditando!.id_lugar" name="id_lugar" required />        </div>      </div>      <div class="form-group checkbox-group">        <label>          <input type="checkbox" [(ngModel)]="paqueteEditando!.estado" name="estado">          Paquete disponible        </label>      </div>      <div class="modal-actions">        <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>        <button type="submit" class="btn-guardar">Guardar Cambios</button>      </div>    </form>  </div></div></div>'
+    var COMPONENTS = [{'name': 'App', 'selector': 'app-root'},{'name': 'AsistenteIa', 'selector': 'app-asistente-ia'},{'name': 'CrearPaquete', 'selector': 'crear-paquete'},{'name': 'Footer', 'selector': 'app-footer'},{'name': 'HabitacionDetalle', 'selector': 'app-habitacion-detalle'},{'name': 'Habitaciones', 'selector': 'app-habitaciones'},{'name': 'HotelDetalleComponent', 'selector': 'app-hotel-detalle'},{'name': 'Hoteles', 'selector': 'app-hoteles'},{'name': 'Inicio', 'selector': 'app-inicio'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LugaresTuristicos', 'selector': 'app-lugares-turisticos'},{'name': 'LugaresTuristicosDetalle', 'selector': 'app-lugares-turisticos-detalle'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PaqueteDetalle', 'selector': 'app-paquete-detalle'},{'name': 'Paquetes', 'selector': 'app-paquetes'},{'name': 'Perfil', 'selector': 'app-perfil'},{'name': 'Registrarse', 'selector': 'app-registrarse'},{'name': 'ReservaComponent', 'selector': 'app-reserva'},{'name': 'ReservaDetalleComponent', 'selector': 'app-reserva-detalle'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'Paquetes'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'Paquetes.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

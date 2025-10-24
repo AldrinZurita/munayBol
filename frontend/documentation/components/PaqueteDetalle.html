@@ -1,0 +1,1162 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>frontend-turismo-hoteleria documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">frontend-turismo-hoteleria documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  PaqueteDetalle</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/paquete-detalle/paquete-detalle.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-paquete-detalle</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>CommonModule</code>
+                            <code>RouterModule</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./paquete-detalle.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./paquete-detalle.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#cargando" >cargando</a>
+                            </li>
+                            <li>
+                                <a href="#error" >error</a>
+                            </li>
+                            <li>
+                                <a href="#infoImportante" >infoImportante</a>
+                            </li>
+                            <li>
+                                <a href="#itinerario" >itinerario</a>
+                            </li>
+                            <li>
+                                <a href="#paquete" >paquete</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#getDuracion" >getDuracion</a>
+                            </li>
+                            <li>
+                                <a href="#getGrupo" >getGrupo</a>
+                            </li>
+                            <li>
+                                <a href="#getPrecioFormateado" >getPrecioFormateado</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(route: ActivatedRoute, paqueteService: <a href="../injectables/PaqueteService.html" target="_self">PaqueteService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/pages/paquete-detalle/paquete-detalle.ts:20</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>route</td>
+                                                  
+                                                        <td>
+                                                                    <code>ActivatedRoute</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>paqueteService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/PaqueteService.html" target="_self" >PaqueteService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDuracion"></a>
+                    <span class="name">
+                        <span ><b>getDuracion</b></span>
+                        <a href="#getDuracion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getDuracion()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="54"
+                                    class="link-to-prism">src/app/pages/paquete-detalle/paquete-detalle.ts:54</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getGrupo"></a>
+                    <span class="name">
+                        <span ><b>getGrupo</b></span>
+                        <a href="#getGrupo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getGrupo()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="58"
+                                    class="link-to-prism">src/app/pages/paquete-detalle/paquete-detalle.ts:58</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPrecioFormateado"></a>
+                    <span class="name">
+                        <span ><b>getPrecioFormateado</b></span>
+                        <a href="#getPrecioFormateado"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPrecioFormateado()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="50"
+                                    class="link-to-prism">src/app/pages/paquete-detalle/paquete-detalle.ts:50</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="27"
+                                    class="link-to-prism">src/app/pages/paquete-detalle/paquete-detalle.ts:27</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargando"></a>
+                    <span class="name">
+                        <span ><b>cargando</b></span>
+                        <a href="#cargando"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>true</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/pages/paquete-detalle/paquete-detalle.ts:20</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="error"></a>
+                    <span class="name">
+                        <span ><b>error</b></span>
+                        <a href="#error"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/pages/paquete-detalle/paquete-detalle.ts:19</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="infoImportante"></a>
+                    <span class="name">
+                        <span ><b>infoImportante</b></span>
+                        <a href="#infoImportante"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/app/pages/paquete-detalle/paquete-detalle.ts:18</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="itinerario"></a>
+                    <span class="name">
+                        <span ><b>itinerario</b></span>
+                        <a href="#itinerario"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/pages/paquete-detalle/paquete-detalle.ts:17</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="paquete"></a>
+                    <span class="name">
+                        <span ><b>paquete</b></span>
+                        <a href="#paquete"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Paquete.html" target="_self" >Paquete | null</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/pages/paquete-detalle/paquete-detalle.ts:16</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { ActivatedRoute } from &#x27;@angular/router&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { RouterModule } from &#x27;@angular/router&#x27;;
+import { PaqueteService } from &#x27;../../services/paquete.service&#x27;;
+import { Paquete } from &#x27;../../interfaces/paquete.interface&#x27;;
+
+@Component({
+  selector: &#x27;app-paquete-detalle&#x27;,
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  templateUrl: &#x27;./paquete-detalle.html&#x27;,
+  styleUrls: [&#x27;./paquete-detalle.scss&#x27;]
+})
+export class PaqueteDetalle implements OnInit {
+  paquete: Paquete | null &#x3D; null;
+  itinerario: string[] &#x3D; [];
+  infoImportante: string[] &#x3D; [];
+  error &#x3D; &#x27;&#x27;;
+  cargando &#x3D; true;
+
+  constructor(
+    private route: ActivatedRoute,
+    private paqueteService: PaqueteService
+  ) {}
+
+  ngOnInit(): void {
+    const id &#x3D; Number(this.route.snapshot.paramMap.get(&#x27;id&#x27;));
+    if (!id) {
+      this.error &#x3D; &#x27;ID de paquete no válido&#x27;;
+      this.cargando &#x3D; false;
+      return;
+    }
+
+    this.paqueteService.getPaqueteById(id).subscribe({
+      next: (data) &#x3D;&gt; {
+        this.paquete &#x3D; data;
+        this.itinerario &#x3D; (data as any).itinerario ?? [];
+        this.infoImportante &#x3D; (data as any).info_importante ?? [];
+        this.cargando &#x3D; false;
+      },
+      error: (err) &#x3D;&gt; {
+        this.error &#x3D; &#x27;No se pudo cargar el paquete&#x27;;
+        this.cargando &#x3D; false;
+        console.error(err);
+      }
+    });
+  }
+
+  getPrecioFormateado(): string {
+    return this.paquete ? &#x60;${this.paquete.precio.toFixed(2)} BOB&#x60; : &#x27;&#x27;;
+  }
+
+  getDuracion(): string {
+    return this.itinerario.length ? &#x60;${this.itinerario.length} días&#x60; : &#x27;Duración no especificada&#x27;;
+  }
+
+  getGrupo(): string {
+    const info &#x3D; this.infoImportante.find((i: string) &#x3D;&gt;
+      i.toLowerCase().includes(&#x27;grupo&#x27;)
+    );
+    return info || &#x27;Grupo estándar&#x27;;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;paquete-detalle&quot; *ngIf&#x3D;&quot;paquete&quot;&gt;
+  &lt;div class&#x3D;&quot;content-container&quot;&gt;
+    &lt;div class&#x3D;&quot;info-section&quot;&gt;
+      &lt;div class&#x3D;&quot;header-section&quot;&gt;
+        &lt;h2 class&#x3D;&quot;package-title&quot;&gt;{{ paquete.lugar?.nombre }} + {{ paquete.hotel?.nombre }}&lt;/h2&gt;
+        &lt;div class&#x3D;&quot;price-block&quot;&gt;
+          &lt;div class&#x3D;&quot;price-value&quot;&gt;{{ paquete.precio.toFixed(2) }} BOB&lt;/div&gt;
+          &lt;div class&#x3D;&quot;price-label&quot;&gt;Precio por paquete&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;p class&#x3D;&quot;package-description&quot;&gt;{{ paquete.lugar?.descripcion }}&lt;/p&gt;
+
+      &lt;p&gt;&lt;strong&gt;Ubicación:&lt;/strong&gt; {{ paquete.lugar?.ubicacion }}&lt;/p&gt;
+      &lt;p&gt;&lt;strong&gt;Departamento:&lt;/strong&gt; {{ paquete.lugar?.departamento }}&lt;/p&gt;
+      &lt;p&gt;&lt;strong&gt;Disponible:&lt;/strong&gt; {{ paquete.estado ? &#x27;Sí&#x27; : &#x27;No&#x27; }}&lt;/p&gt;
+      &lt;p&gt;&lt;strong&gt;Hotel asignado:&lt;/strong&gt; {{ paquete.hotel?.nombre }}&lt;/p&gt;
+
+      &lt;div class&#x3D;&quot;itinerary-section&quot; *ngIf&#x3D;&quot;itinerario.length&quot;&gt;
+        &lt;h3&gt;Itinerario&lt;/h3&gt;
+        &lt;div class&#x3D;&quot;itinerary-list&quot;&gt;
+          &lt;div class&#x3D;&quot;itinerary-day&quot; *ngFor&#x3D;&quot;let dia of itinerario; let i &#x3D; index&quot;&gt;
+            &lt;div class&#x3D;&quot;day-number&quot;&gt;Día {{ i + 1 }}&lt;/div&gt;
+            &lt;div class&#x3D;&quot;day-description&quot;&gt;{{ dia }}&lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;important-info-section&quot; *ngIf&#x3D;&quot;infoImportante.length&quot;&gt;
+        &lt;h3&gt;Información importante&lt;/h3&gt;
+        &lt;ul&gt;
+          &lt;li *ngFor&#x3D;&quot;let info of infoImportante&quot;&gt;{{ info }}&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;imagen-lugar&quot;&gt;
+      &lt;img [src]&#x3D;&quot;paquete.lugar?.url_image_lugar_turistico&quot; alt&#x3D;&quot;Imagen lugar&quot; /&gt;
+    &lt;/div&gt;
+    &lt;button class&#x3D;&quot;btn&quot;&gt;Reservar Paquete&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./paquete-detalle.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.paquete-detalle {
+  padding: 2rem;
+  font-family: &#x27;Segoe UI&#x27;, sans-serif;
+  background-color: #f9f9f9;
+
+  .content-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .info-section {
+    flex: 1;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+
+    .header-section {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+
+      .package-title {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0;
+        line-height: 1.3;
+        word-break: break-word;
+      }
+
+      .price-block {
+        text-align: right;
+
+        .price-value {
+          font-size: 2rem;
+          font-weight: bold;
+          color: #FF9800;
+        }
+
+        .price-label {
+          font-size: 1rem;
+          color: #FF9800;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .package-description {
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.05rem;
+      color: #444;
+      margin-bottom: 0.6rem;
+
+      strong {
+        font-weight: 700;
+        color: #222;
+      }
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    ul {
+      padding-left: 1.2rem;
+      margin-bottom: 1rem;
+
+      li {
+        font-size: 1rem;
+        color: #444;
+        margin-bottom: 0.4rem;
+        position: relative;
+
+        &amp;::before {
+          content: &#x27;✔&#x27;;
+          position: absolute;
+          left: -1.2rem;
+          color: #016d2e;
+        }
+      }
+    }
+
+    .important-info-section {
+      background-color: #e0f4ff;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    .imagen-lugar {
+      margin-top: 1.5rem;
+
+      img {
+        max-width: 100%;
+        width: 30%;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .location-section {
+      margin-top: 2rem;
+
+      h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #0f172a;
+      }
+
+      .location-box {
+        display: flex;
+        align-items: center;
+        background-color: #eaeaea;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        gap: 1.5rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
+      .location-icon {
+        font-size: 2rem;
+        color: #016d2e;
+      }
+
+      .location-text {
+        display: flex;
+        flex-direction: column;
+
+        .map-label {
+          font-weight: 600;
+          font-size: 1.1rem;
+          color: #333;
+          margin-bottom: 0.3rem;
+        }
+
+        .map-location {
+          font-size: 1rem;
+          color: #555;
+        }
+      }
+    }
+
+    .itinerary-section {
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #f0f9ff;
+      border: 1px solid #cce8ff;
+      border-radius: 8px;
+
+      h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #0f172a;
+      }
+
+      .itinerary-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .itinerary-day {
+        display: flex;
+        flex-direction: column;
+        padding: 0.75rem 1rem;
+        background-color: #fff;
+        border-left: 4px solid #38bdf8;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        border-radius: 6px;
+
+        .day-number {
+          font-weight: 700;
+          font-size: 1.1rem;
+          color: #0f172a;
+          margin-bottom: 0.3rem;
+        }
+
+        .day-description {
+          font-size: 1rem;
+          color: #444;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .content-container {
+      flex-direction: column;
+    }
+
+    .info-section {
+      width: 100%;
+    }
+  }
+}
+.content-container {
+  display: flex;
+  flex-wrap: nowrap; /* 👈 no se envuelven las columnas */
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.info-section {
+  flex: 1;
+}
+
+.imagen-lugar {
+  flex: 1; /* 👈 ocupa el otro 50% del espacio */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 👈 llena el contenedor sin deformarse */
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Vista móvil */
+@media (max-width: 768px) {
+  .content-container {
+    flex-direction: column;
+  }
+
+  .imagen-lugar {
+    width: 100%;
+
+    img {
+      height: auto;
+      object-fit: contain;
+    }
+  }
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  background-color: #016d2e;
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="paquete-detalle" *ngIf="paquete">  <div class="content-container">    <div class="info-section">      <div class="header-section">        <h2 class="package-title">{{ paquete.lugar?.nombre }} + {{ paquete.hotel?.nombre }}</h2>        <div class="price-block">          <div class="price-value">{{ paquete.precio.toFixed(2) }} BOB</div>          <div class="price-label">Precio por paquete</div>        </div>      </div>      <p class="package-description">{{ paquete.lugar?.descripcion }}</p>      <p><strong>Ubicación:</strong> {{ paquete.lugar?.ubicacion }}</p>      <p><strong>Departamento:</strong> {{ paquete.lugar?.departamento }}</p>      <p><strong>Disponible:</strong> {{ paquete.estado ? \'Sí\' : \'No\' }}</p>      <p><strong>Hotel asignado:</strong> {{ paquete.hotel?.nombre }}</p>      <div class="itinerary-section" *ngIf="itinerario.length">        <h3>Itinerario</h3>        <div class="itinerary-list">          <div class="itinerary-day" *ngFor="let dia of itinerario; let i = index">            <div class="day-number">Día {{ i + 1 }}</div>            <div class="day-description">{{ dia }}</div>          </div>        </div>      </div>      <div class="important-info-section" *ngIf="infoImportante.length">        <h3>Información importante</h3>        <ul>          <li *ngFor="let info of infoImportante">{{ info }}</li>        </ul>      </div>    </div>    <div class="imagen-lugar">      <img [src]="paquete.lugar?.url_image_lugar_turistico" alt="Imagen lugar" />    </div>    <button class="btn">Reservar Paquete</button>  </div></div></div>'
+    var COMPONENTS = [{'name': 'App', 'selector': 'app-root'},{'name': 'AsistenteIa', 'selector': 'app-asistente-ia'},{'name': 'CrearPaquete', 'selector': 'crear-paquete'},{'name': 'Footer', 'selector': 'app-footer'},{'name': 'HabitacionDetalle', 'selector': 'app-habitacion-detalle'},{'name': 'Habitaciones', 'selector': 'app-habitaciones'},{'name': 'HotelDetalleComponent', 'selector': 'app-hotel-detalle'},{'name': 'Hoteles', 'selector': 'app-hoteles'},{'name': 'Inicio', 'selector': 'app-inicio'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LugaresTuristicos', 'selector': 'app-lugares-turisticos'},{'name': 'LugaresTuristicosDetalle', 'selector': 'app-lugares-turisticos-detalle'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PaqueteDetalle', 'selector': 'app-paquete-detalle'},{'name': 'Paquetes', 'selector': 'app-paquetes'},{'name': 'Perfil', 'selector': 'app-perfil'},{'name': 'Registrarse', 'selector': 'app-registrarse'},{'name': 'ReservaComponent', 'selector': 'app-reserva'},{'name': 'ReservaDetalleComponent', 'selector': 'app-reserva-detalle'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'PaqueteDetalle'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'PaqueteDetalle.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

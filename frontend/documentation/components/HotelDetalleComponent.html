@@ -1,0 +1,1117 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>frontend-turismo-hoteleria documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">frontend-turismo-hoteleria documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  HotelDetalleComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/hotel-detalle/hotel-detalle.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-hotel-detalle</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>CommonModule</code>
+                            <code>RouterModule</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./hotel-detalle.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./hotel-detalle.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#cargando" >cargando</a>
+                            </li>
+                            <li>
+                                <a href="#cargandoHabitaciones" >cargandoHabitaciones</a>
+                            </li>
+                            <li>
+                                <a href="#error" >error</a>
+                            </li>
+                            <li>
+                                <a href="#errorHabitaciones" >errorHabitaciones</a>
+                            </li>
+                            <li>
+                                <a href="#habitaciones" >habitaciones</a>
+                            </li>
+                            <li>
+                                <a href="#hotel" >hotel</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#getHabitaciones" >getHabitaciones</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(route: ActivatedRoute, hotelService: <a href="../injectables/HotelService.html" target="_self">HotelService</a>, habitacionService: <a href="../injectables/HabitacionService.html" target="_self">HabitacionService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/pages/hotel-detalle/hotel-detalle.ts:22</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>route</td>
+                                                  
+                                                        <td>
+                                                                    <code>ActivatedRoute</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>hotelService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/HotelService.html" target="_self" >HotelService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>habitacionService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/HabitacionService.html" target="_self" >HabitacionService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getHabitaciones"></a>
+                    <span class="name">
+                        <span ><b>getHabitaciones</b></span>
+                        <a href="#getHabitaciones"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getHabitaciones()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="56"
+                                    class="link-to-prism">src/app/pages/hotel-detalle/hotel-detalle.ts:56</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="30"
+                                    class="link-to-prism">src/app/pages/hotel-detalle/hotel-detalle.ts:30</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargando"></a>
+                    <span class="name">
+                        <span ><b>cargando</b></span>
+                        <a href="#cargando"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/pages/hotel-detalle/hotel-detalle.ts:19</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargandoHabitaciones"></a>
+                    <span class="name">
+                        <span ><b>cargandoHabitaciones</b></span>
+                        <a href="#cargandoHabitaciones"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/pages/hotel-detalle/hotel-detalle.ts:20</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="error"></a>
+                    <span class="name">
+                        <span ><b>error</b></span>
+                        <a href="#error"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/app/pages/hotel-detalle/hotel-detalle.ts:21</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="errorHabitaciones"></a>
+                    <span class="name">
+                        <span ><b>errorHabitaciones</b></span>
+                        <a href="#errorHabitaciones"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/pages/hotel-detalle/hotel-detalle.ts:22</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="habitaciones"></a>
+                    <span class="name">
+                        <span ><b>habitaciones</b></span>
+                        <a href="#habitaciones"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Habitacion.html" target="_self" >Habitacion[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/app/pages/hotel-detalle/hotel-detalle.ts:18</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="hotel"></a>
+                    <span class="name">
+                        <span ><b>hotel</b></span>
+                        <a href="#hotel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Hotel | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/pages/hotel-detalle/hotel-detalle.ts:17</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { ActivatedRoute, RouterModule } from &#x27;@angular/router&#x27;;
+import { Hotel } from &#x27;../../interfaces/hotel.interface&#x27;;
+import { HotelService } from &#x27;../../services/hotel.service&#x27;;
+import { HabitacionService } from &#x27;../../services/habitacion.service&#x27;;
+import { Habitacion } from &#x27;../../interfaces/habitacion.interface&#x27;;
+
+@Component({
+  selector: &#x27;app-hotel-detalle&#x27;,
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  templateUrl: &#x27;./hotel-detalle.html&#x27;,
+  styleUrls: [&#x27;./hotel-detalle.scss&#x27;],
+})
+export class HotelDetalleComponent implements OnInit {
+  hotel: Hotel | null &#x3D; null;
+  habitaciones: Habitacion[] &#x3D; [];
+  cargando &#x3D; false;
+  cargandoHabitaciones &#x3D; false;
+  error &#x3D; &#x27;&#x27;;
+  errorHabitaciones &#x3D; &#x27;&#x27;; // Para separar errores
+
+  constructor(
+    private route: ActivatedRoute,
+    private hotelService: HotelService,
+    private habitacionService: HabitacionService,
+  ) { }
+
+  ngOnInit(): void {
+    this.cargando &#x3D; true;
+    const idStr &#x3D; this.route.snapshot.paramMap.get(&#x27;id&#x27;);
+    const id &#x3D; Number(idStr);
+    console.log(&#x27;[HotelDetalle] ID recibido:&#x27;, idStr, &#x27;-&gt;&#x27;, id);
+
+    if (!id || isNaN(id)) {
+      this.error &#x3D; &#x27;ID de hotel no válido.&#x27;;
+      this.cargando &#x3D; false;
+      return;
+    }
+    this.hotelService.getHotelById(id).subscribe({
+      next: (hotel) &#x3D;&gt; {
+        console.log(&#x27;[HotelDetalle] Hotel recibido:&#x27;, hotel);
+        this.hotel &#x3D; hotel;
+        this.cargando &#x3D; false;
+        this.getHabitaciones();
+      },
+      error: (e) &#x3D;&gt; {
+        console.error(&#x27;[HotelDetalle] Error al cargar hotel:&#x27;, e);
+        this.error &#x3D; &#x27;No se pudo cargar el hotel.&#x27;;
+        this.cargando &#x3D; false;
+      }
+    });
+  }
+
+  getHabitaciones(): void {
+    if (!this.hotel || !this.hotel.id_hotel) {
+      this.errorHabitaciones &#x3D; &#x27;No se ha seleccionado un hotel válido&#x27;;
+      return;
+    }
+
+    this.cargandoHabitaciones &#x3D; true;
+    this.errorHabitaciones &#x3D; &#x27;&#x27;;
+    this.habitacionService.getHabitacionesPorHotel(this.hotel.id_hotel).subscribe({
+      next: (habitaciones: Habitacion[]) &#x3D;&gt; {
+        console.log(&#x27;[HotelDetalle] Habitaciones recibidas:&#x27;, habitaciones);
+        this.habitaciones &#x3D; habitaciones;
+        this.cargandoHabitaciones &#x3D; false;
+      },
+      error: (err) &#x3D;&gt; {
+        console.error(&#x27;[HotelDetalle] Error al obtener habitaciones:&#x27;, err);
+        this.errorHabitaciones &#x3D; &#x27;No se pudo cargar la lista de habitaciones&#x27;;
+        this.cargandoHabitaciones &#x3D; false;
+      }
+    });
+  }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;hotel-detalle-container&quot;&gt;
+  &lt;ng-container *ngIf&#x3D;&quot;cargando&quot;&gt;
+    &lt;div class&#x3D;&quot;estado&quot;&gt;Cargando datos del hotel...&lt;/div&gt;
+  &lt;/ng-container&gt;
+  &lt;ng-container *ngIf&#x3D;&quot;error&quot;&gt;
+    &lt;div class&#x3D;&quot;estado error&quot;&gt;{{ error }}&lt;/div&gt;
+  &lt;/ng-container&gt;
+  &lt;ng-container *ngIf&#x3D;&quot;hotel &amp;&amp; !cargando &amp;&amp; !error&quot;&gt;
+    &lt;div class&#x3D;&quot;hotel-card&quot;&gt;
+      &lt;div class&#x3D;&quot;hotel-img-box&quot;&gt;
+        &lt;img *ngIf&#x3D;&quot;hotel.url_imagen_hotel; else noImg&quot;
+             [src]&#x3D;&quot;hotel.url_imagen_hotel&quot;
+             alt&#x3D;&quot;Imagen de {{ hotel.nombre }}&quot;
+             (error)&#x3D;&quot;hotel.url_imagen_hotel &#x3D; &#x27;assets/no-image.svg&#x27;&quot; /&gt;
+        &lt;ng-template #noImg&gt;
+          &lt;img src&#x3D;&quot;assets/no-image.svg&quot; alt&#x3D;&quot;Imagen no disponible&quot; /&gt;
+        &lt;/ng-template&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;hotel-info&quot;&gt;
+        &lt;h1&gt;{{ hotel.nombre }}&lt;/h1&gt;
+        &lt;div class&#x3D;&quot;meta&quot;&gt;
+          &lt;span&gt;&lt;b&gt;Departamento:&lt;/b&gt; {{ hotel.departamento }}&lt;/span&gt;
+          &lt;span&gt;&lt;b&gt;Ubicación:&lt;/b&gt; {{ hotel.ubicacion }}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class&#x3D;&quot;meta&quot;&gt;
+          &lt;span&gt;&lt;b&gt;Calificación:&lt;/b&gt; {{ hotel.calificacion }}/10&lt;/span&gt;
+          &lt;span *ngIf&#x3D;&quot;hotel.estado&quot; class&#x3D;&quot;estado-hotel activo&quot;&gt;Activo&lt;/span&gt;
+          &lt;span *ngIf&#x3D;&quot;!hotel.estado&quot; class&#x3D;&quot;estado-hotel inactivo&quot;&gt;Inactivo&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class&#x3D;&quot;fecha-creacion&quot;&gt;
+          &lt;b&gt;Fecha de creación:&lt;/b&gt; {{ hotel.fecha_creacion | date:&#x27;longDate&#x27; }}
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/ng-container&gt;
+&lt;/div&gt;
+
+&lt;h2&gt;Habitaciones del {{hotel?.nombre}}&lt;/h2&gt;
+&lt;div class&#x3D;&quot;estado&quot;&gt;
+  &lt;div *ngIf&#x3D;&quot;cargandoHabitaciones&quot;&gt;Cargando habitaciones del hotel...&lt;/div&gt;
+  &lt;div *ngIf&#x3D;&quot;errorHabitaciones&quot; class&#x3D;&quot;error&quot;&gt;{{ errorHabitaciones }}&lt;/div&gt;
+  &lt;div *ngIf&#x3D;&quot;!cargandoHabitaciones &amp;&amp; habitaciones.length &#x3D;&#x3D;&#x3D; 0 &amp;&amp; !errorHabitaciones&quot;&gt;No hay habitaciones añadidas a este hotel&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;section class&#x3D;&quot;lista-habitaciones&quot;&gt;
+  &lt;div *ngFor&#x3D;&quot;let habitacion of habitaciones&quot; class&#x3D;&quot;habitacion-card&quot;&gt;
+    &lt;div class&#x3D;&quot;card-left&quot;&gt;
+      &lt;h3&gt;Habitación #{{ habitacion.num }}&lt;/h3&gt;
+      &lt;p class&#x3D;&quot;descripcion&quot;&gt;{{ habitacion.caracteristicas }}&lt;/p&gt;
+      &lt;ul class&#x3D;&quot;meta&quot;&gt;
+        &lt;li class&#x3D;&quot;meta-item&quot;&gt;
+          &lt;span class&#x3D;&quot;status-dot&quot; [class.disponible]&#x3D;&quot;habitacion.disponible&quot;
+                [class.no-disponible]&#x3D;&quot;!habitacion.disponible&quot;&gt;&lt;/span&gt;
+          {{ habitacion.disponible ? &#x27;Disponible&#x27; : &#x27;No disponible&#x27; }}
+        &lt;/li&gt;
+        &lt;li class&#x3D;&quot;meta-item&quot;&gt;
+          &lt;span class&#x3D;&quot;material-symbols-outlined&quot;&gt;hotel&lt;/span&gt;
+          Hotel: {{ habitacion.codigo_hotel }}
+        &lt;/li&gt;
+        &lt;li class&#x3D;&quot;meta-item&quot;&gt;
+          &lt;span class&#x3D;&quot;material-symbols-outlined&quot;&gt;group&lt;/span&gt;
+          {{ habitacion.cant_huespedes }} Huéspedes
+        &lt;/li&gt;
+        &lt;li class&#x3D;&quot;meta-item&quot;&gt;
+          &lt;span class&#x3D;&quot;material-symbols-outlined&quot;&gt;payments&lt;/span&gt;
+          {{ habitacion.precio | number:&#x27;1.2-2&#x27; }} BOB
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;card-right&quot;&gt;
+      &lt;a class&#x3D;&quot;btn btn-primary&quot; [routerLink]&#x3D;&quot;[&#x27;/habitaciones&#x27;, habitacion.num]&quot;&gt;Ver Detalle&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./hotel-detalle.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">@use &quot;sass:color&quot;;
+// --- Sistema de Diseño (Variables para consistencia) ---
+$primary-text: #0f172a;
+$secondary-text: #334155;
+$light-text: #64748b;
+$border-color: #e5e7eb;
+$card-bg: #fff;
+$primary-color: #16a34a; // Verde para acciones principales
+$accent-color: #16a34a; // Azul para &quot;Ver Detalle&quot;
+$danger-color: #dc2626; // Rojo para &quot;Eliminar&quot; y estado &quot;No disponible&quot;
+$secondary-btn-bg: #f1f5f9; // Gris claro para &quot;Editar&quot;
+
+h2 {
+  display: flex;
+  justify-content: center;
+}
+
+.hotel-detalle-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 32px 18px 18px 18px;
+}
+
+.estado {
+  color: #0f172a;
+  padding: 12px 0;
+  text-align: center;
+
+  &amp;.error {
+    color: #dc2626;
+  }
+}
+
+.hotel-card {
+  display: flex;
+  gap: 28px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+    gap: 18px;
+    padding: 16px;
+  }
+}
+
+.hotel-img-box {
+  flex-shrink: 0;
+
+  img {
+    width: 240px;
+    max-width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: #f1f5f9;
+    display: block;
+  }
+}
+
+.hotel-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  h1 {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0 0 10px 0;
+    color: #0f172a;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    font-size: 16px;
+    color: #334155;
+    margin-bottom: 8px;
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
+
+  .fecha-creacion {
+    margin-top: 16px;
+    font-size: 14px;
+    color: #64748b;
+  }
+
+  .estado-hotel {
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+
+    &amp;.activo {
+      background: #d1fae5;
+      color: #047857;
+      border: 1px solid #10b981;
+    }
+
+    &amp;.inactivo {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #ef4444;
+    }
+  }
+}
+
+// --- Lista y Tarjetas de Habitación ---
+.lista-habitaciones {
+  display: grid;
+  gap: 18px;
+}
+
+.habitacion-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  background: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: 14px;
+  padding: 20px;
+  margin-left: 3rem;
+  margin-right: 3rem;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
+  &amp;:hover {
+    border-color: color.adjust(#016d2e, $lightness: -10%);
+    box-shadow: 0 4px 12px rgba(40, 92, 145, 0.06);
+  }
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 200px; // Dos columnas en pantallas más grandes
+  }
+
+  .card-left {
+    h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      color: $primary-text;
+      font-weight: 800;
+    }
+
+    .descripcion {
+      margin: 0 0 14px;
+      color: $secondary-text;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      color: $secondary-text;
+      font-size: 14px;
+
+      .meta-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        .status-dot {
+          width: 9px;
+          height: 9px;
+          border-radius: 50%;
+
+          &amp;.disponible {
+            background-color: $primary-color;
+          }
+
+          &amp;.no-disponible {
+            background-color: $danger-color;
+          }
+        }
+      }
+    }
+  }
+
+  .card-right {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+
+    // Los botones ocupan todo el ancho en su contenedor
+    .btn {
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      align-items: flex-end; // Botones a la derecha en escritorio
+      justify-content: center;
+    }
+  }
+}
+
+.btn-primary {
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="hotel-detalle-container">  <ng-container *ngIf="cargando">    <div class="estado">Cargando datos del hotel...</div>  </ng-container>  <ng-container *ngIf="error">    <div class="estado error">{{ error }}</div>  </ng-container>  <ng-container *ngIf="hotel && !cargando && !error">    <div class="hotel-card">      <div class="hotel-img-box">        <img *ngIf="hotel.url_imagen_hotel; else noImg"             [src]="hotel.url_imagen_hotel"             alt="Imagen de {{ hotel.nombre }}"             (error)="hotel.url_imagen_hotel = \'assets/no-image.svg\'" />        <ng-template #noImg>          <img src="assets/no-image.svg" alt="Imagen no disponible" />        </ng-template>      </div>      <div class="hotel-info">        <h1>{{ hotel.nombre }}</h1>        <div class="meta">          <span><b>Departamento:</b> {{ hotel.departamento }}</span>          <span><b>Ubicación:</b> {{ hotel.ubicacion }}</span>        </div>        <div class="meta">          <span><b>Calificación:</b> {{ hotel.calificacion }}/10</span>          <span *ngIf="hotel.estado" class="estado-hotel activo">Activo</span>          <span *ngIf="!hotel.estado" class="estado-hotel inactivo">Inactivo</span>        </div>        <div class="fecha-creacion">          <b>Fecha de creación:</b> {{ hotel.fecha_creacion | date:\'longDate\' }}        </div>      </div>    </div>  </ng-container></div><h2>Habitaciones del {{hotel?.nombre}}</h2><div class="estado">  <div *ngIf="cargandoHabitaciones">Cargando habitaciones del hotel...</div>  <div *ngIf="errorHabitaciones" class="error">{{ errorHabitaciones }}</div>  <div *ngIf="!cargandoHabitaciones && habitaciones.length === 0 && !errorHabitaciones">No hay habitaciones añadidas a este hotel</div></div><section class="lista-habitaciones">  <div *ngFor="let habitacion of habitaciones" class="habitacion-card">    <div class="card-left">      <h3>Habitación #{{ habitacion.num }}</h3>      <p class="descripcion">{{ habitacion.caracteristicas }}</p>      <ul class="meta">        <li class="meta-item">          <span class="status-dot" [class.disponible]="habitacion.disponible"                [class.no-disponible]="!habitacion.disponible"></span>          {{ habitacion.disponible ? \'Disponible\' : \'No disponible\' }}        </li>        <li class="meta-item">          <span class="material-symbols-outlined">hotel</span>          Hotel: {{ habitacion.codigo_hotel }}        </li>        <li class="meta-item">          <span class="material-symbols-outlined">group</span>          {{ habitacion.cant_huespedes }} Huéspedes        </li>        <li class="meta-item">          <span class="material-symbols-outlined">payments</span>          {{ habitacion.precio | number:\'1.2-2\' }} BOB        </li>      </ul>    </div>    <div class="card-right">      <a class="btn btn-primary" [routerLink]="[\'/habitaciones\', habitacion.num]">Ver Detalle</a>    </div>  </div></section></div>'
+    var COMPONENTS = [{'name': 'App', 'selector': 'app-root'},{'name': 'AsistenteIa', 'selector': 'app-asistente-ia'},{'name': 'CrearPaquete', 'selector': 'crear-paquete'},{'name': 'Footer', 'selector': 'app-footer'},{'name': 'HabitacionDetalle', 'selector': 'app-habitacion-detalle'},{'name': 'Habitaciones', 'selector': 'app-habitaciones'},{'name': 'HotelDetalleComponent', 'selector': 'app-hotel-detalle'},{'name': 'Hoteles', 'selector': 'app-hoteles'},{'name': 'Inicio', 'selector': 'app-inicio'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LugaresTuristicos', 'selector': 'app-lugares-turisticos'},{'name': 'LugaresTuristicosDetalle', 'selector': 'app-lugares-turisticos-detalle'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PaqueteDetalle', 'selector': 'app-paquete-detalle'},{'name': 'Paquetes', 'selector': 'app-paquetes'},{'name': 'Perfil', 'selector': 'app-perfil'},{'name': 'Registrarse', 'selector': 'app-registrarse'},{'name': 'ReservaComponent', 'selector': 'app-reserva'},{'name': 'ReservaDetalleComponent', 'selector': 'app-reserva-detalle'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'HotelDetalleComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'HotelDetalleComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

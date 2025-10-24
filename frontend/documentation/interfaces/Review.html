@@ -1,0 +1,706 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>frontend-turismo-hoteleria documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">frontend-turismo-hoteleria documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
+  >
+  Review</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/pages/habitacion-detalle/habitacion-detalle.ts</code>
+        </p>
+
+
+
+
+        <section data-compodoc="block-index">
+            <h3 id="index">Index</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Properties</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                        <a href="#autor" 
+>
+                                            autor
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#calificacion" 
+>
+                                            calificacion
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#fecha" 
+>
+                                            fecha
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#texto" 
+>
+                                            texto
+                                        </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+
+            <section data-compodoc="block-properties">
+                <h3 id="inputs">Properties</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="autor"></a>
+                                        <span class="name "><b>autor</b>
+                                            <a href="#autor">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>autor:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="calificacion"></a>
+                                        <span class="name "><b>calificacion</b>
+                                            <a href="#calificacion">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>calificacion:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="fecha"></a>
+                                        <span class="name "><b>fecha</b>
+                                            <a href="#fecha">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>fecha:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="texto"></a>
+                                        <span class="name "><b>texto</b>
+                                            <a href="#texto">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>texto:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+            </section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { ActivatedRoute, RouterModule, Router } from &#x27;@angular/router&#x27;;
+import { FormsModule } from &#x27;@angular/forms&#x27;;
+import { HabitacionService, DisponibilidadHabitacionResponse, IntervaloReservado } from &#x27;../../services/habitacion.service&#x27;;
+import { Habitacion } from &#x27;../../interfaces/habitacion.interface&#x27;;
+import { HotelService } from &#x27;../../services/hotel.service&#x27;;
+import { Hotel } from &#x27;../../interfaces/hotel.interface&#x27;;
+
+
+interface Review {
+	autor: string;
+	texto: string;
+	calificacion: number;
+	fecha: string;
+}
+
+interface AmenidadChip {
+  label: string;
+  icon: string; // could be emoji or later an SVG/material symbol key
+}
+
+@Component({
+	selector: &#x27;app-habitacion-detalle&#x27;,
+	imports: [CommonModule, RouterModule, FormsModule],
+	templateUrl: &#x27;./habitacion-detalle.html&#x27;,
+	styleUrls: [&#x27;./habitacion-detalle.scss&#x27;],
+	standalone: true,
+})
+export class HabitacionDetalle implements OnInit {
+	habitacion: Habitacion | null &#x3D; null;
+	hotel: Hotel | null &#x3D; null;
+	loadingHotel: boolean &#x3D; true;
+	reviews: Review[] &#x3D; [];
+	amenidades: AmenidadChip[] &#x3D; [];
+
+	// Nuevos campos para seleccionar rango de fechas
+	fechaReserva: string &#x3D; &#x27;&#x27;;
+	fechaCaducidad: string &#x3D; &#x27;&#x27;;
+	minFecha: string &#x3D; &#x27;&#x27;;
+	minFechaSalida: string &#x3D; &#x27;&#x27;;
+	disponibilidad: DisponibilidadHabitacionResponse | null &#x3D; null;
+	intervalos: IntervaloReservado[] &#x3D; [];
+	fechaOcupada: boolean &#x3D; false;
+	mensajeDisponibilidad: string &#x3D; &#x27;&#x27;;
+	showToast: boolean &#x3D; false;
+	showModal: boolean &#x3D; false;
+	proxDisponible: string &#x3D; &#x27;&#x27;;
+
+	constructor(
+		private readonly route: ActivatedRoute,
+		private readonly habitacionService: HabitacionService,
+		private readonly hotelService: HotelService,
+		private readonly router: Router
+	) {}
+
+	ngOnInit() {
+		const numParam &#x3D; this.route.snapshot.paramMap.get(&#x27;num&#x27;);
+		// Inicializar fechas (hoy y mañana)
+		const hoy &#x3D; new Date();
+		const manana &#x3D; new Date(hoy.getTime() + 24 * 60 * 60 * 1000);
+		this.fechaReserva &#x3D; hoy.toISOString().slice(0, 10);
+		this.fechaCaducidad &#x3D; manana.toISOString().slice(0, 10);
+		this.minFecha &#x3D; this.fechaReserva;
+		this.minFechaSalida &#x3D; this.fechaCaducidad;
+		if (numParam) {
+			this.habitacionService.getHabitaciones().subscribe({
+				next: habitaciones &#x3D;&gt; {
+					this.habitacion &#x3D; habitaciones.find(h &#x3D;&gt; String(h.num) &#x3D;&#x3D;&#x3D; String(numParam)) || null;
+					this.generarReviewsFake();
+					if (this.habitacion) {
+						this.procesarAmenidades(this.habitacion.caracteristicas);
+						this.cargarDisponibilidad(String(this.habitacion.num));
+						// Cargar info del hotel para cabecera enriquecida
+						this.loadingHotel &#x3D; true;
+						this.hotelService.getHotelById(this.habitacion.codigo_hotel as unknown as number).subscribe({
+							next: h &#x3D;&gt; { this.hotel &#x3D; h; this.loadingHotel &#x3D; false; },
+							error: () &#x3D;&gt; { this.loadingHotel &#x3D; false; }
+						});
+					} else {
+						// Fallback: intentar cargar la habitación directamente por num
+						this.habitacionService.getHabitacionByNum(String(numParam)).subscribe({
+							next: hab &#x3D;&gt; {
+								this.habitacion &#x3D; hab;
+								this.generarReviewsFake();
+								this.procesarAmenidades(hab.caracteristicas);
+								this.cargarDisponibilidad(String(hab.num));
+								this.loadingHotel &#x3D; true;
+								this.hotelService.getHotelById(hab.codigo_hotel as unknown as number).subscribe({
+									next: h &#x3D;&gt; { this.hotel &#x3D; h; this.loadingHotel &#x3D; false; },
+									error: () &#x3D;&gt; { this.loadingHotel &#x3D; false; }
+								});
+							},
+							error: () &#x3D;&gt; {
+								// dejar habitacion en null si no se encuentra
+							}
+						});
+					}
+				}
+			});
+		} else {
+			this.generarReviewsFake();
+		}
+	}
+
+	onChangeFechaReserva() {
+		if (this.fechaCaducidad &lt;&#x3D; this.fechaReserva) {
+			const nuevaSalida &#x3D; new Date(this.fechaReserva);
+			nuevaSalida.setDate(nuevaSalida.getDate() + 1);
+			this.fechaCaducidad &#x3D; nuevaSalida.toISOString().slice(0, 10);
+		}
+		this.minFechaSalida &#x3D; this.addDias(this.fechaReserva, 1);
+		this.evaluarSolapamiento();
+	}
+
+	onChangeFechaCaducidad() {
+		if (this.fechaCaducidad &lt;&#x3D; this.fechaReserva) {
+			this.fechaCaducidad &#x3D; this.addDias(this.fechaReserva, 1);
+		}
+		this.evaluarSolapamiento();
+	}
+
+	private cargarDisponibilidad(num: string) {
+		this.habitacionService.getDisponibilidadHabitacion(num).subscribe({
+			next: resp &#x3D;&gt; {
+				this.disponibilidad &#x3D; resp;
+				this.intervalos &#x3D; resp.intervalos_reservados.map(i &#x3D;&gt; ({...i}));
+				// Ya no reajustamos automáticamente; se decide al click.
+				this.evaluarSolapamiento();
+			}
+		});
+	}
+
+	private estaDentro(fecha: string, intervalo: IntervaloReservado): boolean {
+		return fecha &gt;&#x3D; intervalo.inicio &amp;&amp; fecha &lt;&#x3D; intervalo.fin;
+	}
+
+	private rangoSolapa(inicio: string, fin: string, intervalo: IntervaloReservado): boolean {
+		return inicio &lt;&#x3D; intervalo.fin &amp;&amp; fin &gt;&#x3D; intervalo.inicio;
+	}
+
+	private evaluarSolapamiento() {
+		this.fechaOcupada &#x3D; this.intervalos.some(it &#x3D;&gt; this.rangoSolapa(this.fechaReserva, this.fechaCaducidad, it));
+	}
+
+	onIntentarReservar() {
+		this.mensajeDisponibilidad &#x3D; &#x27;&#x27;;
+		this.showToast &#x3D; false;
+		this.showModal &#x3D; false;
+		this.evaluarSolapamiento();
+		if (this.fechaOcupada) {
+			this.proxDisponible &#x3D; this.disponibilidad?.next_available_from || &#x27;&#x27;;
+			this.mensajeDisponibilidad &#x3D; &#x60;La habitación está ocupada en esas fechas&#x60;;
+			this.showToast &#x3D; true; // Mostrar toast rápido
+			this.showModal &#x3D; true; // Y modal con acción
+			return;
+		}
+		// Navegación manual asegurando parámetros consistentes
+		this.router.navigate([&#x27;/reservas&#x27;], {
+			queryParams: {
+				num: this.habitacion?.num,
+				precio: this.habitacion?.precio,
+				hotel: this.habitacion?.codigo_hotel,
+				capacidad: this.habitacion?.cant_huespedes,
+				fecha_reserva: this.fechaReserva,
+				fecha_caducidad: this.fechaCaducidad
+			}
+		});
+	}
+
+	formatear(fecha: string): string {
+		if (!fecha) return &#x27;&#x27;;
+		const [y,m,d] &#x3D; fecha.split(&#x27;-&#x27;);
+		return &#x60;${d}/${m}/${y}&#x60;;
+	}
+
+	usarProximaFecha() {
+		if (!this.proxDisponible) return;
+		this.fechaReserva &#x3D; this.proxDisponible;
+		// set checkout +1 día
+		this.fechaCaducidad &#x3D; this.addDias(this.proxDisponible, 1);
+		this.minFecha &#x3D; this.fechaReserva;
+		this.minFechaSalida &#x3D; this.fechaCaducidad;
+		this.showModal &#x3D; false;
+		this.showToast &#x3D; false;
+		this.mensajeDisponibilidad &#x3D; &#x27;&#x27;;
+	}
+
+	cerrarToast() { this.showToast &#x3D; false; }
+	cerrarModal() { this.showModal &#x3D; false; }
+
+	private addDias(fecha: string, dias: number): string {
+		const d &#x3D; new Date(fecha);
+		d.setDate(d.getDate() + dias);
+		return d.toISOString().slice(0, 10);
+	}
+
+	reservar() {
+		// Navega a la página de reservas con las fechas seleccionadas
+		if (!this.habitacion) {
+			alert(&#x27;No se encontró la habitación&#x27;);
+			return;
+		}
+		// Usamos routerLink en la plantilla, este método queda por si se quisiera programático
+		alert(&#x27;Serás redirigido a la creación de la reserva con tus fechas seleccionadas.&#x27;);
+	}
+
+	getPrecioHabitacion(): number {
+		return this.habitacion ? this.habitacion.precio : 0;
+	}
+
+	getCapacidadHabitacion(): number {
+		return this.habitacion ? this.habitacion.cant_huespedes : 2;
+	}
+
+	getPrecioFormateado(): string {
+		const val &#x3D; this.getPrecioHabitacion();
+		const fmt &#x3D; new Intl.NumberFormat(&#x27;es-BO&#x27;, { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(val);
+		return &#x60;${fmt} BOB&#x60;;
+	}
+	getPrecio(): string {
+  const val &#x3D; this.getPrecioHabitacion();
+  const fmt &#x3D; new Intl.NumberFormat(&#x27;es-BO&#x27;, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(val);
+  return &#x60;${fmt} BOB&#x60;;
+}
+
+
+	getNombreSeccion(): string {
+		if (this.loadingHotel) return &#x27;&#x27;;
+		if (this.hotel?.nombre) return &#x60;Habitación en ${this.hotel.nombre}&#x60;;
+		return this.habitacion ? &#x60;Habitación ${this.habitacion.num}&#x60; : &#x27;&#x27;;
+	}
+
+	getUbicacionCompuesta(): string {
+		if (!this.hotel) return &#x27;&#x27;;
+		// departamento, ubicacion (asumiendo ubicacion contiene ciudad / direccion)
+		return &#x60;${this.hotel.departamento}, ${this.hotel.ubicacion}&#x60;;
+	}
+
+	getCalificacion(): string {
+		if (!this.hotel) return &#x27;&#x27;;
+		const scoreInt &#x3D; Math.round(this.hotel.calificacion || 0); // mostrar entero
+		return &#x60;${scoreInt}/5 (3 reseñas)&#x60;; // Placeholder reseñas
+	}
+
+	getDisponibilidadLabel(): string {
+		if (!this.habitacion) return &#x27;&#x27;;
+		return this.habitacion.disponible ? &#x27;Disponible&#x27; : &#x27;No disponible&#x27;;
+	}
+
+	private procesarAmenidades(raw: string) {
+		if (!raw) { this.amenidades &#x3D; []; return; }
+		const mapIcons: Record&lt;string,string&gt; &#x3D; {
+			&#x27;wifi&#x27;: &#x27;📶&#x27;,
+			&#x27;wi-fi&#x27;: &#x27;📶&#x27;,
+			&#x27;Internet&#x27;: &#x27;📶&#x27;,
+			&#x27;desayuno&#x27;: &#x27;🍳&#x27;,
+			&#x27;desayuno incluido&#x27;: &#x27;🍳&#x27;,
+			&#x27;tv&#x27;: &#x27;📺&#x27;,
+			&#x27;tv cable&#x27;: &#x27;📺&#x27;,
+			&#x27;cable&#x27;: &#x27;📺&#x27;,
+			&#x27;baño privado&#x27;: &#x27;🛁&#x27;,
+			&#x27;aire acondicionado&#x27;: &#x27;❄️&#x27;,
+			&#x27;calefacción&#x27;: &#x27;🔥&#x27;,
+			&#x27;parking&#x27;: &#x27;🅿️&#x27;,
+			&#x27;estacionamiento&#x27;: &#x27;🅿️&#x27;,
+			&#x27;gimnasio&#x27;: &#x27;🏋️&#x27;,
+			&#x27;pool&#x27;: &#x27;🏊&#x27;,
+			&#x27;piscina&#x27;: &#x27;🏊&#x27;
+		};
+		this.amenidades &#x3D; raw.split(&#x27;,&#x27;)
+			.map(c &#x3D;&gt; c.trim())
+			.filter(c &#x3D;&gt; !!c)
+			.map(c &#x3D;&gt; {
+				const key &#x3D; c.toLowerCase();
+				const icon &#x3D; mapIcons[key] || &#x27;•&#x27;;
+				return { label: c, icon } as AmenidadChip;
+			});
+	}
+
+	private generarReviewsFake() {
+		this.reviews &#x3D; [
+			{ autor: &#x27;Ana&#x27;, texto: &#x27;Muy acogedor y limpio. Volveria sin duda.&#x27;, calificacion: 4.5, fecha: &#x27;2025-09-10&#x27; },
+			{ autor: &#x27;Luis&#x27;, texto: &#x27;Excelente ubicacion y atencion. Desayuno completo.&#x27;, calificacion: 4.2, fecha: &#x27;2025-09-12&#x27; },
+			{ autor: &#x27;Maria&#x27;, texto: &#x27;Hotel con encanto. Ideal para descansar y recorrer.&#x27;, calificacion: 4.8, fecha: &#x27;2025-09-15&#x27; },
+		];
+	}
+}
+// ...existing code...
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'Review.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

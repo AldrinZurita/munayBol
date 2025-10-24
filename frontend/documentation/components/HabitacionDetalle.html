@@ -1,0 +1,3029 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>frontend-turismo-hoteleria documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">frontend-turismo-hoteleria documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  HabitacionDetalle</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/habitacion-detalle/habitacion-detalle.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-habitacion-detalle</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>CommonModule</code>
+                            <code>RouterModule</code>
+                            <code>FormsModule</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./habitacion-detalle.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./habitacion-detalle.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#amenidades" >amenidades</a>
+                            </li>
+                            <li>
+                                <a href="#disponibilidad" >disponibilidad</a>
+                            </li>
+                            <li>
+                                <a href="#fechaCaducidad" >fechaCaducidad</a>
+                            </li>
+                            <li>
+                                <a href="#fechaOcupada" >fechaOcupada</a>
+                            </li>
+                            <li>
+                                <a href="#fechaReserva" >fechaReserva</a>
+                            </li>
+                            <li>
+                                <a href="#habitacion" >habitacion</a>
+                            </li>
+                            <li>
+                                <a href="#hotel" >hotel</a>
+                            </li>
+                            <li>
+                                <a href="#intervalos" >intervalos</a>
+                            </li>
+                            <li>
+                                <a href="#loadingHotel" >loadingHotel</a>
+                            </li>
+                            <li>
+                                <a href="#mensajeDisponibilidad" >mensajeDisponibilidad</a>
+                            </li>
+                            <li>
+                                <a href="#minFecha" >minFecha</a>
+                            </li>
+                            <li>
+                                <a href="#minFechaSalida" >minFechaSalida</a>
+                            </li>
+                            <li>
+                                <a href="#proxDisponible" >proxDisponible</a>
+                            </li>
+                            <li>
+                                <a href="#reviews" >reviews</a>
+                            </li>
+                            <li>
+                                <a href="#showModal" >showModal</a>
+                            </li>
+                            <li>
+                                <a href="#showToast" >showToast</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#addDias" >addDias</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#cargarDisponibilidad" >cargarDisponibilidad</a>
+                            </li>
+                            <li>
+                                <a href="#cerrarModal" >cerrarModal</a>
+                            </li>
+                            <li>
+                                <a href="#cerrarToast" >cerrarToast</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#estaDentro" >estaDentro</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#evaluarSolapamiento" >evaluarSolapamiento</a>
+                            </li>
+                            <li>
+                                <a href="#formatear" >formatear</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#generarReviewsFake" >generarReviewsFake</a>
+                            </li>
+                            <li>
+                                <a href="#getCalificacion" >getCalificacion</a>
+                            </li>
+                            <li>
+                                <a href="#getCapacidadHabitacion" >getCapacidadHabitacion</a>
+                            </li>
+                            <li>
+                                <a href="#getDisponibilidadLabel" >getDisponibilidadLabel</a>
+                            </li>
+                            <li>
+                                <a href="#getNombreSeccion" >getNombreSeccion</a>
+                            </li>
+                            <li>
+                                <a href="#getPrecio" >getPrecio</a>
+                            </li>
+                            <li>
+                                <a href="#getPrecioFormateado" >getPrecioFormateado</a>
+                            </li>
+                            <li>
+                                <a href="#getPrecioHabitacion" >getPrecioHabitacion</a>
+                            </li>
+                            <li>
+                                <a href="#getUbicacionCompuesta" >getUbicacionCompuesta</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#onChangeFechaCaducidad" >onChangeFechaCaducidad</a>
+                            </li>
+                            <li>
+                                <a href="#onChangeFechaReserva" >onChangeFechaReserva</a>
+                            </li>
+                            <li>
+                                <a href="#onIntentarReservar" >onIntentarReservar</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#procesarAmenidades" >procesarAmenidades</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#rangoSolapa" >rangoSolapa</a>
+                            </li>
+                            <li>
+                                <a href="#reservar" >reservar</a>
+                            </li>
+                            <li>
+                                <a href="#usarProximaFecha" >usarProximaFecha</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(route: ActivatedRoute, habitacionService: <a href="../injectables/HabitacionService.html" target="_self">HabitacionService</a>, hotelService: <a href="../injectables/HotelService.html" target="_self">HotelService</a>, router: Router)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:48</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>route</td>
+                                                  
+                                                        <td>
+                                                                    <code>ActivatedRoute</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>habitacionService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/HabitacionService.html" target="_self" >HabitacionService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>hotelService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/HotelService.html" target="_self" >HotelService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                    <code>Router</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addDias"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>addDias</b></span>
+                        <a href="#addDias"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>addDias(fecha: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, dias: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="192"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:192</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>fecha</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>dias</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargarDisponibilidad"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>cargarDisponibilidad</b></span>
+                        <a href="#cargarDisponibilidad"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>cargarDisponibilidad(num: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="123"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:123</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>num</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cerrarModal"></a>
+                    <span class="name">
+                        <span ><b>cerrarModal</b></span>
+                        <a href="#cerrarModal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cerrarModal()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="190"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:190</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cerrarToast"></a>
+                    <span class="name">
+                        <span ><b>cerrarToast</b></span>
+                        <a href="#cerrarToast"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cerrarToast()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="189"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:189</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="estaDentro"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>estaDentro</b></span>
+                        <a href="#estaDentro"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>estaDentro(fecha: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, intervalo: <a href="../interfaces/IntervaloReservado.html" target="_self">IntervaloReservado</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="134"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:134</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>fecha</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>intervalo</td>
+                                            <td>
+                                                            <code><a href="../interfaces/IntervaloReservado.html" target="_self" >IntervaloReservado</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="evaluarSolapamiento"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>evaluarSolapamiento</b></span>
+                        <a href="#evaluarSolapamiento"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>evaluarSolapamiento()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="142"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:142</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="formatear"></a>
+                    <span class="name">
+                        <span ><b>formatear</b></span>
+                        <a href="#formatear"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>formatear(fecha: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="171"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:171</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>fecha</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="generarReviewsFake"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>generarReviewsFake</b></span>
+                        <a href="#generarReviewsFake"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>generarReviewsFake()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="284"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:284</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getCalificacion"></a>
+                    <span class="name">
+                        <span ><b>getCalificacion</b></span>
+                        <a href="#getCalificacion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getCalificacion()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="243"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:243</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getCapacidadHabitacion"></a>
+                    <span class="name">
+                        <span ><b>getCapacidadHabitacion</b></span>
+                        <a href="#getCapacidadHabitacion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getCapacidadHabitacion()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="212"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:212</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDisponibilidadLabel"></a>
+                    <span class="name">
+                        <span ><b>getDisponibilidadLabel</b></span>
+                        <a href="#getDisponibilidadLabel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getDisponibilidadLabel()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="249"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:249</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getNombreSeccion"></a>
+                    <span class="name">
+                        <span ><b>getNombreSeccion</b></span>
+                        <a href="#getNombreSeccion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getNombreSeccion()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="231"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:231</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPrecio"></a>
+                    <span class="name">
+                        <span ><b>getPrecio</b></span>
+                        <a href="#getPrecio"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPrecio()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="221"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:221</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPrecioFormateado"></a>
+                    <span class="name">
+                        <span ><b>getPrecioFormateado</b></span>
+                        <a href="#getPrecioFormateado"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPrecioFormateado()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="216"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:216</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPrecioHabitacion"></a>
+                    <span class="name">
+                        <span ><b>getPrecioHabitacion</b></span>
+                        <a href="#getPrecioHabitacion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPrecioHabitacion()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="208"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:208</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getUbicacionCompuesta"></a>
+                    <span class="name">
+                        <span ><b>getUbicacionCompuesta</b></span>
+                        <a href="#getUbicacionCompuesta"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getUbicacionCompuesta()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="237"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:237</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="57"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:57</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onChangeFechaCaducidad"></a>
+                    <span class="name">
+                        <span ><b>onChangeFechaCaducidad</b></span>
+                        <a href="#onChangeFechaCaducidad"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onChangeFechaCaducidad()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="116"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:116</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onChangeFechaReserva"></a>
+                    <span class="name">
+                        <span ><b>onChangeFechaReserva</b></span>
+                        <a href="#onChangeFechaReserva"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onChangeFechaReserva()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="106"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:106</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onIntentarReservar"></a>
+                    <span class="name">
+                        <span ><b>onIntentarReservar</b></span>
+                        <a href="#onIntentarReservar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onIntentarReservar()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="146"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:146</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="procesarAmenidades"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>procesarAmenidades</b></span>
+                        <a href="#procesarAmenidades"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>procesarAmenidades(raw: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="254"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:254</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>raw</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="rangoSolapa"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>rangoSolapa</b></span>
+                        <a href="#rangoSolapa"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>rangoSolapa(inicio: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, fin: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, intervalo: <a href="../interfaces/IntervaloReservado.html" target="_self">IntervaloReservado</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="138"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:138</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>inicio</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>fin</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>intervalo</td>
+                                            <td>
+                                                            <code><a href="../interfaces/IntervaloReservado.html" target="_self" >IntervaloReservado</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="reservar"></a>
+                    <span class="name">
+                        <span ><b>reservar</b></span>
+                        <a href="#reservar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>reservar()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="198"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:198</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="usarProximaFecha"></a>
+                    <span class="name">
+                        <span ><b>usarProximaFecha</b></span>
+                        <a href="#usarProximaFecha"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>usarProximaFecha()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="177"
+                                    class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:177</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="amenidades"></a>
+                    <span class="name">
+                        <span ><b>amenidades</b></span>
+                        <a href="#amenidades"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/AmenidadChip.html" target="_self" >AmenidadChip[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:35</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="disponibilidad"></a>
+                    <span class="name">
+                        <span ><b>disponibilidad</b></span>
+                        <a href="#disponibilidad"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>DisponibilidadHabitacionResponse | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:42</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fechaCaducidad"></a>
+                    <span class="name">
+                        <span ><b>fechaCaducidad</b></span>
+                        <a href="#fechaCaducidad"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:39</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fechaOcupada"></a>
+                    <span class="name">
+                        <span ><b>fechaOcupada</b></span>
+                        <a href="#fechaOcupada"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:44</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fechaReserva"></a>
+                    <span class="name">
+                        <span ><b>fechaReserva</b></span>
+                        <a href="#fechaReserva"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:38</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="habitacion"></a>
+                    <span class="name">
+                        <span ><b>habitacion</b></span>
+                        <a href="#habitacion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Habitacion.html" target="_self" >Habitacion | null</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:31</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="hotel"></a>
+                    <span class="name">
+                        <span ><b>hotel</b></span>
+                        <a href="#hotel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Hotel | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:32</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="intervalos"></a>
+                    <span class="name">
+                        <span ><b>intervalos</b></span>
+                        <a href="#intervalos"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>IntervaloReservado[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:43</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadingHotel"></a>
+                    <span class="name">
+                        <span ><b>loadingHotel</b></span>
+                        <a href="#loadingHotel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>true</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:33</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mensajeDisponibilidad"></a>
+                    <span class="name">
+                        <span ><b>mensajeDisponibilidad</b></span>
+                        <a href="#mensajeDisponibilidad"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:45</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="minFecha"></a>
+                    <span class="name">
+                        <span ><b>minFecha</b></span>
+                        <a href="#minFecha"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:40</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="minFechaSalida"></a>
+                    <span class="name">
+                        <span ><b>minFechaSalida</b></span>
+                        <a href="#minFechaSalida"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:41</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="proxDisponible"></a>
+                    <span class="name">
+                        <span ><b>proxDisponible</b></span>
+                        <a href="#proxDisponible"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:48</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="reviews"></a>
+                    <span class="name">
+                        <span ><b>reviews</b></span>
+                        <a href="#reviews"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Review.html" target="_self" >Review[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:34</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="showModal"></a>
+                    <span class="name">
+                        <span ><b>showModal</b></span>
+                        <a href="#showModal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:47</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="showToast"></a>
+                    <span class="name">
+                        <span ><b>showToast</b></span>
+                        <a href="#showToast"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/pages/habitacion-detalle/habitacion-detalle.ts:46</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { ActivatedRoute, RouterModule, Router } from &#x27;@angular/router&#x27;;
+import { FormsModule } from &#x27;@angular/forms&#x27;;
+import { HabitacionService, DisponibilidadHabitacionResponse, IntervaloReservado } from &#x27;../../services/habitacion.service&#x27;;
+import { Habitacion } from &#x27;../../interfaces/habitacion.interface&#x27;;
+import { HotelService } from &#x27;../../services/hotel.service&#x27;;
+import { Hotel } from &#x27;../../interfaces/hotel.interface&#x27;;
+
+
+interface Review {
+	autor: string;
+	texto: string;
+	calificacion: number;
+	fecha: string;
+}
+
+interface AmenidadChip {
+  label: string;
+  icon: string; // could be emoji or later an SVG/material symbol key
+}
+
+@Component({
+	selector: &#x27;app-habitacion-detalle&#x27;,
+	imports: [CommonModule, RouterModule, FormsModule],
+	templateUrl: &#x27;./habitacion-detalle.html&#x27;,
+	styleUrls: [&#x27;./habitacion-detalle.scss&#x27;],
+	standalone: true,
+})
+export class HabitacionDetalle implements OnInit {
+	habitacion: Habitacion | null &#x3D; null;
+	hotel: Hotel | null &#x3D; null;
+	loadingHotel: boolean &#x3D; true;
+	reviews: Review[] &#x3D; [];
+	amenidades: AmenidadChip[] &#x3D; [];
+
+	// Nuevos campos para seleccionar rango de fechas
+	fechaReserva: string &#x3D; &#x27;&#x27;;
+	fechaCaducidad: string &#x3D; &#x27;&#x27;;
+	minFecha: string &#x3D; &#x27;&#x27;;
+	minFechaSalida: string &#x3D; &#x27;&#x27;;
+	disponibilidad: DisponibilidadHabitacionResponse | null &#x3D; null;
+	intervalos: IntervaloReservado[] &#x3D; [];
+	fechaOcupada: boolean &#x3D; false;
+	mensajeDisponibilidad: string &#x3D; &#x27;&#x27;;
+	showToast: boolean &#x3D; false;
+	showModal: boolean &#x3D; false;
+	proxDisponible: string &#x3D; &#x27;&#x27;;
+
+	constructor(
+		private readonly route: ActivatedRoute,
+		private readonly habitacionService: HabitacionService,
+		private readonly hotelService: HotelService,
+		private readonly router: Router
+	) {}
+
+	ngOnInit() {
+		const numParam &#x3D; this.route.snapshot.paramMap.get(&#x27;num&#x27;);
+		// Inicializar fechas (hoy y mañana)
+		const hoy &#x3D; new Date();
+		const manana &#x3D; new Date(hoy.getTime() + 24 * 60 * 60 * 1000);
+		this.fechaReserva &#x3D; hoy.toISOString().slice(0, 10);
+		this.fechaCaducidad &#x3D; manana.toISOString().slice(0, 10);
+		this.minFecha &#x3D; this.fechaReserva;
+		this.minFechaSalida &#x3D; this.fechaCaducidad;
+		if (numParam) {
+			this.habitacionService.getHabitaciones().subscribe({
+				next: habitaciones &#x3D;&gt; {
+					this.habitacion &#x3D; habitaciones.find(h &#x3D;&gt; String(h.num) &#x3D;&#x3D;&#x3D; String(numParam)) || null;
+					this.generarReviewsFake();
+					if (this.habitacion) {
+						this.procesarAmenidades(this.habitacion.caracteristicas);
+						this.cargarDisponibilidad(String(this.habitacion.num));
+						// Cargar info del hotel para cabecera enriquecida
+						this.loadingHotel &#x3D; true;
+						this.hotelService.getHotelById(this.habitacion.codigo_hotel as unknown as number).subscribe({
+							next: h &#x3D;&gt; { this.hotel &#x3D; h; this.loadingHotel &#x3D; false; },
+							error: () &#x3D;&gt; { this.loadingHotel &#x3D; false; }
+						});
+					} else {
+						// Fallback: intentar cargar la habitación directamente por num
+						this.habitacionService.getHabitacionByNum(String(numParam)).subscribe({
+							next: hab &#x3D;&gt; {
+								this.habitacion &#x3D; hab;
+								this.generarReviewsFake();
+								this.procesarAmenidades(hab.caracteristicas);
+								this.cargarDisponibilidad(String(hab.num));
+								this.loadingHotel &#x3D; true;
+								this.hotelService.getHotelById(hab.codigo_hotel as unknown as number).subscribe({
+									next: h &#x3D;&gt; { this.hotel &#x3D; h; this.loadingHotel &#x3D; false; },
+									error: () &#x3D;&gt; { this.loadingHotel &#x3D; false; }
+								});
+							},
+							error: () &#x3D;&gt; {
+								// dejar habitacion en null si no se encuentra
+							}
+						});
+					}
+				}
+			});
+		} else {
+			this.generarReviewsFake();
+		}
+	}
+
+	onChangeFechaReserva() {
+		if (this.fechaCaducidad &lt;&#x3D; this.fechaReserva) {
+			const nuevaSalida &#x3D; new Date(this.fechaReserva);
+			nuevaSalida.setDate(nuevaSalida.getDate() + 1);
+			this.fechaCaducidad &#x3D; nuevaSalida.toISOString().slice(0, 10);
+		}
+		this.minFechaSalida &#x3D; this.addDias(this.fechaReserva, 1);
+		this.evaluarSolapamiento();
+	}
+
+	onChangeFechaCaducidad() {
+		if (this.fechaCaducidad &lt;&#x3D; this.fechaReserva) {
+			this.fechaCaducidad &#x3D; this.addDias(this.fechaReserva, 1);
+		}
+		this.evaluarSolapamiento();
+	}
+
+	private cargarDisponibilidad(num: string) {
+		this.habitacionService.getDisponibilidadHabitacion(num).subscribe({
+			next: resp &#x3D;&gt; {
+				this.disponibilidad &#x3D; resp;
+				this.intervalos &#x3D; resp.intervalos_reservados.map(i &#x3D;&gt; ({...i}));
+				// Ya no reajustamos automáticamente; se decide al click.
+				this.evaluarSolapamiento();
+			}
+		});
+	}
+
+	private estaDentro(fecha: string, intervalo: IntervaloReservado): boolean {
+		return fecha &gt;&#x3D; intervalo.inicio &amp;&amp; fecha &lt;&#x3D; intervalo.fin;
+	}
+
+	private rangoSolapa(inicio: string, fin: string, intervalo: IntervaloReservado): boolean {
+		return inicio &lt;&#x3D; intervalo.fin &amp;&amp; fin &gt;&#x3D; intervalo.inicio;
+	}
+
+	private evaluarSolapamiento() {
+		this.fechaOcupada &#x3D; this.intervalos.some(it &#x3D;&gt; this.rangoSolapa(this.fechaReserva, this.fechaCaducidad, it));
+	}
+
+	onIntentarReservar() {
+		this.mensajeDisponibilidad &#x3D; &#x27;&#x27;;
+		this.showToast &#x3D; false;
+		this.showModal &#x3D; false;
+		this.evaluarSolapamiento();
+		if (this.fechaOcupada) {
+			this.proxDisponible &#x3D; this.disponibilidad?.next_available_from || &#x27;&#x27;;
+			this.mensajeDisponibilidad &#x3D; &#x60;La habitación está ocupada en esas fechas&#x60;;
+			this.showToast &#x3D; true; // Mostrar toast rápido
+			this.showModal &#x3D; true; // Y modal con acción
+			return;
+		}
+		// Navegación manual asegurando parámetros consistentes
+		this.router.navigate([&#x27;/reservas&#x27;], {
+			queryParams: {
+				num: this.habitacion?.num,
+				precio: this.habitacion?.precio,
+				hotel: this.habitacion?.codigo_hotel,
+				capacidad: this.habitacion?.cant_huespedes,
+				fecha_reserva: this.fechaReserva,
+				fecha_caducidad: this.fechaCaducidad
+			}
+		});
+	}
+
+	formatear(fecha: string): string {
+		if (!fecha) return &#x27;&#x27;;
+		const [y,m,d] &#x3D; fecha.split(&#x27;-&#x27;);
+		return &#x60;${d}/${m}/${y}&#x60;;
+	}
+
+	usarProximaFecha() {
+		if (!this.proxDisponible) return;
+		this.fechaReserva &#x3D; this.proxDisponible;
+		// set checkout +1 día
+		this.fechaCaducidad &#x3D; this.addDias(this.proxDisponible, 1);
+		this.minFecha &#x3D; this.fechaReserva;
+		this.minFechaSalida &#x3D; this.fechaCaducidad;
+		this.showModal &#x3D; false;
+		this.showToast &#x3D; false;
+		this.mensajeDisponibilidad &#x3D; &#x27;&#x27;;
+	}
+
+	cerrarToast() { this.showToast &#x3D; false; }
+	cerrarModal() { this.showModal &#x3D; false; }
+
+	private addDias(fecha: string, dias: number): string {
+		const d &#x3D; new Date(fecha);
+		d.setDate(d.getDate() + dias);
+		return d.toISOString().slice(0, 10);
+	}
+
+	reservar() {
+		// Navega a la página de reservas con las fechas seleccionadas
+		if (!this.habitacion) {
+			alert(&#x27;No se encontró la habitación&#x27;);
+			return;
+		}
+		// Usamos routerLink en la plantilla, este método queda por si se quisiera programático
+		alert(&#x27;Serás redirigido a la creación de la reserva con tus fechas seleccionadas.&#x27;);
+	}
+
+	getPrecioHabitacion(): number {
+		return this.habitacion ? this.habitacion.precio : 0;
+	}
+
+	getCapacidadHabitacion(): number {
+		return this.habitacion ? this.habitacion.cant_huespedes : 2;
+	}
+
+	getPrecioFormateado(): string {
+		const val &#x3D; this.getPrecioHabitacion();
+		const fmt &#x3D; new Intl.NumberFormat(&#x27;es-BO&#x27;, { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(val);
+		return &#x60;${fmt} BOB&#x60;;
+	}
+	getPrecio(): string {
+  const val &#x3D; this.getPrecioHabitacion();
+  const fmt &#x3D; new Intl.NumberFormat(&#x27;es-BO&#x27;, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(val);
+  return &#x60;${fmt} BOB&#x60;;
+}
+
+
+	getNombreSeccion(): string {
+		if (this.loadingHotel) return &#x27;&#x27;;
+		if (this.hotel?.nombre) return &#x60;Habitación en ${this.hotel.nombre}&#x60;;
+		return this.habitacion ? &#x60;Habitación ${this.habitacion.num}&#x60; : &#x27;&#x27;;
+	}
+
+	getUbicacionCompuesta(): string {
+		if (!this.hotel) return &#x27;&#x27;;
+		// departamento, ubicacion (asumiendo ubicacion contiene ciudad / direccion)
+		return &#x60;${this.hotel.departamento}, ${this.hotel.ubicacion}&#x60;;
+	}
+
+	getCalificacion(): string {
+		if (!this.hotel) return &#x27;&#x27;;
+		const scoreInt &#x3D; Math.round(this.hotel.calificacion || 0); // mostrar entero
+		return &#x60;${scoreInt}/5 (3 reseñas)&#x60;; // Placeholder reseñas
+	}
+
+	getDisponibilidadLabel(): string {
+		if (!this.habitacion) return &#x27;&#x27;;
+		return this.habitacion.disponible ? &#x27;Disponible&#x27; : &#x27;No disponible&#x27;;
+	}
+
+	private procesarAmenidades(raw: string) {
+		if (!raw) { this.amenidades &#x3D; []; return; }
+		const mapIcons: Record&lt;string,string&gt; &#x3D; {
+			&#x27;wifi&#x27;: &#x27;📶&#x27;,
+			&#x27;wi-fi&#x27;: &#x27;📶&#x27;,
+			&#x27;Internet&#x27;: &#x27;📶&#x27;,
+			&#x27;desayuno&#x27;: &#x27;🍳&#x27;,
+			&#x27;desayuno incluido&#x27;: &#x27;🍳&#x27;,
+			&#x27;tv&#x27;: &#x27;📺&#x27;,
+			&#x27;tv cable&#x27;: &#x27;📺&#x27;,
+			&#x27;cable&#x27;: &#x27;📺&#x27;,
+			&#x27;baño privado&#x27;: &#x27;🛁&#x27;,
+			&#x27;aire acondicionado&#x27;: &#x27;❄️&#x27;,
+			&#x27;calefacción&#x27;: &#x27;🔥&#x27;,
+			&#x27;parking&#x27;: &#x27;🅿️&#x27;,
+			&#x27;estacionamiento&#x27;: &#x27;🅿️&#x27;,
+			&#x27;gimnasio&#x27;: &#x27;🏋️&#x27;,
+			&#x27;pool&#x27;: &#x27;🏊&#x27;,
+			&#x27;piscina&#x27;: &#x27;🏊&#x27;
+		};
+		this.amenidades &#x3D; raw.split(&#x27;,&#x27;)
+			.map(c &#x3D;&gt; c.trim())
+			.filter(c &#x3D;&gt; !!c)
+			.map(c &#x3D;&gt; {
+				const key &#x3D; c.toLowerCase();
+				const icon &#x3D; mapIcons[key] || &#x27;•&#x27;;
+				return { label: c, icon } as AmenidadChip;
+			});
+	}
+
+	private generarReviewsFake() {
+		this.reviews &#x3D; [
+			{ autor: &#x27;Ana&#x27;, texto: &#x27;Muy acogedor y limpio. Volveria sin duda.&#x27;, calificacion: 4.5, fecha: &#x27;2025-09-10&#x27; },
+			{ autor: &#x27;Luis&#x27;, texto: &#x27;Excelente ubicacion y atencion. Desayuno completo.&#x27;, calificacion: 4.2, fecha: &#x27;2025-09-12&#x27; },
+			{ autor: &#x27;Maria&#x27;, texto: &#x27;Hotel con encanto. Ideal para descansar y recorrer.&#x27;, calificacion: 4.8, fecha: &#x27;2025-09-15&#x27; },
+		];
+	}
+}
+// ...existing code...
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;habitacion-detalle&quot;&gt;
+    &lt;div class&#x3D;&quot;hotel-contenido&quot;&gt;
+
+        &lt;!-- Contenedor de información --&gt;
+        &lt;div class&#x3D;&quot;info-contenedor&quot;&gt;
+
+            &lt;!-- Card principal estilo ficha --&gt;
+            &lt;div class&#x3D;&quot;hotel-info&quot; *ngIf&#x3D;&quot;habitacion&quot;&gt;
+                &lt;div class&#x3D;&quot;hotel-info-layout&quot;&gt;
+                    &lt;div class&#x3D;&quot;hotel-info-texto&quot;&gt;
+                        &lt;ng-container *ngIf&#x3D;&quot;!loadingHotel; else titleSkeleton&quot;&gt;
+                            &lt;h2 class&#x3D;&quot;hotel-title&quot;&gt;{{ getNombreSeccion() }}&lt;/h2&gt;
+                        &lt;/ng-container&gt;
+                        &lt;ng-template #titleSkeleton&gt;
+                            &lt;div class&#x3D;&quot;title-skeleton&quot;&gt;&lt;/div&gt;
+                        &lt;/ng-template&gt;
+                        &lt;p class&#x3D;&quot;hotel-ubicacion&quot; *ngIf&#x3D;&quot;hotel&quot;&gt;{{ getUbicacionCompuesta() }}&lt;/p&gt;
+                        &lt;div class&#x3D;&quot;hotel-rating&quot; *ngIf&#x3D;&quot;hotel&quot;&gt;
+                            &lt;span class&#x3D;&quot;stars&quot; [style.--rating]&#x3D;&quot;hotel.calificacion&quot;&gt;★★★★★&lt;/span&gt;
+                            &lt;span class&#x3D;&quot;score&quot;&gt;{{ getCalificacion() }}&lt;/span&gt;
+                        &lt;/div&gt;
+                        &lt;div class&#x3D;&quot;amenities&quot; *ngIf&#x3D;&quot;amenidades.length&quot;&gt;
+                            &lt;span class&#x3D;&quot;chip&quot; *ngFor&#x3D;&quot;let a of amenidades&quot;&gt;&lt;span class&#x3D;&quot;chip-icon&quot;&gt;{{ a.icon }}&lt;/span&gt; {{ a.label }}&lt;/span&gt;
+                        &lt;/div&gt;
+                        &lt;ul class&#x3D;&quot;meta-lines&quot;&gt;
+                            &lt;li&gt;&lt;span class&#x3D;&quot;icon&quot;&gt;🛏️&lt;/span&gt;Capacidad: {{ habitacion.cant_huespedes }} huéspedes&lt;/li&gt;
+                            &lt;li&gt;&lt;span class&#x3D;&quot;icon&quot;&gt;🕒&lt;/span&gt;Check-in: 12:00&lt;/li&gt;
+                            &lt;li&gt;&lt;span class&#x3D;&quot;icon&quot;&gt;🕒&lt;/span&gt;Check-out: 12:00&lt;/li&gt;
+                            &lt;li&gt;&lt;span class&#x3D;&quot;icon&quot;&gt;👤&lt;/span&gt;&lt;span [class.disponible]&#x3D;&quot;habitacion.disponible&quot; [class.no-disponible]&#x3D;&quot;!habitacion.disponible&quot;&gt;{{ getDisponibilidadLabel() }}&lt;/span&gt;&lt;/li&gt;
+                        &lt;/ul&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;price-wrapper&quot;&gt;
+                        &lt;div class&#x3D;&quot;price-big&quot;&gt;{{ getPrecio() }}&lt;/div&gt;
+                        &lt;div class&#x3D;&quot;price-label&quot;&gt;por noche&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Reviews --&gt;
+&lt;div class&#x3D;&quot;hotel-reviews&quot;&gt;
+  &lt;h3 class&#x3D;&quot;reviews-title&quot;&gt;Reviews de huéspedes&lt;/h3&gt;
+
+  &lt;div class&#x3D;&quot;review&quot;&gt;
+    &lt;p class&#x3D;&quot;review-header&quot;&gt;María G. —
+      &lt;span class&#x3D;&quot;stars&quot; style&#x3D;&quot;--rating: 4.5&quot;&gt;★★★★★&lt;/span&gt;
+      &lt;span class&#x3D;&quot;score&quot;&gt;4.5/5&lt;/span&gt;
+    &lt;/p&gt;
+    &lt;p class&#x3D;&quot;review-text&quot;&gt;“La habitación estaba impecable y la vista era espectacular. Volvería sin dudar.”&lt;/p&gt;
+    &lt;p class&#x3D;&quot;review-fecha&quot;&gt;15 de septiembre de 2025&lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;review&quot;&gt;
+    &lt;p class&#x3D;&quot;review-header&quot;&gt;Carlos R. —
+      &lt;span class&#x3D;&quot;stars&quot; style&#x3D;&quot;--rating: 5&quot;&gt;★★★★★&lt;/span&gt;
+      &lt;span class&#x3D;&quot;score&quot;&gt;5/5&lt;/span&gt;
+    &lt;/p&gt;
+    &lt;p class&#x3D;&quot;review-text&quot;&gt;“Excelente atención y ubicación. Muy recomendable para parejas.”&lt;/p&gt;
+    &lt;p class&#x3D;&quot;review-fecha&quot;&gt;10 de septiembre de 2025&lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;review&quot;&gt;
+    &lt;p class&#x3D;&quot;review-header&quot;&gt;Lucía M. —
+      &lt;span class&#x3D;&quot;stars&quot; style&#x3D;&quot;--rating: 4&quot;&gt;★★★★★&lt;/span&gt;
+      &lt;span class&#x3D;&quot;score&quot;&gt;4/5&lt;/span&gt;
+    &lt;/p&gt;
+    &lt;p class&#x3D;&quot;review-text&quot;&gt;“Todo bien, aunque el desayuno podría mejorar. La cama muy cómoda.”&lt;/p&gt;
+    &lt;p class&#x3D;&quot;review-fecha&quot;&gt;5 de septiembre de 2025&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Ubicación del tour --&gt;
+&lt;div class&#x3D;&quot;location-wrapper&quot;&gt;
+  &lt;div class&#x3D;&quot;location-section&quot;&gt;
+    &lt;h3 class&#x3D;&quot;location-title&quot;&gt;Ubicación del tour&lt;/h3&gt;
+    &lt;div class&#x3D;&quot;location-box&quot;&gt;
+      &lt;div class&#x3D;&quot;location-icon&quot;&gt;📍&lt;/div&gt;
+      &lt;div class&#x3D;&quot;location-text&quot;&gt;
+        &lt;div class&#x3D;&quot;map-label&quot;&gt;Mapa del recorrido&lt;/div&gt;
+        &lt;div class&#x3D;&quot;map-location&quot;&gt;{{ hotel?.ubicacion }}&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+        &lt;/div&gt;
+
+        &lt;!-- Panel de reserva --&gt;
+        &lt;div class&#x3D;&quot;reserva&quot;&gt;
+            &lt;h2 class&#x3D;&quot;reserva-title&quot;&gt;Reserva tu habitación&lt;/h2&gt;
+
+            &lt;div class&#x3D;&quot;precio-panel&quot;&gt;
+                &lt;div class&#x3D;&quot;price-big&quot;&gt;{{ getPrecio() }}&lt;/div&gt;
+                &lt;div class&#x3D;&quot;precio-label&quot;&gt;por noche&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;p class&#x3D;&quot;reserva-capacidad&quot;&gt;Máximo {{ getCapacidadHabitacion() }} huéspedes por habitación&lt;/p&gt;
+
+            &lt;div class&#x3D;&quot;fechas-inline&quot;&gt;
+                &lt;div class&#x3D;&quot;date-row&quot;&gt;
+                    &lt;label for&#x3D;&quot;fechaReserva&quot;&gt;Check-in:&lt;/label&gt;
+                    &lt;input id&#x3D;&quot;fechaReserva&quot; type&#x3D;&quot;date&quot; [(ngModel)]&#x3D;&quot;fechaReserva&quot; name&#x3D;&quot;fechaReserva&quot; (change)&#x3D;&quot;onChangeFechaReserva()&quot; [min]&#x3D;&quot;minFecha&quot; /&gt;
+                &lt;/div&gt;
+                &lt;div class&#x3D;&quot;date-row&quot;&gt;
+                    &lt;label for&#x3D;&quot;fechaCaducidad&quot;&gt;Check-out:&lt;/label&gt;
+                    &lt;input id&#x3D;&quot;fechaCaducidad&quot; type&#x3D;&quot;date&quot; [(ngModel)]&#x3D;&quot;fechaCaducidad&quot; name&#x3D;&quot;fechaCaducidad&quot; (change)&#x3D;&quot;onChangeFechaCaducidad()&quot; [min]&#x3D;&quot;minFechaSalida&quot; /&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class&#x3D;&quot;accion-reservar&quot;&gt;
+                &lt;a class&#x3D;&quot;btn-reservar&quot; (click)&#x3D;&quot;$event.preventDefault(); onIntentarReservar();&quot;&gt;Reservar Ahora&lt;/a&gt;
+                &lt;button *ngIf&#x3D;&quot;showToast&quot; type&#x3D;&quot;button&quot; class&#x3D;&quot;toast-ocupado&quot; (click)&#x3D;&quot;cerrarToast()&quot;&gt;
+                    {{ mensajeDisponibilidad }}. Disponible desde {{ formatear(proxDisponible) }} (cerrar)
+                &lt;/button&gt;
+            &lt;/div&gt;
+
+            &lt;div class&#x3D;&quot;modal-ocupado-backdrop&quot; *ngIf&#x3D;&quot;showModal&quot;&gt;
+                &lt;div class&#x3D;&quot;modal-ocupado&quot;&gt;
+                    &lt;h3&gt;Fechas ocupadas&lt;/h3&gt;
+                    &lt;p&gt;La habitación está ocupada en el rango elegido.&lt;br&gt;Próxima fecha disponible desde &lt;b&gt;{{ formatear(proxDisponible) }}&lt;/b&gt;.&lt;/p&gt;
+                    &lt;div class&#x3D;&quot;acciones-modal&quot;&gt;
+                        &lt;button class&#x3D;&quot;btn-sec&quot; (click)&#x3D;&quot;cerrarModal()&quot;&gt;Cerrar&lt;/button&gt;
+                        &lt;button class&#x3D;&quot;btn-principal&quot; (click)&#x3D;&quot;usarProximaFecha()&quot;&gt;Usar próxima fecha&lt;/button&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;p class&#x3D;&quot;reserva-info&quot;&gt;✓ Cancelación gratuita hasta 24 horas antes&lt;/p&gt;
+            &lt;p class&#x3D;&quot;reserva-info&quot;&gt;✓ No se requiere pago por adelantado&lt;/p&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./habitacion-detalle.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">@use &quot;sass:color&quot;;
+
+.habitacion-detalle {
+  padding: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hotel-contenido {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1.5rem;
+
+  @media (max-width: 1024px) {
+    flex-wrap: wrap;
+  }
+}
+
+.info-contenedor {
+  flex: 0 0 65%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.reserva {
+  flex: 0 0 35%;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+}
+
+.hotel-info,
+.hotel-reviews,
+.reserva {
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.hotel-info-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.hotel-info-texto {
+  flex: 1;
+}
+
+.hotel-title {
+  font-size: 1.65rem;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
+}
+
+.title-skeleton {
+  height: 1.5rem;
+  background-color: #e5e7eb;
+  border-radius: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.hotel-ubicacion {
+  color: #4b5563;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.hotel-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.meta-lines {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+
+    .icon {
+      margin-right: 0.25rem;
+    }
+
+    .disponible {
+      color: #15803d;
+    }
+
+    .no-disponible {
+      color: #dc2626;
+    }
+  }
+}
+
+.price-wrapper {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.price-big {
+  color: #f97316;
+  font-weight: bold;
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.price-label {
+  color: #4b5563;
+  font-size: 0.75rem;
+}
+
+.reviews-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.review {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+
+  .review-header {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .review-text {
+    font-size: 0.875rem;
+    color: #374151;
+    font-style: italic;
+    margin-top: 0.25rem;
+  }
+
+  .review-fecha {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+  }
+}
+
+.reserva-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.precio-panel {
+  text-align: center;
+  background-color: #dbeafe;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+
+  .precio {
+    color: #f97316;
+    font-weight: bold;
+    font-size: 2.5rem;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .precio-label {
+    color: #4b5563;
+    font-size: 0.875rem;
+  }
+}
+
+.reserva-capacidad {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.fechas-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+
+  .date-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+
+    label {
+      width: 6rem;
+      font-weight: 600;
+    }
+
+    input {
+      flex: 1;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      padding: 0.5rem 0.75rem;
+    }
+  }
+}
+
+.accion-reservar {
+  margin-bottom: 1rem;
+
+  .btn-reservar {
+  display: block; // ← importante para que ocupe todo el ancho
+  width: 100%;    // ← ocupa todo el espacio disponible
+  background-color: #016d2e; // ← nuevo color
+  box-sizing: border-box;
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &amp;:hover {
+    background-color: color.adjust(#016d2e, $lightness: -10%);
+  }
+}
+
+
+  .toast-ocupado {
+    display: block;
+    margin-top: 0.5rem;
+    background-color: #fee2e2;
+    color: #b91c1c;
+    font-size: 0.875rem;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    border: none;
+    cursor: pointer;
+  }
+}
+
+.modal-ocupado-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(31, 41, 55, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .modal-ocupado {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    max-width: 400px;
+    text-align: center;
+
+    h3 {
+      font-size: 1.125rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+
+    .acciones-modal {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+
+      .btn-sec,
+      .btn-principal {
+        flex: 1;
+        padding: 0.5rem;
+        border-radius: 0.375rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .btn-sec {
+        background-color: #e5e7eb;
+        color: #374151;
+      }
+
+      .btn-principal {
+        background-color: #016d2e;
+        color: white;
+      }
+    }
+  }
+}
+
+.reserva-info {
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.location-wrapper {
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 1.5rem;
+}
+.location-section {
+  .location-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #0f172a;
+  }
+
+  .location-box {
+    display: flex;
+    align-items: center;
+    background-color: #eaeaea;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    gap: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .location-icon {
+    font-size: 2rem;
+    color: #016d2e;
+  }
+
+  .location-text {
+    display: flex;
+    flex-direction: column;
+
+    .map-label {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 0.3rem;
+    }
+
+    .map-location {
+      font-size: 1rem;
+      color: #555;
+    }
+  }
+}</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="habitacion-detalle">    <div class="hotel-contenido">        <!-- Contenedor de información -->        <div class="info-contenedor">            <!-- Card principal estilo ficha -->            <div class="hotel-info" *ngIf="habitacion">                <div class="hotel-info-layout">                    <div class="hotel-info-texto">                        <ng-container *ngIf="!loadingHotel; else titleSkeleton">                            <h2 class="hotel-title">{{ getNombreSeccion() }}</h2>                        </ng-container>                        <ng-template #titleSkeleton>                            <div class="title-skeleton"></div>                        </ng-template>                        <p class="hotel-ubicacion" *ngIf="hotel">{{ getUbicacionCompuesta() }}</p>                        <div class="hotel-rating" *ngIf="hotel">                            <span class="stars" [style.--rating]="hotel.calificacion">★★★★★</span>                            <span class="score">{{ getCalificacion() }}</span>                        </div>                        <div class="amenities" *ngIf="amenidades.length">                            <span class="chip" *ngFor="let a of amenidades"><span class="chip-icon">{{ a.icon }}</span> {{ a.label }}</span>                        </div>                        <ul class="meta-lines">                            <li><span class="icon">🛏️</span>Capacidad: {{ habitacion.cant_huespedes }} huéspedes</li>                            <li><span class="icon">🕒</span>Check-in: 12:00</li>                            <li><span class="icon">🕒</span>Check-out: 12:00</li>                            <li><span class="icon">👤</span><span [class.disponible]="habitacion.disponible" [class.no-disponible]="!habitacion.disponible">{{ getDisponibilidadLabel() }}</span></li>                        </ul>                    </div>                    <div class="price-wrapper">                        <div class="price-big">{{ getPrecio() }}</div>                        <div class="price-label">por noche</div>                    </div>                </div>            </div>            <!-- Reviews --><div class="hotel-reviews">  <h3 class="reviews-title">Reviews de huéspedes</h3>  <div class="review">    <p class="review-header">María G. —      <span class="stars" style="--rating: 4.5">★★★★★</span>      <span class="score">4.5/5</span>    </p>    <p class="review-text">“La habitación estaba impecable y la vista era espectacular. Volvería sin dudar.”</p>    <p class="review-fecha">15 de septiembre de 2025</p>  </div>  <div class="review">    <p class="review-header">Carlos R. —      <span class="stars" style="--rating: 5">★★★★★</span>      <span class="score">5/5</span>    </p>    <p class="review-text">“Excelente atención y ubicación. Muy recomendable para parejas.”</p>    <p class="review-fecha">10 de septiembre de 2025</p>  </div>  <div class="review">    <p class="review-header">Lucía M. —      <span class="stars" style="--rating: 4">★★★★★</span>      <span class="score">4/5</span>    </p>    <p class="review-text">“Todo bien, aunque el desayuno podría mejorar. La cama muy cómoda.”</p>    <p class="review-fecha">5 de septiembre de 2025</p>  </div></div><!-- Ubicación del tour --><div class="location-wrapper">  <div class="location-section">    <h3 class="location-title">Ubicación del tour</h3>    <div class="location-box">      <div class="location-icon">📍</div>      <div class="location-text">        <div class="map-label">Mapa del recorrido</div>        <div class="map-location">{{ hotel?.ubicacion }}</div>      </div>    </div>  </div></div>        </div>        <!-- Panel de reserva -->        <div class="reserva">            <h2 class="reserva-title">Reserva tu habitación</h2>            <div class="precio-panel">                <div class="price-big">{{ getPrecio() }}</div>                <div class="precio-label">por noche</div>            </div>            <p class="reserva-capacidad">Máximo {{ getCapacidadHabitacion() }} huéspedes por habitación</p>            <div class="fechas-inline">                <div class="date-row">                    <label for="fechaReserva">Check-in:</label>                    <input id="fechaReserva" type="date" [(ngModel)]="fechaReserva" name="fechaReserva" (change)="onChangeFechaReserva()" [min]="minFecha" />                </div>                <div class="date-row">                    <label for="fechaCaducidad">Check-out:</label>                    <input id="fechaCaducidad" type="date" [(ngModel)]="fechaCaducidad" name="fechaCaducidad" (change)="onChangeFechaCaducidad()" [min]="minFechaSalida" />                </div>            </div>            <div class="accion-reservar">                <a class="btn-reservar" (click)="$event.preventDefault(); onIntentarReservar();">Reservar Ahora</a>                <button *ngIf="showToast" type="button" class="toast-ocupado" (click)="cerrarToast()">                    {{ mensajeDisponibilidad }}. Disponible desde {{ formatear(proxDisponible) }} (cerrar)                </button>            </div>            <div class="modal-ocupado-backdrop" *ngIf="showModal">                <div class="modal-ocupado">                    <h3>Fechas ocupadas</h3>                    <p>La habitación está ocupada en el rango elegido.<br>Próxima fecha disponible desde <b>{{ formatear(proxDisponible) }}</b>.</p>                    <div class="acciones-modal">                        <button class="btn-sec" (click)="cerrarModal()">Cerrar</button>                        <button class="btn-principal" (click)="usarProximaFecha()">Usar próxima fecha</button>                    </div>                </div>            </div>            <p class="reserva-info">✓ Cancelación gratuita hasta 24 horas antes</p>            <p class="reserva-info">✓ No se requiere pago por adelantado</p>        </div>    </div></div></div>'
+    var COMPONENTS = [{'name': 'App', 'selector': 'app-root'},{'name': 'AsistenteIa', 'selector': 'app-asistente-ia'},{'name': 'CrearPaquete', 'selector': 'crear-paquete'},{'name': 'Footer', 'selector': 'app-footer'},{'name': 'HabitacionDetalle', 'selector': 'app-habitacion-detalle'},{'name': 'Habitaciones', 'selector': 'app-habitaciones'},{'name': 'HotelDetalleComponent', 'selector': 'app-hotel-detalle'},{'name': 'Hoteles', 'selector': 'app-hoteles'},{'name': 'Inicio', 'selector': 'app-inicio'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LugaresTuristicos', 'selector': 'app-lugares-turisticos'},{'name': 'LugaresTuristicosDetalle', 'selector': 'app-lugares-turisticos-detalle'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PaqueteDetalle', 'selector': 'app-paquete-detalle'},{'name': 'Paquetes', 'selector': 'app-paquetes'},{'name': 'Perfil', 'selector': 'app-perfil'},{'name': 'Registrarse', 'selector': 'app-registrarse'},{'name': 'ReservaComponent', 'selector': 'app-reserva'},{'name': 'ReservaDetalleComponent', 'selector': 'app-reserva-detalle'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'HabitacionDetalle'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'HabitacionDetalle.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
