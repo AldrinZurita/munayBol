@@ -11,3 +11,4 @@ weaviate-client>=3.26.7,<4.0.0
 channels==4.0.0
 daphne==4.0.0
 drf-yasg
+google-auth

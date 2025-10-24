@@ -15,6 +15,20 @@
     <button type="submit" [disabled]="loading">Ingresar</button>
     <div class="error" *ngIf="error">{{ error }}</div>
   </form>
+
+  <div style="margin: 16px 0; text-align:center;">
+    <span>o continúa con</span>
+  </div>
+
+  <div id="googleButton" style="display:flex; justify-content:center; margin-bottom: 12px;"></div>
+
+  <div style="display:flex; justify-content:center;">
+    <button type="button" (click)="loginWithGitHub()" class="github-btn">
+      <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 6px;">code</span>
+      Continuar con GitHub
+    </button>
+  </div>
+
   <div class="auth-links-container">
     <a class="forgot-password-link" routerLink="/recuperar-contrasenia">¿Olvidaste tu contraseña?</a>
     <div class="signup-prompt">

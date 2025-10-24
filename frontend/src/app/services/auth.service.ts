@@ -11,9 +11,12 @@ export interface LoginResponse {
   usuario: Usuario;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+export interface GithubLoginUrlResponse {
+  authorize_url: string;
+  state: string;
+}
+
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   private baseUrl = environment.apiUrl;
   private userSubject: BehaviorSubject<Usuario | null>;
@@ -32,16 +35,38 @@ export class AuthService {
     this.user$ = this.userSubject.asObservable();
   }
 
+  // Email/Password
   login(data: { correo: string; contrasenia: string }): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.baseUrl}usuarios/login/`, data).pipe(
-      tap(resp => {
-        if (resp && resp.usuario && resp.access && isPlatformBrowser(this.platformId)) {
-          localStorage.setItem('user', JSON.stringify(resp.usuario));
-          localStorage.setItem('token', resp.access);
-          this.userSubject.next(resp.usuario);
-        }
-      })
+      tap(resp => this.persist(resp))
     );
+  }
+
+  // Google
+  googleLogin(idToken: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.baseUrl}auth/google/`, { token: idToken }).pipe(
+      tap(resp => this.persist(resp))
+    );
+  }
+
+  // GitHub - obtener URL de login (con state firmado por el backend)
+  githubLoginUrl(): Observable<GithubLoginUrlResponse> {
+    return this.http.get<GithubLoginUrlResponse>(`${this.baseUrl}auth/github/login-url/`);
+  }
+
+  // GitHub - intercambio code + state
+  githubExchange(code: string, state: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.baseUrl}auth/github/exchange/`, { code, state }).pipe(
+      tap(resp => this.persist(resp))
+    );
+  }
+
+  private persist(resp: LoginResponse) {
+    if (resp && resp.usuario && resp.access && isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('user', JSON.stringify(resp.usuario));
+      localStorage.setItem('token', resp.access);
+      this.userSubject.next(resp.usuario);
+    }
   }
 
   logout() {
