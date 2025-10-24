@@ -7,7 +7,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework import status
 from django.contrib.auth import get_user_model
-from django.contrib.auth.hashers import make_password
 from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
@@ -71,15 +70,17 @@ class GitHubExchangeCodeAPIView(APIView):
             return Response({"error": "State expired"}, status=status.HTTP_400_BAD_REQUEST)
 
         # 2) Intercambiar code -> access_token
-        token_url = "https://github.com/login/oauth/access_token"
-        headers = {"Accept": "application/json"}
-        data = {
-            "client_id": client_id,
-            "client_secret": client_secret,
-            "code": code,
-            "redirect_uri": redirect_uri,
-        }
-        token_resp = requests.post(token_url, headers=headers, data=data, timeout=15)
+        token_resp = requests.post(
+            "https://github.com/login/oauth/access_token",
+            headers={"Accept": "application/json"},
+            data={
+                "client_id": client_id,
+                "client_secret": client_secret,
+                "code": code,
+                "redirect_uri": redirect_uri,
+            },
+            timeout=15,
+        )
         if token_resp.status_code >= 400:
             return Response({"error": "GitHub token exchange failed"}, status=status.HTTP_400_BAD_REQUEST)
         token_json = token_resp.json()
@@ -99,6 +100,7 @@ class GitHubExchangeCodeAPIView(APIView):
         gh_user = user_resp.json()
         email = gh_user.get("email")
         name = gh_user.get("name") or gh_user.get("login") or ""
+        avatar = gh_user.get("avatar_url", "")
 
         if not email:
             emails_resp = requests.get("https://api.github.com/user/emails", headers=api_headers, timeout=15)
@@ -110,7 +112,6 @@ class GitHubExchangeCodeAPIView(APIView):
         if not email:
             return Response({"error": "GitHub account has no accessible email"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # 4) Crear/obtener Usuario (tu modelo exige nombre, pais, pasaporte, contrasenia)
         user, created = User.objects.get_or_create(
             correo=email,
             defaults={
@@ -118,14 +119,20 @@ class GitHubExchangeCodeAPIView(APIView):
                 "pais": "",
                 "pasaporte": "",
                 "rol": "usuario",
-                "contrasenia": make_password(None),
                 "is_staff": False,
                 "estado": True,
+                "avatar_url": avatar or "",
             },
         )
+        updated = False
         if created:
             user.set_password(None)
-            user.save(update_fields=["contrasenia"])
+            updated = True
+        if avatar and user.avatar_url != avatar:
+            user.avatar_url = avatar
+            updated = True
+        if updated:
+            user.save()
 
         # 5) Emitir JWT
         refresh = RefreshToken.for_user(user)
@@ -136,7 +143,8 @@ class GitHubExchangeCodeAPIView(APIView):
             "rol": user.rol,
             "pais": user.pais,
             "pasaporte": user.pasaporte,
-            "estado": user.estado
+            "estado": user.estado,
+            "avatar_url": user.avatar_url or "",
         }
         return Response(
             {"refresh": str(refresh), "access": str(refresh.access_token), "usuario": usuario_payload},

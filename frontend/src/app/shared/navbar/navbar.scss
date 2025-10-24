@@ -40,9 +40,9 @@ $primary-hover-bg: #eaf5ea;
 
   a {
     text-decoration: none;
-    color: #1e293b; // darker gray for better contrast
+    color: #1e293b;
     font-weight: 700;
-    font-size: 17px; // larger and more professional
+    font-size: 17px;
     letter-spacing: 0.2px;
     padding: 10px 0;
     position: relative;
@@ -88,6 +88,24 @@ $primary-hover-bg: #eaf5ea;
   gap: 16px;
 }
 
+// --- Avatar ---
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f0f0f0;
+  border: 1px solid #e1e1e1;
+}
+
+.avatar.initials {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #444;
+}
+
 // --- User Dropdown Menu Styles ---
 .user-menu {
   position: relative;
@@ -95,7 +113,7 @@ $primary-hover-bg: #eaf5ea;
   .user-menu-trigger {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     padding: 6px 12px;
     border-radius: 8px;
     cursor: pointer;

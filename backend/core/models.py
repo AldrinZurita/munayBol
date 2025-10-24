@@ -32,6 +32,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     estado = models.BooleanField(default=True)
     fecha_creacion = models.DateField(auto_now_add=True)
     is_staff = models.BooleanField(default=False)
+    # NUEVO: URL de avatar (Google picture o GitHub avatar_url)
+    avatar_url = models.URLField(blank=True, default="")
 
     USERNAME_FIELD = 'correo'
     REQUIRED_FIELDS = ['nombre', 'pais', 'pasaporte']

@@ -7,7 +7,6 @@ from google.oauth2 import id_token
 from google.auth.transport import requests as grequests
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth.hashers import make_password
 
 User = get_user_model()
 
@@ -32,6 +31,7 @@ class GoogleLoginAPIView(APIView):
         email = idinfo.get("email")
         email_verified = idinfo.get("email_verified", False)
         name = idinfo.get("name") or (email.split("@")[0] if email else "")
+        picture = idinfo.get("picture", "")
 
         if not email or not email_verified:
             return Response({"error": "Email is missing or not verified"}, status=status.HTTP_400_BAD_REQUEST)
@@ -43,14 +43,21 @@ class GoogleLoginAPIView(APIView):
                 "pais": "",
                 "pasaporte": "",
                 "rol": "usuario",
-                "contrasenia": make_password(None),
                 "is_staff": False,
                 "estado": True,
+                "avatar_url": picture or "",
             },
         )
+        updated = False
         if created:
             user.set_password(None)
-            user.save(update_fields=["contrasenia"])
+            updated = True
+        # Actualiza avatar si trae uno y cambió
+        if picture and user.avatar_url != picture:
+            user.avatar_url = picture
+            updated = True
+        if updated:
+            user.save()
 
         refresh = RefreshToken.for_user(user)
         usuario_payload = {
@@ -60,13 +67,10 @@ class GoogleLoginAPIView(APIView):
             "rol": user.rol,
             "pais": user.pais,
             "pasaporte": user.pasaporte,
-            "estado": user.estado
+            "estado": user.estado,
+            "avatar_url": user.avatar_url or "",
         }
         return Response(
-            {
-                "refresh": str(refresh),
-                "access": str(refresh.access_token),
-                "usuario": usuario_payload,
-            },
+            {"refresh": str(refresh), "access": str(refresh.access_token), "usuario": usuario_payload},
             status=status.HTTP_200_OK,
         )
