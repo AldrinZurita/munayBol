@@ -30,13 +30,14 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ],
 }
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=12),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
 # Middleware: corsheaders debe ir primero
@@ -54,7 +55,7 @@ MIDDLEWARE = [
 # CORS: permite todas las conexiones (solo para desarrollo)
 CORS_ALLOW_ALL_ORIGINS = True
 
-# CSRF trusted origins, importante para frontend en docker/local
+# CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
     "http://127.0.0.1:4200",
@@ -94,7 +95,6 @@ CHANNEL_LAYERS = {
 USE_NEON = os.environ.get('USE_NEON', 'False') == 'True'
 
 if USE_NEON:
-    # Configuración para NeonDB
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -110,7 +110,6 @@ if USE_NEON:
         }
     }
 else:
-    # Configuración para Postgres en Docker (servicio db:)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -122,7 +121,15 @@ else:
         }
     }
 
-# -------------------------------------------------------
+# --- OAuth IDs ---
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
+
+# GitHub OAuth (state firmado)
+GITHUB_CLIENT_ID = os.environ.get('GITHUB_CLIENT_ID')
+GITHUB_CLIENT_SECRET = os.environ.get('GITHUB_CLIENT_SECRET')
+GITHUB_REDIRECT_URI = os.environ.get('GITHUB_REDIRECT_URI', 'http://localhost:4200/login')
+GITHUB_STATE_SALT = os.environ.get('GITHUB_STATE_SALT', 'github-oauth-state')
+GITHUB_STATE_TTL_SECONDS = int(os.environ.get('GITHUB_STATE_TTL_SECONDS', '600'))  # 10 min
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'

@@ -7,4 +7,5 @@ export interface Usuario {
   pasaporte: string;
   estado: boolean;
   fecha_creacion?: string;
+  avatar_url?: string;
 }

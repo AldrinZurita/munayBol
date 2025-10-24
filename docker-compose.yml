@@ -18,6 +18,10 @@ services:
       DJANGO_ALLOWED_HOSTS: "localhost 127.0.0.1 backend 0.0.0.0"
       OLLAMA_BASE_URL: "http://ollama:11434"
       OLLAMA_MODEL: "llama3.2:1b"
+      GOOGLE_CLIENT_ID: "152411335033-meomkvc2136t317jgcqusbq3r7fo687m.apps.googleusercontent.com"
+      GITHUB_CLIENT_ID: "Ov23lifxaogIQ25M8Xd3"
+      GITHUB_CLIENT_SECRET: "f785366ad20b1f859b06fe1723593814bc2e54dd"
+      GITHUB_REDIRECT_URI: "http://localhost:4200/login"
     networks:
       - turismo-net
     depends_on:

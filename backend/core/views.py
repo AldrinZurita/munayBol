@@ -87,7 +87,7 @@ class LoginView(APIView):
         correo = serializer.validated_data["correo"]
         contrasenia = serializer.validated_data["contrasenia"]
         usuario = Usuario.objects.filter(correo__iexact=correo, estado=True).first()
-        if usuario and usuario.check_password(contrasenia):  # <---- CAMBIA AQUÍ
+        if usuario and usuario.check_password(contrasenia):
             refresh = RefreshToken.for_user(usuario)
             return Response({
                 "refresh": str(refresh),
@@ -99,7 +99,8 @@ class LoginView(APIView):
                     "rol": usuario.rol,
                     "pais": usuario.pais,
                     "pasaporte": usuario.pasaporte,
-                    "estado": usuario.estado
+                    "estado": usuario.estado,
+                    "avatar_url": getattr(usuario, "avatar_url", "") or ""
                 }
             })
         return Response({"error": "Credenciales inválidas"}, status=401)
@@ -127,7 +128,8 @@ class SuperadminLoginView(APIView):
                 "pais": usuario.pais,
                 "pasaporte": usuario.pasaporte,
                 "estado": usuario.estado,
-                "fecha_creacion": usuario.fecha_creacion
+                "fecha_creacion": usuario.fecha_creacion,
+                "avatar_url": getattr(usuario, "avatar_url", "") or ""
             }, status=status.HTTP_200_OK)
         return Response({"error": "Credenciales inválidas o usuario no autorizado"}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -205,10 +207,6 @@ class PagoViewSet(viewsets.ModelViewSet):
     serializer_class = PagoSerializer
 
     def get_permissions(self):
-        # Permisos:
-        # - create: usuario autenticado (pago propio)
-        # - update/partial_update/destroy: solo superadmin
-        # - list/retrieve: por ahora público (como estaba); ajustar si se requiere
         if self.action == 'create':
             return [IsAuthenticated()]
         if self.action in ['update', 'partial_update', 'destroy']:
@@ -266,11 +264,9 @@ class ReservaViewSet(viewsets.ModelViewSet):
         data = request.data.copy()
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
-        # Asignar el usuario autenticado mediante save(), dado que id_usuario es read_only en el serializer
         instance = serializer.save(id_usuario=user)
         output = self.get_serializer(instance)
 
-        # Crear notificación para el usuario
         from .models import Notification
         from asgiref.sync import async_to_sync
         from channels.layers import get_channel_layer
@@ -280,7 +276,6 @@ class ReservaViewSet(viewsets.ModelViewSet):
             message=f"Tu reserva #{instance.id_reserva} fue creada correctamente.",
             link=f"/reservas/{instance.id_reserva}"
         )
-        # Emitir evento WS
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             f"user_{user.id}",
@@ -342,13 +337,9 @@ class PaqueteViewSet(viewsets.ModelViewSet):
         return Response({"message": "Paquete desactivado correctamente"}, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
-        # Solo superadmin crea; permisos ya lo controlan
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         paquete = serializer.save()
-
-
-
         output = self.get_serializer(paquete)
         return Response({
             "message": "Paquete creado correctamente",
@@ -360,7 +351,6 @@ class SugerenciasViewSet(viewsets.ModelViewSet):
     serializer_class = SugerenciasSerializer
 
     def get_permissions(self):
-        # Solo usuarios autenticados pueden crear; lectura es pública
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
             return [IsAuthenticated()]
         return [AllowAny()]
@@ -392,7 +382,6 @@ class NotificationViewSet(viewsets.ModelViewSet):
     def mark_all_as_read(self, request):
         qs = self.get_queryset().filter(read=False)
         updated = qs.update(read=True)
-        # Emitir evento de actualización de contador
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             f"user_{request.user.id}",
@@ -409,7 +398,6 @@ class NotificationViewSet(viewsets.ModelViewSet):
         if not notif.read:
             notif.read = True
             notif.save(update_fields=['read'])
-        # Emitir evento de actualización de contador
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             f"user_{request.user.id}",
@@ -419,11 +407,10 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class LLMGenerateView(APIView):
-    permission_classes = [AllowAny]  
+    permission_classes = [AllowAny]
     def post(self, request):
         prompt = request.data.get('prompt', '')
         chat_id = request.data.get('chat_id')
-        # attach user if authenticated for per-user memory
         user = request.user if getattr(request.user, 'is_authenticated', False) else None
         result, chat_id = send_message(prompt, chat_id=chat_id, usuario=user)
         return Response({'result': result, 'chat_id': chat_id})

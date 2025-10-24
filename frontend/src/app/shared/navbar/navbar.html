@@ -7,7 +7,7 @@
   <label for="menu-toggle" class="hamburger">☰</label>
 
   <ul class="nav-list">
-    <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a></li>        
+    <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a></li>
     <li><a routerLink="/lugares-turisticos" routerLinkActive="active">Lugares Turísticos</a></li>
     <li><a routerLink="/paquetes" routerLinkActive="active">Paquetes</a></li>
     <li><a routerLink="/hoteles" routerLinkActive="active">Hoteles</a></li>
@@ -18,10 +18,15 @@
     <ng-container *ngIf="isLoggedIn; else showLogin">
       <div class="user-actions">
         <app-notification></app-notification>
-        <!-- New User Dropdown Menu -->
         <div class="user-menu">
           <div class="user-menu-trigger">
-            <span class="material-symbols-outlined">person</span>
+            <ng-container *ngIf="user?.avatar_url; else initials">
+              <img [src]="user?.avatar_url" class="avatar" referrerpolicy="no-referrer" alt="avatar" />
+            </ng-container>
+            <ng-template #initials>
+              <div class="avatar initials">{{ (username || '?')[0] | uppercase }}</div>
+            </ng-template>
+
             <span class="username">{{ username }}</span>
             <span class="material-symbols-outlined chevron">expand_more</span>
           </div>
@@ -43,4 +48,3 @@
     </ng-template>
   </div>
 </nav>
-
