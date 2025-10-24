@@ -79,7 +79,7 @@ def _detect_departamento(prompt: str) -> Optional[str]:
             return dep
     return None
 
-def _filter_hoteles(dep: Optional[str], limit: int = 5) -> List[Dict]:
+def _filter_hoteles(dep: Optional[str], limit: int = 3) -> List[Dict]:
     data = _load_data()
     hoteles = [h for h in data.get("hoteles", []) if h.get("estado", False)]
     if dep:
@@ -87,7 +87,7 @@ def _filter_hoteles(dep: Optional[str], limit: int = 5) -> List[Dict]:
     hoteles.sort(key=lambda x: x.get("calificacion", 0), reverse=True)
     return hoteles[:limit]
 
-def _filter_lugares(dep: Optional[str], limit: int = 8) -> List[Dict]:
+def _filter_lugares(dep: Optional[str], limit: int = 2) -> List[Dict]:
     data = _load_data()
     lugares = [l for l in data.get("lugares_turisticos", []) if l.get("estado", True)]
     if dep:
@@ -98,8 +98,8 @@ def _filter_lugares(dep: Optional[str], limit: int = 8) -> List[Dict]:
 def _dataset_answer(prompt: str) -> Optional[str]:
     """Genera una respuesta determinística basada SOLO en el dataset cuando aplica."""
     pnorm = _norm(prompt)
-    es_hoteles = any(k in pnorm for k in ["hotel", "hospedaje", "alojamiento"]) 
-    es_lugares = any(k in pnorm for k in ["lugar", "lugares", "visitar", "itinerario", "ruta", "qué ver", "que ver"]) 
+    es_hoteles = any(k in pnorm for k in ["hotel", "hospedaje", "alojamiento"])
+    es_lugares = any(k in pnorm for k in ["lugar", "lugares", "visitar", "itinerario", "ruta", "qué ver", "que ver"])
     if not (es_hoteles or es_lugares):
         return None
 
@@ -107,7 +107,7 @@ def _dataset_answer(prompt: str) -> Optional[str]:
     # Si no detectamos departamento, aún podemos listar top del país, pero mantenemos breve
     seccion: List[str] = []
     if es_hoteles:
-        hoteles = _filter_hoteles(dep, limit=5)
+        hoteles = _filter_hoteles(dep, limit=3)
         if not hoteles:
             return ""
         titulo = f"## Hoteles sugeridos{f' en {dep}' if dep else ''}"
@@ -115,7 +115,7 @@ def _dataset_answer(prompt: str) -> Optional[str]:
         for h in hoteles[:5]:
             seccion.append(f"- {h.get('nombre')} — {h.get('ubicacion')} ({h.get('departamento')}) · ⭐ {h.get('calificacion')}")
     if es_lugares:
-        lugares = _filter_lugares(dep, limit=8)
+        lugares = _filter_lugares(dep, limit=3)
         if not lugares and not es_hoteles:
             return ""
         titulo = f"## Lugares para visitar{f' en {dep}' if dep else ''}"
