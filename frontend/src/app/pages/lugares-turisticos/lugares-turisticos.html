@@ -1,165 +1,266 @@
-<!-- Main container for the page -->
-<div class="lugares-container">
-  <h1 class="title">Lugares Turísticos de Bolivia</h1>
-
-  <!-- Header for main actions, like the add button -->
-  <div class="header-acciones">
-    <button *ngIf="isSuperAdmin" class="btn btn-primary" (click)="openAddModal()">
-      <span class="material-symbols-outlined icon-ms">add</span>
-      Agregar Lugar Turístico
+<main class="lugares-page container">
+  <!-- Título principal + acción global (superadmin) -->
+  <header class="page-header">
+    <h1 class="page-title">
+      <span class="title-icon">
+        <span class="fi fi-bo" role="img" aria-label="Bandera de Bolivia" title="Bolivia"></span>
+      </span>
+      Lugares Turísticos de Bolivia
+    </h1>
+    <button
+      *ngIf="isSuperAdmin"
+      class="btn btn-add icon-only"
+      (click)="openAddModal()"
+      title="Agregar Lugar Turístico"
+      aria-label="Agregar Lugar Turístico"
+    >
+      <i-bs name="plus-square-fill" width="22" height="22" class="icon-center"></i-bs>
     </button>
-  </div>
+  </header>
 
-  <!-- Filters card section -->
-  <section class="filtros-card">
-    <h4>Filtros de búsqueda</h4>
-    <div class="filtros-grid solo-uno">
-      <!-- Filtro 1: Departamento -->
-      <div class="filtro">
-        <label for="ciudad">Departamento</label>
-        <div class="select-wrapper">
-          <select id="ciudad" [(ngModel)]="ciudadSeleccionada" (change)="aplicarFiltros()">
-            <option value="">Todos los departamentos</option>
-            <option *ngFor="let ciudad of ciudades" [value]="ciudad">{{ ciudad }}</option>
-          </select>
-          <div class="chevron-icon">
-            <span class="material-symbols-outlined">expand_more</span>
-          </div>
+  <!-- Filtros -->
+  <section class="filtros-card card">
+    <h2 class="card-title">Filtros de búsqueda</h2>
+    <div class="filtros-grid">
+      <!-- Buscador -->
+      <div class="filtro filtro-busqueda">
+        <label for="busqueda" class="form-label">Buscar (nombre o tipo)</label>
+        <div class="search-wrapper">
+          <i-bs name="search" width="18" height="18" class="search-icon icon-center icon-secondary" aria-hidden="true"></i-bs>
+          <input
+            id="busqueda"
+            type="search"
+            class="form-input"
+            placeholder="Ej.: Salar, Parque, Montaña…"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="aplicarFiltros()"
+            aria-label="Buscar lugares"
+          />
+          <button
+            type="button"
+            class="btn btn-secondary-soft icon-only clear-btn"
+            *ngIf="searchTerm"
+            (click)="searchTerm=''; aplicarFiltros()"
+            title="Limpiar búsqueda"
+            aria-label="Limpiar búsqueda"
+          >
+            <i-bs name="x-circle" width="18" height="18" class="icon-center"></i-bs>
+          </button>
         </div>
       </div>
-      <!-- Botón de acción para aplicar filtros -->
+
+      <!-- Departamento -->
+      <div class="filtro filtro-depto">
+        <label for="ciudad" class="form-label">Departamento</label>
+        <div class="select-wrapper">
+          <select
+            id="ciudad"
+            class="form-select"
+            [(ngModel)]="ciudadSeleccionada"
+            (change)="aplicarFiltros()"
+            aria-label="Filtrar por departamento"
+          >
+            <option value="">Todos los departamentos</option>
+            <option *ngFor="let ciudad of ciudades" [value]="ciudad">
+              {{ ciudad }}
+            </option>
+          </select>
+          <i-bs class="chevron-icon icon-center icon-secondary" name="chevron-down" width="16" height="16" aria-hidden="true"></i-bs>
+        </div>
+      </div>
+
+      <!-- Acciones filtros (icon-only) -->
       <div class="acciones">
-        <button class="btn btn-primary" (click)="aplicarFiltros()">Aplicar</button>
+        <button class="btn btn-accent icon-only" (click)="aplicarFiltros()" title="Aplicar filtros" aria-label="Aplicar filtros">
+          <i-bs name="funnel" width="18" height="18" class="icon-center"></i-bs>
+        </button>
+        <button class="btn btn-secondary-soft icon-only" (click)="clearFilters()" title="Limpiar filtros" aria-label="Limpiar filtros">
+          <i-bs name="x-circle" width="18" height="18" class="icon-center"></i-bs>
+        </button>
+      </div>
+
+      <div class="resultados" aria-live="polite">
+        Resultados: <strong>{{ lugaresFiltrados.length }}</strong>
       </div>
     </div>
   </section>
 
-  <!-- Status display for loading, errors, or no results -->
-  <div class="estado" role="status" aria-live="polite">
-    <div *ngIf="cargando">Cargando lugares…</div>
+  <!-- Estado -->
+  <section class="estado" role="status" aria-live="polite">
+    <div *ngIf="cargando" class="loading">
+      <span class="spinner"></span> Cargando lugares…
+    </div>
     <div *ngIf="error" class="error">{{ error }}</div>
-    <div *ngIf="!cargando && lugaresFiltrados.length === 0 && !error">
+    <div *ngIf="!cargando && lugaresFiltrados.length === 0 && !error" class="no-result">
+      <span class="material-symbols-outlined icon-center icon-secondary" aria-hidden="true">info</span>
       No hay lugares que coincidan con el filtro.
     </div>
-  </div>
+  </section>
 
-  <!-- List of tourist location cards -->
+  <!-- Lista de lugares -->
   <section class="lista">
-    <article *ngFor="let l of lugaresFiltrados; trackBy: trackByLugar" class="card-lugar">
-      <!-- Left column: Information -->
+    <article
+      *ngFor="let l of lugaresFiltrados; trackBy: trackByLugar"
+      class="card-lugar card reveal"
+    >
       <div class="card-left">
-        <div *ngIf="l.url_image_lugar_turistico" class="imagen-lugar">
-          <img [src]="l.url_image_lugar_turistico" [alt]="'Imagen de ' + l.nombre" />
-        </div>
+        <div
+          class="imagen-lugar reveal-item"
+          *ngIf="l.url_image_lugar_turistico"
+          [style.backgroundImage]="'url(' + l.url_image_lugar_turistico + ')'"
+          role="img"
+          aria-label="Imagen de {{ l.nombre }}"
+        ></div>
+
         <h3 class="lugar-nombre">{{ l.nombre }}</h3>
+
         <ul class="meta">
           <li class="meta-item">
-            <span class="material-symbols-outlined">location_on</span>
+            <span class="material-symbols-outlined icon-center icon-secondary" aria-hidden="true">location_on</span>
             {{ l.departamento }}
           </li>
           <li class="meta-item" *ngIf="l.tipo">
-            <span class="material-symbols-outlined">sell</span>
+            <span class="material-symbols-outlined icon-center icon-secondary" aria-hidden="true">category</span>
             {{ l.tipo }}
           </li>
         </ul>
+
         <p class="descripcion" *ngIf="l.ubicacion">{{ l.ubicacion }}</p>
       </div>
-      <!-- Right column: Action buttons -->
-      <div class="card-right">
-        <a class="btn btn-accent" [routerLink]="['/lugares-turisticos', l.id_lugar]">Ver Detalles</a>
-        <!-- --- UPDATED BUTTONS --- -->
-        <div class="admin-actions" *ngIf="isSuperAdmin">
-          <button class="btn btn-secondary btn-icon" (click)="openEditModal(l)" aria-label="Editar Lugar">
-            <span class="material-symbols-outlined">edit</span>
+
+      <!-- Acciones centradas (icon-only) -->
+      <div class="card-right card-actions-centered">
+        <button
+          class="btn btn-ghost icon-only"
+          (click)="goToDetalle(l.id_lugar)"
+          title="Ver detalles"
+          aria-label="Ver detalles de {{ l.nombre }}"
+        >
+          <i-bs name="eye" width="20" height="20" class="icon-center"></i-bs>
+        </button>
+
+        <ng-container *ngIf="isSuperAdmin">
+          <button
+            class="icon-btn btn-edit"
+            (click)="openEditModal(l)"
+            title="Editar"
+            aria-label="Editar {{ l.nombre }}"
+          >
+            <i-bs name="pencil" width="20" height="20" class="icon-center"></i-bs>
           </button>
-          <button class="btn btn-danger btn-icon" (click)="onEliminarLugar(l)" aria-label="Eliminar Lugar">
-            <span class="material-symbols-outlined">delete</span>
+          <button
+            class="icon-btn btn-delete"
+            (click)="onEliminarLugar(l)"
+            title="Eliminar"
+            aria-label="Eliminar {{ l.nombre }}"
+          >
+            <i-bs name="trash" width="20" height="20" class="icon-center"></i-bs>
           </button>
-        </div>
+        </ng-container>
       </div>
     </article>
   </section>
-</div>
 
-  <!-- Edit Modal -->
-  <div class="modal-backdrop" *ngIf="showEditModal" (click)="closeEditModal()" aria-hidden="true"></div>
-  <div class="modal-root" *ngIf="showEditModal" role="dialog" aria-modal="true" aria-labelledby="editLugarTitle" (click)="closeEditModal()">
-    <div class="modal-card" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3 id="editLugarTitle">Editar lugar</h3>
-        <button class="icon-btn" (click)="closeEditModal()" aria-label="Cerrar">
-          <span class="material-symbols-outlined">close</span>
-        </button>
-      </div>
-      <form #editForm="ngForm" (ngSubmit)="saveEdit(editForm)" novalidate>
-        <div class="modal-body">
-          <label class="form-label" for="edit_nombre">Nombre *</label>
-          <input id="edit_nombre" name="nombre" type="text" class="form-input" [(ngModel)]="editModel.nombre" required />
-          <label class="form-label" for="edit_departamento">Departamento *</label>
-          <input id="edit_departamento" name="departamento" type="text" class="form-input" [(ngModel)]="editModel.departamento" required />
-          <label class="form-label" for="edit_tipo">Tipo *</label>
-          <input id="edit_tipo" name="tipo" type="text" class="form-input" [(ngModel)]="editModel.tipo" required />
-          <label class="form-label" for="edit_ubicacion">Ubicación *</label>
-          <textarea id="edit_ubicacion" name="ubicacion" class="form-textarea" rows="3" [(ngModel)]="editModel.ubicacion" required></textarea>
-          <label class="form-label" for="edit_horario">Horario</label>
-          <input id="edit_horario" name="horario" type="text" class="form-input" [(ngModel)]="editModel.horario" />
-          <label class="form-label" for="edit_descripcion">Descripción</label>
-          <textarea id="edit_descripcion" name="descripcion" class="form-textarea" rows="3" [(ngModel)]="editModel.descripcion"></textarea>
-          <label class="form-label" for="edit_img">URL de imagen</label>
-          <input id="edit_img" name="img" type="url" class="form-input" [(ngModel)]="editModel.url_image_lugar_turistico" />
-          <div class="img-preview" *ngIf="editModel.url_image_lugar_turistico">
-            <img [src]="editModel.url_image_lugar_turistico" alt="Vista previa" (error)="onImageError($event)" />
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeEditModal()">Cancelar</button>
-          <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid || savingEdit">
-            {{ savingEdit ? 'Guardando…' : 'Guardar cambios' }}
-          </button>
-        </div>
-      </form>
+  <!-- Loader navegación -->
+  <div class="route-loader" *ngIf="routeLoading">
+    <div class="route-loader__backdrop"></div>
+    <div class="route-loader__content" role="status" aria-live="polite">
+      <div class="route-loader__spinner"></div>
+      <div class="route-loader__bar"></div>
+      <p>Cargando detalles…</p>
     </div>
   </div>
 
-  <!-- Add Modal -->
-  <div class="modal-backdrop" *ngIf="showAddModal" (click)="closeAddModal()" aria-hidden="true"></div>
-  <div class="modal-root" *ngIf="showAddModal" role="dialog" aria-modal="true" aria-labelledby="addLugarTitle" (click)="closeAddModal()">
-    <div class="modal-card" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3 id="addLugarTitle">Agregar Nuevo Lugar</h3>
-        <button class="icon-btn" (click)="closeAddModal()" aria-label="Cerrar">
-          <span class="material-symbols-outlined">close</span>
+  <!-- Modal (Agregar / Editar) -->
+  <div class="modal-backdrop" *ngIf="showModal" (click)="closeModal()" aria-hidden="true"></div>
+  <div
+    class="modal-root"
+    *ngIf="showModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle"
+    (click)="closeModal()"
+  >
+    <div class="modal-ornaments" aria-hidden="true">
+      <span class="orbit orbit-1"></span>
+      <span class="orbit orbit-2"></span>
+      <span class="glow glow-1"></span>
+      <span class="glow glow-2"></span>
+    </div>
+
+    <div class="modal-card animate-in" (click)="$event.stopPropagation()" [attr.aria-busy]="savingModal ? 'true' : 'false'">
+      <header class="modal-header">
+        <h3 id="modalTitle">
+          {{ isEditMode ? 'Editar Lugar Turístico' : 'Agregar Nuevo Lugar' }}
+        </h3>
+        <button class="icon-btn" (click)="closeModal()" aria-label="Cerrar">
+          <span class="material-symbols-outlined icon-center icon-secondary">close</span>
         </button>
-      </div>
-      <form #addForm="ngForm" (ngSubmit)="saveNewLugar(addForm)" novalidate>
-        <div class="modal-body">
-          <label class="form-label" for="add_id_lugar">ID Lugar *</label>
-          <input id="add_id_lugar" name="id_lugar" type="number" class="form-input" [(ngModel)]="addModel.id_lugar" required />
-          <label class="form-label" for="add-nombre">Nombre *</label>
-          <input id="add-nombre" name="nombre" type="text" class="form-input" [(ngModel)]="addModel.nombre" required />
-          <label class="form-label" for="add-departamento">Departamento *</label>
-          <input id="add-departamento" name="departamento" type="text" class="form-input" [(ngModel)]="addModel.departamento" required />
-          <label class="form-label" for="add-tipo">Tipo *</label>
-          <input id="add-tipo" name="tipo" type="text" class="form-input" [(ngModel)]="addModel.tipo" required />
-          <label class="form-label" for="add-ubicacion">Ubicación *</label>
-          <textarea id="add-ubicacion" name="ubicacion" class="form-textarea" rows="3" [(ngModel)]="addModel.ubicacion" required></textarea>
-          <label class="form-label" for="add-horario">Horario</label>
-          <input id="add-horario" name="horario" type="text" class="form-input" [(ngModel)]="addModel.horario" />
-          <label class="form-label" for="add-descripcion">Descripción</label>
-          <textarea id="add-descripcion" name="descripcion" class="form-textarea" rows="3" [(ngModel)]="addModel.descripcion"></textarea>
-          <label class="form-label" for="add-img">URL de imagen</label>
-          <input id="add-img" name="img" type="url" class="form-input" [(ngModel)]="addModel.url_image_lugar_turistico" />
-          <div class="img-preview" *ngIf="addModel.url_image_lugar_turistico">
-            <img [src]="addModel.url_image_lugar_turistico" alt="Vista previa" (error)="onImageError($event)" />
+      </header>
+
+      <form
+        #modalForm="ngForm"
+        (ngSubmit)="isEditMode ? saveEdit(modalForm) : saveNewLugar(modalForm)"
+        novalidate
+      >
+        <!-- Cuerpo con web scroll visible, fondo suave tricolor y sin cortes bajo la imagen -->
+        <div class="modal-body" aria-describedby="modalScrollHelp">
+          <div id="modalScrollHelp" class="sr-only">Desplázate dentro de este área para ver todo el contenido del formulario.</div>
+
+          <div class="form-grid">
+            <div class="field">
+              <label class="form-label" for="nombre">Nombre *</label>
+              <input id="nombre" name="nombre" type="text" class="form-input" [(ngModel)]="modalModel.nombre" required />
+            </div>
+
+            <div class="field">
+              <label class="form-label" for="departamento">Departamento *</label>
+              <input id="departamento" name="departamento" type="text" class="form-input" [(ngModel)]="modalModel.departamento" required />
+            </div>
+
+            <div class="field">
+              <label class="form-label" for="tipo">Tipo *</label>
+              <input id="tipo" name="tipo" type="text" class="form-input" [(ngModel)]="modalModel.tipo" required />
+            </div>
+
+            <div class="field">
+              <label class="form-label" for="horario">Horario</label>
+              <input id="horario" name="horario" type="text" class="form-input" [(ngModel)]="modalModel.horario" />
+            </div>
+
+            <div class="field span-2">
+              <label class="form-label" for="ubicacion">Ubicación *</label>
+              <textarea id="ubicacion" name="ubicacion" class="form-textarea" rows="3" [(ngModel)]="modalModel.ubicacion" required></textarea>
+            </div>
+
+            <div class="field span-2">
+              <label class="form-label" for="descripcion">Descripción</label>
+              <textarea id="descripcion" name="descripcion" class="form-textarea" rows="3" [(ngModel)]="modalModel.descripcion"></textarea>
+            </div>
+
+            <div class="field span-2">
+              <label class="form-label" for="url_image">URL de imagen</label>
+              <input id="url_image" name="url_image" type="url" class="form-input" [(ngModel)]="modalModel.url_image_lugar_turistico" placeholder="https://..." />
+            </div>
+
+            <div class="img-preview span-2" *ngIf="modalModel.url_image_lugar_turistico">
+              <div class="img-frame">
+                <img [src]="modalModel.url_image_lugar_turistico" alt="Vista previa" (error)="onImageError($event)" />
+              </div>
+            </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeAddModal()">Cancelar</button>
-          <button type="submit" class="btn btn-primary" [disabled]="addForm.invalid || savingAdd">
-            {{ savingAdd ? 'Guardando…' : 'Crear Lugar' }}
+
+        <footer class="modal-footer">
+          <button type="button" class="btn btn-secondary-soft icon-only" (click)="closeModal()" title="Cancelar" aria-label="Cancelar">
+            <i-bs name="x-circle" width="18" height="18" class="icon-center"></i-bs>
           </button>
-        </div>
+          <button type="submit" class="btn btn-primary icon-only" [disabled]="modalForm.invalid || savingModal" title="Guardar" aria-label="Guardar">
+            <span *ngIf="savingModal" class="spinner-inline" aria-hidden="true"></span>
+            <i-bs name="check2-circle" width="18" height="18" class="icon-center" aria-hidden="true"></i-bs>
+          </button>
+        </footer>
       </form>
     </div>
   </div>
-
+</main>
