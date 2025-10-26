@@ -1,291 +1,324 @@
 :root {
   --brand: #2e7d32;
-  --ink: #111827;
-  --text: #4b5563;
+  --brand-600: #1f6d26;
+  --ink: #0f172a;
+  --text: #334155;
   --surface: #ffffff;
   --border: #e5e7eb;
+  --muted: #f6f7fb;
+  --ring: rgba(46, 125, 50, 0.35);
+
+  /* Bandera (suave) */
+  --bol-red: rgba(200, 16, 46, 0.08);
+  --bol-yellow: rgba(255, 215, 0, 0.08);
+  --bol-green: rgba(0, 122, 51, 0.08);
 }
 
-/* ---------- HERO WITH IMAGE (responsive) ---------- */
+/* Fondo de página a toda la pantalla */
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, var(--bol-red) 0%, var(--bol-yellow) 50%, var(--bol-green) 100%),
+    radial-gradient(1200px 600px at 50% -10%, rgba(255,255,255,.6), transparent 60%),
+    var(--muted);
+  background-attachment: fixed, fixed, scroll;
+}
+
+/* Helpers */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+.sr-live { position: absolute; left: -9999px; }
+.skip-link {
+  position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;
+  &:focus { left: 16px; top: 16px; width: auto; height: auto; background: var(--surface); color: var(--ink); border-radius: 8px; padding: 8px 12px; z-index: 10; box-shadow: 0 0 0 3px var(--ring); }
+}
+
+/* ---------- HERO ---------- */
 .hero {
   position: relative;
-  display: flex;
-  align-items: center;
+  display: grid;
+  place-items: center;
   color: #fff;
-  min-height: 420px;
-  background: 
-    linear-gradient(0deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)),
-    url("https://boliviamia.net/Images/Tourpics/atop-uyuni-01.jpg") center/cover no-repeat;
-  animation: slideshow 15s infinite;
+  min-height: 540px;
+  background:
+    linear-gradient(0deg, rgba(0,0,0,0.26), rgba(0,0,0,0.26)),
+    url('https://res.cloudinary.com/dj5uzus8e/image/upload/f_auto,q_auto:good,w_1920,dpr_2/v1761429463/wjrh01yodnvwtcvlqogp.jpg')
+    center/cover no-repeat;
+  overflow: hidden;
+  filter: saturate(1.06) contrast(1.02);
+  animation:
+    hero-slideshow 22s infinite ease-in-out,
+    hero-pan 22s infinite linear;
+}
+.hero__overlay {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.35)),
+    radial-gradient(60% 40% at 50% 60%, rgba(255,215,0,0.16), transparent 70%),
+    radial-gradient(40% 30% at 20% 30%, rgba(200,16,46,0.12), transparent 70%),
+    radial-gradient(40% 30% at 80% 30%, rgba(0,122,51,0.12), transparent 60%);
+  pointer-events: none;
 }
 
-/* Animación que cambia las imágenes */
-@keyframes slideshow {
+@keyframes hero-slideshow {
   0%, 20% {
-    background-image: 
-      linear-gradient(0deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)),
-      url("https://boliviamia.net/Images/Tourpics/atop-uyuni-06.jpg");
+    background-image:
+      linear-gradient(0deg, rgba(0,0,0,0.26), rgba(0,0,0,0.26)),
+      url('https://res.cloudinary.com/dj5uzus8e/image/upload/f_auto,q_auto:good,w_1920,dpr_2/v1761429463/wjrh01yodnvwtcvlqogp.jpg');
   }
   21%, 40% {
-    background-image: 
-      linear-gradient(0deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)),
-      url("https://i.natgeofe.com/n/857a969e-9fe6-4b5e-959f-157ad9fdf7f9/reflection-salar-de-uyuni-bolivia.jpg");
+    background-image:
+      linear-gradient(0deg, rgba(0,0,0,0.26), rgba(0,0,0,0.26)),
+      url('https://res.cloudinary.com/dj5uzus8e/image/upload/f_auto,q_auto:good,w_1920,dpr_2/v1761429216/yykf4olka4yfieza9uef.jpg');
   }
   41%, 60% {
-    background-image: 
-      linear-gradient(0deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)),
-      url("https://www.arttravel.no/wp-content/uploads/2021/03/bolivia-las-yungas-landskap.jpg") top/cover no-repeat;
+    background-image:
+      linear-gradient(0deg, rgba(0,0,0,0.26), rgba(0,0,0,0.26)),
+      url('https://res.cloudinary.com/dj5uzus8e/image/upload/f_auto,q_auto:good,w_1920,dpr_2/v1759260470/salar_de_uyuni_potosi_l5ndhw.avif');
   }
   61%, 80% {
-    background-image: 
-      linear-gradient(0deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)),
-      url("https://res.cloudinary.com/dj5uzus8e/image/upload/v1759409725/atxmsay01eua7ugxdwfs.jpg");
+    background-image:
+      linear-gradient(0deg, rgba(0,0,0,0.26), rgba(0,0,0,0.26)),
+      url('https://res.cloudinary.com/dj5uzus8e/image/upload/f_auto,q_auto:good,w_1920,dpr_2/v1759409725/atxmsay01eua7ugxdwfs.jpg');
   }
   81%, 100% {
-    background-image: 
-      linear-gradient(0deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)),
-      url("https://camarahoteleradesantacruz.org/wp-content/uploads/2023/11/guembe2.jpg");
+    background-image:
+      linear-gradient(0deg, rgba(0,0,0,0.26), rgba(0,0,0,0.26)),
+      url('https://res.cloudinary.com/dj5uzus8e/image/upload/f_auto,q_auto:good,w_1920,dpr_2/v1761428829/smus7vcaripsb2ovhxvh.jpg');
   }
 }
 
-
-.hero__inner {
-  position: relative;
-  text-align: center;
-  max-width: 900px;
-  padding: 56px 16px;
-  margin: 0 auto;
+@keyframes hero-pan {
+  0%, 100% { background-position: 50% 55%, center; }
+  50% { background-position: 50% 45%, center; }
 }
+@media (prefers-reduced-motion: reduce) { .hero { animation: none; } }
 
+.hero__inner { position: relative; text-align: center; max-width: 980px; padding: 64px 16px; z-index: 1; }
 .hero__title {
-  font-size: clamp(26px, 6vw, 44px);
-  line-height: 1.1;
-  font-size: 3rem;
-  margin: 0 0 8px;
-  color: #fff;
+  margin: 0 0 10px; color: #fff; font-weight: 900; line-height: 1.06; letter-spacing: -0.015em;
+  font-size: clamp(30px, 5.6vw, 52px);
+  text-shadow: 0 2px 18px rgba(0,0,0,.25);
 }
+.hero__lead { margin: 0 auto 24px; font-size: clamp(15px, 2.6vw, 19px); color: #eef2ff; max-width: 820px; }
 
-.hero__subtitle {
-  margin: 0 0 10px;
-  font-weight: 600;
-  color: #e8f5ff;
-  font-size: clamp(14px, 3.5vw, 18px);
-}
-
-.hero__lead {
-  margin: 0 auto 16px;
-  font-size: clamp(14px, 3.6vw, 16px);
-  color: #f3f4f6;
-  max-width: 720px;
-}
-
-.hero__actions {
+/* ---------- PANEL DE FILTRO ---------- */
+.filter-card {
+  backdrop-filter: blur(6px);
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 16px;
+  padding: 14px 14px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: center;
-  align-items: flex-end;
-  padding: 20px;
+  gap: 14px;
+  align-items: end;
+  box-shadow: 0 8px 22px rgba(0,0,0,.10);
+  animation: fade-in .5s ease both;
+}
+@media (prefers-color-scheme: dark) {
+  .filter-card { background: rgba(15,23,42,0.25); border-color: rgba(255,255,255,0.2); }
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .filtro {
-  display: flex;
-  flex-direction: column;
-  min-width: 200px;
+  display: grid; gap: 6px; min-width: 260px;
+  label { font-weight: 800; font-size: 14px; color: #fff; letter-spacing: .2px; display: inline-flex; align-items: center; gap: 6px; }
+  .filtro__icon { font-size: 18px; }
 }
-
-.filtro label {
-  font-weight: bold;
-  margin-bottom: 5px;
-  font-size: 14px;
-  color: #fff;
-}
-
-.filtro select,
-.filtro input[type="date"] {
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  background-color: #f3f3f3;
-  font-size: 14px;
-  color: #555;
-}
-
-.botones {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.btn {
-  background-color: #016d2e;
-  color: white;
-  padding: 15px 25px;
-  border: none;
-  border-radius: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-  background-color: #43a047;
-}
-
-.icono {
-  margin-right: 5px;
-  color: green;
-}
-
-/* Puedes reemplazar estas clases de íconos con íconos reales si usas FontAwesome o similar */
-.icono.ubicacion::before {
-  content: "📍";
-}
-
-.icono.calendario::before {
-  content: "📅";
-}
-
-.icono.personas::before {
-  content: "👥";
-}
-
-/* tighter on very small screens */
-@media (max-width: 420px) {
-  .hero {
-    min-height: 360px;
-    background-position: 50% 35%;
-  }
-
-  .hero__inner {
-    padding: 40px 12px;
-  }
-
-  .hero__actions .btn {
+.select-wrap {
+  position: relative;
+  select {
+    appearance: none;
     width: 100%;
-    text-align: center;
+    padding: 12px 40px 12px 14px;
+    border-radius: 12px;
+    border: 1px solid #cbd5e1;
+    background-color: #f8fafc;
+    font-size: 14px;
+    color: #334155;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease, transform .1s ease;
+  }
+  select:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--ring); transform: translateY(-1px); }
+  .select-wrap__chev {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    font-size: 22px; color: #64748b; pointer-events: none;
   }
 }
+.botones { display: flex; gap: 10px; flex-wrap: wrap; }
 
-
-/* ---------- QUIÉNES SOMOS ---------- */
-.quienes {
-  background: #e3f2fd;
-  padding: 56px 0;
+/* ---------- BOTONES ---------- */
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24; }
+.btn {
+  background-color: var(--brand); color: #fff; padding: 12px 20px; border: none; border-radius: 12px;
+  font-weight: 900; cursor: pointer; font-size: 16px; transition: background-color .2s, transform .05s, box-shadow .2s;
+  display: inline-flex; align-items: center; gap: 6px;
+  &:hover { background-color: var(--brand-600); }
+  &:active { transform: translateY(1px); }
+  &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--ring); }
+  &:disabled, &[aria-disabled="true"] { opacity: .6; cursor: not-allowed; }
+  &.btn--secondary {
+    background-color: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.35); color: #fff; backdrop-filter: blur(1px);
+    &:hover { background-color: rgba(255,255,255,.25); }
+  }
+  &.btn--ghost {
+    background: transparent; border: 1px solid rgba(255,255,255,.35); color: #fff;
+    &:hover { background-color: rgba(255,255,255,.08); }
+  }
+  &.btn--grad { background-image: linear-gradient(135deg, #16a34a 0%, #0ea5e9 100%); border: 0; &:hover { filter: brightness(1.05); } }
+  &.btn--sm { padding: 9px 14px; font-size: 14px; border-radius: 10px; }
 }
+.btn__icon { margin-right: 6px; }
 
-.quienes .container {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0 16px;
+/* ---------- DESTINOS POPULARES (3 columnas) ---------- */
+.popular { padding: 64px 0; }
+.popular__title {
+  text-align: center; color: var(--ink); font-size: clamp(24px, 3.2vw, 34px); font-weight: 900; margin: 0 0 8px;
 }
+.popular__intro { text-align: center; max-width: 820px; margin: 0 auto 28px; color: var(--text); }
 
-.quienes__title {
-  text-align: center;
-  color: var(--ink);
-  font-size: clamp(22px, 3vw, 32px);
-  font-weight: 800;
-  margin: 0 0 8px;
-  // color: #016d2e;
-}
-
-.quienes__intro {
-  text-align: center;
-  max-width: 760px;
-  margin: 0 auto 28px;
-  color: var(--text);
-}
-
-.quienes__grid {
+.popular__grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  gap: 24px;
+}
+@media (max-width: 1100px) { .popular__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 700px)  { .popular__grid { grid-template-columns: 1fr; } }
+
+/* Animación de entrada para cards y steps */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fade-up .5s ease both; }
+
+/* Card con borde acentuado (color), imagen centrada y movimiento */
+.popular-card {
+  position: relative;
+  border: 3px solid transparent; /* borde visible (color via --accent) */
+  border-radius: 18px;
+  background:
+    linear-gradient(var(--surface), var(--surface)) padding-box,
+    linear-gradient(135deg, var(--accent), var(--accent)) border-box;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  overflow: hidden;
+  display: grid; grid-template-rows: auto 1fr; text-align: center;
+  transition: transform .18s ease, box-shadow .2s ease, filter .2s ease;
+  will-change: transform, box-shadow;
+  &:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,.12); }
+  &:focus-within { outline: 3px solid var(--ring); outline-offset: 2px; }
+  &.selected { filter: saturate(1.03) contrast(1.01); animation: float 4s ease-in-out infinite; }
+}
+@keyframes float {
+  0%,100% { transform: translateY(-2px); }
+  50%     { transform: translateY(2px); }
 }
 
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-  text-align: center;
-  transition: transform .15s ease, box-shadow .15s ease;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
-  background-color: #016d2e;
-  color: white;
-}
-
-.card__icon {
-  font-size: 28px;
-  line-height: 1;
-  width: 48px;
-  height: 48px;
-  margin: 0 auto 8px;
-  display: grid;
-  place-items: center;
-  background: #e8f5e9;
-  color: var(--brand);
-  border-radius: 12px;
-}
-
-.card__title {
-  margin: 8px 0 6px;
-  color: var(--ink);
-  font-weight: 700;
-  font-size: 18px;
-}
-
-.card__text {
-  margin: 0;
-  color: var(--text);
-  font-size: 14px;
-}
-
-p {
-  font-size: 1.2rem;
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .quienes {
-    padding: 44px 0;
-  }
-
-  .quienes__intro {
-    margin-bottom: 24px;
-  }
-}
-
-@media (max-width: 520px) {
-  .quienes {
-    padding: 36px 0;
-  }
-
-  .quienes__title {
-    font-size: clamp(20px, 5.5vw, 28px);
-  }
-
-  .card {
-    padding: 16px;
-    border-radius: 12px;
-  }
-
-  .card__title {
-    font-size: 17px;
-  }
-
-  .card__text {
-    font-size: 13px;
-  }
-}
-
-a.disabled {
+/* Borde de brillo exterior (suave) */
+.popular-card__border {
+  position: absolute;
+  inset: 0;
   pointer-events: none;
-  opacity: 0.5;
-  cursor: default;
-  text-decoration: none;
+  box-shadow: 0 0 0 0 rgba(0,0,0,0);
+}
+.popular-card:hover .popular-card__border,
+.popular-card.selected .popular-card__border {
+  box-shadow: 0 0 0 3px rgba(255,255,255,0), 0 0 24px 0 var(--accent);
+}
+
+/* Media centrado con zoom sutil */
+.popular-card__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+}
+
+/* Contenedor de la imagen: centra el contenido */
+.media-inner {
+  display: grid;
+  place-items: center; /* centra horizontal y vertical */
+  width: 100%;
+  height: 100%;
+}
+
+/* Imagen centrada y responsiva dentro del media */
+.popular-card__image {
+  display: block;         /* evita espacios en línea y permite margin auto */
+  margin: 0 auto;         /* centra horizontalmente si aplica */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;       /* llena el contenedor manteniendo proporción */
+  object-position: center center; /* centrada (no a la derecha) */
+  transform: scale(1);
+  transition: transform .55s ease, filter .35s ease;
+  will-change: transform, filter;
+}
+
+/* Hover/selección: ligero zoom y realce */
+.popular-card:hover .popular-card__image,
+.popular-card:focus-within .popular-card__image,
+.popular-card.selected .popular-card__image {
+  transform: scale(1.085) translateY(-2px);
+  filter: saturate(1.06) contrast(1.03);
+}
+
+/* Chip dentro del media */
+.chip--overlay {
+  position: absolute; left: 14px; bottom: 14px; z-index: 2;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px; border-radius: 999px; font-size: 12px;
+  color: #062e12; background: #dcfce7; border: 1px solid #bbf7d0;
+  box-shadow: 0 2px 10px rgba(0,0,0,.12);
+}
+.chip__icon { font-size: 18px; line-height: 1; }
+
+/* Cuerpo y tipografía */
+.popular-card__body {
+  position: relative; z-index: 1;
+  padding: 22px 18px 24px;
+  display: grid; gap: 12px; justify-items: center;
+}
+.popular-card__title {
+  margin: 0; color: var(--ink); font-weight: 900; font-size: 20px; letter-spacing: .2px;
+  display: inline-flex; gap: 8px; align-items: center;
+}
+.title__icon { font-size: 22px; color: var(--ink); }
+.popular-card.selected .title__icon { color: var(--accent); }
+
+.popular-card__text { margin: 0; color: var(--text); font-size: 15px; max-width: 90%; min-height: 46px; }
+
+/* Acciones: botones con acento al seleccionar */
+.popular-card__actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.popular-card.selected .btn { background-color: var(--accent); color: #fff; }
+.popular-card.selected .btn.btn--secondary { background: #fff; color: var(--accent); border-color: var(--accent); }
+
+/* ---------- CÓMO FUNCIONA ---------- */
+.steps { padding: 56px 0; }
+.steps__title { text-align: center; color: var(--ink); font-size: clamp(22px, 3.2vw, 32px); font-weight: 800; margin: 0 0 8px; }
+.steps__grid {
+  list-style: none; padding: 0; margin: 22px 0 0;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+}
+@media (max-width: 900px) { .steps__grid { grid-template-columns: 1fr; } }
+.step {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px;
+  display: grid; gap: 8px; text-align: center;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  &:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,0.06); border-color: #d1d5db; }
+}
+.step__icon { font-size: 28px; width: 48px; height: 48px; margin: 0 auto 8px; display: grid; place-items: center; background: #e8f5e9; color: var(--brand); border-radius: 12px; }
+.step__title { margin: 0; color: var(--ink); font-weight: 800; font-size: 18px; }
+.step__text { margin: 0; color: var(--text); font-size: 14px; }
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 560px) {
+  .hero { min-height: 420px; background-position: 50% 35%; }
+  .hero__inner { padding: 40px 12px; }
+  .hero__actions .btn { width: 100%; text-align: center; }
+  .filtro { min-width: 100%; }
 }

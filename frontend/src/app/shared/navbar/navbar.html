@@ -1,50 +1,170 @@
-<nav class="navbar">
-  <h1 class="logo">
-    <a routerLink="/">Munay<span>Bol</span></a>
-  </h1>
+<nav
+  class="navbar"
+  role="navigation"
+  aria-label="Navegación principal"
+  [class.scrolled]="scrolled"
+  [class.at-top]="atTop"
+  [class.hidden]="hidden"
+  [class.mounted]="mounted"
+  [class.shrink]="shrink"
+  [class.route-home]="routeHome"
+  [class.internal]="!routeHome"
+  [class.contrast-light]="headerContrast === 'light'"
+  [class.contrast-dark]="headerContrast === 'dark'"
+>
+  <div class="navbar__route" *ngIf="routeLoading" aria-hidden="true"></div>
+  <div class="navbar__progress" [style.width.%]="scrollProgress" aria-hidden="true"></div>
 
-  <input type="checkbox" id="menu-toggle" class="menu-toggle" />
-  <label for="menu-toggle" class="hamburger">☰</label>
+  <div class="navbar__container">
+    <h1 class="logo ani-stagger">
+      <a routerLink="/" aria-label="Ir a inicio" (click)="onNavItemSelect($event)">
+        <svg class="logo__emblem" width="30" height="30" viewBox="0 0 48 48" aria-hidden="true">
+          <defs>
+            <linearGradient id="mbGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#22c55e"/>
+              <stop offset="50%" stop-color="#10b981"/>
+              <stop offset="100%" stop-color="#06b6d4"/>
+            </linearGradient>
+          </defs>
+          <circle cx="24" cy="24" r="22" fill="url(#mbGrad)" opacity="0.18"/>
+          <circle cx="24" cy="24" r="18" fill="url(#mbGrad)" opacity="0.35"/>
+          <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="16" font-weight="900" fill="url(#mbGrad)">MB</text>
+        </svg>
+        <span class="logo__word">
+          <span class="logo__munay">Munay</span><span class="logo__bol">Bol</span>
+        </span>
+      </a>
+    </h1>
 
-  <ul class="nav-list">
-    <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a></li>
-    <li><a routerLink="/lugares-turisticos" routerLinkActive="active">Lugares Turísticos</a></li>
-    <li><a routerLink="/paquetes" routerLinkActive="active">Paquetes</a></li>
-    <li><a routerLink="/hoteles" routerLinkActive="active">Hoteles</a></li>
-    <li><a routerLink="/asistente-ia" routerLinkActive="active">AsistenteIA</a></li>
-  </ul>
+    <button
+      class="hamburger ani-stagger"
+      type="button"
+      aria-label="Abrir menú"
+      aria-controls="primary-menu"
+      [attr.aria-expanded]="mobileOpen"
+      (click)="toggleMobile(); onControlSelect($event)"
+    >
+      <span class="hamburger__bar"></span>
+      <span class="hamburger__bar"></span>
+      <span class="hamburger__bar"></span>
+    </button>
 
-  <div class="session-actions">
-    <ng-container *ngIf="isLoggedIn; else showLogin">
-      <div class="user-actions">
-        <app-notification></app-notification>
-        <div class="user-menu">
-          <div class="user-menu-trigger">
-            <ng-container *ngIf="user?.avatar_url; else initials">
-              <img [src]="user?.avatar_url" class="avatar" referrerpolicy="no-referrer" alt="avatar" />
-            </ng-container>
-            <ng-template #initials>
-              <div class="avatar initials">{{ (username || '?')[0] | uppercase }}</div>
-            </ng-template>
+    <ul
+      #navList
+      id="primary-menu"
+      class="nav-list"
+      [class.open]="mobileOpen"
+      (mouseleave)="clearInk()"
+      role="menubar"
+    >
+      <div class="nav-ink" [class.visible]="inkVisible" [style.transform]="inkTransform" [style.width.px]="inkW" aria-hidden="true"></div>
 
-            <span class="username">{{ username }}</span>
-            <span class="material-symbols-outlined chevron">expand_more</span>
-          </div>
-          <div class="user-menu-content">
-            <a routerLink="/perfil" class="user-menu-item">
-              <span class="material-symbols-outlined">account_circle</span>
-              Mi Perfil
-            </a>
-            <button (click)="logout()" class="user-menu-item">
-              <span class="material-symbols-outlined">logout</span>
-              Cerrar Sesión
+      <li class="nav-item ani-stagger" role="none">
+        <a role="menuitem" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+           (mouseenter)="onNavItemEnter($event)" (focus)="onNavItemEnter($event)"
+           (click)="onNavItemSelect($event); onNavLinkClick()">
+          <span class="nav-text">Inicio</span>
+        </a>
+      </li>
+
+      <li class="nav-item ani-stagger" role="none">
+        <a role="menuitem" routerLink="/lugares-turisticos" routerLinkActive="active"
+           (mouseenter)="onNavItemEnter($event)" (focus)="onNavItemEnter($event)"
+           (click)="onNavItemSelect($event); onNavLinkClick()">
+          <span class="nav-text">Lugares Turísticos</span>
+        </a>
+      </li>
+
+      <li class="nav-item ani-stagger" role="none">
+        <a role="menuitem" routerLink="/paquetes" routerLinkActive="active"
+           (mouseenter)="onNavItemEnter($event)" (focus)="onNavItemEnter($event)"
+           (click)="onNavItemSelect($event); onNavLinkClick()">
+          <span class="nav-text">Paquetes</span>
+        </a>
+      </li>
+
+      <li class="nav-item ani-stagger" role="none">
+        <a role="menuitem" routerLink="/hoteles" routerLinkActive="active"
+           (mouseenter)="onNavItemEnter($event)" (focus)="onNavItemEnter($event)"
+           (click)="onNavItemSelect($event); onNavLinkClick()">
+          <span class="nav-text">Hoteles</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="session-actions ani-stagger">
+      <button class="icon-btn search-btn" type="button" aria-label="Buscar o ir rápidamente (Ctrl/Cmd + K)"
+              (click)="openPalette(); onControlSelect($event)">
+        <span class="material-symbols-outlined">search</span>
+      </button>
+
+      <ng-container *ngIf="isLoggedIn; else showLogin">
+        <div class="user-actions">
+          <app-notification class="notif-ani" (click)="onControlSelect($event)"></app-notification>
+
+          <div class="user-menu" [class.open]="userMenuOpen">
+            <button class="user-menu-trigger" type="button" aria-haspopup="menu"
+                    [attr.aria-expanded]="userMenuOpen" (click)="toggleUserMenu($event); onControlSelect($event)">
+              <ng-container *ngIf="user?.avatar_url; else initials">
+                <img [src]="user?.avatar_url" class="avatar" referrerpolicy="no-referrer" alt="avatar" />
+              </ng-container>
+              <ng-template #initials>
+                <div class="avatar initials" aria-hidden="true">{{ (username || '?')[0] | uppercase }}</div>
+              </ng-template>
+
+              <span class="username">{{ username }}</span>
+              <span class="material-symbols-outlined chevron" aria-hidden="true">expand_more</span>
             </button>
+
+            <div class="user-menu-content" role="menu">
+              <a routerLink="/perfil" class="user-menu-item" role="menuitem" (click)="onNavItemSelect($event); closeMenus()">
+                <span class="material-symbols-outlined" aria-hidden="true">account_circle</span>
+                Mi Perfil
+              </a>
+              <button class="user-menu-item" role="menuitem" (click)="onControlSelect($event); logout(); closeMenus()">
+                <span class="material-symbols-outlined" aria-hidden="true">logout</span>
+                Cerrar Sesión
+              </button>
+            </div>
           </div>
         </div>
+      </ng-container>
+
+      <ng-template #showLogin>
+        <button class="btn cta-login" routerLink="/login" (click)="onControlSelect($event)">Iniciar Sesión</button>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="palette" *ngIf="paletteOpen" role="dialog" aria-modal="true" aria-label="Buscar y ejecutar acciones" (click)="closePalette()">
+    <div class="palette__panel" (click)="$event.stopPropagation()">
+      <div class="palette__header">
+        <span class="material-symbols-outlined" aria-hidden="true">search</span>
+        <input
+          type="text"
+          class="palette__input"
+          [value]="paletteQuery"
+          (input)="onPaletteInput($any($event.target).value)"
+          placeholder="Buscar... (Ctrl/Cmd + K)"
+          autofocus
+        />
+        <button class="palette__close" type="button" aria-label="Cerrar" (click)="closePalette()">
+          <span class="material-symbols-outlined" aria-hidden="true">close</span>
+        </button>
       </div>
-    </ng-container>
-    <ng-template #showLogin>
-      <button class="login-btn" routerLink="/login">Iniciar Sesión</button>
-    </ng-template>
+
+      <ul class="palette__list">
+        <li class="palette__item" *ngFor="let it of filteredPalette; let i = index" (click)="go(it)" tabindex="0">
+          <span class="material-symbols-outlined palette__icon" aria-hidden="true">{{ it.icon }}</span>
+          <span class="palette__label">{{ it.label }}</span>
+          <span class="material-symbols-outlined palette__chev" aria-hidden="true">chevron_right</span>
+        </li>
+        <li class="palette__empty" *ngIf="filteredPalette.length === 0">Sin resultados</li>
+      </ul>
+
+      <div class="palette__footer">
+        <span class="kbd">Esc</span> cerrar • <span class="kbd">Ctrl/Cmd + K</span> abrir
+      </div>
+    </div>
   </div>
 </nav>

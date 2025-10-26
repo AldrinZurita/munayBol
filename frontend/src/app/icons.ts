@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
+import { NgxBootstrapIconsModule } from 'ngx-bootstrap-icons';
 import {
-  NgxBootstrapIconsModule,
   plusCircle,
   pencil,
   trash,
@@ -9,7 +9,12 @@ import {
   xCircle,
   chevronDown,
   search,
-  plusSquareFill
+  plusSquareFill,
+  geoAlt,
+  building,
+  star,
+  starFill,
+  starHalf,
 } from 'ngx-bootstrap-icons';
 
 const icons = {
@@ -21,11 +26,16 @@ const icons = {
   xCircle,
   chevronDown,
   search,
-  plusSquareFill
+  plusSquareFill,
+  geoAlt,
+  building,
+  star,
+  starFill,
+  starHalf,
 };
 
 @NgModule({
   imports: [NgxBootstrapIconsModule.pick(icons)],
-  exports: [NgxBootstrapIconsModule]
+  exports: [NgxBootstrapIconsModule],
 })
 export class IconsModule {}

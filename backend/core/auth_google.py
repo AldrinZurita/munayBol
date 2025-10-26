@@ -7,7 +7,10 @@ from google.oauth2 import id_token
 from google.auth.transport import requests as grequests
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.hashers import make_password
+import logging
 
+logger = logging.getLogger(__name__)
 User = get_user_model()
 
 class GoogleLoginAPIView(APIView):
@@ -21,12 +24,15 @@ class GoogleLoginAPIView(APIView):
 
         client_id = getattr(settings, "GOOGLE_CLIENT_ID", None)
         if not client_id:
+            logger.error("GOOGLE_CLIENT_ID not configured")
             return Response({"error": "GOOGLE_CLIENT_ID not configured"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         try:
+            # Verifica firma + audiencia (audience=client_id)
             idinfo = id_token.verify_oauth2_token(token, grequests.Request(), client_id)
-        except Exception:
-            return Response({"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger.exception("Google token verification failed")
+            return Response({"error": "Invalid token", "details": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
         email = idinfo.get("email")
         email_verified = idinfo.get("email_verified", False)
@@ -52,7 +58,6 @@ class GoogleLoginAPIView(APIView):
         if created:
             user.set_password(None)
             updated = True
-        # Actualiza avatar si trae uno y cambió
         if picture and user.avatar_url != picture:
             user.avatar_url = picture
             updated = True
