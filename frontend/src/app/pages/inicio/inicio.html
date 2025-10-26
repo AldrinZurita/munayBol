@@ -1,70 +1,184 @@
-<section class="hero">
-  <div class="hero__overlay"></div>
+<!-- Fondo fijo para toda la página con colores de la bandera (suave) -->
+<div class="page-bg" aria-hidden="true"></div>
+
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<section class="hero" role="banner" aria-label="Portada MunayBol" [attr.aria-describedby]="heroDescId">
+  <div class="hero__overlay" aria-hidden="true"></div>
+
   <div class="container hero__inner">
     <h1 class="hero__title">Descubre las Maravillas de Bolivia</h1>
-    <p class="hero__lead">
+    <p class="hero__lead" [id]="heroDescId">
       Hoteles y paquetes turísticos en los mejores destinos bolivianos. Explora el Salar de Uyuni,
       Lago Titicaca, La Paz y mucho más.
     </p>
 
-    <div class="hero__actions">
+    <!-- Panel del filtro con color y glassmorphism -->
+    <form class="filter-card hero__actions" role="search" aria-label="Búsqueda por departamento" (submit)="$event.preventDefault()">
       <div class="filtro">
-        <label for="departamento" style="font-size: large;">¿Dónde?</label>
-        <select name="departamento" id="departamento" [(ngModel)]="departamentoSeleccionado">
-          <option selected disabled>Selecciona destino</option>
-          <option value="Chuquisaca">Chuquisaca</option>
-          <option value="La Paz">La Paz</option>
-          <option value="Cochabamba">Cochabamba</option>
-          <option value="Oruro">Oruro</option>
-          <option value="Potosí">Potosí</option>
-          <option value="Tarija">Tarija</option>
-          <option value="Santa Cruz">Santa Cruz</option>
-          <option value="Beni">Beni</option>
-          <option value="Pando">Pando</option>
-        </select>
+        <label for="departamento">
+          <span class="material-symbols-outlined filtro__icon" aria-hidden="true">location_on</span>
+          ¿Dónde?
+        </label>
+        <div class="select-wrap">
+          <select
+            id="departamento"
+            name="departamento"
+            [(ngModel)]="departamentoSeleccionado"
+            (change)="onDepartamentoChange(departamentoSeleccionado)"
+            aria-label="Selecciona un departamento"
+          >
+            <option [ngValue]="null" disabled selected>Selecciona destino</option>
+            <option *ngFor="let d of departamentos" [value]="d">{{ d }}</option>
+          </select>
+          <span class="material-symbols-outlined select-wrap__chev" aria-hidden="true">expand_more</span>
+        </div>
+        <p class="sr-live" aria-live="polite">{{ a11yMensajeSeleccion }}</p>
       </div>
 
       <div class="botones">
-        <a class="btn" [routerLink]="['/hoteles']" [queryParams]="{ departamento: departamentoSeleccionado }"
-          [class.disabled]="!departamentoSeleccionado" routerLinkActive="active">
+        <button
+          type="button"
+          class="btn btn--grad"
+          (click)="buscarHoteles()"
+          [disabled]="!puedeBuscarHoteles"
+          [attr.aria-disabled]="!puedeBuscarHoteles"
+          title="Buscar hoteles en el destino seleccionado"
+        >
+          <span class="material-symbols-outlined btn__icon" aria-hidden="true">hotel</span>
           Buscar Hoteles
-        </a>
-        <a class="btn" [routerLink]="['/paquetes']" routerLinkActive="active">Explorar Tours</a>
+        </button>
+
+        <button
+          type="button"
+          class="btn btn--secondary"
+          (click)="explorarTours()"
+          title="Ver paquetes y tours"
+        >
+          <span class="material-symbols-outlined btn__icon" aria-hidden="true">map</span>
+          Explorar Tours
+        </button>
+
+        <button
+          type="button"
+          class="btn btn--ghost"
+          (click)="inspirarme()"
+          aria-label="Pedir ideas al asistente de viajes"
+          title="Pedir ideas al asistente"
+        >
+          <span class="btn__icon material-symbols-outlined" aria-hidden="true">auto_awesome</span>
+          Inspirarme
+        </button>
       </div>
-
-
-    </div>
-
+    </form>
   </div>
 </section>
 
-<!-- ¿QUIÉNES SOMOS? -->
-<section class="quienes">
-  <div class="container">
-    <h2 class="quienes__title">¿Quiénes somos?</h2><br>
-    <p class="quienes__intro">
-      MunayBol te conecta con la magia de Bolivia. Descubre paisajes únicos, cultura milenaria y experiencias
-      inolvidables en el corazón de Sudamérica.
-    </p>
+<main id="contenido">
+  <!-- DESTINOS POPULARES -->
+  <section class="popular" aria-labelledby="popular-title">
+    <div class="container">
+      <h2 id="popular-title" class="popular__title">Destinos populares</h2>
+      <p class="popular__intro">
+        Explora estos lugares imperdibles y empieza tu aventura con un clic.
+      </p>
 
-    <div class="quienes__grid">
-      <article class="card">
-        <div class="card__icon">🌄</div>
-        <h3 class="card__title">Destinos Únicos</h3>
-        <p class="card__text">Desde el Salar de Uyuni hasta el Lago Titicaca, descubre paisajes inolvidables.</p>
-      </article>
+      <div class="popular__grid" role="list">
+        <article
+          class="popular-card fade-up"
+          *ngFor="let d of destinosPopulares; let i = index; trackBy: trackByDestino"
+          role="listitem"
+          tabindex="0"
+          [class.selected]="selectedIndex === i"
+          [style.--accent]="accentColor(d.departamento)"
+          (click)="selectCard(i)"
+          (keyup.enter)="selectCard(i)"
+          [attr.aria-pressed]="selectedIndex === i"
+          [attr.aria-label]="d.nombre + ' en ' + d.departamento"
+          [style.animationDelay]="(i * 80) + 'ms'"
+        >
+          <!-- Borde exterior de brillo (suave) -->
+          <div class="popular-card__border" aria-hidden="true"></div>
 
-      <article class="card">
-        <div class="card__icon">🏘️</div>
-        <h3 class="card__title">Expertos Locales</h3>
-        <p class="card__text">Operadores confiables y guías locales que conocen cada rincón del país.</p>
-      </article>
+          <!-- Media centrado: imagen centrada y responsiva -->
+          <figure class="popular-card__media" aria-label="Imagen de {{ d.nombre }}">
+            <div class="media-inner">
+              <img
+                class="popular-card__image"
+                [src]="hiRes(d.imagen, 1280)"
+                [attr.srcset]="srcset(d.imagen)"
+                [attr.sizes]="cardSizes"
+                [alt]="d.nombre + ' - ' + d.departamento"
+                loading="lazy"
+                width="1280"
+                height="720"
+                decoding="async"
+              />
+            </div>
 
-      <article class="card">
-        <div class="card__icon">🛡️</div>
-        <h3 class="card__title">Reservas Seguras</h3>
-        <p class="card__text">Pagos protegidos y confirmaciones al instante para viajar con tranquilidad.</p>
-      </article>
+            <span class="chip chip--overlay" [attr.aria-label]="'Departamento: ' + d.departamento">
+              <span class="material-symbols-outlined chip__icon" aria-hidden="true">location_on</span>
+              {{ d.departamento }}
+            </span>
+          </figure>
+
+          <div class="popular-card__body">
+            <h3 class="popular-card__title">
+              <span class="material-symbols-outlined title__icon" aria-hidden="true">terrain</span>
+              {{ d.nombre }}
+            </h3>
+
+            <p class="popular-card__text">{{ d.resumen }}</p>
+
+            <div class="popular-card__actions">
+              <button
+                type="button"
+                class="btn btn--sm"
+                (click)="verHotelesDestino(d.departamento)"
+                [attr.aria-label]="'Ver hoteles en ' + d.departamento"
+                title="Ver hoteles"
+              >
+                <span class="material-symbols-outlined btn__icon" aria-hidden="true">hotel</span>
+                Hoteles
+              </button>
+              <button
+                type="button"
+                class="btn btn--sm btn--secondary"
+                (click)="verToursDestino(d.departamento)"
+                [attr.aria-label]="'Ver tours en ' + d.departamento"
+                title="Ver tours"
+              >
+                <span class="material-symbols-outlined btn__icon" aria-hidden="true">explore</span>
+                Tours
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- CÓMO FUNCIONA -->
+  <section class="steps" aria-labelledby="steps-title">
+    <div class="container">
+      <h2 id="steps-title" class="steps__title">¿Cómo funciona?</h2>
+      <ol class="steps__grid">
+        <li class="step fade-up" style="animation-delay: 60ms">
+          <div class="step__icon" aria-hidden="true">🔎</div>
+          <h3 class="step__title">1. Busca</h3>
+          <p class="step__text">Elige el destino y explora hoteles o tours disponibles según tus fechas.</p>
+        </li>
+        <li class="step fade-up" style="animation-delay: 120ms">
+          <div class="step__icon" aria-hidden="true">📅</div>
+          <h3 class="step__title">2. Reserva</h3>
+          <p class="step__text">Reserva de forma segura y recibe confirmación instantánea en tu perfil.</p>
+        </li>
+        <li class="step fade-up" style="animation-delay: 180ms">
+          <div class="step__icon" aria-hidden="true">🧭</div>
+          <h3 class="step__title">3. Disfruta</h3>
+          <p class="step__text">Viaja con tranquilidad; nuestro equipo te acompaña en cada paso.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+</main>

@@ -1,12 +1,14 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, AfterViewInit, OnDestroy, Inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Router, RouterModule, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
+import { Router, RouterModule, NavigationStart, NavigationEnd, NavigationCancel, NavigationError, ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LugarTuristico } from '../../interfaces/lugar-turistico.interface';
 import { AuthService } from '../../services/auth.service';
 import { LugaresService } from '../../services/lugares.service';
 import { IconsModule } from '../../icons';
+import { PLATFORM_ID } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-lugares-turisticos',
@@ -19,41 +21,58 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
   lugares: LugarTuristico[] = [];
   lugaresFiltrados: LugarTuristico[] = [];
   ciudades: string[] = [];
+  tipos: string[] = [];
+
   ciudadSeleccionada = '';
+  selectedTipo = '';
   searchTerm = '';
+
   cargando = false;
   error = '';
 
-  // Loader navegación
   routeLoading = false;
-  private routerSub: any;
+  private routerSub?: Subscription;
+  private qpSub?: Subscription;
 
-  // Modal (Agregar / Editar)
   showModal = false;
   isEditMode = false;
   savingModal = false;
   modalModel: Partial<LugarTuristico> = {};
   private _editTargetRef: LugarTuristico | null = null;
 
-  // Reveal on scroll
-  private io?: IntersectionObserver;
+  private io: IntersectionObserver | null = null;
+  private readonly isBrowser: boolean;
 
   constructor(
     private lugaresService: LugaresService,
     public authService: AuthService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute,
+    @Inject(PLATFORM_ID) platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
   ngOnInit(): void {
     this.cargarLugares();
 
-    // Loader de rutas
-    this.routerSub = this.router.events.subscribe(evt => {
+    // Loader navegación
+    this.routerSub = this.router.events.subscribe((evt) => {
       if (evt instanceof NavigationStart) {
         this.routeLoading = true;
       } else if (evt instanceof NavigationEnd || evt instanceof NavigationCancel || evt instanceof NavigationError) {
         this.routeLoading = false;
       }
+    });
+
+    // Reaccionar a filtros desde el Navbar (query params)
+    this.qpSub = this.route.queryParams.subscribe((qp) => {
+      const d = (qp['departamento'] ?? '').toString();
+      const t = (qp['tipo'] ?? '').toString();
+      if (typeof d === 'string') this.ciudadSeleccionada = d;
+      if (typeof t === 'string') this.selectedTipo = t;
+      // No tocamos searchTerm desde la URL aquí
+      this.aplicarFiltros();
     });
   }
 
@@ -62,8 +81,11 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.io) this.io.disconnect();
-    if (this.routerSub) this.routerSub.unsubscribe();
+    this.io?.disconnect();
+    this.io = null;
+    this.routerSub?.unsubscribe();
+    this.qpSub?.unsubscribe();
+    if (this.isBrowser) document.body.classList.remove('no-scroll');
   }
 
   get isSuperAdmin(): boolean {
@@ -79,7 +101,7 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
       tipo: '',
       horario: '',
       descripcion: '',
-      url_image_lugar_turistico: ''
+      url_image_lugar_turistico: '',
     };
   }
 
@@ -93,9 +115,15 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
           .map((l) => (l?.departamento ?? '').toString().trim())
           .filter((s) => s.length > 0);
         this.ciudades = Array.from(new Set(allCities)).sort((a, b) => a.localeCompare(b));
+
+        const allTipos = this.lugares
+          .map((l) => (l?.tipo ?? '').toString().trim())
+          .filter((s) => s.length > 0);
+        this.tipos = Array.from(new Set(allTipos)).sort((a, b) => a.localeCompare(b));
+
         this.lugaresFiltrados = [...this.lugares];
         this.cargando = false;
-        setTimeout(() => this.observeRevealTargets(), 0);
+        if (this.isBrowser) requestAnimationFrame(() => this.observeRevealTargets());
       },
       error: () => {
         this.error = 'No se pudo cargar la lista de lugares.';
@@ -105,23 +133,32 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
   }
 
   aplicarFiltros(): void {
-    const term = this.searchTerm.trim().toLowerCase();
+    const term = this.normalize(this.searchTerm);
+    const selDepto = this.normalize(this.ciudadSeleccionada);
+    const selTipo = this.normalize(this.selectedTipo);
+
     this.lugaresFiltrados = this.lugares.filter((l) => {
-      const okDepto = this.ciudadSeleccionada ? l.departamento === this.ciudadSeleccionada : true;
-      if (!okDepto) return false;
+      const okDepto = selDepto ? this.normalize(l.departamento) === selDepto : true;
+      const okTipo = selTipo ? this.normalize(l.tipo) === selTipo : true;
+      if (!okDepto || !okTipo) return false;
+
       if (!term) return true;
-      const nombre = (l.nombre ?? '').toLowerCase();
-      const tipo = (l.tipo ?? '').toLowerCase();
-      const ubic = (l.ubicacion ?? '').toLowerCase();
+      const nombre = this.normalize(l.nombre ?? '');
+      const tipo = this.normalize(l.tipo ?? '');
+      const ubic = this.normalize(l.ubicacion ?? '');
       return nombre.includes(term) || tipo.includes(term) || ubic.includes(term);
     });
-    setTimeout(() => this.observeRevealTargets(), 0);
+
+    if (this.isBrowser) requestAnimationFrame(() => this.observeRevealTargets());
   }
 
   clearFilters(): void {
     this.ciudadSeleccionada = '';
+    this.selectedTipo = '';
     this.searchTerm = '';
     this.aplicarFiltros();
+    // También limpiar query params
+    void this.router.navigate([], { relativeTo: this.route, queryParams: { departamento: null, tipo: null }, queryParamsHandling: 'merge' });
   }
 
   // Navegar a detalles con loader
@@ -213,10 +250,7 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
       error: (err: HttpErrorResponse) => {
         console.error('Error al agregar:', err);
         this.savingModal = false;
-        const msg =
-          err?.error?.nombre?.[0] ||
-          err?.error?.id_lugar?.[0] ||
-          'Error al agregar el lugar.';
+        const msg = err?.error?.nombre?.[0] || err?.error?.id_lugar?.[0] || 'Error al agregar el lugar.';
         alert(msg);
       },
     });
@@ -225,12 +259,12 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
   closeModal(): void {
     if (this.savingModal) return;
     this.showModal = false;
-    document.body.classList.remove('no-scroll');
+    if (this.isBrowser) document.body.classList.remove('no-scroll');
   }
 
   private openModal(): void {
     this.showModal = true;
-    document.body.classList.add('no-scroll'); // requiere body.no-scroll { overflow:hidden } en estilos globales o con ::ng-deep (incluido)
+    if (this.isBrowser) document.body.classList.add('no-scroll');
   }
 
   trackByLugar(_: number, item: LugarTuristico): number {
@@ -249,9 +283,23 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
-  /* ===== Reveal on scroll ===== */
+  /* ===== Reveal on scroll (SSR-safe) ===== */
+  ngOnChanges(): void {
+    // no-op
+  }
+
   private setupRevealObserver(): void {
-    if (this.io) this.io.disconnect();
+    if (!this.isBrowser) {
+      this.io = null;
+      return;
+    }
+    const hasIO = typeof (window as any).IntersectionObserver !== 'undefined';
+    if (!hasIO) {
+      this.markAllRevealed();
+      this.io = null;
+      return;
+    }
+    this.io?.disconnect();
     this.io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
@@ -267,9 +315,28 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private observeRevealTargets(): void {
-    if (!this.io) return;
-    document.querySelectorAll<HTMLElement>('.reveal').forEach(n => {
+    if (!this.isBrowser) return;
+    if (!this.io) {
+      this.markAllRevealed();
+      return;
+    }
+    document.querySelectorAll<HTMLElement>('.reveal').forEach((n) => {
       if (!n.classList.contains('in-view')) this.io!.observe(n);
     });
+  }
+
+  private markAllRevealed(): void {
+    if (!this.isBrowser) return;
+    document.querySelectorAll<HTMLElement>('.reveal').forEach((n) => n.classList.add('in-view'));
+  }
+
+  /* ===== Utils ===== */
+  private normalize(s: string | undefined | null): string {
+    return (s ?? '')
+      .toString()
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .toLowerCase()
+      .trim();
   }
 }

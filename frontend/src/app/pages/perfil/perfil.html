@@ -2,19 +2,29 @@
 <div class="perfil-container">
   <h1 class="title">Mi Perfil</h1>
 
-  <!-- Profile card remains the same -->
+  <!-- Profile card -->
   <section *ngIf="usuario" class="perfil-card">
     <div class="perfil-header">
-      <div class="avatar-placeholder">
-        <span>{{ usuario.nombre.charAt(0).toUpperCase() }}</span>
+      <div class="avatar-wrapper">
+        <img *ngIf="usuario.avatar_url; else avatarInicial"
+             [src]="usuario.avatar_url"
+             class="avatar-img"
+             referrerpolicy="no-referrer"
+             alt="avatar" />
+        <ng-template #avatarInicial>
+          <div class="avatar-placeholder">
+            <span>{{ (usuario.nombre || usuario.correo).charAt(0).toUpperCase() }}</span>
+          </div>
+        </ng-template>
       </div>
+
       <div class="info-principal">
         <h2 class="nombre-usuario">{{ usuario.nombre }}</h2>
         <p class="rol-usuario">{{ usuario.rol | titlecase }}</p>
       </div>
     </div>
 
-    <div class="perfil-body">
+    <div class="perfil-body" *ngIf="!editando; else formEdicion">
       <div class="detalle-item">
         <span class="label">Correo Electrónico</span>
         <span class="valor">{{ usuario.correo }}</span>
@@ -37,14 +47,46 @@
           {{ usuario.estado ? 'Activo' : 'Inactivo' }}
         </span>
       </div>
+
+      <div class="acciones">
+        <button class="btn-primario" (click)="activarEdicion()">Editar perfil</button>
+      </div>
     </div>
+
+    <ng-template #formEdicion>
+      <form class="perfil-form" (ngSubmit)="guardarCambios()" autocomplete="off">
+        <div class="campo">
+          <label>Nombre</label>
+          <input [(ngModel)]="form.nombre" name="nombre" required />
+        </div>
+        <div class="campo">
+          <label>País</label>
+          <input [(ngModel)]="form.pais" name="pais" />
+        </div>
+        <div class="campo">
+          <label>Pasaporte</label>
+          <input [(ngModel)]="form.pasaporte" name="pasaporte" />
+        </div>
+        <div class="campo">
+          <label>Foto (URL)</label>
+          <input [(ngModel)]="form.avatar_url" name="avatar_url" placeholder="https://..." />
+          <small class="ayuda">Si iniciaste con Google/GitHub, se usa su foto; aquí puedes pegar otra URL si quieres.</small>
+        </div>
+
+        <div class="acciones">
+          <button type="submit" class="btn-primario" [disabled]="guardando">Guardar</button>
+          <button type="button" class="btn-secundario" (click)="cancelarEdicion()" [disabled]="guardando">Cancelar</button>
+        </div>
+
+        <div class="mensaje-error" *ngIf="errorGuardar">{{ errorGuardar }}</div>
+      </form>
+    </ng-template>
   </section>
 
   <!-- "Mis Reservas" section -->
   <section *ngIf="usuario" class="reservas-section">
     <h2>Mis Reservas</h2>
-    
-    <!-- Loading, error, and empty states -->
+
     <div *ngIf="cargandoReservas" class="estado">Cargando tus reservas...</div>
     <div *ngIf="errorReservas" class="estado error">{{ errorReservas }}</div>
     <div *ngIf="!cargandoReservas && reservas.length === 0 && !errorReservas" class="estado-vacio">
@@ -53,7 +95,6 @@
       <a routerLink="/paquetes" class="btn-explorar">Explorar Paquetes</a>
     </div>
 
-    <!-- List of reservation cards -->
     <div *ngIf="reservas.length > 0" class="lista-reservas">
       <article *ngFor="let reserva of reservas" class="reserva-card">
         <div class="reserva-header">
@@ -67,11 +108,9 @@
             <span class="material-symbols-outlined">bed</span>
             <p><strong>Habitación:</strong> {{ reserva.num_habitacion }}</p>
           </div>
-          <!-- --- THE CHANGE IS HERE --- -->
           <div class="detalle-reserva">
             <span class="material-symbols-outlined">hotel</span>
-            <!-- Show the hotel name if it exists, otherwise show the ID as a fallback -->
-            <p><strong>Hotel:</strong> {{ reserva.hotel?.nombre || 'ID: ' + reserva.codigo_hotel }}</p>
+            <p><strong>Hotel:</strong> {{ reserva.hotel?.nombre || ('ID: ' + reserva.codigo_hotel) }}</p>
           </div>
           <div class="detalle-reserva">
             <span class="material-symbols-outlined">calendar_month</span>
@@ -89,4 +128,3 @@
     </div>
   </section>
 </div>
-

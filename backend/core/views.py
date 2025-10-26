@@ -2,34 +2,41 @@ from rest_framework import viewsets, status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse
-from .models import Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias, Notification
+from .models import (
+    Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias, Notification
+)
 from .serializers import (
     UsuarioSerializer, HotelSerializer, LugarTuristicoSerializer, PagoSerializer,
     HabitacionSerializer, ReservaSerializer, PaqueteSerializer, SugerenciasSerializer,
     LoginSerializer, RegistroSerializer, SuperUsuarioRegistroSerializer, NotificationSerializer
 )
 from .permissions import IsSuperAdmin, IsUsuario
-from .llm_client import get_llm_response, send_message
+from .llm_client import send_message
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from datetime import date, timedelta
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.contrib.auth.hashers import check_password
 from rest_framework.decorators import action
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
+
 def home(request):
     return HttpResponse("Bienvenido a la API MunayBol")
 
+
 class HabitacionDisponibilidadView(APIView):
     permission_classes = [AllowAny]
+
     def get(self, request, num):
         try:
             habitacion = Habitacion.objects.get(pk=num)
         except Habitacion.DoesNotExist:
             return Response({"error": "Habitación no encontrada"}, status=404)
+
         desde_str = request.query_params.get('desde')
         hasta_str = request.query_params.get('hasta')
         try:
@@ -42,44 +49,45 @@ class HabitacionDisponibilidadView(APIView):
             return Response({"error": "Formato inválido en 'hasta'"}, status=400)
         if ventana_hasta < ventana_desde:
             return Response({"error": "'hasta' no puede ser anterior a 'desde'"}, status=400)
+
         reservas = (Reserva.objects
                     .filter(num_habitacion=habitacion,
                             fecha_reserva__lte=ventana_hasta,
                             fecha_caducidad__gte=ventana_desde)
                     .order_by('fecha_reserva'))
-        intervalos = []
-        for r in reservas:
-            intervalos.append({
-                'inicio': r.fecha_reserva.isoformat(),
-                'fin': r.fecha_caducidad.isoformat()
-            })
+        intervalos = [{"inicio": r.fecha_reserva.isoformat(), "fin": r.fecha_caducidad.isoformat()} for r in reservas]
+
         cursor = ventana_desde
         for r in reservas:
             if r.fecha_reserva <= cursor <= r.fecha_caducidad:
                 cursor = r.fecha_caducidad + timedelta(days=1)
-        next_available_from = cursor.isoformat()
+
         return Response({
             'habitacion': habitacion.num,
             'codigo_hotel': habitacion.codigo_hotel_id,
             'intervalos_reservados': intervalos,
-            'next_available_from': next_available_from,
+            'next_available_from': cursor.isoformat(),
             'ventana_consulta': {
                 'desde': ventana_desde.isoformat(),
                 'hasta': ventana_hasta.isoformat()
             }
         })
 
+
 class RegistroView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = RegistroSerializer(data=request.data)
         if serializer.is_valid():
-            usuario = serializer.save()
+            serializer.save()
             return Response({"msg": "Usuario registrado correctamente"}, status=201)
         return Response(serializer.errors, status=400)
 
+
 class LoginView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if not serializer.is_valid():
@@ -105,8 +113,10 @@ class LoginView(APIView):
             })
         return Response({"error": "Credenciales inválidas"}, status=401)
 
+
 class SuperadminLoginView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if not serializer.is_valid():
@@ -114,9 +124,7 @@ class SuperadminLoginView(APIView):
         correo = serializer.validated_data["correo"]
         contrasenia = serializer.validated_data["contrasenia"]
         usuario = Usuario.objects.filter(
-            correo__iexact=correo,
-            rol="superadmin",
-            estado=True
+            correo__iexact=correo, rol="superadmin", estado=True
         ).first()
         if usuario and check_password(contrasenia, usuario.contrasenia):
             return Response({
@@ -133,9 +141,11 @@ class SuperadminLoginView(APIView):
             }, status=status.HTTP_200_OK)
         return Response({"error": "Credenciales inválidas o usuario no autorizado"}, status=status.HTTP_401_UNAUTHORIZED)
 
+
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
+    authentication_classes = [JWTAuthentication]
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve', 'destroy', 'partial_update', 'update', 'create']:
@@ -150,15 +160,37 @@ class UsuarioViewSet(viewsets.ModelViewSet):
             return Usuario.objects.filter(id=user.id)
         return Usuario.objects.none()
 
+
 class SuperUsuarioRegistroView(APIView):
-    permission_classes = [AllowAny]  # Cambia esto si quieres proteger el endpoint
+    permission_classes = [AllowAny]
 
     def post(self, request):
         serializer = SuperUsuarioRegistroSerializer(data=request.data)
         if serializer.is_valid():
-            usuario = serializer.save()
+            serializer.save()
             return Response({"msg": "Superusuario registrado correctamente"}, status=201)
         return Response(serializer.errors, status=400)
+
+
+# -------- Perfil del usuario autenticado (GET/PATCH) --------
+@method_decorator(csrf_exempt, name='dispatch')
+class MeView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UsuarioSerializer(request.user)
+        return Response(serializer.data)
+
+    def patch(self, request):
+        user = request.user
+        allowed = {'nombre', 'pais', 'pasaporte', 'avatar_url'}
+        data = {k: v for k, v in request.data.items() if k in allowed}
+        serializer = UsuarioSerializer(user, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
 
 class HotelViewSet(viewsets.ModelViewSet):
     queryset = Hotel.objects.all()
@@ -181,6 +213,7 @@ class HotelViewSet(viewsets.ModelViewSet):
         hotel.save()
         return Response({"message": "Hotel desactivado correctamente"}, status=status.HTTP_200_OK)
 
+
 class LugarTuristicoViewSet(viewsets.ModelViewSet):
     queryset = LugarTuristico.objects.all()
     serializer_class = LugarTuristicoSerializer
@@ -202,6 +235,7 @@ class LugarTuristicoViewSet(viewsets.ModelViewSet):
         lugar.save()
         return Response({"message": "Lugar turístico desactivado correctamente"}, status=status.HTTP_200_OK)
 
+
 class PagoViewSet(viewsets.ModelViewSet):
     queryset = Pago.objects.all()
     serializer_class = PagoSerializer
@@ -212,6 +246,7 @@ class PagoViewSet(viewsets.ModelViewSet):
         if self.action in ['update', 'partial_update', 'destroy']:
             return [IsSuperAdmin()]
         return [AllowAny()]
+
 
 class HabitacionViewSet(viewsets.ModelViewSet):
     queryset = Habitacion.objects.all()
@@ -238,13 +273,14 @@ class HabitacionViewSet(viewsets.ModelViewSet):
         habitacion.save()
         return Response({"message": "Habitación desactivada correctamente"}, status=status.HTTP_200_OK)
 
+
 class ReservaViewSet(viewsets.ModelViewSet):
     queryset = Reserva.objects.all()
     serializer_class = ReservaSerializer
 
     def get_permissions(self):
         if self.action in ['destroy', 'update', 'partial_update']:
-            return [IsSuperAdmin()|IsUsuario()]
+            return [IsSuperAdmin() | IsUsuario()]
         if self.action == 'create':
             return [IsAuthenticated()]
         return [IsAuthenticated()]
@@ -267,9 +303,6 @@ class ReservaViewSet(viewsets.ModelViewSet):
         instance = serializer.save(id_usuario=user)
         output = self.get_serializer(instance)
 
-        from .models import Notification
-        from asgiref.sync import async_to_sync
-        from channels.layers import get_channel_layer
         notif = Notification.objects.create(
             usuario=user,
             title="Reserva exitosa",
@@ -282,14 +315,12 @@ class ReservaViewSet(viewsets.ModelViewSet):
             {"type": "notify", "payload": {"event": "new_reserva", "title": notif.title, "message": notif.message}}
         )
 
-        return Response({
-            "message": "Reserva creada correctamente",
-            "reserva": output.data
-        }, status=status.HTTP_201_CREATED)
+        return Response({"message": "Reserva creada correctamente", "reserva": output.data},
+                        status=status.HTTP_201_CREATED)
 
     def partial_update(self, request, *args, **kwargs):
         reserva = self.get_object()
-        user = request.user
+        user = self.request.user
         if getattr(user, "rol", None) != "superadmin":
             if reserva.id_usuario.id != user.id:
                 return Response({"error": "No tiene permiso para modificar esta reserva"}, status=403)
@@ -299,21 +330,19 @@ class ReservaViewSet(viewsets.ModelViewSet):
             ]
             for campo in request.data:
                 if campo in campos_restringidos:
-                    return Response(
-                        {"error": f"No se permite modificar el campo '{campo}'"},
-                        status=400
-                    )
+                    return Response({"error": f"No se permite modificar el campo '{campo}'"}, status=400)
         return super().partial_update(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         reserva = self.get_object()
-        user = request.user
+        user = self.request.user
         if getattr(user, "rol", None) != "superadmin":
             if reserva.id_usuario.id != user.id:
                 return Response({"error": "No tiene permiso para eliminar esta reserva"}, status=403)
         reserva.estado = False
         reserva.save()
         return Response({"message": "Reserva desactivada correctamente"}, status=status.HTTP_200_OK)
+
 
 class PaqueteViewSet(viewsets.ModelViewSet):
     queryset = Paquete.objects.all()
@@ -341,10 +370,9 @@ class PaqueteViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         paquete = serializer.save()
         output = self.get_serializer(paquete)
-        return Response({
-            "message": "Paquete creado correctamente",
-            "paquete": output.data
-        }, status=status.HTTP_201_CREATED)
+        return Response({"message": "Paquete creado correctamente", "paquete": output.data},
+                        status=status.HTTP_201_CREATED)
+
 
 class SugerenciasViewSet(viewsets.ModelViewSet):
     queryset = Sugerencias.objects.all()
@@ -355,15 +383,8 @@ class SugerenciasViewSet(viewsets.ModelViewSet):
             return [IsAuthenticated()]
         return [AllowAny()]
 
+
 class NotificationViewSet(viewsets.ModelViewSet):
-    @action(detail=True, methods=['delete'])
-    def delete_notification(self, request, pk=None):
-        try:
-            notif = self.get_queryset().get(pk=pk)
-        except Notification.DoesNotExist:
-            return Response({"error": "Notificación no encontrada"}, status=404)
-        notif.delete()
-        return Response({"status": "deleted"})
     serializer_class = NotificationSerializer
     permission_classes = [IsAuthenticated]
 
@@ -372,6 +393,15 @@ class NotificationViewSet(viewsets.ModelViewSet):
         if not getattr(user, 'is_authenticated', False):
             return Notification.objects.none()
         return Notification.objects.filter(usuario=user).order_by('-created_at')
+
+    @action(detail=True, methods=['delete'])
+    def delete_notification(self, request, pk=None):
+        try:
+            notif = self.get_queryset().get(pk=pk)
+        except Notification.DoesNotExist:
+            return Response({"error": "Notificación no encontrada"}, status=404)
+        notif.delete()
+        return Response({"status": "deleted"})
 
     @action(detail=False, methods=['get'])
     def unread_count(self, request):
@@ -405,9 +435,11 @@ class NotificationViewSet(viewsets.ModelViewSet):
         )
         return Response({"status": "ok"})
 
+
 @method_decorator(csrf_exempt, name='dispatch')
 class LLMGenerateView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
         prompt = request.data.get('prompt', '')
         chat_id = request.data.get('chat_id')

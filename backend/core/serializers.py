@@ -4,10 +4,25 @@ from .models import Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, P
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        fields = '__all__'
-        read_only_fields = ['rol', 'estado', 'fecha_creacion']
+        fields = [
+            'id',
+            'nombre',
+            'correo',
+            'rol',
+            'pais',
+            'pasaporte',
+            'estado',
+            'fecha_creacion',
+            'avatar_url',
+        ]
+        read_only_fields = ['id', 'correo', 'rol', 'estado', 'fecha_creacion']
+        # Permitir editar opcionalmente y en blanco desde PATCH
         extra_kwargs = {
-            'contrasenia': {'write_only': True}
+            'pais': {'required': False, 'allow_blank': True},
+            'pasaporte': {'required': False, 'allow_blank': True},
+            'avatar_url': {'required': False, 'allow_blank': True},
+            # nombre normalmente requerido; si quieres permitir vacío, añade:
+            # 'nombre': {'required': False, 'allow_blank': True},
         }
 
 class SuperUsuarioRegistroSerializer(serializers.ModelSerializer):
@@ -19,7 +34,6 @@ class SuperUsuarioRegistroSerializer(serializers.ModelSerializer):
         }
     def create(self, validated_data):
         validated_data['rol'] = 'superadmin'
-        # No hash aquí, el manager lo hace
         return Usuario.objects.create_superuser(**validated_data)
 
 class RegistroSerializer(serializers.ModelSerializer):
@@ -31,7 +45,6 @@ class RegistroSerializer(serializers.ModelSerializer):
         }
     def create(self, validated_data):
         validated_data['rol'] = 'usuario'
-        # No hash aquí, el manager lo hace
         return Usuario.objects.create_user(**validated_data)
 
 class HotelSerializer(serializers.ModelSerializer):

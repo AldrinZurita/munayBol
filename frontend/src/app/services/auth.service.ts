@@ -1,5 +1,5 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Usuario } from '../interfaces/usuario.interface';
@@ -35,6 +35,16 @@ export class AuthService {
     this.user$ = this.userSubject.asObservable();
   }
 
+  // Utilidad para adjuntar Authorization: Bearer <token>
+  private authOptions(): { headers: HttpHeaders } {
+    const token = this.getToken();
+    return {
+      headers: new HttpHeaders(
+        token ? { Authorization: `Bearer ${token}` } : {}
+      ),
+    } as { headers: HttpHeaders };
+  }
+
   // Email/Password
   login(data: { correo: string; contrasenia: string }): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.baseUrl}usuarios/login/`, data).pipe(
@@ -49,15 +59,36 @@ export class AuthService {
     );
   }
 
-  // GitHub - obtener URL de login (con state firmado por el backend)
+  // GitHub
   githubLoginUrl(): Observable<GithubLoginUrlResponse> {
     return this.http.get<GithubLoginUrlResponse>(`${this.baseUrl}auth/github/login-url/`);
   }
-
-  // GitHub - intercambio code + state
   githubExchange(code: string, state: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.baseUrl}auth/github/exchange/`, { code, state }).pipe(
       tap(resp => this.persist(resp))
+    );
+  }
+
+  // Perfil (protegido): ahora con Authorization
+  getMe(): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.baseUrl}usuarios/me/`, this.authOptions()).pipe(
+      tap(user => {
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('user', JSON.stringify(user));
+        }
+        this.userSubject.next(user);
+      })
+    );
+  }
+
+  updateMe(data: Partial<Pick<Usuario, 'nombre' | 'pais' | 'pasaporte' | 'avatar_url'>>): Observable<Usuario> {
+    return this.http.patch<Usuario>(`${this.baseUrl}usuarios/me/`, data, this.authOptions()).pipe(
+      tap(user => {
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('user', JSON.stringify(user));
+        }
+        this.userSubject.next(user);
+      })
     );
   }
 
