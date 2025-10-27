@@ -16,22 +16,18 @@ class UsuarioSerializer(serializers.ModelSerializer):
             'avatar_url',
         ]
         read_only_fields = ['id', 'correo', 'rol', 'estado', 'fecha_creacion']
-        # Permitir editar opcionalmente y en blanco desde PATCH
         extra_kwargs = {
             'pais': {'required': False, 'allow_blank': True},
             'pasaporte': {'required': False, 'allow_blank': True},
             'avatar_url': {'required': False, 'allow_blank': True},
-            # nombre normalmente requerido; si quieres permitir vacío, añade:
-            # 'nombre': {'required': False, 'allow_blank': True},
         }
 
 class SuperUsuarioRegistroSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields = ['id', 'nombre', 'correo', 'contrasenia', 'pais', 'pasaporte']
-        extra_kwargs = {
-            'contrasenia': {'write_only': True}
-        }
+        extra_kwargs = {'contrasenia': {'write_only': True}}
+
     def create(self, validated_data):
         validated_data['rol'] = 'superadmin'
         return Usuario.objects.create_superuser(**validated_data)
@@ -40,9 +36,8 @@ class RegistroSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields = ['id', 'nombre', 'correo', 'contrasenia', 'pais', 'pasaporte']
-        extra_kwargs = {
-            'contrasenia': {'write_only': True}
-        }
+        extra_kwargs = {'contrasenia': {'write_only': True}}
+
     def create(self, validated_data):
         validated_data['rol'] = 'usuario'
         return Usuario.objects.create_user(**validated_data)
@@ -76,6 +71,7 @@ class PagoSerializer(serializers.ModelSerializer):
 class HabitacionSerializer(serializers.ModelSerializer):
     codigo_hotel = serializers.PrimaryKeyRelatedField(read_only=True)
     hotel = HotelSerializer(source='codigo_hotel', read_only=True)
+
     class Meta:
         model = Habitacion
         fields = ['num', 'caracteristicas', 'precio', 'codigo_hotel', 'hotel', 'disponible', 'fecha_creacion', 'cant_huespedes']
@@ -93,13 +89,17 @@ class ReservaSerializer(serializers.ModelSerializer):
             attrs['codigo_hotel'] = habitacion.codigo_hotel
         if habitacion and codigo_hotel and habitacion.codigo_hotel_id != codigo_hotel.id_hotel:
             raise serializers.ValidationError('La habitación no pertenece al hotel especificado.')
+
         fecha_reserva = attrs.get('fecha_reserva')
         fecha_caducidad = attrs.get('fecha_caducidad')
         if fecha_reserva and fecha_caducidad and fecha_caducidad < fecha_reserva:
             raise serializers.ValidationError('La fecha_caducidad no puede ser anterior a fecha_reserva.')
+
+        # Validación de solapamiento SOLO contra reservas activas
         if habitacion and fecha_reserva and fecha_caducidad:
             overlapping = Reserva.objects.filter(
                 num_habitacion=habitacion,
+                estado=True,
                 fecha_reserva__lte=fecha_caducidad,
                 fecha_caducidad__gte=fecha_reserva
             )
@@ -107,6 +107,7 @@ class ReservaSerializer(serializers.ModelSerializer):
                 overlapping = overlapping.exclude(pk=self.instance.pk)
             if overlapping.exists():
                 raise serializers.ValidationError('La habitación ya está reservada en el rango de fechas solicitado.')
+
         return attrs
 
     def create(self, validated_data):

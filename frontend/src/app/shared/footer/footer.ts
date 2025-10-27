@@ -8,4 +8,6 @@ import { CommonModule } from '@angular/common';
   templateUrl: './footer.html',
   styleUrls: ['./footer.scss'],
 })
-export class FooterComponent {}
+export class FooterComponent {
+  readonly year = new Date().getFullYear();
+}

@@ -16,10 +16,14 @@ router.register(r'hoteles', HotelViewSet)
 router.register(r'lugares', LugarTuristicoViewSet)
 router.register(r'pagos', PagoViewSet)
 router.register(r'habitaciones', HabitacionViewSet)
-router.register(r'reservas', ReservaViewSet)
+router.register(r'reservas', ReservaViewSet)  # incluye cancelar/ y reactivar/
 router.register(r'paquetes', PaqueteViewSet)
 router.register(r'sugerencias', SugerenciasViewSet)
 router.register(r'notifications', NotificationViewSet, basename='notifications')
+
+# Rutas explícitas por si el router no publicara las acciones
+reserva_cancelar_view = ReservaViewSet.as_view({'post': 'cancelar'})
+reserva_reactivar_view = ReservaViewSet.as_view({'post': 'reactivar'})
 
 urlpatterns = [
     path('', home, name='home'),
@@ -36,9 +40,14 @@ urlpatterns = [
     path('auth/github/login-url/', GitHubLoginURLAPIView.as_view(), name='github-login-url'),
     path('auth/github/exchange/', GitHubExchangeCodeAPIView.as_view(), name='github-exchange'),
 
-    # LLM y otros
+    # LLM y disponibilidad
     path('llm/generate/', LLMGenerateView.as_view(), name='llm-generate'),
     path('habitaciones/<str:num>/disponibilidad/', HabitacionDisponibilidadView.as_view(), name='habitacion-disponibilidad'),
 
+    # Acciones explícitas (POST)
+    path('reservas/<int:pk>/cancelar/', reserva_cancelar_view, name='reserva-cancelar'),
+    path('reservas/<int:pk>/reactivar/', reserva_reactivar_view, name='reserva-reactivar'),
+
+    # Viewsets
     path('', include(router.urls)),
 ]

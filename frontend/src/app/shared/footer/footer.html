@@ -1,17 +1,36 @@
-<footer>
-  <div class="footer-container">
-    <div class="footer-top">
-      <h2 class="brand">Munay<span>Bol</span></h2>
-      <nav class="footer-links">
-        <a routerLink="/terminos">Términos y Condiciones</a>
-        <span class="sep">•</span>
-        <a routerLink="/politica-privacidad">Política de Privacidad</a>
-        <span class="sep">•</span>
-        <a routerLink="/contacto">Contacto</a>
+<footer class="ff-footer" role="contentinfo" aria-label="Pie de página">
+  <div class="ff-container">
+    <div class="ff-top">
+      <h2 class="ff-brand" aria-label="MunayBol">
+        <span class="ff-brand__emblem" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 48 48" focusable="false">
+            <defs>
+              <linearGradient id="ffFlagGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#d32f2f"/>
+                <stop offset="50%" stop-color="#facc15"/>
+                <stop offset="100%" stop-color="#16a34a"/>
+              </linearGradient>
+            </defs>
+            <circle cx="24" cy="24" r="18" fill="url(#ffFlagGrad)" opacity="0.95"/>
+          </svg>
+        </span>
+        <span class="ff-brand__word">MUNAY<span class="ff-brand__bol">BOL</span></span>
+      </h2>
+
+      <nav class="ff-links" aria-label="Enlaces legales">
+        <a routerLink="/terminos">TÉRMINOS Y CONDICIONES</a>
+        <span class="dot" aria-hidden="true">•</span>
+        <a routerLink="/politica-privacidad">POLÍTICA DE PRIVACIDAD</a>
+        <span class="dot" aria-hidden="true">•</span>
+        <a routerLink="/contacto">CONTACTO</a>
       </nav>
     </div>
-    <div class="footer-bottom">
-      <p>© 2025 MunayBol. Todos los derechos reservados.</p>
+
+    <hr class="ff-divider" aria-hidden="true"/>
+
+    <div class="ff-legal">
+      <p>© {{ year }} MUNAYBOL. TODOS LOS DERECHOS RESERVADOS.</p>
+      <p>MUNAYBOL ES UNA MARCA DEDICADA AL TURISMO Y HOTELERÍA EN BOLIVIA.</p>
     </div>
   </div>
 </footer>

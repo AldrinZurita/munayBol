@@ -34,6 +34,7 @@ type PaletteItem = { label: string; icon: string; path: string };
 })
 export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
   isLoggedIn = false;
+  isSuperAdmin = false;
   username = '';
   user: Usuario | null = null;
 
@@ -59,17 +60,31 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
   // Command palette
   paletteOpen = false;
   paletteQuery = '';
-  readonly paletteItems: PaletteItem[] = [
+
+  // Base items; los de admin se agregan dinámicamente si corresponde
+  private readonly basePaletteItems: PaletteItem[] = [
     { label: 'Inicio', icon: 'home', path: '/' },
     { label: 'Lugares Turísticos', icon: 'attractions', path: '/lugares-turisticos' },
     { label: 'Paquetes', icon: 'card_travel', path: '/paquetes' },
     { label: 'Hoteles', icon: 'hotel', path: '/hoteles' },
     { label: 'Mi Perfil', icon: 'account_circle', path: '/perfil' },
   ];
+
+  get paletteItems(): PaletteItem[] {
+    if (this.isSuperAdmin) {
+      return [
+        ...this.basePaletteItems,
+        { label: 'Admin: Reservas', icon: 'admin_panel_settings', path: '/admin/reservas' },
+      ];
+    }
+    return this.basePaletteItems;
+  }
+
   get filteredPalette(): PaletteItem[] {
     const q = this.paletteQuery.trim().toLowerCase();
-    if (!q) return this.paletteItems;
-    return this.paletteItems.filter(i => i.label.toLowerCase().includes(q));
+    const all = this.paletteItems;
+    if (!q) return all;
+    return all.filter(i => i.label.toLowerCase().includes(q));
   }
 
   private readonly isBrowser: boolean;
@@ -90,6 +105,11 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
       this.user = user;
       this.isLoggedIn = !!user;
       this.username = user ? (user.nombre || user.correo || '') : '';
+      this.isSuperAdmin = !!user && user.estado === true && user.rol === 'superadmin';
+
+      // Cuando cambian los ítems del menú (ej. aparece "Gestión Reservas"),
+      // re-sincroniza el indicador (ink)
+      setTimeout(() => this.syncActiveInk(), 0);
     });
 
     if (this.isBrowser) {

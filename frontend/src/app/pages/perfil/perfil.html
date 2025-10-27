@@ -1,130 +1,296 @@
-<!-- Main container for the profile page -->
-<div class="perfil-container">
-  <h1 class="title">Mi Perfil</h1>
+<!-- Perfil – versión final (tipografía NEGRA, fondo más oscuro, alto contraste) -->
+<div class="perfil-root">
+  <!-- Acentos de fondo -->
+  <div class="bg fx fx-a" aria-hidden="true"></div>
+  <div class="bg fx fx-b" aria-hidden="true"></div>
+  <div class="sparkles" *ngIf="animateFun" aria-hidden="true"></div>
 
-  <!-- Profile card -->
-  <section *ngIf="usuario" class="perfil-card">
-    <div class="perfil-header">
-      <div class="avatar-wrapper">
-        <img *ngIf="usuario.avatar_url; else avatarInicial"
-             [src]="usuario.avatar_url"
-             class="avatar-img"
-             referrerpolicy="no-referrer"
-             alt="avatar" />
-        <ng-template #avatarInicial>
-          <div class="avatar-placeholder">
-            <span>{{ (usuario.nombre || usuario.correo).charAt(0).toUpperCase() }}</span>
-          </div>
-        </ng-template>
-      </div>
+  <div class="perfil-container">
+    <!-- Título -->
+    <h1 class="title">
+      <span class="title__icon material-symbols-outlined" aria-hidden="true">account_circle</span>
+      Mi Perfil
+      <span class="title__glow" aria-hidden="true"></span>
+    </h1>
 
-      <div class="info-principal">
-        <h2 class="nombre-usuario">{{ usuario.nombre }}</h2>
-        <p class="rol-usuario">{{ usuario.rol | titlecase }}</p>
-      </div>
-    </div>
-
-    <div class="perfil-body" *ngIf="!editando; else formEdicion">
-      <div class="detalle-item">
-        <span class="label">Correo Electrónico</span>
-        <span class="valor">{{ usuario.correo }}</span>
-      </div>
-      <div class="detalle-item">
-        <span class="label">País</span>
-        <span class="valor">{{ usuario.pais }}</span>
-      </div>
-      <div class="detalle-item">
-        <span class="label">Pasaporte</span>
-        <span class="valor">{{ usuario.pasaporte }}</span>
-      </div>
-      <div *ngIf="usuario.fecha_creacion" class="detalle-item">
-        <span class="label">Miembro Desde</span>
-        <span class="valor">{{ usuario.fecha_creacion | date:'longDate' }}</span>
-      </div>
-      <div class="detalle-item">
-        <span class="label">Estado de la Cuenta</span>
-        <span class="valor" [ngClass]="{'activo': usuario.estado, 'inactivo': !usuario.estado}">
-          {{ usuario.estado ? 'Activo' : 'Inactivo' }}
-        </span>
-      </div>
-
-      <div class="acciones">
-        <button class="btn-primario" (click)="activarEdicion()">Editar perfil</button>
-      </div>
-    </div>
-
-    <ng-template #formEdicion>
-      <form class="perfil-form" (ngSubmit)="guardarCambios()" autocomplete="off">
-        <div class="campo">
-          <label>Nombre</label>
-          <input [(ngModel)]="form.nombre" name="nombre" required />
+    <!-- Cargando -->
+    <section *ngIf="cargando" class="perfil-card skeleton" aria-busy="true" aria-live="polite">
+      <div class="perfil-header">
+        <div class="avatar-wrapper"><div class="avatar-img sk-block"></div></div>
+        <div class="info-principal">
+          <div class="sk-line w-60"></div>
+          <div class="sk-line w-30"></div>
         </div>
-        <div class="campo">
-          <label>País</label>
-          <input [(ngModel)]="form.pais" name="pais" />
+      </div>
+      <div class="perfil-body">
+        <div class="sk-line w-100"></div>
+        <div class="sk-line w-90"></div>
+        <div class="sk-line w-80"></div>
+      </div>
+    </section>
+
+    <!-- Card de perfil -->
+    <section *ngIf="!cargando && usuario" class="perfil-card">
+      <div class="perfil-header">
+        <!-- Avatar -->
+        <div class="avatar-wrapper ring">
+          <img *ngIf="usuario.avatar_url; else avatarInicial"
+               [src]="usuario.avatar_url"
+               class="avatar-img"
+               referrerpolicy="no-referrer"
+               alt="avatar" />
+          <ng-template #avatarInicial>
+            <div class="avatar-placeholder">
+              <span>{{ (usuario.nombre || usuario.correo).charAt(0).toUpperCase() }}</span>
+            </div>
+          </ng-template>
         </div>
-        <div class="campo">
-          <label>Pasaporte</label>
-          <input [(ngModel)]="form.pasaporte" name="pasaporte" />
+
+        <!-- Datos principales -->
+        <div class="info-principal">
+          <h2 class="nombre-usuario">
+            {{ usuario.nombre }}
+            <span class="badge role">{{ usuario.rol | titlecase }}</span>
+          </h2>
+          <p class="rol-usuario subtle">
+            ID: {{ usuario.id || ($any(usuario)._id || '—') }}
+          </p>
         </div>
-        <div class="campo">
-          <label>Foto (URL)</label>
-          <input [(ngModel)]="form.avatar_url" name="avatar_url" placeholder="https://..." />
-          <small class="ayuda">Si iniciaste con Google/GitHub, se usa su foto; aquí puedes pegar otra URL si quieres.</small>
+
+        <!-- Estado de cuenta -->
+        <div class="header-actions">
+          <button class="chip"
+                  type="button"
+                  title="Estado de cuenta"
+                  [class.nope]="!usuario.estado"
+                  [attr.aria-pressed]="usuario.estado">
+            <span class="dot" aria-hidden="true"></span>
+            {{ usuario.estado ? 'Activo' : 'Inactivo' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Vista lectura -->
+      <div class="perfil-body" *ngIf="!editando; else formEdicion">
+        <div class="detalle-item">
+          <span class="label">Correo Electrónico</span>
+          <span class="valor">{{ usuario.correo }}</span>
+        </div>
+        <div class="detalle-item">
+          <span class="label">País</span>
+          <span class="valor">{{ usuario.pais || '—' }}</span>
+        </div>
+        <div class="detalle-item">
+          <span class="label">Pasaporte</span>
+          <span class="valor">{{ usuario.pasaporte || '—' }}</span>
+        </div>
+        <div *ngIf="usuario.fecha_creacion" class="detalle-item">
+          <span class="label">Miembro Desde</span>
+          <span class="valor">{{ usuario.fecha_creacion | date:'longDate' }}</span>
         </div>
 
         <div class="acciones">
-          <button type="submit" class="btn-primario" [disabled]="guardando">Guardar</button>
-          <button type="button" class="btn-secundario" (click)="cancelarEdicion()" [disabled]="guardando">Cancelar</button>
+          <button class="btn-primario" (click)="activarEdicion()">
+            <span class="material-symbols-outlined" aria-hidden="true">edit</span>
+            Editar perfil
+          </button>
+        </div>
+      </div>
+
+      <!-- Edición -->
+      <ng-template #formEdicion>
+        <form class="perfil-form" (ngSubmit)="guardarCambios()" autocomplete="off">
+          <div class="form-grid">
+            <div class="campo">
+              <label for="pf-nombre">Nombre</label>
+              <input id="pf-nombre" [(ngModel)]="form.nombre" name="nombre" required />
+            </div>
+            <div class="campo">
+              <label for="pf-pais">País</label>
+              <input id="pf-pais" [(ngModel)]="form.pais" name="pais" />
+            </div>
+            <div class="campo">
+              <label for="pf-pass">Pasaporte</label>
+              <input id="pf-pass" [(ngModel)]="form.pasaporte" name="pasaporte" />
+            </div>
+            <div class="campo stretch">
+              <label for="pf-avatar">Foto (URL)</label>
+              <input id="pf-avatar" [(ngModel)]="form.avatar_url" name="avatar_url" placeholder="https://..." />
+              <small class="ayuda">Si iniciaste con Google/GitHub, se usa su foto; aquí puedes pegar otra URL si quieres.</small>
+            </div>
+
+            <!-- Previsualización -->
+            <div class="preview" aria-hidden="true">
+              <div class="preview__title">Previsualización</div>
+              <div class="avatar-wrapper ring">
+                <img *ngIf="form.avatar_url; else preAvatarInicial"
+                     [src]="form.avatar_url!"
+                     class="avatar-img"
+                     (error)="onAvatarError($event)"
+                     alt="preview"/>
+                <ng-template #preAvatarInicial>
+                  <div class="avatar-placeholder"><span>{{ (form.nombre || usuario.correo || '?').charAt(0).toUpperCase() }}</span></div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+
+          <div class="acciones">
+            <button type="submit" class="btn-primario" [disabled]="guardando">
+              <span class="material-symbols-outlined" aria-hidden="true">save</span>
+              Guardar
+            </button>
+            <button type="button" class="btn-secundario" (click)="cancelarEdicion()" [disabled]="guardando">
+              <span class="material-symbols-outlined" aria-hidden="true">close</span>
+              Cancelar
+            </button>
+          </div>
+
+          <div class="mensaje-error estado error" *ngIf="errorGuardar">{{ errorGuardar }}</div>
+        </form>
+      </ng-template>
+    </section>
+
+    <!-- Mis Reservas -->
+    <section *ngIf="usuario" class="reservas-section">
+      <div class="section-header">
+        <h2>
+          <span class="material-symbols-outlined" aria-hidden="true">luggage</span>
+          Mis Reservas
+        </h2>
+        <button type="button" class="fx-toggle" (click)="triggerFun()" [class.active]="animateFun" title="Ver animación">
+          <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
+        </button>
+      </div>
+
+      <!-- Loader de reservas (animación de espera) -->
+      <div class="reserve-loader" *ngIf="loaderVisible" aria-live="polite" aria-busy="true">
+        <div class="rl-plane">
+          <span class="material-symbols-outlined" aria-hidden="true">flight_takeoff</span>
+        </div>
+        <div class="rl-clouds" aria-hidden="true"></div>
+
+        <div
+          class="rl-progress"
+          role="progressbar"
+          [attr.aria-valuenow]="loaderProgress"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          <div class="rl-progress__bar" [style.width.%]="loaderProgress"></div>
         </div>
 
-        <div class="mensaje-error" *ngIf="errorGuardar">{{ errorGuardar }}</div>
-      </form>
-    </ng-template>
-  </section>
+        <div class="rl-label">Buscando tus reservas...</div>
+        <div class="rl-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+      </div>
 
-  <!-- "Mis Reservas" section -->
-  <section *ngIf="usuario" class="reservas-section">
-    <h2>Mis Reservas</h2>
+      <!-- Skeletons (fallback mientras carga y no hay loader overlay) -->
+      <div class="lista-reservas" *ngIf="cargandoReservas && !loaderVisible">
+        <article class="reserva-card skeleton">
+          <div class="reserva-header"><div class="sk-line w-40"></div><div class="sk-pill"></div></div>
+          <div class="reserva-body"><div class="sk-line w-80"></div><div class="sk-line w-70"></div></div>
+          <div class="reserva-footer"><div class="sk-btn"></div></div>
+        </article>
+        <article class="reserva-card skeleton">
+          <div class="reserva-header"><div class="sk-line w-50"></div><div class="sk-pill"></div></div>
+          <div class="reserva-body"><div class="sk-line w-85"></div><div class="sk-line w-65"></div></div>
+          <div class="reserva-footer"><div class="sk-btn"></div></div>
+        </article>
+      </div>
 
-    <div *ngIf="cargandoReservas" class="estado">Cargando tus reservas...</div>
-    <div *ngIf="errorReservas" class="estado error">{{ errorReservas }}</div>
-    <div *ngIf="!cargandoReservas && reservas.length === 0 && !errorReservas" class="estado-vacio">
-      <span class="material-symbols-outlined">luggage</span>
-      <p>Aún no tienes ninguna reserva.</p>
-      <a routerLink="/paquetes" class="btn-explorar">Explorar Paquetes</a>
-    </div>
+      <div *ngIf="errorReservas && !loaderVisible" class="estado error">{{ errorReservas }}</div>
 
-    <div *ngIf="reservas.length > 0" class="lista-reservas">
-      <article *ngFor="let reserva of reservas" class="reserva-card">
-        <div class="reserva-header">
-          <h3>Reserva #{{ reserva.id_reserva }}</h3>
-          <span class="status-badge" [ngClass]="{ 'activa': reserva.estado, 'cancelada': !reserva.estado }">
-            {{ reserva.estado ? 'Activa' : 'Cancelada' }}
-          </span>
-        </div>
-        <div class="reserva-body">
-          <div class="detalle-reserva">
-            <span class="material-symbols-outlined">bed</span>
-            <p><strong>Habitación:</strong> {{ reserva.num_habitacion }}</p>
+      <div *ngIf="!cargandoReservas && reservas.length === 0 && !errorReservas && !loaderVisible" class="estado">
+        <span class="material-symbols-outlined" aria-hidden="true">flight_takeoff</span>
+        <p>No tienes reservas aún.</p>
+        <a routerLink="/paquetes" class="btn-detalle" style="margin-top:8px">
+          <span class="material-symbols-outlined" aria-hidden="true">map</span>
+          Explorar Paquetes
+        </a>
+      </div>
+
+      <div *ngIf="reservas.length > 0 && !loaderVisible" class="lista-reservas reservas-loaded">
+        <article
+          *ngFor="let reserva of reservas; trackBy: trackByReserva"
+          class="reserva-card"
+          [class.is-cancelled]="!reserva.estado"
+          [class.is-removing]="removing.has(reserva.id_reserva)">
+          <div class="reserva-header">
+            <h3>Reserva #{{ reserva.id_reserva }}</h3>
+            <span class="status-badge" [ngClass]="{ 'activa': reserva.estado, 'cancelada': !reserva.estado }">
+              <span class="dot" aria-hidden="true"></span>
+              {{ reserva.estado ? 'Activa' : 'Cancelada' }}
+            </span>
           </div>
-          <div class="detalle-reserva">
-            <span class="material-symbols-outlined">hotel</span>
-            <p><strong>Hotel:</strong> {{ reserva.hotel?.nombre || ('ID: ' + reserva.codigo_hotel) }}</p>
+
+          <div class="reserva-body">
+            <div class="detalle-reserva">
+              <span class="material-symbols-outlined" aria-hidden="true">hotel</span>
+              <p><strong>Hotel:</strong> {{ reserva.hotel?.nombre || ('ID: ' + reserva.codigo_hotel) }}</p>
+            </div>
+            <div class="detalle-reserva">
+              <span class="material-symbols-outlined" aria-hidden="true">bed</span>
+              <p><strong>Habitación:</strong> {{ reserva.num_habitacion }}</p>
+            </div>
+            <div class="detalle-reserva">
+              <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
+              <p><strong>Check-in:</strong> {{ reserva.fecha_reserva | date:'fullDate' }}</p>
+            </div>
+            <div class="detalle-reserva">
+              <span class="material-symbols-outlined" aria-hidden="true">event</span>
+              <p><strong>Check-out:</strong> {{ reserva.fecha_caducidad | date:'fullDate' }}</p>
+            </div>
           </div>
-          <div class="detalle-reserva">
-            <span class="material-symbols-outlined">calendar_month</span>
-            <p><strong>Check-in:</strong> {{ reserva.fecha_reserva | date:'fullDate' }}</p>
+
+          <div class="reserva-footer">
+            <a [routerLink]="['/reservas', reserva.id_reserva]" class="btn-detalle">
+              <span class="material-symbols-outlined" aria-hidden="true">visibility</span>
+              Ver Detalle
+            </a>
+
+            <button
+              class="btn-cancel"
+              type="button"
+              [disabled]="!reserva.estado || cancelling.has(reserva.id_reserva)"
+              [class.is-loading]="cancelling.has(reserva.id_reserva)"
+              (click)="toggleConfirm(reserva.id_reserva)">
+              <span class="material-symbols-outlined" aria-hidden="true">cancel</span>
+              {{ reserva.estado ? 'Cancelar' : 'Cancelada' }}
+            </button>
           </div>
-          <div class="detalle-reserva">
-            <span class="material-symbols-outlined">event</span>
-            <p><strong>Check-out:</strong> {{ reserva.fecha_caducidad | date:'fullDate' }}</p>
+
+          <!-- Confirmación de cancelación (mejorada) -->
+          <div
+            class="confirm-cancel"
+            [class.open]="confirmId === reserva.id_reserva"
+            role="alertdialog"
+            [attr.aria-labelledby]="'cc-title-'+reserva.id_reserva"
+            [attr.aria-hidden]="confirmId === reserva.id_reserva ? 'false' : 'true'">
+            <div class="cc-icon" aria-hidden="true">
+              <span class="material-symbols-outlined">warning</span>
+            </div>
+            <div class="cc-content">
+              <h4 class="cc-title" [id]="'cc-title-'+reserva.id_reserva">Confirmar cancelación</h4>
+              <p class="cc-text">
+                ¿Seguro que deseas cancelar la reserva #{{ reserva.id_reserva }}? Esta acción no se puede deshacer.
+              </p>
+            </div>
+            <div class="cc-actions">
+              <button class="btn-danger"
+                      type="button"
+                      (click)="confirmarCancel(reserva)"
+                      [disabled]="cancelling.has(reserva.id_reserva)">
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
+                Sí, cancelar
+              </button>
+              <button class="btn-link" type="button" (click)="confirmId = null" aria-label="Volver sin cancelar">
+                No, volver
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="reserva-footer">
-          <a [routerLink]="['/reservas', reserva.id_reserva]" class="btn-detalle">Ver Detalle</a>
-        </div>
-      </article>
-    </div>
-  </section>
+          <!-- /Confirmación -->
+        </article>
+      </div>
+    </section>
+  </div>
 </div>
