@@ -32,9 +32,13 @@ export class Registrarse implements OnInit {
   intentadoEnviar = false;
   verContrasenia = false;
 
-  // ✅ NUEVAS propiedades para el modal
+  // Modal de éxito
   showRegistroSuccessModal = false;
   successNombre = '';
+
+  // Fondo (mismo estilo que login)
+  backgroundUrl =
+    'https://res.cloudinary.com/dj5uzus8e/image/upload/v1761429463/wjrh01yodnvwtcvlqogp.jpg';
 
   constructor(
     private fb: FormBuilder,
@@ -61,6 +65,14 @@ export class Registrarse implements OnInit {
     return pass === confirm ? null : { passwordMismatch: true };
   }
 
+  get f(): { [key: string]: AbstractControl } {
+    return this.form.controls;
+  }
+
+  toggleVerContrasenia(): void {
+    this.verContrasenia = !this.verContrasenia;
+  }
+
   onSubmit(): void {
     this.intentadoEnviar = true;
 
@@ -75,23 +87,21 @@ export class Registrarse implements OnInit {
 
       this.registroService.registrarUsuario(datos).subscribe({
         next: (res) => {
-          console.log('✅ Usuario creado:', res);
+          // eslint-disable-next-line no-console
+          console.log('Usuario creado correctamente!:', res);
           this.successNombre = this.form.value.nombre;
           this.showRegistroSuccessModal = true;
         },
         error: (err) => {
-          console.error('❌ Error al registrar:', err);
+          // eslint-disable-next-line no-console
+          console.error('Error al registrar!:', err);
         }
       });
-
-      console.log('✅ Datos enviados al backend:', datos);
     } else {
-      console.warn('⚠️ Formulario inválido');
       this.form.markAllAsTouched();
     }
   }
 
-  // ✅ NUEVO método para cerrar el modal y redirigir
   cerrarRegistroSuccess(): void {
     this.showRegistroSuccessModal = false;
     this.router.navigate(['/login']);
