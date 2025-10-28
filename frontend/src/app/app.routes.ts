@@ -44,7 +44,11 @@ export const routes: Routes = [
   // Rutas protegidas para usuarios autenticados (usuario o superadmin)
   { path: 'reservas', component: ReservaComponent, canActivate: [userGuard], title: 'Mis reservas' },
   { path: 'reservas/:id', component: ReservaDetalleComponent, canActivate: [userGuard], title: 'Detalle de reserva' },
+
+  // Asistente IA con historial
   { path: 'asistente-ia', component: AsistenteIa, canActivate: [userGuard], title: 'Asistente IA' },
+  { path: 'asistente-ia/:sessionId', component: AsistenteIa, canActivate: [userGuard], title: 'Asistente IA' },
+
   { path: 'perfil', component: Perfil, canActivate: [userGuard], title: 'Mi perfil' },
 
   // Rutas exclusivas admin (superadmin)

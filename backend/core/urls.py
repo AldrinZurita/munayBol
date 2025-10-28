@@ -5,7 +5,8 @@ from .views import (
     UsuarioViewSet, HotelViewSet, LugarTuristicoViewSet,
     PagoViewSet, HabitacionViewSet, ReservaViewSet, PaqueteViewSet, SugerenciasViewSet,
     NotificationViewSet, home, LLMGenerateView, HabitacionDisponibilidadView,
-    RegistroView, LoginView, SuperUsuarioRegistroView, SuperadminLoginView, MeView
+    RegistroView, LoginView, SuperUsuarioRegistroView, SuperadminLoginView, MeView,
+    ChatSessionViewSet
 )
 from .auth_google import GoogleLoginAPIView
 from .auth_github import GitHubLoginURLAPIView, GitHubExchangeCodeAPIView
@@ -20,6 +21,8 @@ router.register(r'reservas', ReservaViewSet)  # incluye cancelar/ y reactivar/
 router.register(r'paquetes', PaqueteViewSet)
 router.register(r'sugerencias', SugerenciasViewSet)
 router.register(r'notifications', NotificationViewSet, basename='notifications')
+# NUEVO: Chat sessions
+router.register(r'chat/sessions', ChatSessionViewSet, basename='chat-sessions')
 
 # Rutas explícitas por si el router no publicara las acciones
 reserva_cancelar_view = ReservaViewSet.as_view({'post': 'cancelar'})

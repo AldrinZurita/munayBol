@@ -3,12 +3,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse
 from .models import (
-    Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias, Notification
+    Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias, Notification, ChatSession
 )
 from .serializers import (
     UsuarioSerializer, HotelSerializer, LugarTuristicoSerializer, PagoSerializer,
     HabitacionSerializer, ReservaSerializer, PaqueteSerializer, SugerenciasSerializer,
-    LoginSerializer, RegistroSerializer, SuperUsuarioRegistroSerializer, NotificationSerializer
+    LoginSerializer, RegistroSerializer, SuperUsuarioRegistroSerializer, NotificationSerializer,
+    ChatSessionListSerializer, ChatSessionDetailSerializer, ChatSessionCreateSerializer, ChatSessionPatchSerializer,
+    ChatMessageSerializer
 )
 from .permissions import IsSuperAdmin, IsUsuario
 from .llm_client import send_message
@@ -22,6 +24,9 @@ from rest_framework.decorators import action
 from django.contrib.auth.hashers import check_password
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+
+from django.db.models import Q
+from django.utils.dateparse import parse_datetime
 
 
 def home(request):
@@ -50,7 +55,6 @@ class HabitacionDisponibilidadView(APIView):
         if ventana_hasta < ventana_desde:
             return Response({"error": "'hasta' no puede ser anterior a 'desde'"}, status=400)
 
-        # Solo reservas activas bloquean
         reservas = (Reserva.objects
                     .filter(
             num_habitacion=habitacion,
@@ -284,7 +288,6 @@ class ReservaViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
 
     def get_permissions(self):
-        # Autenticación requerida; el chequeo de dueño/superadmin se hace por acción
         return [IsAuthenticated()]
 
     def get_queryset(self):
@@ -403,7 +406,6 @@ class ReservaViewSet(viewsets.ModelViewSet):
         if reserva.estado:
             return Response({"message": "La reserva ya está activa."}, status=200)
 
-        # Validar que al reactivar no solape con otras activas en la misma habitación
         overlap = Reserva.objects.filter(
             num_habitacion=reserva.num_habitacion,
             estado=True,
@@ -551,3 +553,137 @@ class LLMGenerateView(APIView):
         user = request.user if getattr(request.user, 'is_authenticated', False) else None
         result, chat_id = send_message(prompt, chat_id=chat_id, usuario=user)
         return Response({'result': result, 'chat_id': chat_id})
+
+
+# =========================
+# Chat – ViewSet de sesiones
+# =========================
+
+class ChatSessionViewSet(viewsets.ViewSet):
+    """
+    Rutas:
+      GET    /api/chat/sessions
+      POST   /api/chat/sessions
+      GET    /api/chat/sessions/{id}
+      PATCH  /api/chat/sessions/{id}
+      DELETE /api/chat/sessions/{id}
+
+      GET/POST /api/chat/sessions/{id}/messages   -> GET lista paginada, POST agrega y responde IA
+    """
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def _user_qs(self, request):
+        return ChatSession.objects.filter(usuario=request.user).order_by('-updated_at')
+
+    def list(self, request):
+        q = (request.query_params.get('q') or '').strip().lower()
+        archived = request.query_params.get('archived')
+        qs = self._user_qs(request)
+        if archived in ('true', 'false'):
+            qs = qs.filter(archived=(archived == 'true'))
+
+        sessions = []
+        for s in qs:
+            s.ensure_metadata()
+            if q:
+                found = False
+                if s.title and q in s.title.lower():
+                    found = True
+                if not found:
+                    for h in (s.history or []):
+                        if h.get('role') == 'user':
+                            txt = (h.get('content') or '').lower()
+                            if q in txt:
+                                found = True
+                                break
+                if not found:
+                    continue
+            sessions.append(s)
+
+        serializer = ChatSessionListSerializer(sessions, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        ser = ChatSessionCreateSerializer(data=request.data or {})
+        ser.is_valid(raise_exception=True)
+        title = (ser.validated_data.get('title') or '').strip()
+        s = ChatSession.objects.create(usuario=request.user, title=title)
+        s.ensure_metadata()
+        out = ChatSessionDetailSerializer(s)
+        return Response(out.data, status=201)
+
+    def retrieve(self, request, pk=None):
+        try:
+            s = self._user_qs(request).get(pk=pk)
+        except ChatSession.DoesNotExist:
+            return Response({"error": "Sesión no encontrada"}, status=404)
+        s.ensure_metadata()
+        return Response(ChatSessionDetailSerializer(s).data)
+
+    def partial_update(self, request, pk=None):
+        try:
+            s = self._user_qs(request).get(pk=pk)
+        except ChatSession.DoesNotExist:
+            return Response({"error": "Sesión no encontrada"}, status=404)
+
+        ser = ChatSessionPatchSerializer(s, data=request.data, partial=True)
+        ser.is_valid(raise_exception=True)
+        ser.save()
+        s.refresh_from_db()
+        s.ensure_metadata()
+        return Response(ChatSessionDetailSerializer(s).data)
+
+    def destroy(self, request, pk=None):
+        try:
+            s = self._user_qs(request).get(pk=pk)
+        except ChatSession.DoesNotExist:
+            return Response({"error": "Sesión no encontrada"}, status=404)
+        s.delete()
+        return Response(status=204)
+
+    @action(detail=True, methods=['get', 'post'], url_path='messages')
+    def messages(self, request, pk=None):
+        """
+        GET: lista mensajes paginados
+        POST: agrega mensaje de usuario y devuelve respuesta de la IA
+        """
+        try:
+            s = self._user_qs(request).get(pk=pk)
+        except ChatSession.DoesNotExist:
+            return Response({"error": "Sesión no encontrada"}, status=404)
+
+        if request.method.lower() == 'get':
+            page = max(int(request.query_params.get('page', '1') or 1), 1)
+            limit = min(max(int(request.query_params.get('limit', '30') or 30), 1), 200)
+            hist = s.history or []
+            total = len(hist)
+            start = max(total - page * limit, 0)
+            end = total - (page - 1) * limit
+            items = hist[start:end]
+            items = sorted(items, key=lambda x: x.get('ts', ''))
+            msg_ser = ChatMessageSerializer(items, many=True)
+            return Response({
+                "session": str(s.id),
+                "page": page,
+                "limit": limit,
+                "total": total,
+                "items": msg_ser.data
+            })
+
+        # POST
+        body = request.data or {}
+        role = (body.get('role') or 'user').strip()
+        content = (body.get('content') or '').strip()
+        if role != 'user':
+            return Response({"error": "Solo se aceptan mensajes de 'user' en este endpoint"}, status=400)
+        if not content:
+            return Response({"error": "Contenido vacío"}, status=400)
+
+        reply, _ = send_message(content, chat_id=str(s.id), usuario=request.user)
+        s.refresh_from_db()
+        s.ensure_metadata()
+        return Response({
+            "session": str(s.id),
+            "assistant": {"role": "assistant", "content": reply}
+        }, status=201)

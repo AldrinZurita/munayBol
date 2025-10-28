@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 import uuid
+from django.utils import timezone
+
 
 class UsuarioManager(BaseUserManager):
     def create_user(self, correo, contrasenia=None, **extra_fields):
@@ -20,6 +22,7 @@ class UsuarioManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
         return self.create_user(correo, contrasenia, **extra_fields)
+
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
     id = models.BigAutoField(primary_key=True)
@@ -55,7 +58,6 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         from django.contrib.auth.hashers import check_password
         return check_password(raw_password, self.contrasenia)
 
-# Los demás modelos igual que tu versión original
 
 class Hotel(models.Model):
     id_hotel = models.BigAutoField(primary_key=True)
@@ -68,6 +70,7 @@ class Hotel(models.Model):
     url = models.CharField(max_length=255, default="")
     url_imagen_hotel = models.TextField(blank=True)
 
+
 class LugarTuristico(models.Model):
     id_lugar = models.BigAutoField(primary_key=True)
     nombre = models.CharField(max_length=255)
@@ -79,6 +82,7 @@ class LugarTuristico(models.Model):
     descripcion = models.TextField(blank=True, default="")
     url_image_lugar_turistico = models.TextField(blank=True, default="")
     estado = models.BooleanField(default=True)
+
 
 class Pago(models.Model):
     id_pago = models.BigAutoField(primary_key=True)
@@ -97,6 +101,7 @@ class Pago(models.Model):
 
     estado = models.CharField(max_length=15, choices=Estado.choices, default=Estado.PENDIENTE)
 
+
 class Habitacion(models.Model):
     num = models.BigAutoField(primary_key=True)
     caracteristicas = models.TextField()
@@ -105,6 +110,7 @@ class Habitacion(models.Model):
     disponible = models.BooleanField(default=True)
     fecha_creacion = models.DateField(auto_now_add=True)
     cant_huespedes = models.IntegerField()
+
 
 class Paquete(models.Model):
     id_paquete = models.BigAutoField(primary_key=True)
@@ -118,6 +124,7 @@ class Paquete(models.Model):
 
     def __str__(self):
         return f"{self.nombre} ({self.tipo})"
+
 
 class Reserva(models.Model):
     id_reserva = models.BigAutoField(primary_key=True)
@@ -136,18 +143,67 @@ class Reserva(models.Model):
             models.Index(fields=["num_habitacion", "fecha_reserva", "fecha_caducidad"]),
         ]
 
+
 class Sugerencias(models.Model):
     id_sugerencia = models.BigAutoField(primary_key=True)
     preferencias = models.TextField()
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     fecha_creacion = models.DateField(auto_now_add=True)
 
+
 class ChatSession(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     usuario = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True, db_constraint=False)
+    # NUEVO: metadatos para historial profesional
+    title = models.CharField(max_length=120, blank=True, default="")
+    archived = models.BooleanField(default=False)
+    messages_count = models.PositiveIntegerField(default=0)
+    last_message_at = models.DateTimeField(null=True, blank=True)
+
     history = models.JSONField(default=list)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def ensure_metadata(self):
+        """
+        Asegura que title/messages_count/last_message_at estén sincronizados
+        con history si faltan (compatibilidad hacia atrás).
+        """
+        changed = False
+        if not self.messages_count:
+            self.messages_count = len(self.history or [])
+            changed = True
+        if not self.last_message_at:
+            try:
+                last_ts = None
+                for h in (self.history or []):
+                    ts = h.get("ts")
+                    if ts:
+                        # ts puede venir como ISO string
+                        try:
+                            from django.utils.dateparse import parse_datetime
+                            dt = parse_datetime(ts) or timezone.now()
+                        except Exception:
+                            dt = timezone.now()
+                        if (last_ts is None) or (dt > last_ts):
+                            last_ts = dt
+                self.last_message_at = last_ts or self.updated_at
+                changed = True
+            except Exception:
+                self.last_message_at = self.updated_at
+                changed = True
+        if not self.title:
+            # Usa el primer prompt del usuario como título
+            for h in (self.history or []):
+                if h.get("role") == "user":
+                    txt = (h.get("content") or "").strip()
+                    if txt:
+                        self.title = (txt[:60] + ("…" if len(txt) > 60 else ""))
+                        changed = True
+                        break
+        if changed:
+            self.save(update_fields=["messages_count", "last_message_at", "title", "updated_at"])
+
 
 class Notification(models.Model):
     id = models.AutoField(primary_key=True)

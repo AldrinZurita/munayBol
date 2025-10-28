@@ -14,7 +14,6 @@ import weaviate
 from .models import ChatSession, Usuario
 
 # === CONFIGURACIÓN ===
-# Load a richer system prompt from file if available (contains instructions to ALWAYS respond in Markdown)
 DEFAULT_SYSTEM_PROMPT = (
     "Eres MunayBot, un agente de viajes de Bolivia. Hablas en español de forma amable y concisa. "
     "Ayudas a planificar itinerarios, recomendar hoteles y lugares turísticos en Bolivia. "
@@ -38,11 +37,9 @@ OLLAMA_MAX_TOKENS = int(os.getenv("OLLAMA_MAX_TOKENS", "40"))
 OLLAMA_TEMPERATURE = float(os.getenv("OLLAMA_TEMPERATURE", "0.2"))
 WEAVIATE_URL = os.getenv("WEAVIATE_URL", "http://weaviate:8080")
 
-# === CACHE GLOBAL DE ÍNDICE ===
 _INDEX: Optional[VectorStoreIndex] = None
-
-# === CACHE DE DATOS E UTILIDADES ===
 _DATA_CACHE: Optional[Dict] = None
+
 
 def _load_data() -> Dict:
     global _DATA_CACHE
@@ -51,12 +48,14 @@ def _load_data() -> Dict:
             _DATA_CACHE = json.load(f)
     return _DATA_CACHE or {}
 
+
 def _norm(text: str) -> str:
     if not text:
         return ""
     text = unicodedata.normalize('NFD', text)
     text = ''.join(ch for ch in text if unicodedata.category(ch) != 'Mn')
     return text.lower().strip()
+
 
 def _known_departamentos() -> List[str]:
     data = _load_data()
@@ -69,8 +68,8 @@ def _known_departamentos() -> List[str]:
         d = l.get("departamento", "")
         if l.get("estado", True) and d:
             deps.add(d)
-    # Orden estable para consistencia
     return sorted(deps)
+
 
 def _detect_departamento(prompt: str) -> Optional[str]:
     p = _norm(prompt)
@@ -78,6 +77,7 @@ def _detect_departamento(prompt: str) -> Optional[str]:
         if _norm(dep) in p:
             return dep
     return None
+
 
 def _filter_hoteles(dep: Optional[str], limit: int = 3) -> List[Dict]:
     data = _load_data()
@@ -87,16 +87,16 @@ def _filter_hoteles(dep: Optional[str], limit: int = 3) -> List[Dict]:
     hoteles.sort(key=lambda x: x.get("calificacion", 0), reverse=True)
     return hoteles[:limit]
 
+
 def _filter_lugares(dep: Optional[str], limit: int = 2) -> List[Dict]:
     data = _load_data()
     lugares = [l for l in data.get("lugares_turisticos", []) if l.get("estado", True)]
     if dep:
         lugares = [l for l in lugares if _norm(l.get("departamento", "")) == _norm(dep)]
-    # Mantener orden original; opcional: priorizar por tipo o nombre
     return lugares[:limit]
 
+
 def _dataset_answer(prompt: str) -> Optional[str]:
-    """Genera una respuesta determinística basada SOLO en el dataset cuando aplica."""
     pnorm = _norm(prompt)
     es_hoteles = any(k in pnorm for k in ["hotel", "hospedaje", "alojamiento"])
     es_lugares = any(k in pnorm for k in ["lugar", "lugares", "visitar", "itinerario", "ruta", "qué ver", "que ver"])
@@ -104,7 +104,6 @@ def _dataset_answer(prompt: str) -> Optional[str]:
         return None
 
     dep = _detect_departamento(prompt)
-    # Si no detectamos departamento, aún podemos listar top del país, pero mantenemos breve
     seccion: List[str] = []
     if es_hoteles:
         hoteles = _filter_hoteles(dep, limit=3)
@@ -122,14 +121,12 @@ def _dataset_answer(prompt: str) -> Optional[str]:
         seccion.append(titulo)
         for l in lugares[:8]:
             seccion.append(f"- {l.get('nombre')} — {l.get('tipo')} · {l.get('ubicacion')}")
-
-    # Nota de origen de datos
     seccion.append("\n> Datos obtenidos directamente de la base interna (CSV).")
     return "\n".join(seccion).strip()
 
+
 def _user_requested_days(prompt: str) -> Optional[int]:
     p = _norm(prompt)
-    # Buscar expresiones como "itinerario de 5 días", "3 dias", "una semana"
     m = re.search(r"(\d+)\s*d[ií]as", p)
     if m:
         try:
@@ -140,11 +137,11 @@ def _user_requested_days(prompt: str) -> Optional[int]:
         return 7
     return None
 
+
 def _cap_itinerary_days_if_needed(prompt: str, reply: str, max_days: int = 3) -> str:
     requested = _user_requested_days(prompt)
     if requested and requested > max_days:
         return reply
-    # Cap a max_days
     lines = reply.splitlines()
     out = []
     skipping_block = False
@@ -162,10 +159,8 @@ def _cap_itinerary_days_if_needed(prompt: str, reply: str, max_days: int = 3) ->
                 continue
             else:
                 skipping_block = False
-        # Si encontramos una cabecera markdown, salimos del modo skip
         if line.strip().startswith("## "):
             skipping_block = False
-        # Heurística: si la línea inicia otra sección típica, dejar de omitir
         if any(line.strip().lower().startswith(k) for k in ["presupuesto", "tips", "preguntas", "conclusión", "conclusion"]):
             skipping_block = False
         if skipping_block:
@@ -173,7 +168,7 @@ def _cap_itinerary_days_if_needed(prompt: str, reply: str, max_days: int = 3) ->
         out.append(line)
     return "\n".join(out)
 
-# === FUNCIONES DE DOCUMENTOS ===
+
 def _build_documents_from_json() -> List[Document]:
     with open(DATA_PATH, 'r', encoding='utf-8') as f:
         data = json.load(f)
@@ -203,12 +198,11 @@ def _build_documents_from_json() -> List[Document]:
             docs.append(Document(text=content, metadata=meta))
     return docs
 
-# === INICIALIZACIÓN DEL ÍNDICE (SOLO 1ra VEZ) ===
+
 def init_index(force_rebuild: bool = False) -> VectorStoreIndex:
     global _INDEX
     if _INDEX is not None and not force_rebuild:
         return _INDEX
-    # Embedder configurado externamente si aplica (intencionado)
 
     client = weaviate.Client(WEAVIATE_URL)
     vector_store = WeaviateVectorStore(weaviate_client=client, index_name="munaybol")
@@ -220,7 +214,7 @@ def init_index(force_rebuild: bool = False) -> VectorStoreIndex:
     )
     return _INDEX
 
-# === RETRIEVAL DE CONTEXTO CON RAG ===
+
 def retrieve_context(query: str, top_k: int = 1) -> str:
     index = init_index()
     retriever = index.as_retriever(similarity_top_k=top_k)
@@ -234,7 +228,7 @@ def retrieve_context(query: str, top_k: int = 1) -> str:
         lines.append(f"- ({tipo}) {n.text.strip()[:300]}")
     return "\n".join(lines)
 
-# === LLM CLIENT ===
+
 def _get_llm() -> Ollama:
     return Ollama(
         model=OLLAMA_MODEL,
@@ -245,9 +239,9 @@ def _get_llm() -> Ollama:
         top_p=0.8
     )
 
+
 def _history_to_messages(history: List[Dict]) -> List[ChatMessage]:
     messages: List[ChatMessage] = [ChatMessage(role=MessageRole.SYSTEM, content=SYSTEM_PROMPT)]
-    # Solo el último mensaje para máxima rapidez
     for item in history[-1:]:
         role = item.get("role", "user")
         content = item.get("content", "")
@@ -259,19 +253,32 @@ def _history_to_messages(history: List[Dict]) -> List[ChatMessage]:
             messages.append(ChatMessage(role=MessageRole.USER, content=content))
     return messages
 
+
 def _append_history(session: ChatSession, role: str, content: str) -> None:
+    now_iso = timezone.now().isoformat()
     session.history.append({
         "role": role,
         "content": content,
-        "ts": timezone.now().isoformat(),
+        "ts": now_iso,
     })
-    session.save(update_fields=["history", "updated_at"])
+    # Mantener metadatos actualizados
+    session.messages_count = (session.messages_count or 0) + 1
+    session.last_message_at = timezone.now()
+    if not session.title and role == "user":
+        txt = (content or "").strip()
+        if txt:
+            session.title = (txt[:60] + ("…" if len(txt) > 60 else ""))
+    session.save(update_fields=["history", "messages_count", "last_message_at", "title", "updated_at"])
+
 
 def start_chat(usuario: Optional[Usuario] = None) -> str:
     session = ChatSession.objects.create(usuario=usuario)
-    session.history = []  # Borrar historial al iniciar
-    session.save(update_fields=["history"])
+    session.history = []
+    session.messages_count = 0
+    session.last_message_at = None
+    session.save(update_fields=["history", "messages_count", "last_message_at"])
     return str(session.id)
+
 
 def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[Usuario] = None) -> Tuple[str, str]:
     if not prompt.strip():
@@ -287,18 +294,15 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
 
     _append_history(session, "user", prompt)
 
-    # Intento 1: Respuesta directa desde el dataset (sin LLM) cuando aplica
     try:
         ds_reply = _dataset_answer(prompt)
     except Exception:
         ds_reply = None
     if ds_reply:
-        # Asegurar límite de 3 días por defecto en itinerarios
         ds_reply = _cap_itinerary_days_if_needed(prompt, ds_reply, max_days=3)
         _append_history(session, "assistant", ds_reply)
         return ds_reply, str(session.id)
 
-    # Detectar si el usuario pide un nuevo destino y limpiar historial relevante
     nuevo_dep = _detect_departamento(prompt)
     ultimo_dep = None
     if len(session.history) > 1:
@@ -307,11 +311,11 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
                 ultimo_dep = _detect_departamento(h["content"])
                 if ultimo_dep:
                     break
-    # Si el destino actual es diferente al anterior, o si el prompt menciona explícitamente un nuevo destino, usa solo el mensaje actual
     if nuevo_dep and (nuevo_dep != ultimo_dep or f"viajar a {nuevo_dep.lower()}" in _norm(prompt)):
         messages = [ChatMessage(role=MessageRole.SYSTEM, content=SYSTEM_PROMPT), ChatMessage(role=MessageRole.USER, content=prompt)]
     else:
         messages = _history_to_messages(session.history)
+
     try:
         context_block = retrieve_context(prompt, top_k=1)
     except Exception:
@@ -324,15 +328,11 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
         resp = llm.chat(messages)
         reply = resp.message.content if hasattr(resp, "message") else str(resp)
 
-        # Filtrado post-LLM para hoteles y lugares turísticos recomendados
-
         with open(DATA_PATH, encoding="utf-8") as f:
             data = json.load(f)
             hoteles_validos = {h["nombre"].strip().lower() for h in data.get("hoteles", []) if h.get("estado", False)}
-            # Diccionario: nombre -> departamento
             lugares_validos = {l["nombre"].strip().lower(): l.get("departamento", "") for l in data.get("lugares_turisticos", []) if l.get("estado", True)}
 
-        # Detectar departamento solicitado
         dep_solicitado = _detect_departamento(prompt)
 
         def filtrar_lineas_lugares_departamento(lineas, lugares_validos, dep_solicitado):
@@ -341,20 +341,16 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
             lugares_extranjeros = ["san pedro de atacama", "machu picchu", "cusco", "lima", "santiago", "quito", "buenos aires", "rio de janeiro", "bogotá", "caracas", "montevideo", "asunción", "guayaquil", "valparaíso", "cartagena", "medellín", "arequipa", "puno", "salta", "mendoza", "rosario", "cali", "mar del plata", "viña del mar", "antofagasta", "callao", "trujillo", "la serena", "valdivia", "chile", "perú", "argentina", "colombia", "ecuador", "venezuela", "brasil", "uruguay", "paraguay"]
             for linea in lineas:
                 linea_norm = unicodedata.normalize('NFD', linea).encode('ascii', 'ignore').decode('utf-8').lower().strip()
-                # Buscar si la línea menciona algún lugar válido
                 encontrado = None
                 for nombre, dep in lugares_norm.items():
                     if nombre in linea_norm:
                         encontrado = (nombre, dep)
                         break
                 extranjero = any(lugar in linea_norm for lugar in lugares_extranjeros)
-                # Si la línea menciona un lugar fuera de Bolivia conocido, omite
                 if extranjero:
                     continue
-                # Si la línea menciona palabras clave de lugares pero no está en el dataset, omite
                 elif ("lugar" in linea_norm or "valle" in linea_norm or "plaza" in linea_norm or "catedral" in linea_norm or "palacio" in linea_norm or "barrio" in linea_norm) and not encontrado:
                     continue
-                # Si hay departamento solicitado, solo aceptar si el lugar es de ese departamento
                 elif dep_solicitado and encontrado and _norm(encontrado[1]) != _norm(dep_solicitado):
                     continue
                 else:
@@ -380,10 +376,8 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
         lineas = filtrar_lineas_lugares_departamento(lineas, lugares_validos, dep_solicitado)
         reply = "\n".join(lineas)
 
-        # Limitar itinerarios a 3 días por defecto
         reply = _cap_itinerary_days_if_needed(prompt, reply, max_days=3)
 
-        # Enforce brevity limits if configured
         max_chars = int(os.getenv("MUNAY_MAX_CHARS", "0") or 0)
         max_lines = int(os.getenv("MUNAY_MAX_LINES", "0") or 0)
         if max_lines and reply:
@@ -398,29 +392,23 @@ def send_message(prompt: str, chat_id: Optional[str] = None, usuario: Optional[U
             "Verifica que Ollama esté ejecutándose y que el modelo esté disponible. "
             f"Detalle: {e}"
         )
-    # Normalize common non-markdown markers the model may insert (BBCode-like tags, simple list markers)
+
     def _normalize_reply(text: str) -> str:
         if not text:
             return text
-        # BBCode-like bold/italic -> Markdown
         text = re.sub(r"\[b\](.*?)\[/b\]", r"**\1**", text, flags=re.IGNORECASE | re.DOTALL)
         text = re.sub(r"\[i\](.*?)\[/i\]", r"*\1*", text, flags=re.IGNORECASE | re.DOTALL)
-        # Unescape common escaped markdown characters (\* \_ \`)
         text = re.sub(r"\\([*_`~])", r"\1", text)
-        # Convert common list bullets (•, ·, ◦) at start of line to markdown '- '
         text = re.sub(r"^[ \t]*[•·◦]\s+", "- ", text, flags=re.MULTILINE)
-        # Convert [ul][li]...[/li][/ul] patterns to markdown lists
         text = re.sub(r"\[li\](.*?)\[/li\]", r"- \1", text, flags=re.IGNORECASE | re.DOTALL)
-        # Replace HTML <br> with newline
         text = re.sub(r"<br\s*/?>", "\n", text, flags=re.IGNORECASE)
-        # Trim repeated empty lines
         text = re.sub(r"\n{3,}", "\n\n", text)
         return text.strip()
 
     reply = _normalize_reply(reply)
-
     _append_history(session, "assistant", reply)
     return reply, str(session.id)
+
 
 def get_llm_response(prompt: str) -> str:
     reply, _ = send_message(prompt)
