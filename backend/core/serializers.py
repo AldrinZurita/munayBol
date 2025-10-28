@@ -1,5 +1,8 @@
 from rest_framework import serializers
-from .models import Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete, Sugerencias, Notification
+from .models import (
+    Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete,
+    Sugerencias, Notification, ChatSession
+)
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,6 +25,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
             'avatar_url': {'required': False, 'allow_blank': True},
         }
 
+
 class SuperUsuarioRegistroSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
@@ -31,6 +35,7 @@ class SuperUsuarioRegistroSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data['rol'] = 'superadmin'
         return Usuario.objects.create_superuser(**validated_data)
+
 
 class RegistroSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,15 +47,18 @@ class RegistroSerializer(serializers.ModelSerializer):
         validated_data['rol'] = 'usuario'
         return Usuario.objects.create_user(**validated_data)
 
+
 class HotelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hotel
         fields = '__all__'
 
+
 class LugarTuristicoSerializer(serializers.ModelSerializer):
     class Meta:
         model = LugarTuristico
         fields = '__all__'
+
 
 class PagoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -68,6 +76,7 @@ class PagoSerializer(serializers.ModelSerializer):
             validated_data['estado'] = 'pendiente'
         return super().create(validated_data)
 
+
 class HabitacionSerializer(serializers.ModelSerializer):
     codigo_hotel = serializers.PrimaryKeyRelatedField(read_only=True)
     hotel = HotelSerializer(source='codigo_hotel', read_only=True)
@@ -75,6 +84,7 @@ class HabitacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Habitacion
         fields = ['num', 'caracteristicas', 'precio', 'codigo_hotel', 'hotel', 'disponible', 'fecha_creacion', 'cant_huespedes']
+
 
 class ReservaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -116,6 +126,7 @@ class ReservaSerializer(serializers.ModelSerializer):
             validated_data['fecha_creacion'] = date.today()
         return super().create(validated_data)
 
+
 class PaqueteSerializer(serializers.ModelSerializer):
     hotel = HotelSerializer(source='id_hotel', read_only=True)
     lugar = LugarTuristicoSerializer(source='id_lugar', read_only=True)
@@ -125,16 +136,61 @@ class PaqueteSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('id_paquete', 'fecha_creacion')
 
+
 class SugerenciasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sugerencias
         fields = '__all__'
 
+
 class LoginSerializer(serializers.Serializer):
     correo = serializers.EmailField()
     contrasenia = serializers.CharField()
+
 
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = ['id', 'title', 'message', 'read', 'created_at', 'link']
+
+
+# =========================
+# Chat – serializers nuevos
+# =========================
+
+class ChatMessageSerializer(serializers.Serializer):
+    role = serializers.ChoiceField(choices=['user', 'assistant'])
+    content = serializers.CharField()
+    ts = serializers.CharField()
+
+
+class ChatSessionBaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatSession
+        fields = ['id', 'title', 'archived', 'messages_count', 'last_message_at', 'created_at', 'updated_at']
+
+
+class ChatSessionListSerializer(ChatSessionBaseSerializer):
+    # Derivados por compatibilidad (si no hay metadatos, se calculan en view)
+    pass
+
+
+class ChatSessionDetailSerializer(ChatSessionBaseSerializer):
+    # Detalle básico de la sesión; los mensajes se obtienen por endpoint /messages
+    pass
+
+
+class ChatSessionCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatSession
+        fields = ['title']
+
+
+class ChatSessionPatchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatSession
+        fields = ['title', 'archived']
+        extra_kwargs = {
+            'title': {'required': False, 'allow_blank': True},
+            'archived': {'required': False}
+        }

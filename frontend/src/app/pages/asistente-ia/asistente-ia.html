@@ -1,60 +1,249 @@
-<div class="asistente-container">
-  <div class="header">
-    <div class="icon">🤖</div>
-    <div class="title">
-      <h1>Asistente IA MunayBol</h1>
-      <p>Tu guía personal de turismo boliviano</p>
-    </div>
-  </div>
+<div class="asistente-root">
+  <div class="bg fx fx-a" aria-hidden="true"></div>
+  <div class="bg fx fx-b" aria-hidden="true"></div>
 
-  <div class="chat">
-    <!-- Muestra el historial de mensajes -->
-    <div *ngFor="let r of respuestas" [ngClass]="{'message': true, 'ia': r.from==='ia', 'user': r.from==='user'}">
-      <div class="icon">{{ r.from === 'ia' ? '🤖' : '🧑' }}</div>
-      <div class="text">
-        <ng-container *ngIf="r.from==='ia'; else userPlain">
-          <div [innerHTML]="renderMarkdown(r.text)"></div>
+  <div class="asistente-container" role="application" aria-label="Asistente IA MunayBol">
+    <header class="header">
+      <div class="logo"><div class="spark">🤖</div></div>
+
+      <div class="title">
+        <h1>Asistente IA MunayBol</h1>
+        <p>Tu guía personal de turismo boliviano</p>
+      </div>
+
+      <div class="toolbar">
+        <button class="icon-btn" (click)="exportarChat()" [disabled]="respuestas.length===0" title="Exportar conversación" aria-label="Exportar conversación">
+          <span class="material-symbols-outlined" aria-hidden="true">download</span>
+        </button>
+
+        <button class="icon-btn" (click)="nuevoChat()" [disabled]="sending" title="Nueva conversación" aria-label="Nueva conversación">
+          <span class="material-symbols-outlined" aria-hidden="true">add_comment</span>
+        </button>
+
+        <button class="icon-btn" (click)="sidebarOpen = !sidebarOpen" title="Mostrar/ocultar historial" aria-label="Mostrar/ocultar historial">
+          <span class="material-symbols-outlined" aria-hidden="true">view_sidebar</span>
+        </button>
+
+        <div class="header-glow" aria-hidden="true"></div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- Sidebar: historial -->
+      <aside class="sidebar" [class.closed]="!sidebarOpen" aria-label="Historial de conversaciones">
+        <div class="sb-header">
+          <div class="search">
+            <input
+              type="search"
+              [(ngModel)]="search"
+              (keyup.enter)="applyFilters()"
+              placeholder="Buscar en tus conversaciones..." />
+            <button class="icon-btn" (click)="applyFilters()" title="Buscar">
+              <span class="material-symbols-outlined" aria-hidden="true">search</span>
+            </button>
+          </div>
+
+          <label class="switch">
+            <input type="checkbox" [(ngModel)]="showArchived" (change)="applyFilters()" />
+            <span>Archivadas</span>
+          </label>
+
+          <button class="new-session" (click)="nuevoChat()" title="Nueva conversación">
+            <span class="material-symbols-outlined" aria-hidden="true">add</span>
+            Nueva
+          </button>
+        </div>
+
+        <div class="sb-body" [class.loading]="loadingSessions">
+          <!-- Skeleton cards while loading -->
+          <ng-container *ngIf="loadingSessions">
+            <div class="group">
+              <div class="group-title">Cargando...</div>
+              <div class="session-skel" *ngFor="let k of [1,2,3,4,5,6]">
+                <div class="skel-title"></div>
+                <div class="skel-meta"></div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Saved chats groups -->
+          <ng-container *ngIf="!loadingSessions">
+            <div class="group" *ngFor="let g of groupedSessions()">
+              <div class="group-title">{{ g.label }}</div>
+
+              <button
+                class="session-item"
+                *ngFor="let s of g.items"
+                [class.active]="s.id === currentSessionId"
+                (click)="goToSession(s)">
+                <div class="top">
+                  <div class="title" [title]="s.title || 'Sin título'">
+                    {{ s.title || 'Sin título' }}
+                    <span class="chip" *ngIf="s.archived">Archivada</span>
+                  </div>
+                  <div class="meta">
+                    <span class="time">{{ s.updated_at | date:'short' }}</span>
+                    <span class="count" title="Mensajes">💬 {{ s.messages_count }}</span>
+                  </div>
+                </div>
+                <div class="actions" (click)="$event.stopPropagation()">
+                  <button class="icon-btn mini" [disabled]="renamingId===s.id" (click)="renameSession(s)" title="Renombrar">
+                    <span class="material-symbols-outlined" aria-hidden="true">edit</span>
+                  </button>
+                  <button class="icon-btn mini" [disabled]="archivingId===s.id" (click)="toggleArchive(s)" [title]="s.archived ? 'Desarchivar' : 'Archivar'">
+                    <span class="material-symbols-outlined" aria-hidden="true">{{ s.archived ? 'unarchive' : 'archive' }}</span>
+                  </button>
+                  <button class="icon-btn mini danger" [disabled]="deletingId===s.id" (click)="deleteSession(s)" title="Eliminar">
+                    <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+                  </button>
+                </div>
+              </button>
+            </div>
+
+            <div class="empty" *ngIf="sessions.length === 0">
+              <p>No tienes conversaciones aún.</p>
+              <button class="new-session" (click)="nuevoChat()">Crear la primera</button>
+            </div>
+          </ng-container>
+        </div>
+      </aside>
+
+      <!-- Chat body -->
+      <section class="chat" #chatScroll (scroll)="onChatScroll($event)" aria-live="polite" aria-label="Historial del chat">
+        <!-- Load older messages -->
+        <div class="load-more" *ngIf="hasMore && !loadingMessages">
+          <button class="load-btn" (click)="loadMore()">
+            <span class="material-symbols-outlined" aria-hidden="true">expand_less</span>
+            Cargar mensajes anteriores
+          </button>
+        </div>
+        <div class="load-more" *ngIf="loadingMessages">
+          <div class="loader"></div>
+        </div>
+
+        <!-- Welcome -->
+        <div class="message ia welcome" *ngIf="respuestas.length === 0 && !typing">
+          <div class="bubble">
+            <div class="bubble-head">
+              <span class="msg-icon">🤖</span>
+              <span class="who">Asistente</span>
+              <span class="spacer"></span>
+            </div>
+            <div class="content">
+              <p>¡Bienvenido a la IA de MunayBol! Cuéntame a qué departamento o lugar turístico de Bolivia quieres ir y te mostraré paquetes, lugares imperdibles y habitaciones disponibles.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <ng-container *ngFor="let r of respuestas; let i = index; trackBy: trackByMsg">
+          <div class="day-separator" *ngIf="isNewDay(i)">
+            <span>{{ r.t | date:'fullDate' }}</span>
+          </div>
+
+          <div class="message" [ngClass]="{'ia': r.from==='ia', 'user': r.from==='user', 'group-start': isGroupStart(i)}">
+            <div class="bubble" [class.skeleton]="r.text === '' && r.from === 'ia'">
+              <div class="bubble-head">
+                <ng-container *ngIf="r.from === 'user'; else iaIcon">
+                  <svg class="icon-lightning-svg"
+                       [class.draw]="boltShouldDraw(r.t)"
+                       [class.waiting]="sending && isLastUser(i)"
+                       viewBox="0 0 24 24" aria-hidden="true" focusable="false"
+                       width="18" height="18" role="img">
+                    <defs>
+                      <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ffd54a"/>
+                        <stop offset="100%" stop-color="#ffb86b"/>
+                      </linearGradient>
+                    </defs>
+                    <path class="bolt" d="M13 2 L3 14 H11 L9 22 L21 10 H13 L15 2 Z" fill="url(#g1)" stroke="#ff9e2c" stroke-width="0.9" stroke-linejoin="round"/>
+                  </svg>
+                </ng-container>
+                <ng-template #iaIcon><span class="msg-icon">🤖</span></ng-template>
+
+                <span class="who">{{ r.from === 'ia' ? 'Asistente' : 'Tú' }}</span>
+                <span class="spacer"></span>
+                <time class="when" [attr.datetime]="(r.t | date:'yyyy-MM-ddTHH:mm:ss')">{{ r.t | date:'shortTime' }}</time>
+              </div>
+
+              <div class="content">
+                <ng-container *ngIf="r.from === 'ia'; else userPlain">
+                  <div class="prose" [innerHTML]="renderMarkdown(r.text)"></div>
+                </ng-container>
+                <ng-template #userPlain>
+                  <p class="prose">{{ r.text }}</p>
+                </ng-template>
+              </div>
+
+              <div class="bubble-actions">
+                <button class="copy" (click)="copiar(r.text)" title="Copiar mensaje" aria-label="Copiar mensaje">
+                  <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </ng-container>
-        <ng-template #userPlain>
-          <p>{{ r.text }}</p>
-        </ng-template>
-      </div>
+
+        <!-- Typing -->
+        <div class="message ia typing" *ngIf="typing">
+          <div class="bubble">
+            <div class="bubble-head">
+              <span class="msg-icon">🤖</span>
+              <span class="who">Asistente</span>
+              <span class="spacer"></span>
+            </div>
+            <div class="typing-animated">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAB -->
+        <button class="fab-down" *ngIf="showScrollToBottom" (click)="scrollToBottom()" title="Ir al último mensaje" aria-label="Ir al último mensaje">
+          <span class="material-symbols-outlined" aria-hidden="true">south</span>
+        </button>
+      </section>
     </div>
-    <!-- Mensaje de bienvenida fijo solo si no hay mensajes -->
-    <div class="message ia" *ngIf="respuestas.length === 0">
-      <div class="icon">🤖</div>
-      <div class="text">
-        <p>
-          Bienvenido a la IA de MunayBol, soy tu asistente. Dime a qué departamento o lugar turístico quieres
-          ir y yo te ofreceré lo mejor de esa ciudad para que tu experiencia sea única, incluyendo paquetes,
-          lugares turísticos y las mejores habitaciones disponibles.
-        </p>
-      </div>
+
+    <!-- Input area -->
+    <footer class="input-container" aria-label="Ingresar mensaje">
+      <button class="icon-btn reset" (click)="nuevoChat()" [disabled]="sending" title="Nueva conversación" aria-label="Nueva conversación">
+        <span class="material-symbols-outlined" aria-hidden="true">delete_sweep</span>
+      </button>
+
+      <input
+        type="text"
+        [disabled]="sending"
+        [(ngModel)]="prompt"
+        (keyup.enter)="enviar()"
+        [attr.aria-busy]="sending"
+        [placeholder]="sending ? 'Enviando...' : 'Escribe tu consulta, e.g., Quiero ir a Cochabamba...'"
+        autocomplete="off" />
+
+      <button class="send" [class.waiting]="sending" (click)="enviar()" [disabled]="sending || !prompt.trim()" title="Enviar" aria-label="Enviar">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+        </svg>
+      </button>
+    </footer>
+
+    <p class="hint">
+      Pregunta por destinos, paquetes turísticos, lugares para visitar o habitaciones disponibles en Bolivia.
+    </p>
+
+    <div class="quick-buttons" role="list" aria-label="Sugerencias rápidas">
+      <button class="option" role="listitem" (click)="enviarQuick('Quiero viajar a La Paz')">
+        <h3><strong>La Paz </strong></h3>
+        <span>Ciudad maravillosa</span>
+      </button>
+      <button class="option" role="listitem" (click)="enviarQuick('Quiero conocer el Salar de Uyuni')">
+        <h3><strong>Salar de Uyuni </strong></h3>
+        <span>Espejo del cielo</span>
+      </button>
+      <button class="option" role="listitem" (click)="enviarQuick('¿Cuáles son las ofertas de paquetes económicos?')">
+        <h3><strong>Ofertas </strong></h3>
+        <span>Paquetes económicos</span>
+      </button>
     </div>
-  </div>
-
-  <div class="input-container">
-    <button class="reset" (click)="nuevoChat()" title="Nuevo chat">⟲</button>
-    <input type="text" [(ngModel)]="prompt" (keyup.enter)="enviar()" placeholder="Escribe tu consulta, e.g., 'Quiero ir a Cochabamba'..." />
-    <button (click)="enviar()">➤</button>
-  </div>
-
-  <p class="hint">
-    Pregunta sobre destinos, paquetes turísticos, lugares para visitar o habitaciones disponibles en Bolivia.
-  </p>
-
-  <div class="quick-buttons">
-    <button class="option" (click)="enviarQuick('Quiero viajar a La Paz')">
-      <strong>La Paz</strong><br />
-      Ciudad maravillosa
-    </button>
-    <button class="option" (click)="enviarQuick('Quiero conocer el Salar de Uyuni')">
-      <strong>Salar de Uyuni</strong><br />
-      Espejo del cielo
-    </button>
-    <button class="option" (click)="enviarQuick('¿Cuáles son las ofertas de paquetes económicos?')">
-      <strong>Ofertas</strong><br />
-      Paquetes económicos
-    </button>
   </div>
 </div>
