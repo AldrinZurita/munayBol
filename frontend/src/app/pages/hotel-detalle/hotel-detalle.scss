@@ -1,167 +1,333 @@
 @use "sass:color";
-// --- Sistema de Diseño (Variables para consistencia) ---
+
+/* =========================
+   MODERN HOTEL DETAIL PAGE
+   ========================= */
+
+// Sistema de Diseño (Variables para consistencia)
 $primary-text: #0f172a;
 $secondary-text: #334155;
 $light-text: #64748b;
-$border-color: #e5e7eb;
+$border-color: #e6ebf2;
 $card-bg: #fff;
-$primary-color: #16a34a; // Verde para acciones principales
-$accent-color: #16a34a; // Azul para "Ver Detalle"
-$danger-color: #dc2626; // Rojo para "Eliminar" y estado "No disponible"
-$secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
+$primary-color: #16a34a;
+$accent-color: #0F6BFF;
+$danger-color: #dc2626;
 
-h2 {
-  display: flex;
-  justify-content: center;
+:root {
+  --color-primary: #0F6BFF;
+  --color-accent:  #00B894;
+  --color-danger:  #E74C3C;
+  --bolivia-red:    #D52B1E;
+  --bolivia-yellow: #FFD700;
+  --bolivia-green:  #007A3D;
+  --radius: 12px;
+  --shadow:    0 4px 14px rgba(15, 23, 42, 0.10);
+  --shadow-lg: 0 10px 28px rgba(15, 23, 42, 0.14);
+  --transition: all 0.25s ease;
 }
 
+/* Fondo tricolor suave */
 .hotel-detalle-container {
-  max-width: 700px;
+  position: relative;
+  z-index: 0;
+  max-width: 900px;
   margin: 0 auto;
   padding: 32px 18px 18px 18px;
-}
+  background:
+    radial-gradient(1200px 520px at 10% -10%, rgba(213, 43, 30, 0.08) 0%, rgba(213, 43, 30, 0) 70%),
+    radial-gradient(1200px 520px at 90% 10%,  rgba(0, 122, 61, 0.08) 0%, rgba(0, 122, 61, 0) 70%),
+    radial-gradient(1000px 520px at 50% -12%, rgba(255, 215, 0, 0.08) 0%, rgba(255, 215, 0, 0) 70%),
+    linear-gradient(180deg, #ffffff, #ffffff);
 
-.estado {
-  color: #0f172a;
-  padding: 12px 0;
-  text-align: center;
-
-  &.error {
-    color: #dc2626;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    opacity: .5;
+    background:
+      repeating-linear-gradient(135deg, rgba(2,6,23,0.02) 0 1px, transparent 1px 16px),
+      repeating-linear-gradient(45deg,  rgba(2,6,23,0.015) 0 1px, transparent 1px 20px);
   }
 }
 
+h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--color-primary);
+  text-align: center;
+  margin: 32px 0 24px;
+}
+
+.estado {
+  color: $primary-text;
+  padding: 12px 0;
+  text-align: center;
+  font-weight: 600;
+
+  &.error {
+    color: var(--color-danger);
+    background: linear-gradient(90deg, rgba(220, 38, 38, 0.08), rgba(255, 255, 255, 1));
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+}
+
+/* Tarjeta principal con efectos modernos */
 .hotel-card {
   display: flex;
   gap: 28px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  padding: 24px;
-  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.05);
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid $border-color;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+  position: relative;
+  transition: var(--transition);
+
+  /* Halo luminoso animado */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 18px;
+    padding: 2px;
+    background: conic-gradient(from 180deg at 50% 50%, 
+      rgba(15,107,255,.45), 
+      rgba(0,184,148,.45), 
+      rgba(255,176,32,.35), 
+      rgba(231,76,60,.35), 
+      rgba(15,107,255,.45));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity .25s ease;
+    pointer-events: none;
+    filter: blur(0.8px);
+  }
+
+  &:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
 
   @media (max-width: 750px) {
     flex-direction: column;
     gap: 18px;
-    padding: 16px;
+    padding: 20px;
   }
 }
 
 .hotel-img-box {
   flex-shrink: 0;
+  position: relative;
 
   img {
-    width: 240px;
+    width: 280px;
     max-width: 100%;
-    height: 180px;
+    height: 200px;
     object-fit: cover;
-    border-radius: 10px;
-    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    border: 1px solid $border-color;
     background: #f1f5f9;
     display: block;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
   }
+
+  /* Efecto shine en imagen */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+    transform: translateX(-120%) skewX(12deg);
+    animation: imgShine 8s linear infinite;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    border-radius: 12px;
+  }
+
+  &:hover::after {
+    animation-duration: 3s;
+  }
+}
+
+@keyframes imgShine {
+  0% { transform: translateX(-120%) skewX(12deg); }
+  100% { transform: translateX(120%) skewX(12deg); }
 }
 
 .hotel-info {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 
   h1 {
     font-size: 28px;
     font-weight: 800;
     margin: 0 0 10px 0;
-    color: #0f172a;
+    color: $primary-text;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 24px;
-    font-size: 16px;
-    color: #334155;
+    gap: 16px 24px;
+    font-size: 15px;
+    color: $secondary-text;
     margin-bottom: 8px;
 
     span {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
+      font-weight: 600;
+
+      b {
+        color: $primary-text;
+        font-weight: 800;
+      }
     }
   }
 
   .fecha-creacion {
-    margin-top: 16px;
-    font-size: 14px;
-    color: #64748b;
+    margin-top: 12px;
+    font-size: 13px;
+    color: $light-text;
+    font-weight: 600;
+    padding: 8px 12px;
+    background: linear-gradient(90deg, rgba(15,107,255,0.05), rgba(255,255,255,0.5));
+    border-radius: 8px;
+    border-left: 3px solid var(--color-primary);
   }
 
   .estado-hotel {
-    padding: 2px 8px;
-    border-radius: 8px;
+    padding: 4px 10px;
+    border-radius: 10px;
     font-size: 13px;
-    font-weight: 600;
-
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     &.activo {
-      background: #d1fae5;
+      background: linear-gradient(135deg, #d1fae5, #a7f3d0);
       color: #047857;
       border: 1px solid #10b981;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+
+      &::before {
+        content: '✓';
+        font-weight: 800;
+      }
     }
 
     &.inactivo {
-      background: #fee2e2;
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
       color: #b91c1c;
       border: 1px solid #ef4444;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+
+      &::before {
+        content: '✕';
+        font-weight: 800;
+      }
     }
   }
 }
 
-// --- Lista y Tarjetas de Habitación ---
+/* =========================
+   LISTA Y TARJETAS DE HABITACIÓN
+   ========================= */
 .lista-habitaciones {
   display: grid;
-  gap: 18px;
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
 .habitacion-card {
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
-  background: $card-bg;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
   border: 1px solid $border-color;
   border-radius: 14px;
-  padding: 20px;
-  margin-left: 3rem;
-  margin-right: 3rem;
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  padding: 22px;
+  transition: var(--transition);
+  box-shadow: var(--shadow);
+  position: relative;
+
+  /* Halo luminoso */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 16px;
+    padding: 2px;
+    background: conic-gradient(from 180deg at 50% 50%, 
+      rgba(15,107,255,.45), 
+      rgba(0,184,148,.45), 
+      rgba(255,176,32,.35), 
+      rgba(231,76,60,.35), 
+      rgba(15,107,255,.45));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity .25s ease;
+    pointer-events: none;
+    filter: blur(0.6px);
+  }
 
   &:hover {
-    border-color: color.adjust(#016d2e, $lightness: -10%);
-    box-shadow: 0 4px 12px rgba(40, 92, 145, 0.06);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  &:hover::after {
+    opacity: 1;
   }
 
   @media (min-width: 768px) {
-    grid-template-columns: 1fr 200px; // Dos columnas en pantallas más grandes
+    grid-template-columns: 1fr 200px;
   }
 
   .card-left {
     h3 {
-      margin: 0 0 8px;
-      font-size: 20px;
+      margin: 0 0 10px;
+      font-size: 22px;
       color: $primary-text;
       font-weight: 800;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .descripcion {
-      margin: 0 0 14px;
+      margin: 0 0 16px;
       color: $secondary-text;
-      line-height: 1.5;
+      line-height: 1.6;
       font-size: 14px;
     }
 
     .meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px 20px;
+      gap: 12px 20px;
       padding: 0;
       margin: 0;
       list-style: none;
@@ -172,11 +338,17 @@ h2 {
         display: inline-flex;
         align-items: center;
         gap: 8px;
+        font-weight: 600;
+        padding: 6px 12px;
+        background: linear-gradient(135deg, rgba(15,107,255,0.05), rgba(0,184,148,0.05));
+        border-radius: 8px;
+        border: 1px solid rgba(15,107,255,0.1);
 
         .status-dot {
-          width: 9px;
-          height: 9px;
+          width: 10px;
+          height: 10px;
           border-radius: 50%;
+          box-shadow: 0 0 6px currentColor;
 
           &.disponible {
             background-color: $primary-color;
@@ -186,6 +358,11 @@ h2 {
             background-color: $danger-color;
           }
         }
+
+        .material-symbols-outlined {
+          font-size: 18px;
+          color: var(--color-primary);
+        }
       }
     }
   }
@@ -193,28 +370,66 @@ h2 {
   .card-right {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     justify-content: center;
 
-    // Los botones ocupan todo el ancho en su contenedor
     .btn {
       width: 100%;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      &.btn-primary {
+        background: linear-gradient(135deg, var(--color-primary), #0c56d0);
+        color: white;
+        box-shadow: 0 6px 16px rgba(15, 107, 255, 0.25);
+
+        &:hover {
+          background: linear-gradient(135deg, #0c56d0, #0a47a8);
+          transform: translateY(-2px);
+          box-shadow: 0 10px 22px rgba(15, 107, 255, 0.35);
+        }
+      }
     }
 
     @media (min-width: 768px) {
-      align-items: flex-end; // Botones a la derecha en escritorio
+      align-items: flex-end;
       justify-content: center;
     }
   }
 }
 
+/* Botón primario global */
 .btn-primary {
-  background: #16a34a;
+  background: linear-gradient(135deg, var(--color-primary), #0c56d0);
   color: #fff;
   border: none;
   border-radius: 10px;
-  padding: 10px;
-  font-weight: 600;
+  padding: 12px 20px;
+  font-weight: 700;
   cursor: pointer;
   text-decoration: none;
+  transition: var(--transition);
+  box-shadow: 0 6px 16px rgba(15, 107, 255, 0.25);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  &:hover {
+    background: linear-gradient(135deg, #0c56d0, #0a47a8);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(15, 107, 255, 0.35);
+  }
+}
 }
