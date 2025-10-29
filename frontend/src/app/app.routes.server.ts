@@ -32,6 +32,7 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
+    // Base AI assistant route (redirects to a session)
     path: 'asistente-ia',
     renderMode: RenderMode.Client
   },
