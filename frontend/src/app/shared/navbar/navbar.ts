@@ -75,6 +75,7 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
       return [
         ...this.basePaletteItems,
         { label: 'Admin: Reservas', icon: 'admin_panel_settings', path: '/admin/reservas' },
+        { label: 'Admin: Usuarios', icon: 'manage_accounts', path: '/admin/usuarios' },
       ];
     }
     return this.basePaletteItems;

@@ -22,6 +22,7 @@ import { Perfil } from './pages/perfil/perfil';
 // Admin pages
 import { CrearPaquete } from './pages/crear-paquete/crear-paquete';
 import { AdminReservas } from './pages/admin-reservas/admin-reservas';
+import { AdminUsuariosComponent } from './pages/admin-usuarios/admin-usuarios';
 
 // Guards
 import { adminGuard } from './guards/admin.guard';
@@ -56,6 +57,9 @@ export const routes: Routes = [
 
   // Nueva pantalla de administración de reservas (ver activas y canceladas, filtrar por usuario)
   { path: 'admin/reservas', component: AdminReservas, canActivate: [adminGuard], title: 'Administración de reservas' },
+
+  // Gestión de usuarios (solo admin)
+  { path: 'admin/usuarios', component: AdminUsuariosComponent, canActivate: [adminGuard], title: 'Gestión de usuarios' },
 
   // Puedes mantener este alias si ya lo usabas como dashboard admin
   { path: 'admin', component: Hoteles, canActivate: [adminGuard], title: 'Panel de administración' },
