@@ -366,6 +366,15 @@ export class AsistenteIa implements OnInit, OnDestroy {
     try { navigator.clipboard.writeText(text || ''); } catch {}
   }
 
+  getUserInitials(): string {
+    const user = this.auth.getUser();
+    if (!user || !user.nombre) return '?';
+    const parts = user.nombre.split(' ').filter(p => p.length > 0);
+    if (parts.length === 0) return '?';
+    if (parts.length === 1) return parts[0][0].toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+
   exportarChat(): void {
     if (this.respuestas.length === 0) return;
     const lines: string[] = [];
