@@ -32,9 +32,9 @@ except Exception:
 DATA_PATH = os.path.join(os.path.dirname(__file__), '../data/munaybol_data.json')
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.2:1b")
-OLLAMA_TIMEOUT = float(os.getenv("OLLAMA_TIMEOUT", "90"))
-OLLAMA_MAX_TOKENS = int(os.getenv("OLLAMA_MAX_TOKENS", "40"))
-OLLAMA_TEMPERATURE = float(os.getenv("OLLAMA_TEMPERATURE", "0.2"))
+OLLAMA_TIMEOUT = float(os.getenv("OLLAMA_TIMEOUT", "60"))
+OLLAMA_MAX_TOKENS = int(os.getenv("OLLAMA_MAX_TOKENS", "512"))
+OLLAMA_TEMPERATURE = float(os.getenv("OLLAMA_TEMPERATURE", "0.3"))
 WEAVIATE_URL = os.getenv("WEAVIATE_URL", "http://weaviate:8080")
 
 _INDEX: Optional[VectorStoreIndex] = None
@@ -242,7 +242,8 @@ def _get_llm() -> Ollama:
 
 def _history_to_messages(history: List[Dict]) -> List[ChatMessage]:
     messages: List[ChatMessage] = [ChatMessage(role=MessageRole.SYSTEM, content=SYSTEM_PROMPT)]
-    for item in history[-1:]:
+    # Use last 3 exchanges (6 messages) for better context without overloading
+    for item in history[-6:]:
         role = item.get("role", "user")
         content = item.get("content", "")
         if not content:
