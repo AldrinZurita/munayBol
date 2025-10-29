@@ -223,6 +223,11 @@ class Notification(models.Model):
 
 class Review(models.Model):
     """Reviews/Comments for Hotels, Lugares Turisticos, and Paquetes"""
+    # Rating constants
+    MIN_RATING = 1
+    MAX_RATING = 5
+    RATING_CHOICES = [(i, i) for i in range(MIN_RATING, MAX_RATING + 1)]
+    
     id_review = models.BigAutoField(primary_key=True)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='reviews')
     
@@ -231,7 +236,7 @@ class Review(models.Model):
     lugar_turistico = models.ForeignKey(LugarTuristico, on_delete=models.CASCADE, null=True, blank=True, related_name='reviews')
     paquete = models.ForeignKey(Paquete, on_delete=models.CASCADE, null=True, blank=True, related_name='reviews')
     
-    calificacion = models.IntegerField(choices=[(i, i) for i in range(1, 6)])  # 1-5 stars
+    calificacion = models.IntegerField(choices=RATING_CHOICES)
     comentario = models.TextField()
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     estado = models.BooleanField(default=True)  # Active/inactive
@@ -250,11 +255,17 @@ class Review(models.Model):
 
     def clean(self):
         from django.core.exceptions import ValidationError
-        # Ensure exactly one target is set
+        self._validate_single_target()
+
+    def _validate_single_target(self):
+        """Ensure exactly one target (hotel, lugar_turistico, or paquete) is set"""
+        from django.core.exceptions import ValidationError
         targets = sum([
             self.hotel is not None,
             self.lugar_turistico is not None,
             self.paquete is not None
         ])
         if targets != 1:
-            raise ValidationError('Review must be associated with exactly one target (hotel, lugar, or paquete)')
+            raise ValidationError(
+                'Review must be associated with exactly one target (hotel, lugar_turistico, or paquete)'
+            )
