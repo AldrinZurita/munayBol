@@ -219,3 +219,42 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"Notificación para {self.usuario.nombre}: {self.title}"
+
+
+class Review(models.Model):
+    """Reviews/Comments for Hotels, Lugares Turisticos, and Paquetes"""
+    id_review = models.BigAutoField(primary_key=True)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='reviews')
+    
+    # Content type references - only one should be set
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, null=True, blank=True, related_name='reviews')
+    lugar_turistico = models.ForeignKey(LugarTuristico, on_delete=models.CASCADE, null=True, blank=True, related_name='reviews')
+    paquete = models.ForeignKey(Paquete, on_delete=models.CASCADE, null=True, blank=True, related_name='reviews')
+    
+    calificacion = models.IntegerField(choices=[(i, i) for i in range(1, 6)])  # 1-5 stars
+    comentario = models.TextField()
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    estado = models.BooleanField(default=True)  # Active/inactive
+
+    class Meta:
+        ordering = ['-fecha_creacion']
+        indexes = [
+            models.Index(fields=['hotel', 'estado']),
+            models.Index(fields=['lugar_turistico', 'estado']),
+            models.Index(fields=['paquete', 'estado']),
+        ]
+
+    def __str__(self):
+        target = self.hotel or self.lugar_turistico or self.paquete
+        return f"Review de {self.usuario.nombre} - {target} ({self.calificacion}★)"
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        # Ensure exactly one target is set
+        targets = sum([
+            self.hotel is not None,
+            self.lugar_turistico is not None,
+            self.paquete is not None
+        ])
+        if targets != 1:
+            raise ValidationError('Review must be associated with exactly one target (hotel, lugar, or paquete)')
