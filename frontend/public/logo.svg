@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Bolivian flag colors gradient -->
+    <linearGradient id="boliviaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#D52B1E"/>
+      <stop offset="33.3%" stop-color="#D52B1E"/>
+      <stop offset="33.3%" stop-color="#F9E300"/>
+      <stop offset="66.6%" stop-color="#F9E300"/>
+      <stop offset="66.6%" stop-color="#007A33"/>
+      <stop offset="100%" stop-color="#007A33"/>
+    </linearGradient>
+    <!-- Mountain gradient -->
+    <linearGradient id="mountainGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <!-- Sun gradient -->
+    <linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle with Bolivian flag colors -->
+  <circle cx="64" cy="64" r="60" fill="url(#boliviaGrad)" opacity="0.15"/>
+  
+  <!-- Main circle -->
+  <circle cx="64" cy="64" r="56" fill="#ffffff" stroke="url(#boliviaGrad)" stroke-width="4"/>
+  
+  <!-- Mountain silhouette (representing Andes) -->
+  <path d="M 30 75 L 45 50 L 55 60 L 64 35 L 73 60 L 83 50 L 98 75 Z" 
+        fill="url(#mountainGrad)" opacity="0.9"/>
+  
+  <!-- Sun (representing Bolivia's sunny climate) -->
+  <circle cx="64" cy="45" r="10" fill="url(#sunGrad)"/>
+  
+  <!-- Sun rays -->
+  <g fill="url(#sunGrad)" opacity="0.7">
+    <circle cx="64" cy="32" r="2"/>
+    <circle cx="77" cy="37" r="2"/>
+    <circle cx="80" cy="48" r="2"/>
+    <circle cx="77" cy="53" r="2"/>
+    <circle cx="64" cy="58" r="2"/>
+    <circle cx="51" cy="53" r="2"/>
+    <circle cx="48" cy="48" r="2"/>
+    <circle cx="51" cy="37" r="2"/>
+  </g>
+  
+  <!-- Text: MB (MunayBol initials) -->
+  <text x="64" y="95" 
+        font-family="Arial, sans-serif" 
+        font-size="24" 
+        font-weight="900" 
+        text-anchor="middle" 
+        fill="url(#mountainGrad)">MB</text>
+  
+  <!-- Decorative border -->
+  <circle cx="64" cy="64" r="56" fill="none" stroke="url(#boliviaGrad)" stroke-width="3" opacity="0.3"/>
+</svg>

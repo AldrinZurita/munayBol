@@ -139,6 +139,15 @@
                 Gestión de Reservas
               </a>
 
+              <a *ngIf="isSuperAdmin"
+                 routerLink="/admin/usuarios"
+                 class="user-menu-item"
+                 role="menuitem"
+                 (click)="onNavItemSelect($event); closeMenus()">
+                <span class="material-symbols-outlined" aria-hidden="true">manage_accounts</span>
+                Gestión de Usuarios
+              </a>
+
               <a routerLink="/perfil" class="user-menu-item" role="menuitem" (click)="onNavItemSelect($event); closeMenus()">
                 <span class="material-symbols-outlined" aria-hidden="true">account_circle</span>
                 Mi Perfil

@@ -1,0 +1,115 @@
+<div class="reviews-container">
+  <!-- Summary Header -->
+  <div class="reviews-header">
+    <div class="rating-summary">
+      <div class="average-rating">
+        <span class="rating-number">{{ averageRating | number:'1.1-1' }}</span>
+        <div class="stars-large">
+          <span *ngFor="let filled of getStarsArray(roundedAverageRating)" 
+                class="star" 
+                [class.filled]="filled">
+            ★
+          </span>
+        </div>
+        <p class="review-count">{{ reviews.length }} {{ reviews.length === 1 ? 'reseña' : 'reseñas' }}</p>
+      </div>
+
+      <div class="rating-bars">
+        <div *ngFor="let rating of [5, 4, 3, 2, 1]" class="rating-bar-row">
+          <span class="rating-label">{{ rating }} ★</span>
+          <div class="bar-container">
+            <div class="bar-fill" [style.width.%]="getRatingPercentage(rating)"></div>
+          </div>
+          <span class="rating-count">{{ ratingDistribution[rating] }}</span>
+        </div>
+      </div>
+    </div>
+
+    <button *ngIf="canAddReview && !showAddReview" 
+            class="add-review-btn" 
+            (click)="showAddReview = true">
+      <span class="material-symbols-outlined">add_comment</span>
+      Escribir reseña
+    </button>
+  </div>
+
+  <!-- Add Review Form -->
+  <div class="add-review-form" *ngIf="showAddReview">
+    <h3>Comparte tu experiencia</h3>
+    
+    <div class="rating-selector">
+      <label>Tu calificación:</label>
+      <div class="stars-selector">
+        <button *ngFor="let star of [1, 2, 3, 4, 5]" 
+                type="button"
+                class="star-btn"
+                [class.selected]="star <= newReview.calificacion"
+                (click)="setRating(star)">
+          ★
+        </button>
+      </div>
+    </div>
+
+    <div class="comment-field">
+      <label for="comment">Tu comentario:</label>
+      <textarea 
+        id="comment"
+        [(ngModel)]="newReview.comentario"
+        placeholder="Cuéntanos sobre tu experiencia..."
+        rows="4"
+        maxlength="500"></textarea>
+      <span class="char-count">{{ newReview.comentario.length }}/500</span>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="cancelReview()">Cancelar</button>
+      <button type="button" class="btn-primary" (click)="submitReview()">Publicar reseña</button>
+    </div>
+  </div>
+
+  <!-- Reviews List -->
+  <div class="reviews-list" *ngIf="reviews.length > 0">
+    <h3 class="list-title">Reseñas de usuarios</h3>
+    
+    <div *ngFor="let review of reviews" class="review-card">
+      <div class="review-header">
+        <div class="user-info">
+          <div class="avatar">
+            <img *ngIf="review.usuario.avatar_url" 
+                 [src]="review.usuario.avatar_url" 
+                 [alt]="review.usuario.nombre">
+            <span *ngIf="!review.usuario.avatar_url" class="avatar-initials">
+              {{ getInitials(review.usuario.nombre) }}
+            </span>
+          </div>
+          <div class="user-details">
+            <h4 class="user-name">{{ review.usuario.nombre }}</h4>
+            <p class="review-date">{{ formatDate(review.fecha) }}</p>
+          </div>
+        </div>
+        
+        <div class="review-rating">
+          <div class="stars">
+            <span *ngFor="let filled of getStarsArray(review.calificacion)" 
+                  class="star" 
+                  [class.filled]="filled">
+              ★
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <p class="review-comment">{{ review.comentario }}</p>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="reviews.length === 0 && !showAddReview">
+    <span class="empty-icon">💬</span>
+    <h3>Aún no hay reseñas</h3>
+    <p>Sé el primero en compartir tu experiencia</p>
+    <button *ngIf="canAddReview" class="btn-primary" (click)="showAddReview = true">
+      Escribir primera reseña
+    </button>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import (
     Usuario, Hotel, LugarTuristico, Pago, Habitacion, Reserva, Paquete,
-    Sugerencias, Notification, ChatSession
+    Sugerencias, Notification, ChatSession, Review
 )
 
 class UsuarioSerializer(serializers.ModelSerializer):
@@ -194,3 +194,33 @@ class ChatSessionPatchSerializer(serializers.ModelSerializer):
             'title': {'required': False, 'allow_blank': True},
             'archived': {'required': False}
         }
+
+# =========================
+# Reviews – serializers
+# =========================
+
+class ReviewSerializer(serializers.ModelSerializer):
+    usuario = UsuarioSerializer(read_only=True)
+    usuario_id = serializers.IntegerField(write_only=True, required=False)
+    
+    class Meta:
+        model = Review
+        fields = [
+            'id_review', 'usuario', 'usuario_id',
+            'hotel', 'lugar_turistico', 'paquete',
+            'calificacion', 'comentario', 'fecha_creacion', 'estado'
+        ]
+        read_only_fields = ['id_review', 'fecha_creacion']
+
+    def validate(self, data):
+        # Validate that exactly one target is set
+        targets = sum([
+            data.get('hotel') is not None,
+            data.get('lugar_turistico') is not None,
+            data.get('paquete') is not None
+        ])
+        if targets != 1:
+            raise serializers.ValidationError(
+                'Review must be associated with exactly one target (hotel, lugar_turistico, or paquete)'
+            )
+        return data
