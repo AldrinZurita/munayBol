@@ -18,7 +18,8 @@ class UsuarioSerializer(serializers.ModelSerializer):
             'fecha_creacion',
             'avatar_url',
         ]
-        read_only_fields = ['id', 'correo', 'rol', 'estado', 'fecha_creacion']
+        # Hacemos 'rol' y 'estado' editables para que el superadmin pueda cambiarlos
+        read_only_fields = ['id', 'correo', 'fecha_creacion']
         extra_kwargs = {
             'pais': {'required': False, 'allow_blank': True},
             'pasaporte': {'required': False, 'allow_blank': True},
@@ -202,7 +203,7 @@ class ChatSessionPatchSerializer(serializers.ModelSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     usuario = UsuarioSerializer(read_only=True)
     usuario_id = serializers.IntegerField(write_only=True, required=False)
-    
+
     class Meta:
         model = Review
         fields = [

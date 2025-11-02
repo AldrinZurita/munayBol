@@ -169,6 +169,49 @@ class UsuarioViewSet(viewsets.ModelViewSet):
             return Usuario.objects.filter(id=user.id)
         return Usuario.objects.none()
 
+    def partial_update(self, request, *args, **kwargs):
+        """
+        Reglas de seguridad:
+        - No permitir desactivar al último superadmin.
+        - No permitir quitar el rol de superadmin al último superadmin.
+        - No permitir que el admin se desactive a sí mismo ni se quite su propio rol.
+        """
+        instance = self.get_object()
+        user = request.user
+        data = request.data or {}
+
+        # Normalizar new_estado a boolean si viene como string
+        def to_bool(v):
+            if isinstance(v, bool):
+                return v
+            if isinstance(v, str):
+                return v.lower() in ('true', '1', 'yes', 'on')
+            return bool(v)
+
+        # Validaciones de rol
+        if 'rol' in data:
+            new_role = data.get('rol')
+            if instance.pk == user.pk and new_role != 'superadmin':
+                return Response({"error": "No puedes quitarte tu propio rol de superadmin."}, status=status.HTTP_400_BAD_REQUEST)
+
+            if instance.rol == 'superadmin' and new_role != 'superadmin':
+                remaining = Usuario.objects.filter(rol='superadmin', estado=True).exclude(pk=instance.pk).count()
+                if remaining == 0:
+                    return Response({"error": "No puedes quitar el rol del último superadmin."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Validaciones de estado
+        if 'estado' in data:
+            new_estado = to_bool(data.get('estado'))
+            if instance.pk == user.pk and new_estado is False:
+                return Response({"error": "No puedes desactivarte a ti mismo."}, status=status.HTTP_400_BAD_REQUEST)
+
+            if instance.rol == 'superadmin' and new_estado is False:
+                remaining = Usuario.objects.filter(rol='superadmin', estado=True).exclude(pk=instance.pk).count()
+                if remaining == 0:
+                    return Response({"error": "No puedes desactivar al último superadmin."}, status=status.HTTP_400_BAD_REQUEST)
+
+        return super().partial_update(request, *args, **kwargs)
+
 
 class SuperUsuarioRegistroView(APIView):
     permission_classes = [AllowAny]

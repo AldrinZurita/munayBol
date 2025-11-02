@@ -268,7 +268,7 @@ def _append_history(session: ChatSession, role: str, content: str) -> None:
     if not session.title and role == "user":
         txt = (content or "").strip()
         if txt:
-            session.title = (txt[:60] + ("…" if len(txt) > 60 else ""))
+            session.title = (txt[:60] + ("…" if len(txt) > 90 else ""))
     session.save(update_fields=["history", "messages_count", "last_message_at", "title", "updated_at"])
 
 
