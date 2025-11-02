@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { AuthService } from '../../services/auth.service';
 
 interface Usuario {
   id: number;
@@ -30,14 +33,24 @@ export class AdminUsuariosComponent implements OnInit {
   searchTerm = '';
   filterRole: string = 'all';
   filterStatus: string = 'all';
-  
+
+  private baseUrl = environment.apiUrl;
+  private isBrowser: boolean;
+
   constructor(
     private http: HttpClient,
-    private router: Router
-  ) {}
+    private router: Router,
+    private auth: AuthService,
+    @Inject(PLATFORM_ID) platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
   ngOnInit() {
-    this.loadUsuarios();
+    // Evitar llamada protegida en SSR: sin localStorage => sin Authorization => 401
+    if (this.isBrowser) {
+      this.loadUsuarios();
+    }
   }
 
   get totalAdmins(): number {
@@ -50,18 +63,9 @@ export class AdminUsuariosComponent implements OnInit {
 
   loadUsuarios() {
     this.loading = true;
-    const token = localStorage.getItem('token');
-    
-    if (!token) {
-      this.router.navigate(['/login']);
-      return;
-    }
 
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
-    this.http.get<Usuario[]>('http://localhost:8000/api/usuarios/', { headers })
+    // Adjunta Authorization explícitamente con AuthService
+    this.http.get<Usuario[]>(`${this.baseUrl}usuarios/`, this.authOptions())
       .subscribe({
         next: (data) => {
           this.usuarios = data;
@@ -80,15 +84,15 @@ export class AdminUsuariosComponent implements OnInit {
 
   get filteredUsuarios(): Usuario[] {
     return this.usuarios.filter(u => {
-      const matchesSearch = !this.searchTerm || 
+      const matchesSearch = !this.searchTerm ||
         u.nombre.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
         u.correo.toLowerCase().includes(this.searchTerm.toLowerCase());
-      
+
       const matchesRole = this.filterRole === 'all' || u.rol === this.filterRole;
-      const matchesStatus = this.filterStatus === 'all' || 
+      const matchesStatus = this.filterStatus === 'all' ||
         (this.filterStatus === 'active' && u.estado) ||
         (this.filterStatus === 'inactive' && !u.estado);
-      
+
       return matchesSearch && matchesRole && matchesStatus;
     });
   }
@@ -98,16 +102,10 @@ export class AdminUsuariosComponent implements OnInit {
       return;
     }
 
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
-
     this.http.patch<Usuario>(
-      `http://localhost:8000/api/usuarios/${usuario.id}/`,
+      `${this.baseUrl}usuarios/${usuario.id}/`,
       { rol: newRole },
-      { headers }
+      this.authOptions()
     ).subscribe({
       next: (updated) => {
         const index = this.usuarios.findIndex(u => u.id === usuario.id);
@@ -118,26 +116,21 @@ export class AdminUsuariosComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error updating role:', error);
-        alert('Error al actualizar el rol');
+        alert(error?.error?.error || 'Error al actualizar el rol');
       }
     });
   }
 
   toggleUserStatus(usuario: Usuario) {
-    if (!confirm(`¿Estás seguro de ${usuario.estado ? 'desactivar' : 'activar'} a ${usuario.nombre}?`)) {
+    const action = usuario.estado ? 'desactivar' : 'activar';
+    if (!confirm(`¿Estás seguro de ${action} a ${usuario.nombre}?`)) {
       return;
     }
 
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
-
     this.http.patch<Usuario>(
-      `http://localhost:8000/api/usuarios/${usuario.id}/`,
+      `${this.baseUrl}usuarios/${usuario.id}/`,
       { estado: !usuario.estado },
-      { headers }
+      this.authOptions()
     ).subscribe({
       next: (updated) => {
         const index = this.usuarios.findIndex(u => u.id === usuario.id);
@@ -148,7 +141,7 @@ export class AdminUsuariosComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error updating status:', error);
-        alert('Error al actualizar el estado');
+        alert(error?.error?.error || 'Error al actualizar el estado');
       }
     });
   }
@@ -167,5 +160,10 @@ export class AdminUsuariosComponent implements OnInit {
 
   getStatusBadgeClass(status: boolean): string {
     return status ? 'badge-active' : 'badge-inactive';
+  }
+
+  // Usa el helper del AuthService para adjuntar Authorization
+  private authOptions() {
+    return this.auth['authOptions']();
   }
 }

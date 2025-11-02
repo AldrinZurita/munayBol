@@ -146,8 +146,8 @@
               <div class="bubble-head">
                 <ng-container *ngIf="r.from === 'user'; else iaIcon">
                   <div class="user-avatar">
-                    <img *ngIf="auth.getUser()?.avatar_url" 
-                         [src]="auth.getUser()!.avatar_url" 
+                    <img *ngIf="auth.getUser()?.avatar_url"
+                         [src]="auth.getUser()!.avatar_url"
                          [alt]="auth.getUser()?.nombre"
                          class="avatar-img" />
                     <div *ngIf="!auth.getUser()?.avatar_url" class="avatar-initials">

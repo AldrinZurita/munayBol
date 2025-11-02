@@ -50,18 +50,17 @@ export const routes: Routes = [
   { path: 'asistente-ia', component: AsistenteIa, canActivate: [userGuard], title: 'Asistente IA' },
   { path: 'asistente-ia/:sessionId', component: AsistenteIa, canActivate: [userGuard], title: 'Asistente IA' },
 
+  // Perfil propio
   { path: 'perfil', component: Perfil, canActivate: [userGuard], title: 'Mi perfil' },
+  // Perfil de otro usuario (acceso desde Administración de Usuarios)
+  { path: 'perfil/:id', component: Perfil, canActivate: [adminGuard], title: 'Perfil de usuario' },
 
   // Rutas exclusivas admin (superadmin)
   { path: 'paquetes/nuevo-paquete', component: CrearPaquete, canActivate: [adminGuard], title: 'Crear paquete' },
 
-  // Nueva pantalla de administración de reservas (ver activas y canceladas, filtrar por usuario)
+  // Administración
   { path: 'admin/reservas', component: AdminReservas, canActivate: [adminGuard], title: 'Administración de reservas' },
-
-  // Gestión de usuarios (solo admin)
   { path: 'admin/usuarios', component: AdminUsuariosComponent, canActivate: [adminGuard], title: 'Gestión de usuarios' },
-
-  // Puedes mantener este alias si ya lo usabas como dashboard admin
   { path: 'admin', component: Hoteles, canActivate: [adminGuard], title: 'Panel de administración' },
 
   // Fallback
