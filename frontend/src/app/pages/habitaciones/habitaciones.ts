@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ActualizarLugarDTO, HabitacionService } from '../../services/habitacion.service';
@@ -6,6 +6,7 @@ import { Habitacion } from '../../interfaces/habitacion.interface';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LoadingService } from '../../shared/services/loading';
 
 @Component({
   selector: 'app-habitaciones',
@@ -14,13 +15,12 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './habitaciones.html',
   styleUrls: ['./habitaciones.scss']
 })
-export class Habitaciones implements OnInit {
+export class Habitaciones implements OnInit, OnDestroy {
   habitaciones: Habitacion[] = [];
   habitacionesFiltradas: Habitacion[] = [];
   disponibleSeleccionado = '';
   hotelSeleccionado = '';
   hoteles: number[] = [];
-  cargando = false;
   error = '';
   showEditModal = false;
   savingEdit = false;
@@ -36,7 +36,7 @@ export class Habitaciones implements OnInit {
 
   private _editTargetRef: Habitacion | null = null;
   newModel: Habitacion = {
-  num: '' as unknown as number,
+    num: '' as unknown as number,
     caracteristicas: '',
     precio: 0,
     codigo_hotel: 0,
@@ -47,14 +47,16 @@ export class Habitaciones implements OnInit {
 
   showAddModal: boolean | undefined;
   savingAdd: boolean | undefined;
-  
+
   constructor(
-  private readonly habitacionService: HabitacionService,
-    public authService: AuthService
+    private readonly habitacionService: HabitacionService,
+    public authService: AuthService,
+    private loadingService: LoadingService // <-- 2. INYECTADO
   ) { }
 
   ngOnInit() {
-    this.cargando = true;
+    this.loadingService.show('Cargando habitaciones...');
+
     this.habitacionService.getHabitaciones().subscribe({
       next: habitaciones => {
         this.habitaciones = habitaciones;
@@ -62,13 +64,17 @@ export class Habitaciones implements OnInit {
           ...new Set(habitaciones.map(h => h.codigo_hotel))
         ];
         this.habitacionesFiltradas = [...habitaciones];
-        this.cargando = false;
+        this.loadingService.hide();
       },
       error: err => {
         this.error = 'No se pudo cargar la lista de habitaciones';
-        this.cargando = false;
+        this.loadingService.hide();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.loadingService.hide();
   }
 
   get isSuperAdmin(): boolean {
@@ -88,8 +94,7 @@ export class Habitaciones implements OnInit {
     this.habitacionesFiltradas = filtrados;
   }
 
-  //post 
-openAddModal() {
+  openAddModal() {
     if (!this.isSuperAdmin) return;
     this.newModel = {
       num: '',
@@ -118,7 +123,7 @@ openAddModal() {
       alert('Completa todos los campos obligatorios ');
       return;
     }
-    
+
     this.savingAdd = true;
 
     const payload: Partial<Habitacion> = {
@@ -142,7 +147,7 @@ openAddModal() {
         console.error('Error al agregar:', err);
 
         if (err?.error?.num?.[0]) {
-           alert(`Error: ${err.error.num[0]}`);
+          alert(`Error: ${err.error.num[0]}`);
         } else {
           alert(`Error al agregar habitación. Por favor, revisa los datos.`);
         }

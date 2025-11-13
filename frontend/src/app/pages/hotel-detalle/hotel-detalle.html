@@ -1,11 +1,8 @@
 <div class="hotel-detalle-container">
-  <ng-container *ngIf="cargando">
-    <div class="estado">Cargando datos del hotel...</div>
-  </ng-container>
   <ng-container *ngIf="error">
     <div class="estado error">{{ error }}</div>
   </ng-container>
-  <ng-container *ngIf="hotel && !cargando && !error">
+  <ng-container *ngIf="hotel && !error">
     <div class="hotel-card">
       <div class="hotel-img-box">
         <img *ngIf="hotel.url_imagen_hotel; else noImg"
@@ -34,7 +31,6 @@
     </div>
   </ng-container>
 </div>
-
 <h2>Habitaciones del {{hotel?.nombre}}</h2>
 <div class="estado">
   <div *ngIf="cargandoHabitaciones">Cargando habitaciones del hotel...</div>

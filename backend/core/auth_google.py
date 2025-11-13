@@ -28,7 +28,6 @@ class GoogleLoginAPIView(APIView):
             return Response({"error": "GOOGLE_CLIENT_ID not configured"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         try:
-            # Verifica firma + audiencia (audience=client_id)
             idinfo = id_token.verify_oauth2_token(token, grequests.Request(), client_id)
         except Exception as e:
             logger.exception("Google token verification failed")

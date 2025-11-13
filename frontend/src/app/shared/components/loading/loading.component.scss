@@ -1,3 +1,17 @@
+:host {
+  --color-primary: #2563eb;
+  --color-secondary: #0ea5e9;
+  --color-accent: #10b981;
+  --color-accent-2: #22c55e;
+  --text-muted: #475569;
+  --surface: rgba(255, 255, 255, 0.95);
+  --backdrop-blur: 8px;
+
+  --progress-track: #e2e8f0;
+  --progress-fill: linear-gradient(90deg, #2563eb, #0ea5e9);
+  --plane-color: #0ea5e9;
+}
+
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -5,18 +19,15 @@
   justify-content: center;
   gap: 16px;
   padding: 32px;
-  
+
   &.fullscreen {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
+    inset: 0;
+    background: var(--surface);
+    backdrop-filter: blur(var(--backdrop-blur));
     z-index: 9999;
   }
-  
+
   &.small {
     padding: 16px;
     .loading-spinner {
@@ -26,8 +37,13 @@
     .loading-message {
       font-size: 12px;
     }
+    .reserve-loader {
+      .rl-plane .material-symbols-outlined { font-size: 28px; }
+      .rl-label { font-size: 12px; }
+      .rl-progress { width: 180px; height: 6px; }
+    }
   }
-  
+
   &.medium {
     padding: 24px;
     .loading-spinner {
@@ -37,8 +53,13 @@
     .loading-message {
       font-size: 14px;
     }
+    .reserve-loader {
+      .rl-plane .material-symbols-outlined { font-size: 36px; }
+      .rl-label { font-size: 14px; }
+      .rl-progress { width: 220px; height: 8px; }
+    }
   }
-  
+
   &.large {
     padding: 48px;
     .loading-spinner {
@@ -47,6 +68,11 @@
     }
     .loading-message {
       font-size: 16px;
+    }
+    .reserve-loader {
+      .rl-plane .material-symbols-outlined { font-size: 44px; }
+      .rl-label { font-size: 16px; }
+      .rl-progress { width: 260px; height: 10px; }
     }
   }
 }
@@ -67,20 +93,20 @@
   border: 3px solid transparent;
   border-radius: 50%;
   animation: spin 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
-  
+
   &:nth-child(1) {
-    border-top-color: #2563eb;
+    border-top-color: var(--color-primary);
     animation-delay: 0s;
   }
-  
+
   &:nth-child(2) {
-    border-right-color: #0ea5e9;
+    border-right-color: var(--color-secondary);
     animation-delay: 0.3s;
     animation-duration: 2.5s;
   }
-  
+
   &:nth-child(3) {
-    border-bottom-color: #10b981;
+    border-bottom-color: var(--color-accent);
     animation-delay: 0.6s;
     animation-duration: 3s;
   }
@@ -90,7 +116,7 @@
   position: relative;
   z-index: 1;
   animation: pulse 2s ease-in-out infinite;
-  
+
   svg {
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
   }
@@ -98,49 +124,139 @@
 
 .loading-message {
   margin: 0;
-  color: #475569;
+  color: var(--text-muted);
   font-weight: 500;
   text-align: center;
   font-size: 14px;
   animation: fadeInOut 2s ease-in-out infinite;
 }
 
+.reserve-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-width: 220px;
+
+  .rl-plane {
+    color: var(--plane-color);
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 1, "wght" 600, "GRAD" 0, "opsz" 24;
+      font-size: 36px;
+      animation: floatPlane 2.2s ease-in-out infinite;
+    }
+  }
+
+  .rl-clouds {
+    position: relative;
+    width: 220px;
+    height: 46px;
+    overflow: hidden;
+    opacity: 0.9;
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-repeat: repeat-x;
+      background-size: 160px 46px;
+      opacity: 0.55;
+    }
+
+    &::before {
+      background-image:
+        radial-gradient(24px 16px at 20px 30px, #e2e8f0 60%, rgba(226,232,240,0) 61%),
+        radial-gradient(18px 12px at 80px 20px, #e2e8f0 60%, rgba(226,232,240,0) 61%),
+        radial-gradient(20px 14px at 140px 28px, #e2e8f0 60%, rgba(226,232,240,0) 61%);
+      animation: moveClouds 10s linear infinite;
+    }
+
+    &::after {
+      background-image:
+        radial-gradient(14px 10px at 40px 24px, #edf2f7 60%, rgba(237,242,247,0) 61%),
+        radial-gradient(12px 9px at 110px 18px, #edf2f7 60%, rgba(237,242,247,0) 61%);
+      animation: moveClouds 7s linear infinite reverse;
+    }
+  }
+
+  .rl-progress {
+    width: 220px;
+    height: 8px;
+    background: var(--progress-track);
+    border-radius: 9999px;
+    overflow: hidden;
+
+    &__bar {
+      height: 100%;
+      background: var(--progress-fill);
+      border-radius: 9999px;
+      transition: width 300ms ease;
+      will-change: width;
+    }
+  }
+
+  .rl-label {
+    color: var(--text-muted);
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .rl-dots {
+    display: inline-flex;
+    gap: 4px;
+    span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-secondary);
+      display: inline-block;
+      animation: dotBounce 1.6s infinite ease-in-out;
+
+      &:nth-child(2) { animation-delay: 0.2s; background: var(--color-primary); }
+      &:nth-child(3) { animation-delay: 0.4s; background: var(--color-accent); }
+    }
+  }
+}
+
 @keyframes spin {
-  0% {
-    transform: rotate(0deg) scale(1);
-  }
-  50% {
-    transform: rotate(180deg) scale(1.1);
-  }
-  100% {
-    transform: rotate(360deg) scale(1);
-  }
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
 }
 
 @keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.8;
-  }
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.85; }
 }
 
 @keyframes fadeInOut {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes floatPlane {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes moveClouds {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-160px); }
+}
+
+@keyframes dotBounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.7; }
+  40% { transform: translateY(-4px); opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .spinner-ring,
   .spinner-logo,
-  .loading-message {
-    animation: none;
+  .loading-message,
+  .reserve-loader .rl-plane .material-symbols-outlined,
+  .reserve-loader .rl-clouds::before,
+  .reserve-loader .rl-clouds::after,
+  .reserve-loader .rl-dots span {
+    animation: none !important;
   }
 }

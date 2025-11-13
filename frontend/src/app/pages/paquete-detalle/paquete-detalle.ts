@@ -1,27 +1,32 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { PaqueteService } from '../../services/paquete.service';
-import { Paquete } from '../../interfaces/paquete.interface';
-import { HabitacionService } from '../../services/habitacion.service';
-import { Habitacion } from '../../interfaces/habitacion.interface';
 import { FormsModule } from '@angular/forms';
+import { PaqueteService } from '../../services/paquete.service';
+import { HabitacionService } from '../../services/habitacion.service';
+import { Paquete } from '../../interfaces/paquete.interface';
+import { Habitacion } from '../../interfaces/habitacion.interface';
+import { IconsModule } from '../../icons';
+import { LoadingService } from '../../shared/services/loading';
+type MediaKind = 'lugar' | 'hotel';
 
 @Component({
   selector: 'app-paquete-detalle',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, IconsModule],
   templateUrl: './paquete-detalle.html',
   styleUrls: ['./paquete-detalle.scss']
 })
-export class PaqueteDetalle implements OnInit {
+export class PaqueteDetalle implements OnInit, OnDestroy {
   paquete: Paquete | null = null;
   itinerario: string[] = [];
   infoImportante: string[] = [];
   error = '';
-  cargando = true;
-
+  lugarImg: string = 'assets/no-image.svg';
+  hotelImg: string = 'assets/no-image.svg';
+  hasLugarImage = false;
+  hasHotelImage = false;
+  activeMedia: MediaKind = 'lugar';
   fechaReserva = '';
   fechaCaducidad = '';
   proxDisponible = '';
@@ -30,51 +35,145 @@ export class PaqueteDetalle implements OnInit {
   mensajeFechaLibre = '';
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private paqueteService: PaqueteService,
-    private habitacionService: HabitacionService
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly paqueteService: PaqueteService,
+    private readonly habitacionService: HabitacionService,
+    private readonly loadingService: LoadingService
   ) {}
 
   ngOnInit(): void {
+    this.loadingService.show('Cargando paquete...');
+
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (!id) {
       this.error = 'ID de paquete no válido';
-      this.cargando = false;
+      this.loadingService.hide();
       return;
     }
 
     this.paqueteService.getPaqueteById(id).subscribe({
       next: (data) => {
+        if (!data) {
+          this.error = 'No se pudo cargar el paquete';
+          this.loadingService.hide();
+          return;
+        }
         this.paquete = data;
         this.itinerario = (data as any).itinerario ?? [];
         this.infoImportante = (data as any).info_importante ?? [];
-        this.cargando = false;
+        this.prepareMedia(data);
+        this.loadingService.hide();
       },
       error: (err) => {
-        this.error = 'No se pudo cargar el paquete';
-        this.cargando = false;
         console.error(err);
+        this.error = 'No se pudo cargar el paquete';
+        this.loadingService.hide();
       }
     });
   }
 
-  onChangeFechaReserva() {
+  ngOnDestroy(): void {
+    this.loadingService.hide();
+  }
+
+  private prepareMedia(p: Paquete): void {
+    const lugarRaw = (p.lugar?.url_image_lugar_turistico || '').trim();
+    const hotelRaw = (p.hotel?.url_imagen_hotel || '').trim();
+    this.hasLugarImage = !!lugarRaw;
+    this.hasHotelImage = !!hotelRaw;
+    this.lugarImg = this.hasLugarImage ? lugarRaw : 'assets/no-image.svg';
+    this.hotelImg = this.hasHotelImage ? hotelRaw : 'assets/no-image.svg';
+    if (this.hasLugarImage) this.activeMedia = 'lugar';
+    else if (this.hasHotelImage) this.activeMedia = 'hotel';
+    else this.activeMedia = 'lugar';
+  }
+
+  mediaFallback(evt: Event): void {
+    const img = evt.target as HTMLImageElement;
+    if (img && !img.src.endsWith('no-image.svg')) img.src = 'assets/no-image.svg';
+  }
+  thumbFallback(evt: Event): void {
+    const img = evt.target as HTMLImageElement;
+    if (img && !img.src.endsWith('no-image.svg')) img.src = 'assets/no-image.svg';
+  }
+
+  openMaps(): void {
+    const q =
+      this.paquete?.lugar?.ubicacion ||
+      this.paquete?.hotel?.ubicacion ||
+      `${this.paquete?.lugar?.nombre || ''} ${this.paquete?.hotel?.nombre || ''} ${this.paquete?.hotel?.departamento || ''}`.trim();
+
+    if (!q) return;
+    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  async copyAddress(): Promise<void> {
+    const text =
+      this.paquete?.lugar?.ubicacion ||
+      this.paquete?.hotel?.ubicacion ||
+      `${this.paquete?.lugar?.nombre || ''} ${this.paquete?.hotel?.nombre || ''}`.trim();
+
+    if (!text) return;
+    await this.copyToClipboard(text);
+    alert('Dirección copiada');
+  }
+
+  share(): void {
+    const title = this.paquete?.nombre || `${this.paquete?.lugar?.nombre || 'Paquete'} + ${this.paquete?.hotel?.nombre || ''}`.trim();
+    const price = this.paquete?.precio?.toFixed ? this.paquete.precio.toFixed(2) : String(this.paquete?.precio ?? '');
+    const text = `${title} · ${price} BOB`;
+    const url = window.location.href;
+    if (navigator.share) {
+      navigator.share({ title, text, url }).catch(() => {});
+    } else {
+      this.copyLink();
+    }
+  }
+
+  async copyLink(): Promise<void> {
+    await this.copyToClipboard(window.location.href);
+    alert('Enlace copiado');
+  }
+
+  private async copyToClipboard(text: string): Promise<void> {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    } catch {
+    }
+  }
+
+  onChangeFechaReserva(): void {
     if (this.fechaReserva) {
       this.fechaCaducidad = this.addDias(this.fechaReserva, 1);
     }
   }
 
-  reservarPaquete() {
-    if (!this.paquete?.hotel?.id_hotel) return;
+  reservarPaquete(): void {
+    if (!this.paquete?.hotel?.id_hotel) {
+      alert('No hay hotel asignado para este paquete.');
+      return;
+    }
 
     this.habitacionService.getHabitaciones().subscribe({
-      next: habitaciones => {
-        const disponibles = habitaciones.filter(h =>
-          h.codigo_hotel === this.paquete!.hotel!.id_hotel && h.disponible
+      next: (habitaciones) => {
+        const disponibles = (habitaciones || []).filter(
+          (h: Habitacion) => h.codigo_hotel === this.paquete!.hotel!.id_hotel && (h as any).disponible
         );
 
-        if (disponibles.length === 0) {
+        if (!disponibles.length) {
           alert('No hay habitaciones disponibles en este hotel.');
           return;
         }
@@ -82,69 +181,77 @@ export class PaqueteDetalle implements OnInit {
         this.habitacionSeleccionada = disponibles[0];
 
         this.habitacionService.getDisponibilidadHabitacion(this.habitacionSeleccionada.num).subscribe({
-          next: disponibilidad => {
-            this.proxDisponible = disponibilidad.next_available_from;
+          next: (disp) => {
+            this.proxDisponible = disp?.next_available_from || new Date().toISOString().slice(0, 10);
+            this.showConflictModal = true;
+            this.fechaReserva = this.proxDisponible;
+            this.fechaCaducidad = this.addDias(this.proxDisponible, 1);
+            this.mensajeFechaLibre = '';
+          },
+          error: () => {
+            this.proxDisponible = new Date().toISOString().slice(0, 10);
             this.showConflictModal = true;
             this.fechaReserva = this.proxDisponible;
             this.fechaCaducidad = this.addDias(this.proxDisponible, 1);
             this.mensajeFechaLibre = '';
           }
         });
-      }
+      },
+      error: () => alert('No se pudo obtener disponibilidad de habitaciones.')
     });
   }
- 
-  probarFechasPersonalizadas() {
+
+  probarFechasPersonalizadas(): void {
     if (!this.habitacionSeleccionada || !this.fechaReserva || !this.fechaCaducidad) {
       alert('Selecciona ambas fechas para continuar.');
       return;
     }
 
     this.habitacionService.getDisponibilidadHabitacion(this.habitacionSeleccionada.num).subscribe({
-      next: disponibilidad => {
-        const haySolapamiento = disponibilidad.intervalos_reservados.some(it =>
+      next: (disp) => {
+        const reservado = (disp?.intervalos_reservados || []).some((it: any) =>
           this.fechaReserva <= it.fin && this.fechaCaducidad >= it.inicio
         );
 
-        if (haySolapamiento) {
+        if (reservado) {
           this.mensajeFechaLibre = '❌ Las fechas seleccionadas están ocupadas.';
         } else {
           this.mensajeFechaLibre = '🎉 ¡Felicidades! Las fechas seleccionadas están disponibles.';
           setTimeout(() => {
             this.showConflictModal = false;
             this.redirigirAReservas();
-          }, 1500);
+          }, 1200);
         }
+      },
+      error: () => {
+        this.mensajeFechaLibre = 'No fue posible validar las fechas. Intenta nuevamente.';
       }
     });
   }
 
-  redirigirAReservas() {
+  cancelarReserva(): void {
+    this.showConflictModal = false;
+  }
+
+  redirigirAReservas(): void {
+    if (!this.paquete || !this.habitacionSeleccionada) return;
+
     this.router.navigate(['/reservas'], {
       queryParams: {
-        num: this.habitacionSeleccionada!.num,
-        precio: this.paquete!.precio,
-        hotel: this.paquete!.hotel!.id_hotel,
-        capacidad: this.habitacionSeleccionada!.cant_huespedes,
+        num: this.habitacionSeleccionada.num,
+        precio: this.paquete.precio,
+        hotel: this.paquete.hotel?.id_hotel,
+        capacidad: (this.habitacionSeleccionada as any).cant_huespedes,
         fecha_reserva: this.fechaReserva,
         fecha_caducidad: this.fechaCaducidad,
-        id_paquete: this.paquete!.id_paquete
+        id_paquete: this.paquete.id_paquete
       }
     });
-  }
-
-  cancelarReserva() {
-    this.showConflictModal = false;
-    this.router.navigate(['/paquetes']);
   }
 
   formatearFecha(fecha: string): string {
     const d = new Date(fecha);
-    return d.toLocaleDateString('es-BO', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+    return d.toLocaleDateString('es-BO', { day: '2-digit', month: '2-digit', year: 'numeric' });
   }
 
   private addDias(fecha: string, dias: number): string {
@@ -153,18 +260,22 @@ export class PaqueteDetalle implements OnInit {
     return d.toISOString().slice(0, 10);
   }
 
-  getPrecioFormateado(): string {
-    return this.paquete ? `${this.paquete.precio.toFixed(2)} BOB` : '';
+  private toStarScore10to5(score10: number): number {
+    const s = Math.max(0, Math.min(10, Number(score10) || 0));
+    return Math.round((s / 2) * 2) / 2;
   }
-
-  getDuracion(): string {
-    return this.itinerario.length ? `${this.itinerario.length} días` : 'Duración no especificada';
+  getStarIcons(score10: number): ('full'|'half'|'empty')[] {
+    const score5 = this.toStarScore10to5(score10);
+    const full = Math.floor(score5);
+    const half = score5 - full >= 0.5 ? 1 : 0;
+    const empty = 5 - full - half;
+    return [
+      ...Array(full).fill('full' as const),
+      ...Array(half).fill('half' as const),
+      ...Array(empty).fill('empty' as const),
+    ];
   }
-
-  getGrupo(): string {
-    const info = this.infoImportante.find((i: string) =>
-      i.toLowerCase().includes('grupo')
-    );
-    return info || 'Grupo estándar';
+  formatFiveScale(score10: number): string {
+    return `${this.toStarScore10to5(score10).toFixed(1)}/5`;
   }
 }

@@ -35,7 +35,6 @@ export class AuthService {
     this.user$ = this.userSubject.asObservable();
   }
 
-  // Utilidad para adjuntar Authorization: Bearer <token>
   private authOptions(): { headers: HttpHeaders } {
     const token = this.getToken();
     return {
@@ -45,21 +44,18 @@ export class AuthService {
     } as { headers: HttpHeaders };
   }
 
-  // Email/Password
   login(data: { correo: string; contrasenia: string }): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.baseUrl}usuarios/login/`, data).pipe(
       tap(resp => this.persist(resp))
     );
   }
 
-  // Google
   googleLogin(idToken: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.baseUrl}auth/google/`, { token: idToken }).pipe(
       tap(resp => this.persist(resp))
     );
   }
 
-  // GitHub
   githubLoginUrl(): Observable<GithubLoginUrlResponse> {
     return this.http.get<GithubLoginUrlResponse>(`${this.baseUrl}auth/github/login-url/`);
   }
@@ -69,7 +65,6 @@ export class AuthService {
     );
   }
 
-  // Perfil (protegido): ahora con Authorization
   getMe(): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.baseUrl}usuarios/me/`, this.authOptions()).pipe(
       tap(user => {

@@ -1,35 +1,39 @@
-<div class="reserva-detalle-container" *ngIf="!loading && reserva">
+<div class="reserva-detalle-container" *ngIf="reserva && !error">
   <div class="header">
-    <a class="btn-volver" routerLink="/perfil">← Volver a Mi Perfil</a>
+    <a class="btn-volver" routerLink="/perfil">
+      <i-bs name="arrow-left" class="icon"></i-bs>
+      Volver a Mi Perfil
+    </a>
     <h1 class="titulo">Detalles de Reserva</h1>
-    <div class="reserva-id">Reserva #BK{{ reserva.id_reserva.toString().padStart(3, '0') }}</div>
-    <span class="badge-estado" [class.confirmada]="obtenerEstadoReserva() === 'Confirmado'">
-      {{ obtenerEstadoReserva() }}
-    </span>
+    <div class="header-info">
+      <div class="reserva-id">
+        <i-bs name="receipt" class="icon"></i-bs>
+        Reserva #BK{{ reserva.id_reserva.toString().padStart(3, '0') }}
+      </div>
+      <span class="badge-estado" [ngClass]="obtenerEstadoReserva().toLowerCase()">
+        {{ obtenerEstadoReserva() }}
+      </span>
+    </div>
   </div>
 
   <div class="contenido">
-    <!-- Información General -->
     <div class="card">
       <h2 class="card-titulo">Información General</h2>
 
-      <div class="info-item">
+      <div class="info-item principal">
         <div class="info-label">
           <ng-container *ngIf="esPaquete(); else soloHotel">
-            <div class="info-label">
-              Paquete turístico: {{ paquete?.lugar?.nombre || 'Destino turístico' }}
-            </div>
+            <i-bs name="box" class="icon"></i-bs>
+            Paquete turístico: {{ paquete?.lugar?.nombre || 'Destino turístico' }}
           </ng-container>
-
           <ng-template #soloHotel>
-            <div class="info-label">
-              Habitación en "{{ reserva.hotel_nombre || 'Cargando...' }}"
-            </div>
-           </ng-template>
-
+            <i-bs name="building" class="icon"></i-bs>
+            Habitación en "{{ reserva.hotel_nombre || 'Cargando...' }}"
+          </ng-template>
         </div>
         <div class="info-location">
-          <span class="icon-location">📍</span> {{ reserva.ubicacion_hotel || 'Ubicación no disponible' }}
+          <i-bs name="geo-alt" class="icon"></i-bs>
+          {{ reserva.ubicacion_hotel || 'Ubicación no disponible' }}
         </div>
       </div>
 
@@ -41,53 +45,51 @@
       <div class="fechas-container">
         <div class="fecha-box">
           <div class="fecha-label">Check-in</div>
-          <div class="fecha-icon">📅</div>
+          <div class="fecha-icon">
+            <i-bs name="calendar-check"></i-bs>
+          </div>
           <div class="fecha-valor">{{ formatearFechaCorta(reserva.fecha_reserva) }}</div>
           <div class="fecha-dia">{{ formatearFecha(reserva.fecha_reserva) }}</div>
         </div>
         <div class="fecha-box">
           <div class="fecha-label">Check-out</div>
-          <div class="fecha-icon">📅</div>
+          <div class="fecha-icon">
+            <i-bs name="calendar3"></i-bs>
+          </div>
           <div class="fecha-valor">{{ formatearFechaCorta(reserva.fecha_caducidad) }}</div>
           <div class="fecha-dia">{{ formatearFecha(reserva.fecha_caducidad) }}</div>
         </div>
       </div>
-
-      <div class="info-item">
-        <span class="icon-huespedes">👥</span>
-        <span class="info-valor">{{ reserva.habitacion_huespedes || 2 }} huéspedes</span>
-      </div>
-      <div class="info-item">
-        <div class="info-label">Duración: {{ calcularNoches() }} noches</div>
+      <div class="info-item-grid">
+        <div class="info-item">
+          <i-bs name="people" class="icon"></i-bs>
+          <span class="info-valor">{{ reserva.habitacion_huespedes || 2 }} huéspedes</span>
+        </div>
+        <div class="info-item">
+          <i-bs name="moon-stars" class="icon"></i-bs>
+          <span class="info-valor">{{ calcularNoches() }} noches</span>
+        </div>
       </div>
     </div>
-
-    <!-- Resumen de Precio -->
     <div class="card card-precio">
       <h2 class="card-titulo">Resumen de Precio</h2>
-
       <div class="precio-item">
         <span class="precio-label">Precio por noche</span>
         <span class="precio-valor">{{ reserva.habitacion_precio || 398.75 }} BOB</span>
       </div>
-
       <div class="precio-item">
         <span class="precio-label">Subtotal ({{ calcularNoches() }} noches)</span>
         <span class="precio-valor">{{ calcularSubtotal() }} BOB</span>
       </div>
-
       <div class="precio-item">
         <span class="precio-label">IVA (13%)</span>
         <span class="precio-valor">{{ calcularIVA() }} BOB</span>
       </div>
-
       <div class="precio-total">
         <span class="total-label">Total</span>
         <span class="total-valor">{{ calcularTotal() }} BOB</span>
       </div>
     </div>
-
-    <!-- Información de Reserva -->
     <div class="card">
       <h2 class="card-titulo">Información de Reserva</h2>
       <div class="info-item">
@@ -96,58 +98,66 @@
       </div>
       <div class="info-item">
         <div class="info-label">Método de pago</div>
-        <div class="info-valor">
-          💳 Tarjeta de crédito {{ ocultarNumeroTarjeta(reserva.pago_info?.cod_seguridad?.toString() || '1234') }}
+        <div class="info-valor pago">
+          <i-bs name="credit-card" class="icon"></i-bs>
+          <div>
+            <span class="pago-metodo">{{ reserva.pago_info?.metodo_pago || 'Tarjeta' }}</span>
+            <span class="pago-numero">
+              {{ reserva.pago_info?.tipo_tarjeta || '' }} terminada en {{ ocultarNumeroTarjeta(reserva.pago_info?.numero_tarjeta) }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- Información de Contacto -->
     <div class="card">
       <h2 class="card-titulo">Información de Contacto</h2>
       <div class="info-item">
         <div class="info-label">Teléfono de emergencia</div>
-        <div class="info-valor">📞 +591 2 234-5678</div>
+        <div class="info-valor contacto">
+          <i-bs name="headset" class="icon"></i-bs>
+          +591 2 234-5678
+        </div>
       </div>
       <div class="info-item">
         <div class="info-label">Email de soporte</div>
-        <div class="info-valor">✉️ soporte@munaybol.com</div>
+        <div class="info-valor contacto">
+          <i-bs name="envelope" class="icon"></i-bs>soporte@munaybol.com</div>
       </div>
     </div>
-
-    <!-- Política de Cancelación -->
     <div class="card card-politica">
       <h2 class="card-titulo">Política de Cancelación</h2>
       <div class="politica-item">
-        <span class="politica-icono">⚠️</span>
+        <i-bs name="shield-check" class="politica-icono free"></i-bs>
         <div class="politica-contenido">
           <div class="politica-titulo">Cancelación gratuita</div>
           <div class="politica-descripcion">Puedes cancelar sin costo hasta 48 horas antes de la fecha de check-in.</div>
         </div>
       </div>
       <div class="politica-item">
-        <span class="politica-icono">⚠️</span>
+        <i-bs name="shield-lock" class="politica-icono penalty"></i-bs>
         <div class="politica-contenido">
           <div class="politica-titulo">Cancelación tardía</div>
           <div class="politica-descripcion">Las cancelaciones dentro de las 48 horas están sujetas a penalización del 50%.</div>
         </div>
       </div>
     </div>
-
-    <!-- Acciones -->
     <div class="acciones">
-      <button class="btn btn-modificar" (click)="modificarReserva()">Modificar Reserva</button>
-      <button class="btn btn-cancelar" (click)="cancelarReserva()">Cancelar Reserva</button>
+      <button class="btn btn-modificar" (click)="modificarReserva()">
+        <i-bs name="pencil" class="icon"></i-bs>
+        Modificar Reserva
+      </button>
+      <button class="btn btn-cancelar" (click)="cancelarReserva()">
+        <i-bs name="trash" class="icon"></i-bs>
+        Cancelar Reserva
+      </button>
     </div>
   </div>
 </div>
-
-<div class="loading-container" *ngIf="loading">
-  <div class="spinner"></div>
-  <p>Cargando detalles de la reserva...</p>
-</div>
-
-<div class="error-container" *ngIf="error && !loading">
+<div class="error-container" *ngIf="error">
+  <i-bs name="x-circle" class="error-icon"></i-bs>
   <p>{{ error }}</p>
-  <button class="btn-volver" (click)="volverAMisReservas()">Volver</button>
+  <button class="btn btn-volver-error" (click)="volverAMisReservas()">
+    <i-bs name="arrow-left" class="icon"></i-bs>
+    Volver
+  </button>
 </div>

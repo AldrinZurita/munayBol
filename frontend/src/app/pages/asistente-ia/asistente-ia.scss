@@ -1,43 +1,26 @@
-/* MunayBol – Asistente IA
-   Fondo completamente blanco: app, sidebar, cards de chat y lista de chats guardados. */
-
 :root {
-  /* Fondo y superficies en blanco */
   --bg: #8f8c8c;
   --card: #ffffff;
   --card-2: #ffffff;
   --border: #e5e7eb;
-
-  /* Tipografía */
   --text: #0f172a;
   --text-2: #1f2937;
   --text-3: #64748b;
-
-  /* Marca */
   --brand: #3b82f6;
   --brand-2: #2563eb;
   --brand-3: #0ea5e9;
   --brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-
-  /* Sombras sutiles */
   --shadow-1: 0 2px 10px rgba(0,0,0,.06);
   --shadow-2: 0 4px 16px rgba(0,0,0,.08);
-
-  /* Radios y tamaños */
   --r-lg: 16px;
   --r-md: 12px;
   --r-sm: 10px;
   --pill: 999px;
-
-  /* Botón enviar */
   --send-size-h: 48px;
   --send-size-w: 48px;
-
-  /* Burbujas */
   --bubble-radius: 14px;
 }
 
-/* Base */
 :host, .asistente-root {
   min-height: 100vh;
   color: var(--text);
@@ -48,10 +31,7 @@
   line-height: 1.5;
 }
 
-/* Ocultar blobs de fondo */
 .bg.fx, .bg.fx-b { display: none !important; }
-
-/* Contenedor */
 .asistente-container {
   position: relative; z-index: 1; margin: 0 auto;
   max-width: 1240px;
@@ -60,7 +40,6 @@
   display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 12px;
 }
 
-/* Header blanco */
 .header {
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -95,11 +74,7 @@
   cursor: pointer;
 }
 .icon-btn:disabled { opacity: .5; cursor: not-allowed; }
-
-/* Layout */
 .layout { display: grid; grid-template-columns: 320px 1fr; gap: 12px; align-items: start; }
-
-/* Sidebar blanca */
 .sidebar {
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
@@ -117,8 +92,6 @@
   background: #ffffff;
   color: var(--text);
 }
-
-/* Grupos e items guardados (cards) en blanco */
 .group { margin-bottom: 12px; }
 .group-title {
   font-size: 11px; color: var(--text-3);
@@ -157,8 +130,6 @@
 .session-item .meta { display: inline-flex; gap: 10px; color: var(--text-3); font-size: 12px; font-weight: 500; }
 .session-item .actions { display: inline-flex; gap: 6px; justify-content: end; }
 .icon-btn.mini { width: 30px; height: 30px; border-radius: 8px; }
-
-/* Área del chat blanca */
 .chat {
   position: relative; overflow: auto;
   border: 1px solid var(--border);
@@ -170,16 +141,12 @@
 }
 .chat::-webkit-scrollbar { width: 10px; }
 .chat::-webkit-scrollbar-thumb { background: #e8eef6; border-radius: 8px; }
-
-/* Separador de día */
 .day-separator { text-align: center; margin: 8px 0; }
 .day-separator span {
   display: inline-block; padding: 5px 12px; border-radius: var(--pill);
   background: #ffffff; border: 1px solid var(--border);
   color: var(--text-3); font-size: 11px; font-weight: 700;
 }
-
-/* Mensajes: burbujas blancas para user y IA */
 .message { margin-bottom: 14px; }
 .bubble {
   border-radius: var(--bubble-radius);
@@ -199,8 +166,6 @@
   border-radius: 5px; background: #fff; color: #334155; border: 1px solid var(--border);
   font-size: 12px;
 }
-
-/* Avatar de usuario */
 .user-avatar {
   width: 32px; height: 32px; border-radius: 50%; overflow: hidden;
   border: 2px solid #3b82f6;
@@ -213,8 +178,6 @@
 .who { font-weight: 800; color: var(--text-2); font-size: 12px; }
 .spacer { flex: 1 1 auto; }
 .when { font-size: 11px; color: var(--text-3); }
-
-/* Markdown */
 .prose { color: var(--text-2); }
 .prose :where(p) { margin: 0 0 6px; }
 .prose :where(h1,h2,h3) { margin: 8px 0 6px; font-weight: 900; color: var(--text); font-size: 1rem; }
@@ -226,29 +189,21 @@
   padding: 2px 6px; border-radius: 6px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
-
-/* Acciones de burbuja */
 .bubble-actions { display: flex; align-items: center; gap: 6px; justify-content: flex-end; margin-top: 4px; }
 .bubble-actions .copy {
   display: inline-grid; place-items: center; width: 28px; height: 28px;
   border-radius: 8px; border: 1px solid var(--border); background: #ffffff; color: var(--text-3);
 }
-
-/* Indicador escribiendo (blanco) */
 .typing-animated {
   display: inline-flex; gap: 8px; align-items: center;
   padding: 8px 12px; background: #ffffff;
   border: 1px dashed var(--border); border-radius: var(--pill);
 }
 .typing-animated .dot { width: 8px; height: 8px; border-radius: 50%; background: #cbd5e1; }
-
-/* FAB */
 .fab-down {
   width: 44px; height: 44px; border-radius: var(--pill);
   border: 1px solid var(--border); background: #ffffff; box-shadow: var(--shadow-1);
 }
-
-/* Input area blanca */
 .input-container {
   display: grid; grid-template-columns: auto 1fr var(--send-size-w);
   gap: 12px; align-items: center;
@@ -261,8 +216,6 @@
 }
 .input-container input::placeholder { color: var(--text-3); }
 .input-container input:disabled { opacity: .6; cursor: not-allowed; }
-
-/* Botón enviar (puede mantener el gradiente de marca) */
 .send {
   display: inline-grid; place-items: center;
   width: var(--send-size-w); height: var(--send-size-h);
@@ -272,8 +225,6 @@
   cursor: pointer;
 }
 .send svg { width: 20px; height: 20px; display: block; }
-
-/* Sugerencias rápidas blancas */
 .quick-buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
 .quick-buttons .option {
   padding: 16px; border-radius: 12px;
@@ -283,8 +234,6 @@
 .quick-buttons .option h3 { margin: 0 0 4px; font-size: 15px; color: var(--text); }
 .quick-buttons .option h3 strong { color: var(--text); }
 .quick-buttons .option span { font-size: 12px; color: var(--text-3); }
-
-/* Responsive */
 @media (max-width: 880px) {
   .layout { grid-template-columns: 1fr; }
   .sidebar { order: 2; }
@@ -293,8 +242,6 @@
   .icon-btn { width: 36px; height: 36px; }
   .msg-icon { width: 14px; height: 14px; font-size: 11px; }
 }
-
-/* Modo oscuro forzado a blanco para cumplir el requerimiento */
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #ffffff;

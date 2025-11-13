@@ -1,8 +1,4 @@
 :host { display: block; }
-
-/* =========================
-   PALETA Y BASE (alineada con Lugares)
-   ========================= */
 :root {
   --color-primary: #0F6BFF;
   --color-accent:  #00B894;
@@ -26,7 +22,6 @@
   --transition: all 0.25s ease;
 }
 
-/* Utilidad accesible */
 .sr-only {
   position: absolute !important;
   width: 1px !important;
@@ -39,9 +34,6 @@
   border: 0 !important;
 }
 
-/* =========================
-   FONDO SUAVE TRICOLOR
-   ========================= */
 .hoteles-page {
   position: relative; z-index: 0;
   background:
@@ -57,13 +49,9 @@
     repeating-linear-gradient(45deg,  rgba(2,6,23,0.025) 0 1px, transparent 1px 20px);
 }
 
-/* =========================
-   ICONOS Bootstrap (solo color)
-   ========================= */
 .icon-center { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; line-height: 1; transition: transform .15s ease, color .2s ease; }
 i-bs { display: inline-flex; align-items: center; justify-content: center; }
 
-/* Colores consistentes con Lugares */
 i-bs[name="plus-square-fill"] { color: var(--color-accent); }
 i-bs[name="funnel"]           { color: var(--color-accent); }
 i-bs[name="x-circle"]         { color: var(--color-secondary); }
@@ -79,9 +67,6 @@ i-bs[name="check2-circle"]    { color: var(--color-primary); }
 i-bs[name="search"]           { color: var(--color-primary); }
 i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
 
-/* =========================
-   CONTENEDOR + CABECERA
-   ========================= */
 .hoteles-container { max-width: 1280px; margin: 0 auto; padding: 24px; }
 .header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .title {
@@ -93,9 +78,6 @@ i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
   box-shadow: 0 10px 24px rgba(2,6,23,0.16), inset 0 0 0 1px rgba(2,6,23,0.04);
 }
 
-/* =========================
-   BOTONES (icon-only, como Lugares)
-   ========================= */
 .btn, .icon-btn { transition: var(--transition); }
 .btn-add.icon-only,
 .btn.icon-only {
@@ -122,15 +104,9 @@ i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
 .icon-btn.btn-delete { background: linear-gradient(135deg, #ff6a6a, #e74c3c); box-shadow: 0 10px 22px rgba(231,76,60,.22); }
 .icon-btn:hover { transform: translateY(-2px); filter: saturate(1.05); }
 
-/* =========================
-   TARJETAS (títulos de tarjetas y base)
-   ========================= */
 .card { background: var(--color-card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1rem; transition: var(--transition); overflow: visible; }
 .card-title { margin: 0 0 .75rem; font-size: 1rem; font-weight: 800; color: #0f172a; }
 
-/* =========================
-   FILTROS (copiados de Lugares y adaptados)
-   ========================= */
 .filtros-card { margin-bottom: 1.75rem; background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%); border: 1px solid var(--color-border); border-radius: 14px; }
 .filtros-grid { display: grid; grid-template-columns: 1fr 260px 180px auto auto; align-items: end; gap: 1rem; padding: 1rem; }
 @media (max-width: 900px) { .filtros-grid { grid-template-columns: 1fr 1fr; } .acciones { display: flex; gap: .75rem; } .resultados { justify-self: end; } }
@@ -157,9 +133,6 @@ i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
   border: 1px solid rgba(15,107,255,.18); color: var(--color-primary); border-radius: 999px; font-weight: 800; font-size: .9rem; box-shadow: 0 1px 2px rgba(2,6,23,.06);
 }
 
-/* =========================
-   ESTADOS
-   ========================= */
 .estado { text-align: center; margin: 1.25rem 0; }
 .loading { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
 .spinner { width: 18px; height: 18px; border: 2px solid var(--color-primary); border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; }
@@ -167,9 +140,6 @@ i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
 .error { color: var(--color-danger); font-weight: 700; }
 .no-result { color: var(--color-muted); display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
 
-/* =========================
-   LISTA EN 3 COLUMNAS + CARDS (halo luminoso + reveal)
-   ========================= */
 .lista {
   display: grid;
   grid-template-columns: repeat(3, minmax(280px, 1fr));
@@ -228,19 +198,18 @@ i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
   .fecha-admin .label { color: #64748b; margin-right: 6px; }
 }
 
-/* CRUD y acciones centradas */
 .card-right {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center; /* centrado horizontal */
+  justify-content: center;
   gap: 10px;
   flex-wrap: wrap;
 }
 .admin-actions {
   display: flex;
   align-items: center;
-  justify-content: center; /* centrado de CRUD */
+  justify-content: center;
   gap: 8px;
 }
 
@@ -252,9 +221,6 @@ i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
   100% { transform: translateX(120%)  skewX(12deg); }
 }
 
-/* =========================
-   MODAL (web scroll + fondo tricolor suave)
-   ========================= */
 .modal-backdrop {
   position: fixed; inset: 0;
   background: radial-gradient(1200px 800px at 20% 10%, rgba(15,23,42,0.45) 0%, rgba(2,6,23,0.75) 40%, rgba(2,6,23,0.85) 100%);
@@ -266,7 +232,7 @@ i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
   position: fixed; inset: 0;
   display: flex; align-items: center; justify-content: center;
   z-index: 100; padding: 16px; perspective: 1200px;
-  overflow: auto; /* permite scroll de todo el overlay si hace falta */
+  overflow: auto;
 }
 
 .modal-ornaments { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
@@ -298,11 +264,9 @@ i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
 .modal-header { border-bottom: 1px solid rgba(2,6,23,0.06); }
 .modal-footer { border-top: 1px solid rgba(2,6,23,0.06); }
 
-/* Cuerpo scrollable y sin cortes bajo la imagen */
-/* PRIMORDIAL: Web scroll visible, suave y con colores tricolor en el thumb */
 .modal-body {
   flex: 1 1 auto; min-height: 0;
-  overflow: auto; /* scroll interno */
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
   touch-action: pan-y;
@@ -311,11 +275,10 @@ i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
     linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,1) 22%),
     radial-gradient(800px 480px at 10% -8%, rgba(213,43,30,0.06) 0%, rgba(213,43,30,0) 60%),
     radial-gradient(800px 480px at 90% 8%,  rgba(0,122,61,0.06) 0%, rgba(0,122,61,0) 60%);
-  padding: 1rem 1.5rem 110px; /* gran padding inferior para que nunca tape el footer */
+  padding: 1rem 1.5rem 110px;
   position: relative;
 }
 
-/* Sombras de desplazamiento (indicadores) */
 .modal-body::before,
 .modal-body::after {
   content: ""; position: sticky; left: 0; right: 0; height: 16px; display: block; z-index: 1; pointer-events: none;
@@ -323,7 +286,6 @@ i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
 .modal-body::before { top: 0; background: linear-gradient(180deg, rgba(15,23,42,.08), rgba(15,23,42,0)); }
 .modal-body::after  { bottom: 0; background: linear-gradient(0deg,  rgba(15,23,42,.08), rgba(15,23,42,0)); }
 
-/* Scrollbar WebKit (visible y con colores de la bandera) */
 .modal-body::-webkit-scrollbar { width: 14px; height: 14px; }
 .modal-body::-webkit-scrollbar-track {
   background: linear-gradient(180deg, rgba(2,6,23,.05), rgba(2,6,23,.06));
@@ -336,11 +298,7 @@ i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
   box-shadow: inset 0 0 0 1px rgba(2,6,23,.06);
 }
 .modal-body::-webkit-scrollbar-thumb:hover { filter: brightness(1.05) saturate(1.05); }
-
-/* Firefox */
 .modal-body { scrollbar-width: thin; scrollbar-color: var(--bolivia-green) rgba(2,6,23,.08); }
-
-/* Formulario */
 .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; }
 @media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
 .field { display: flex; flex-direction: column; gap: 6px; }
@@ -356,23 +314,13 @@ i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
   box-shadow: 0 0 0 3px rgba(15,107,255,0.14), inset 0 0 0 1px rgba(0,0,0,0.02);
 }
 .span-2 { grid-column: 1 / -1; }
-
-/* Imagen preview en modal */
 .img-preview { margin-top: 6px; text-align: center; }
 .img-frame { position: relative; display: inline-block; max-width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid rgba(2,6,23,0.06); box-shadow: 0 10px 24px rgba(2,6,23,.2); }
 .img-frame img { display: block; max-width: 100%; height: auto; object-fit: contain; }
 .img-frame::after { content: ""; position: absolute; inset: -20%; background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.28) 50%, rgba(255,255,255,0) 100%); transform: translateX(-120%) skewX(12deg); animation: imgShine 10s linear infinite; mix-blend-mode: screen; pointer-events: none; }
 .img-frame:hover::after { animation-duration: 3.2s; }
-
-/* Spinner inline en botón */
 .spinner-inline { width: 16px; height: 16px; margin-right: 0; border: 2px solid rgba(255,255,255,0.7); border-top-color: transparent; border-radius: 50%; display: inline-block; animation: spin .8s linear infinite; vertical-align: middle; }
-
-/* Evitar scroll del fondo cuando el modal está abierto (si añades body.no-scroll) */
 :host ::ng-deep body.no-scroll { overflow: hidden; }
-
-/* =========================
-   ACCESIBILIDAD
-   ========================= */
 button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible {
   outline: 3px solid rgba(15,107,255,.25); outline-offset: 2px; border-radius: 8px;
 }

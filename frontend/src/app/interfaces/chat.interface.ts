@@ -6,14 +6,14 @@ export interface ChatSession {
   archived: boolean;
   messages_count: number;
   last_message_at: string | null;
-  created_at: string; // ISO
-  updated_at: string; // ISO
+  created_at: string;
+  updated_at: string;
 }
 
 export interface ChatMessage {
   role: ChatRole;
   content: string;
-  ts: string; // ISO
+  ts: string;
 }
 
 export interface MessagesPage {

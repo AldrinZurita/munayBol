@@ -1,147 +1,127 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { PaqueteService } from '../../services/paquete.service';
 import { Paquete } from '../../interfaces/paquete.interface';
+import { IconsModule } from '../../icons';
+import { LoadingService } from '../../shared/services/loading';
+type MediaKind = 'lugar' | 'hotel';
 
 @Component({
   selector: 'app-paquetes',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, IconsModule],
   templateUrl: './paquetes.html',
   styleUrls: ['./paquetes.scss']
 })
-export class Paquetes implements OnInit {
+export class Paquetes implements OnInit, OnDestroy {
   paquetes: Paquete[] = [];
   paquetesFiltrados: Paquete[] = [];
-  disponibleSeleccionado = '';
+  searchTerm = '';
+  departamentos: string[] = [];
   departamentoSeleccionado = '';
+  tipos: string[] = ['aventura', 'cultural', 'naturaleza', 'historico', 'gastronomico'];
   tipoSeleccionado = '';
-  departamentos: string[] = ['Cochabamba', 'Chuquisaca', 'Beni', 'Pando', 'Santa Cruz', 'Tarija', 'La Paz', 'Oruro'];
-  cargando = false;
+  disponibleSeleccionado = '';
   error = '';
-
-  mostrarModalEditar = false;
-  mostrarModalCrear = false; // ✅ NUEVO: controla el modal de creación
-  paqueteEditando: Paquete | null = null;
-
-  paqueteNuevo: Partial<Paquete> = {
-    nombre: '',
-    tipo: '',
-    precio: 0,
-    id_hotel: undefined,
-    id_lugar: undefined,
-    estado: true
-  };
+  showModal = false;
+  isEditMode = false;
+  savingModal = false;
+  modalPaqueteModel: Partial<Paquete> = {};
+  private _editTarget: Paquete | null = null;
+  private activeMedia = new Map<number, MediaKind>();
 
   constructor(
     public authService: AuthService,
-    private paqueteService: PaqueteService
+    private paqueteService: PaqueteService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private loadingService: LoadingService // <-- 2. INYECTADO
   ) {}
 
-  ngOnInit() {
-    this.cargando = true;
+  ngOnInit(): void {
+    this.loadingService.show('Cargando paquetes...');
     this.paqueteService.getPaquetes().subscribe({
       next: (data) => {
         this.paquetes = data ?? [];
         this.paquetesFiltrados = [...this.paquetes];
-        this.cargando = false;
+        const allDeps = this.paquetes
+          .map(p => (p.hotel?.departamento || (p as any).lugar?.departamento || '').toString().trim())
+          .filter(s => s.length > 0);
+        this.departamentos = Array.from(new Set(allDeps))
+          .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
+        for (const p of this.paquetes) {
+          const hasLugar = Boolean(this.getLugarImage(p));
+          const hasHotel = Boolean(this.getHotelImage(p));
+          this.activeMedia.set(p.id_paquete, hasLugar ? 'lugar' : (hasHotel ? 'hotel' : 'lugar'));
+        }
+        this.loadingService.hide();
+        this.route.queryParams.subscribe(params => {
+          this.departamentoSeleccionado = params['departamento'] ?? '';
+          this.aplicarFiltros();
+        });
       },
       error: () => {
         this.error = 'No se pudo cargar la lista de paquetes';
-        this.cargando = false;
+        this.loadingService.hide();
       }
     });
+  }
+  ngOnDestroy(): void {
+    this.loadingService.hide();
   }
 
   get isSuperAdmin(): boolean {
     return this.authService.isSuperadmin();
   }
 
-  aplicarFiltros() {
-    let filtrados = this.paquetes;
+  aplicarFiltros(): void {
+    const term = (this.searchTerm || '').trim().toLowerCase();
 
-    if (this.disponibleSeleccionado) {
-      const disponible = this.disponibleSeleccionado === 'true';
-      filtrados = filtrados.filter(p => p.estado === disponible);
-    }
-
-    if (this.departamentoSeleccionado) {
-      filtrados = filtrados.filter(p =>
-        p.hotel && p.hotel.departamento
-          ? p.hotel.departamento === this.departamentoSeleccionado
-          : false
+    let filtrados = this.paquetes.filter(p => {
+      const okDep = this.departamentoSeleccionado
+        ? (p.hotel?.departamento || (p as any).lugar?.departamento || '') === this.departamentoSeleccionado
+        : true;
+      if (!okDep) return false;
+      const okTipo = this.tipoSeleccionado ? p.tipo === this.tipoSeleccionado : true;
+      if (!okTipo) return false;
+      if (this.disponibleSeleccionado) {
+        const disp = this.disponibleSeleccionado === 'true';
+        if (p.estado !== disp) return false;
+      }
+      if (!term) return true;
+      const nombre = (p.nombre || '').toLowerCase();
+      const hotelNombre = (p.hotel?.nombre || '').toLowerCase();
+      const lugarNombre = ((p as any).lugar?.nombre || '').toLowerCase();
+      const ubic = (p.hotel?.ubicacion || '').toLowerCase();
+      return (
+        nombre.includes(term) ||
+        hotelNombre.includes(term) ||
+        lugarNombre.includes(term) ||
+        ubic.includes(term)
       );
-    }
-
-    if (this.tipoSeleccionado) {
-      filtrados = filtrados.filter(p => p.tipo === this.tipoSeleccionado);
-    }
+    });
 
     this.paquetesFiltrados = filtrados;
   }
 
-  crearPaquete() {
+  clearFilters(): void {
+    this.searchTerm = '';
+    this.departamentoSeleccionado = '';
+    this.tipoSeleccionado = '';
+    this.disponibleSeleccionado = '';
+    this.aplicarFiltros();
+  }
+
+  onVerDetalles(id_paquete: number): void {
+    this.router.navigate(['/paquetes', id_paquete]);
+  }
+
+  onEliminarPaquete(paquete: Paquete): void {
     if (!this.isSuperAdmin) return;
-
-    if (!this.paqueteNuevo.nombre || !this.paqueteNuevo.tipo || !this.paqueteNuevo.precio || !this.paqueteNuevo.id_hotel || !this.paqueteNuevo.id_lugar) {
-      alert('Completa todos los campos obligatorios.');
-      return;
-    }
-
-    this.paqueteService.crearPaquete(this.paqueteNuevo).subscribe({
-      next: (paquete) => {
-        this.paquetes.push(paquete);
-        this.aplicarFiltros();
-        alert('Paquete agregado correctamente');
-        this.paqueteNuevo = {
-          nombre: '',
-          tipo: '',
-          precio: 0,
-          id_hotel: undefined,
-          id_lugar: undefined,
-          estado: true
-        };
-        this.mostrarModalCrear = false; // ✅ Cierra el modal al guardar
-      },
-      error: () => alert('Error al agregar paquete')
-    });
-  }
-
-  onEditarPaquete(paquete: Paquete) {
-    if (!this.isSuperAdmin) return;
-    this.paqueteEditando = { ...paquete };
-    this.mostrarModalEditar = true;
-  }
-
-  cerrarModal() {
-    this.mostrarModalEditar = false;
-    this.paqueteEditando = null;
-  }
-
-  guardarEdicion() {
-    if (!this.paqueteEditando || !this.isSuperAdmin) return;
-
-    this.paqueteService.actualizarPaquete(this.paqueteEditando).subscribe({
-      next: (actualizado) => {
-        const idx = this.paquetes.findIndex(p => p.id_paquete === actualizado.id_paquete);
-        if (idx !== -1) {
-          this.paquetes[idx] = actualizado;
-          this.aplicarFiltros();
-        }
-        this.cerrarModal();
-        alert('Paquete actualizado correctamente');
-      },
-      error: () => alert('Error al actualizar el paquete')
-    });
-  }
-
-  onEliminarPaquete(paquete: Paquete) {
-    if (!this.isSuperAdmin) return;
-
-    if (confirm('¿Eliminar paquete?')) {
+    if (confirm(`¿Eliminar paquete "${paquete.nombre}"?`)) {
       this.paqueteService.eliminarPaquete(paquete.id_paquete).subscribe({
         next: () => {
           this.paquetes = this.paquetes.filter(p => p.id_paquete !== paquete.id_paquete);
@@ -151,5 +131,166 @@ export class Paquetes implements OnInit {
         error: () => alert('Error al eliminar paquete')
       });
     }
+  }
+
+  openAddPaqueteModal(): void {
+    if (!this.isSuperAdmin) return;
+    this._editTarget = null;
+    this.modalPaqueteModel = this.createEmptyPaquete();
+    this.isEditMode = false;
+    this.openModal();
+  }
+
+  openEditPaqueteModal(paquete: Paquete): void {
+    if (!this.isSuperAdmin) return;
+    this._editTarget = paquete;
+    this.modalPaqueteModel = { ...paquete };
+    this.isEditMode = true;
+    this.openModal();
+  }
+
+  saveNewPaquete(form: NgForm): void {
+    if (!form.valid || !this.isSuperAdmin) return;
+
+    if (!this.modalPaqueteModel.nombre || !this.modalPaqueteModel.tipo || this.modalPaqueteModel.precio == null || !this.modalPaqueteModel.id_hotel || !this.modalPaqueteModel.id_lugar) {
+      alert('Completa todos los campos obligatorios.');
+      return;
+    }
+
+    this.savingModal = true;
+    this.paqueteService.crearPaquete(this.modalPaqueteModel).subscribe({
+      next: (paquete) => {
+        this.paquetes.unshift(paquete as Paquete);
+        const hasLugar = Boolean(this.getLugarImage(paquete as Paquete));
+        const hasHotel = Boolean(this.getHotelImage(paquete as Paquete));
+        this.activeMedia.set((paquete as Paquete).id_paquete, hasLugar ? 'lugar' : (hasHotel ? 'hotel' : 'lugar'));
+
+        this.aplicarFiltros();
+        this.savingModal = false;
+        this.closePaqueteModal();
+        alert('Paquete agregado correctamente');
+      },
+      error: (err) => {
+        console.error('Error al agregar paquete:', err);
+        this.savingModal = false;
+        alert('Error al agregar paquete');
+      }
+    });
+  }
+
+  saveEditPaquete(form: NgForm): void {
+    if (!form.valid || !this._editTarget || !this.isSuperAdmin) return;
+    this.savingModal = true;
+
+    const payload: Paquete = {
+      ...(this.modalPaqueteModel as Paquete),
+      id_paquete: this._editTarget.id_paquete
+    };
+
+    this.paqueteService.actualizarPaquete(payload).subscribe({
+      next: (p) => {
+        Object.assign(this._editTarget!, p);
+        const hasLugar = Boolean(this.getLugarImage(this._editTarget!));
+        const hasHotel = Boolean(this.getHotelImage(this._editTarget!));
+        if (!hasLugar && hasHotel) this.activeMedia.set(this._editTarget!.id_paquete, 'hotel');
+        if (hasLugar && !hasHotel) this.activeMedia.set(this._editTarget!.id_paquete, 'lugar');
+
+        this.aplicarFiltros();
+        this.savingModal = false;
+        this.closePaqueteModal();
+        alert('Paquete actualizado');
+        this._editTarget = null;
+      },
+      error: (err) => {
+        console.error('Error al actualizar paquete:', err);
+        this.savingModal = false;
+        alert('Error al actualizar paquete');
+      }
+    });
+  }
+
+  closePaqueteModal(): void {
+    if (this.savingModal) return;
+    this.showModal = false;
+    document.body.classList.remove('no-scroll');
+  }
+
+  private openModal(): void {
+    this.showModal = true;
+    document.body.classList.add('no-scroll');
+  }
+
+  private createEmptyPaquete(): Partial<Paquete> {
+    return {
+      id_paquete: undefined as any,
+      nombre: '',
+      tipo: '',
+      precio: 0,
+      id_hotel: undefined,
+      id_lugar: undefined,
+      estado: true
+    };
+  }
+
+  onCardImageError(evt: Event): void {
+    const img = evt.target as HTMLImageElement;
+    img.src = 'assets/no-image.svg';
+  }
+  onAvatarError(evt: Event): void {
+    const img = evt.target as HTMLImageElement;
+    img.src = 'assets/no-image.svg';
+  }
+
+  hasBothImages(p: Paquete): boolean {
+    return Boolean(this.getLugarImage(p) && this.getHotelImage(p));
+  }
+
+  switchMedia(id: number, kind: MediaKind): void {
+    this.activeMedia.set(id, kind);
+  }
+
+  isActiveMedia(id: number, kind: MediaKind): boolean {
+    const active = this.activeMedia.get(id);
+    return active ? active === kind : kind === 'lugar';
+  }
+
+  getHotelImage(p: Paquete): string | null {
+    return p.hotel?.url_imagen_hotel || null;
+  }
+
+  getLugarImage(p: Paquete): string | null {
+    const l: any = (p as any).lugar;
+    const src =
+      l?.url_image_lugar_turistico ||
+      l?.url_imagen_lugar ||
+      l?.url_imagen ||
+      l?.imagen_url ||
+      l?.imagen ||
+      l?.imageUrl ||
+      null;
+    return src;
+  }
+
+  private toStarScore10to5(score10: number): number {
+    const s = Math.max(0, Math.min(10, Number(score10) || 0));
+    return Math.round((s / 2) * 2) / 2;
+  }
+  getStarIcons(score10: number): ('full'|'half'|'empty')[] {
+    const score5 = this.toStarScore10to5(score10);
+    const full = Math.floor(score5);
+    const half = score5 - full >= 0.5 ? 1 : 0;
+    const empty = 5 - full - half;
+    return [
+      ...Array(full).fill('full' as const),
+      ...Array(half).fill('half' as const),
+      ...Array(empty).fill('empty' as const),
+    ];
+  }
+  formatFiveScale(score10: number): string {
+    return `${this.toStarScore10to5(score10).toFixed(1)}/5`;
+  }
+
+  trackByPaquete(_: number, item: Paquete): number {
+    return item.id_paquete;
   }
 }

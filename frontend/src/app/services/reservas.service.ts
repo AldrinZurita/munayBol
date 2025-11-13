@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
 
 export interface AdminReservasParams {
   id_usuario?: number;
-  estado?: 'true' | 'false'; // true=activas, false=canceladas
+  estado?: 'true' | 'false';
   page?: number;
   page_size?: number;
 }
@@ -35,20 +35,17 @@ export class ReservasService {
     return this.http.get<Reserva[]>(this.apiUrl, { headers: this.getHeaders() });
   }
 
-  // Perfil: siempre activas del usuario
   getMisReservas(): Observable<Reserva[]> {
     const currentUser = this.authService.getUser();
     if (!currentUser) return of<Reserva[]>([]);
     return this.getReservasPorUsuario(currentUser.id);
   }
 
-  // Perfil: fuerza estado=true para ocultar canceladas
   getReservasPorUsuario(id_usuario: number): Observable<Reserva[]> {
     const url = `${this.apiUrl}?id_usuario=${id_usuario}&estado=true`;
     return this.http.get<Reserva[]>(url, { headers: this.getHeaders() });
   }
 
-  // Admin: listados con filtros
   listReservasAdmin(params: AdminReservasParams = {}): Observable<Reserva[]> {
     let httpParams = new HttpParams();
     if (params.id_usuario != null) httpParams = httpParams.set('id_usuario', params.id_usuario);

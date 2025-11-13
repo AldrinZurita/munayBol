@@ -1,12 +1,11 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, OnDestroy } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../services/auth.service';
+import { LoadingService } from '../../shared/services/loading';
 
 interface Usuario {
   id: number;
@@ -23,13 +22,13 @@ interface Usuario {
 @Component({
   selector: 'app-admin-usuarios',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, LoadingComponent],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './admin-usuarios.html',
   styleUrls: ['./admin-usuarios.scss']
 })
-export class AdminUsuariosComponent implements OnInit {
+export class AdminUsuariosComponent implements OnInit, OnDestroy {
   usuarios: Usuario[] = [];
-  loading = false;
+  error = '';
   searchTerm = '';
   filterRole: string = 'all';
   filterStatus: string = 'all';
@@ -41,16 +40,20 @@ export class AdminUsuariosComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private auth: AuthService,
+    private loadingService: LoadingService,
     @Inject(PLATFORM_ID) platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit() {
-    // Evitar llamada protegida en SSR: sin localStorage => sin Authorization => 401
     if (this.isBrowser) {
       this.loadUsuarios();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.loadingService.hide();
   }
 
   get totalAdmins(): number {
@@ -62,18 +65,19 @@ export class AdminUsuariosComponent implements OnInit {
   }
 
   loadUsuarios() {
-    this.loading = true;
+    this.loadingService.show('Cargando usuarios...');
+    this.error = '';
 
-    // Adjunta Authorization explícitamente con AuthService
     this.http.get<Usuario[]>(`${this.baseUrl}usuarios/`, this.authOptions())
       .subscribe({
         next: (data) => {
           this.usuarios = data;
-          this.loading = false;
+          this.loadingService.hide();
         },
         error: (error) => {
           console.error('Error loading users:', error);
-          this.loading = false;
+          this.error = 'No se pudieron cargar los usuarios.';
+          this.loadingService.hide();
           if (error.status === 401 || error.status === 403) {
             alert('No tienes permisos para acceder a esta página');
             this.router.navigate(['/']);
@@ -162,7 +166,6 @@ export class AdminUsuariosComponent implements OnInit {
     return status ? 'badge-active' : 'badge-inactive';
   }
 
-  // Usa el helper del AuthService para adjuntar Authorization
   private authOptions() {
     return this.auth['authOptions']();
   }

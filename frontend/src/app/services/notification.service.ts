@@ -11,9 +11,7 @@ export class NotificationService {
   private readonly notifications = new BehaviorSubject<Notification[]>([]);
   readonly notifications$ = this.notifications.asObservable();
   private ws?: WebSocket;
-
   constructor(private readonly http: HttpClient, private readonly auth: AuthService) {
-    // React to auth state changes
     this.auth.user$.subscribe(user => {
       if (user) {
         this.connectSocket();
@@ -29,7 +27,6 @@ export class NotificationService {
     return token ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) } : {};
   }
 
-  // Fetch list from backend and normalize dates
   fetchNotifications(): Observable<Notification[]> {
     return this.http.get<any[]>('/api/notifications/', this.authOptions()).pipe(
       map(list => list.map(n => ({
@@ -50,7 +47,6 @@ export class NotificationService {
   }
 
   getNotifications(): Observable<Notification[]> {
-    // Ensure we have latest list, but also return stream for subscribers
     this.fetchNotifications().subscribe();
     return this.notifications$;
   }
@@ -92,34 +88,27 @@ export class NotificationService {
     );
   }
 
-  // WebSocket connection for real-time updates
   connectSocket(): void {
-    // Avoid SSR and duplicate connections
     if (typeof window === 'undefined' || this.ws) return;
     const token = this.auth.getToken();
     if (!token) return;
     const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    // Usar el host del frontend, el proxy de Angular lo enviará al backend (según proxy.conf.json)
     const url = `${proto}://${window.location.host}/ws/notifications/?token=${encodeURIComponent(token)}`;
     try {
       this.ws = new WebSocket(url);
       this.ws.onopen = () => {
-        // Al conectar, traer la lista actual para mostrar el punto rojo si corresponde
         this.fetchNotifications().subscribe();
       };
       this.ws.onmessage = () => {
-        // On any event, refetch notifications
         this.fetchNotifications().subscribe();
       };
       this.ws.onclose = () => {
         this.ws = undefined;
       };
       this.ws.onerror = (e) => {
-        // Solo loguear el error, no bloquear la app
         console.warn('WebSocket error (not critical):', e);
       };
     } catch (e) {
-      // Captura cualquier error de conexión y loguea
       console.warn('WebSocket connection error (not critical):', e);
     }
   }

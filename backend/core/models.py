@@ -35,7 +35,6 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     estado = models.BooleanField(default=True)
     fecha_creacion = models.DateField(auto_now_add=True)
     is_staff = models.BooleanField(default=False)
-    # NUEVO: URL de avatar (Google picture o GitHub avatar_url)
     avatar_url = models.URLField(blank=True, default="")
 
     USERNAME_FIELD = 'correo'
@@ -154,7 +153,6 @@ class Sugerencias(models.Model):
 class ChatSession(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     usuario = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True, db_constraint=False)
-    # NUEVO: metadatos para historial profesional
     title = models.CharField(max_length=120, blank=True, default="")
     archived = models.BooleanField(default=False)
     messages_count = models.PositiveIntegerField(default=0)
@@ -165,10 +163,6 @@ class ChatSession(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def ensure_metadata(self):
-        """
-        Asegura que title/messages_count/last_message_at estén sincronizados
-        con history si faltan (compatibilidad hacia atrás).
-        """
         changed = False
         if not self.messages_count:
             self.messages_count = len(self.history or [])
@@ -179,7 +173,6 @@ class ChatSession(models.Model):
                 for h in (self.history or []):
                     ts = h.get("ts")
                     if ts:
-                        # ts puede venir como ISO string
                         try:
                             from django.utils.dateparse import parse_datetime
                             dt = parse_datetime(ts) or timezone.now()
@@ -222,16 +215,13 @@ class Notification(models.Model):
 
 
 class Review(models.Model):
-    """Reviews/Comments for Hotels, Lugares Turisticos, and Paquetes"""
-    # Rating constants
     MIN_RATING = 1
     MAX_RATING = 5
     RATING_CHOICES = [(i, i) for i in range(MIN_RATING, MAX_RATING + 1)]
     
     id_review = models.BigAutoField(primary_key=True)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='reviews')
-    
-    # Content type references - only one should be set
+
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, null=True, blank=True, related_name='reviews')
     lugar_turistico = models.ForeignKey(LugarTuristico, on_delete=models.CASCADE, null=True, blank=True, related_name='reviews')
     paquete = models.ForeignKey(Paquete, on_delete=models.CASCADE, null=True, blank=True, related_name='reviews')

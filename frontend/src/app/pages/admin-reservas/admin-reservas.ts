@@ -5,6 +5,7 @@ import { ReservasService, AdminReservasParams } from '../../services/reservas.se
 import { Reserva } from '../../interfaces/reserva.interface';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { LoadingService } from '../../shared/services/loading';
 
 @Component({
   selector: 'app-admin-reservas',
@@ -16,30 +17,24 @@ import { AuthService } from '../../services/auth.service';
 export class AdminReservas implements OnInit, OnDestroy {
   filtroEstado: 'todas' | 'activas' | 'canceladas' = 'todas';
   filtroUsuarioId: string = '';
-
-  cargando = true;
   error = '';
   reservas: Reserva[] = [];
-
-  // Estado de botones
   cancelling = new Set<number>();
   reactivating = new Set<number>();
   removing = new Set<number>();
-
-  // Deco
   animateFun = signal(false);
   private funTimer?: any;
 
   constructor(
     private reservasService: ReservasService,
-    private auth: AuthService
+    private auth: AuthService,
+    private loadingService: LoadingService // <-- 2. INYECTADO
   ) {}
 
   ngOnInit(): void {
     const user = this.auth.getUser();
     if (!user || user.rol !== 'superadmin') {
       this.error = 'Acceso restringido. Se requiere rol superadmin.';
-      this.cargando = false;
       return;
     }
     this.cargar();
@@ -47,6 +42,7 @@ export class AdminReservas implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.funTimer) clearTimeout(this.funTimer);
+    this.loadingService.hide();
   }
 
   triggerFun(ms = 900) {
@@ -67,7 +63,7 @@ export class AdminReservas implements OnInit, OnDestroy {
   }
 
   cargar(): void {
-    this.cargando = true;
+    this.loadingService.show('Cargando reservas...');
     this.error = '';
     const params = this.buildParams();
     this.reservasService.listReservasAdmin(params).subscribe({
@@ -77,12 +73,12 @@ export class AdminReservas implements OnInit, OnDestroy {
           const db = new Date(b.fecha_reserva as any).getTime();
           return db - da;
         });
-        this.cargando = false;
+        this.loadingService.hide();
         this.triggerFun(700);
       },
       error: () => {
         this.error = 'No se pudieron cargar las reservas.';
-        this.cargando = false;
+        this.loadingService.hide();
       }
     });
   }
@@ -96,10 +92,7 @@ export class AdminReservas implements OnInit, OnDestroy {
   cancelar(reserva: Reserva): void {
     if (!reserva.estado || this.cancelling.has(reserva.id_reserva)) return;
     this.cancelling.add(reserva.id_reserva);
-
-    // Si estamos viendo activas, animar y remover
     if (this.filtroEstado === 'activas') this.removing.add(reserva.id_reserva);
-
     this.reservasService.cancelarReserva(reserva.id_reserva).subscribe({
       next: () => {
         if (this.filtroEstado === 'activas') {
@@ -110,7 +103,6 @@ export class AdminReservas implements OnInit, OnDestroy {
             this.triggerFun(600);
           }, 320);
         } else {
-          // En 'todas' o 'canceladas' solo actualiza el estado
           reserva.estado = false;
           this.cancelling.delete(reserva.id_reserva);
           this.removing.delete(reserva.id_reserva);
@@ -128,8 +120,6 @@ export class AdminReservas implements OnInit, OnDestroy {
   reactivar(reserva: Reserva): void {
     if (reserva.estado || this.reactivating.has(reserva.id_reserva)) return;
     this.reactivating.add(reserva.id_reserva);
-
-    // Si el filtro muestra canceladas, animar salida
     if (this.filtroEstado === 'canceladas') this.removing.add(reserva.id_reserva);
 
     this.reservasService.reactivarReserva(reserva.id_reserva).subscribe({

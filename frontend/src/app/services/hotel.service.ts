@@ -6,7 +6,7 @@ import { Hotel } from '../interfaces/hotel.interface';
 
 @Injectable({ providedIn: 'root' })
 export class HotelService {
-  private apiUrl = environment.apiUrl; // Debe terminar con '/api/'
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

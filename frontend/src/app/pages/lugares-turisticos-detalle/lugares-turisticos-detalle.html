@@ -1,68 +1,166 @@
-<div class="lugar-detalle p-6 max-w-[1000px] mx-auto">
-    <!-- Volver -->
-    <a class="btn-volver" routerLink="/lugares-turisticos">← Volver a la lista</a>
-  
-    <!-- Estados -->
-    <div *ngIf="cargando" class="estado">Cargando...</div>
+<main class="lugar-page">
+  <div class="lugar-detalle">
+    <a class="btn-volver" routerLink="/lugares-turisticos" aria-label="Volver a la lista">
+      <span class="ms">arrow_back</span>
+      Volver a la lista
+    </a>
     <div *ngIf="error" class="estado error">{{ error }}</div>
-  
-    <!-- Contenido -->
-    <div *ngIf="!cargando && !error && lugar" class="contenido">
-      <!-- Columna principal -->
+    <div *ngIf="!error && lugar" class="contenido">
       <div class="col-izq">
-        <div class="card shadow-strong border rounded-lg p-6 bg-white">
-          <h2 class="titulo">{{ lugar.nombre }}</h2>
-  
+        <section class="card">
+          <div class="hero">
+            <div class="media">
+              <img
+                class="media-img"
+                [src]="heroImage"
+                [alt]="lugar.nombre"
+                (error)="onHeroError($event)"
+                loading="eager"
+              />
+
+              <div class="chip tipo" *ngIf="lugar.tipo">
+                <span class="ms">sell</span>
+                <span>{{ lugar.tipo | titlecase }}</span>
+              </div>
+
+              <div class="chip depto" *ngIf="lugar.departamento">
+                <span class="ms">flag</span>
+                <span>{{ lugar.departamento }}</span>
+              </div>
+            </div>
+          </div>
+
+          <h2 class="titulo" [title]="lugar.nombre">{{ lugar.nombre }}</h2>
+
           <ul class="meta">
-            <li class="img-li" *ngIf="lugar.url_image_lugar_turistico">
-              <img [src]="lugar.url_image_lugar_turistico" [alt]="lugar.nombre" />
-            </li>
-            <li>
-              <span class="ms">location_on</span>
-              {{ lugar.departamento }}
-            </li>
-            <li *ngIf="lugar.tipo">
-              <span class="ms">sell</span>
-              {{ lugar.tipo }}
-            </li>
             <li *ngIf="lugar.ubicacion">
-              <span class="ms">map</span>
-              {{ lugar.ubicacion }}
+              <span class="ms">location_on</span>
+              <span class="text">{{ lugar.ubicacion }}</span>
+              <span class="meta-actions">
+                <button class="pill-btn" type="button" (click)="openMaps()" title="Ver en Google Maps" aria-label="Ver en Google Maps">
+                  <span class="ms">map</span>
+                </button>
+                <button class="pill-btn" type="button" (click)="copyAddress()" title="Copiar dirección" aria-label="Copiar dirección">
+                  <span class="ms">content_copy</span>
+                </button>
+              </span>
+            </li>
+
+            <li *ngIf="lugar.departamento">
+              <span class="ms">public</span>
+              <span class="text">{{ lugar.departamento }}</span>
+            </li>
+
+            <li *ngIf="lugar.tipo">
+              <span class="ms">category</span>
+              <span class="text">{{ lugar.tipo | titlecase }}</span>
             </li>
           </ul>
-  
-          <p class="descripcion" *ngIf="lugar.descripcion">
-            {{ lugar.descripcion }}
-          </p>
-  
+
+          <div *ngIf="lugar.descripcion" class="desc-block">
+            <p class="descripcion" [class.clamp]="!showFullDesc">{{ lugar.descripcion }}</p>
+            <button
+              *ngIf="shouldClamp(lugar.descripcion)"
+              class="btn-link"
+              type="button"
+              (click)="showFullDesc = !showFullDesc"
+              [attr.aria-expanded]="showFullDesc"
+            >
+              {{ showFullDesc ? 'Ver menos' : 'Ver más' }}
+            </button>
+          </div>
+
           <p class="fecha" *ngIf="lugar.fecha_creacion">
-            Fecha de creación: {{ lugar.fecha_creacion }}
+            <span class="ms">calendar_month</span>
+            <ng-container *ngIf="isISODate; else rawDate">
+              Fecha de creación: {{ lugar.fecha_creacion | date:'longDate' }}
+            </ng-container>
+            <ng-template #rawDate>
+              Fecha de creación: {{ lugar.fecha_creacion }}
+            </ng-template>
           </p>
-        </div>
+
+          <div class="toolbar">
+            <button class="btn ghost" type="button" (click)="share()" title="Compartir" aria-label="Compartir">
+              <span class="ms">share</span>
+              Compartir
+            </button>
+            <button class="btn ghost" type="button" (click)="copyLink()" title="Copiar enlace" aria-label="Copiar enlace">
+              <span class="ms">link</span>
+              Copiar enlace
+            </button>
+          </div>
+        </section>
       </div>
-  
-      <!-- Panel lateral -->
-      <div class="col-der">
-        <div class="card shadow-strong border rounded-lg p-6 bg-white">
-          <h3 class="subtitulo">Información útil</h3>
-  
+
+      <aside class="col-der">
+        <section class="card side">
+          <h3 class="subtitulo">
+            <span class="ms">info</span>
+            Información útil
+          </h3>
+
           <div class="info-item" *ngIf="lugar.horario">
-            <div class="label">Horario</div>
+            <div class="label">
+              <span class="ms">schedule</span>
+              Horario
+            </div>
             <div class="value">{{ lugar.horario }}</div>
           </div>
-  
-          <div class="info-item">
-            <div class="label">Departamento</div>
+
+          <div class="info-item" *ngIf="lugar.tipo">
+            <div class="label">
+              <span class="ms">sell</span>
+              Tipo
+            </div>
+            <div class="value">{{ lugar.tipo | titlecase }}</div>
+          </div>
+
+          <div class="info-item" *ngIf="lugar.departamento">
+            <div class="label">
+              <span class="ms">public</span>
+              Departamento
+            </div>
             <div class="value">{{ lugar.departamento }}</div>
           </div>
-  
-          <div class="acciones">
-            <a class="btn-primario" routerLink="/paquetes">Ver paquetes</a>
+
+          <div class="info-item" *ngIf="lugar.ubicacion">
+            <div class="label">
+              <span class="ms">location_on</span>
+              Ubicación
+            </div>
+            <div class="value">{{ lugar.ubicacion }}</div>
           </div>
-  
-          <p class="nota">ℹ️ Los horarios pueden cambiar en feriados.</p>
-        </div>
-      </div>
+
+          <div class="acciones">
+            <a
+              class="btn-primario"
+              [routerLink]="['/paquetes']"
+              [queryParams]="{ departamento: lugar.departamento }"
+              title="Ver paquetes relacionados"
+              aria-label="Ver paquetes relacionados"
+            >
+              <span class="ms">card_travel</span>
+              Ver paquetes relacionados
+            </a>
+
+            <a
+              class="btn-secondary"
+              (click)="openMaps()"
+              title="Abrir en Google Maps"
+              aria-label="Abrir en Google Maps"
+            >
+              <span class="ms">map</span>
+              Abrir en Google Maps
+            </a>
+          </div>
+
+          <p class="nota">
+            <span class="ms">info</span>
+            La información puede variar en feriados o por eventos especiales.
+          </p>
+        </section>
+      </aside>
     </div>
   </div>
-  
+</main>

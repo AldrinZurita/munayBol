@@ -1,0 +1,21 @@
+<div class="reserve-loader" *ngIf="(loaderState$ | async) as state" [class.is-visible]="state.visible" aria-live="polite" aria-busy="true">
+  <div class="rl-plane">
+    <span class="material-symbols-outlined" aria-hidden="true">flight_takeoff</span>
+  </div>
+  <div class="rl-clouds" aria-hidden="true"></div>
+  <div
+    class="rl-progress"
+    role="progressbar"
+    [attr.aria-valuenow]="state.progress"
+    aria-valuemin="0"
+    aria-valuemax="100"
+  >
+    <div class="rl-progress__bar" [style.width.%]="state.progress"></div>
+  </div>
+  <div class="rl-label">{{ state.label }}</div>
+  <div class="rl-dots" aria-hidden="true">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>

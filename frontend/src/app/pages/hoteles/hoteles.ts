@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { Hotel } from '../../interfaces/hotel.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IconsModule } from '../../icons';
+import { LoadingService } from '../../shared/services/loading';
 
 @Component({
   selector: 'app-hoteles',
@@ -22,29 +23,24 @@ export class Hoteles implements OnInit, AfterViewInit, OnDestroy {
   ciudadSeleccionada = '';
   calificacionSeleccionada = '';
   searchTerm = '';
-
-  cargando = false;
   error = '';
-
-  // Modal (Agregar / Editar)
   showModal = false;
   isEditMode = false;
   savingModal = false;
   modalHotelModel: Partial<Hotel> = {};
   private _editTarget: Hotel | null = null;
-
-  // Reveal on scroll
   private io?: IntersectionObserver;
 
   constructor(
     private hotelService: HotelService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private loadingService: LoadingService
   ) {}
 
   ngOnInit() {
-    this.cargando = true;
+    this.loadingService.show('Cargando hoteles...');
     this.hotelService.getHoteles().subscribe({
       next: (hoteles) => {
         this.hoteles = hoteles;
@@ -54,20 +50,16 @@ export class Hoteles implements OnInit, AfterViewInit, OnDestroy {
         this.ciudades = Array.from(new Set(allCities))
           .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
         this.hotelesFiltrados = [...this.hoteles];
-        this.cargando = false;
-
-        // aplicar filtro con dpto seleccionado desde query
+        this.loadingService.hide();
         this.route.queryParams.subscribe(params => {
           this.ciudadSeleccionada = params['departamento'] ?? '';
           this.aplicarFiltros();
         });
-
-        // activar reveal para tarjetas
         setTimeout(() => this.observeRevealTargets(), 0);
       },
       error: () => {
         this.error = 'No se pudo cargar la lista de hoteles';
-        this.cargando = false;
+        this.loadingService.hide();
       }
     });
   }
@@ -78,6 +70,7 @@ export class Hoteles implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.io) this.io.disconnect();
+    this.loadingService.hide();
   }
 
   get isSuperAdmin(): boolean {
@@ -103,8 +96,6 @@ export class Hoteles implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.hotelesFiltrados = filtrados;
-
-    // actualizar reveal para nuevas cards renderizadas
     setTimeout(() => this.observeRevealTargets(), 0);
   }
 
@@ -132,8 +123,6 @@ export class Hoteles implements OnInit, AfterViewInit, OnDestroy {
       });
     }
   }
-
-  /* ===== Modal ===== */
   openAddHotelModal(): void {
     if (!this.isSuperAdmin) return;
     this._editTarget = null;
@@ -240,7 +229,6 @@ export class Hoteles implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
-  /* ===== Rating utils ===== */
   toStarScore10to5(score10: number): number {
     const s = Math.max(0, Math.min(10, Number(score10) || 0));
     return Math.round((s / 2) * 2) / 2;
@@ -262,7 +250,6 @@ export class Hoteles implements OnInit, AfterViewInit, OnDestroy {
     return `${this.toStarScore10to5(score10).toFixed(1)}/5`;
   }
 
-  /* ===== Reveal on scroll ===== */
   private setupRevealObserver(): void {
     if (this.io) this.io.disconnect();
     this.io = new IntersectionObserver(

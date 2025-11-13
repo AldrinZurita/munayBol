@@ -23,7 +23,6 @@ export type CrearHabitacionDTO = Pick<
   'num' | 'caracteristicas' | 'precio' | 'codigo_hotel' | 'disponible' | 'fecha_creacion' | 'cant_huespedes'
 >;
 
-// DTO para actualizar (enviamos solo los campos editables)
 export type ActualizarLugarDTO = Partial<Pick<
   Habitacion,
   'num' | 'caracteristicas' | 'precio' | 'codigo_hotel' | 'disponible' | 'fecha_creacion' | 'cant_huespedes'
@@ -33,10 +32,7 @@ export type ActualizarLugarDTO = Partial<Pick<
 export class HabitacionService {
   private readonly apiUrl = environment.apiUrl;
   private readonly baseUrl = `${this.apiUrl}habitaciones/`;
-
   constructor(private readonly http: HttpClient, private authService: AuthService) { }
-
-
   private getAuthOptions(): { headers?: HttpHeaders } {
     const token = this.authService.getToken();
     console.log('Token enviado en petición:', token);
@@ -50,7 +46,6 @@ export class HabitacionService {
   }
 
   agregarHabitacion(habitacion: Partial<Habitacion>): Observable<Habitacion> {
-    // Si el PK es autogenerado (BigAutoField), no enviar 'num' desde el frontend
     const { num, ...rest } = habitacion;
     return this.http.post<Habitacion>(`${this.baseUrl}`, rest, this.getAuthOptions());
   }
@@ -80,5 +75,4 @@ export class HabitacionService {
     const qs = params.length ? `?${params.join('&')}` : '';
     return this.http.get<DisponibilidadHabitacionResponse>(`${this.baseUrl}${String(num)}/disponibilidad/${qs}`);
   }
-
 }

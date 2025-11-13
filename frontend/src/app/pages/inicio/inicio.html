@@ -1,20 +1,20 @@
-<!-- Fondo fijo para toda la página con colores de la bandera (suave) -->
 <div class="page-bg" aria-hidden="true"></div>
-
 <a class="skip-link" href="#contenido">Saltar al contenido</a>
-
 <section class="hero" role="banner" aria-label="Portada MunayBol" [attr.aria-describedby]="heroDescId">
   <div class="hero__overlay" aria-hidden="true"></div>
-
   <div class="container hero__inner">
-    <h1 class="hero__title">Descubre las Maravillas de Bolivia</h1>
+    <p class="hero__kicker" aria-hidden="true">MunayBol</p>
+    <h1 class="hero__title">Descubre las maravillas de Bolivia</h1>
     <p class="hero__lead" [id]="heroDescId">
       Hoteles y paquetes turísticos en los mejores destinos bolivianos. Explora el Salar de Uyuni,
       Lago Titicaca, La Paz y mucho más.
     </p>
-
-    <!-- Panel del filtro con color y glassmorphism -->
-    <form class="filter-card hero__actions" role="search" aria-label="Búsqueda por departamento" (submit)="$event.preventDefault()">
+    <form
+      class="filter-card hero__actions"
+      role="search"
+      aria-label="Búsqueda por departamento"
+      (submit)="onFilterSubmit($event)"
+    >
       <div class="filtro">
         <label for="departamento">
           <span class="material-symbols-outlined filtro__icon" aria-hidden="true">location_on</span>
@@ -26,9 +26,10 @@
             name="departamento"
             [(ngModel)]="departamentoSeleccionado"
             (change)="onDepartamentoChange(departamentoSeleccionado)"
+            (keydown.enter)="onEnterFromSelect($event)"
             aria-label="Selecciona un departamento"
           >
-            <option [ngValue]="null" disabled selected>Selecciona destino</option>
+            <option [ngValue]="null" disabled>Selecciona destino</option>
             <option *ngFor="let d of departamentos" [value]="d">{{ d }}</option>
           </select>
           <span class="material-symbols-outlined select-wrap__chev" aria-hidden="true">expand_more</span>
@@ -41,8 +42,9 @@
           type="button"
           class="btn btn--grad"
           (click)="buscarHoteles()"
-          [disabled]="!puedeBuscarHoteles"
-          [attr.aria-disabled]="!puedeBuscarHoteles"
+          [disabled]="!puedeBuscarHoteles || navigating"
+          [class.is-disabled]="!puedeBuscarHoteles || navigating"
+          [attr.aria-disabled]="!puedeBuscarHoteles || navigating"
           title="Buscar hoteles en el destino seleccionado"
         >
           <span class="material-symbols-outlined btn__icon" aria-hidden="true">hotel</span>
@@ -53,6 +55,7 @@
           type="button"
           class="btn btn--secondary"
           (click)="explorarTours()"
+          [disabled]="navigating"
           title="Ver paquetes y tours"
         >
           <span class="material-symbols-outlined btn__icon" aria-hidden="true">map</span>
@@ -63,6 +66,7 @@
           type="button"
           class="btn btn--ghost"
           (click)="inspirarme()"
+          [disabled]="navigating"
           aria-label="Pedir ideas al asistente de viajes"
           title="Pedir ideas al asistente"
         >
@@ -75,8 +79,7 @@
 </section>
 
 <main id="contenido">
-  <!-- DESTINOS POPULARES -->
-  <section class="popular" aria-labelledby="popular-title">
+  <section class="popular popular-bg" aria-labelledby="popular-title">
     <div class="container">
       <h2 id="popular-title" class="popular__title">Destinos populares</h2>
       <p class="popular__intro">
@@ -97,10 +100,8 @@
           [attr.aria-label]="d.nombre + ' en ' + d.departamento"
           [style.animationDelay]="(i * 80) + 'ms'"
         >
-          <!-- Borde exterior de brillo (suave) -->
           <div class="popular-card__border" aria-hidden="true"></div>
 
-          <!-- Media centrado: imagen centrada y responsiva -->
           <figure class="popular-card__media" aria-label="Imagen de {{ d.nombre }}">
             <div class="media-inner">
               <img
@@ -133,8 +134,9 @@
             <div class="popular-card__actions">
               <button
                 type="button"
-                class="btn btn--sm"
+                class="btn btn--sm btn--primary"
                 (click)="verHotelesDestino(d.departamento)"
+                [disabled]="navigating"
                 [attr.aria-label]="'Ver hoteles en ' + d.departamento"
                 title="Ver hoteles"
               >
@@ -145,6 +147,7 @@
                 type="button"
                 class="btn btn--sm btn--secondary"
                 (click)="verToursDestino(d.departamento)"
+                [disabled]="navigating"
                 [attr.aria-label]="'Ver tours en ' + d.departamento"
                 title="Ver tours"
               >
@@ -157,8 +160,6 @@
       </div>
     </div>
   </section>
-
-  <!-- CÓMO FUNCIONA -->
   <section class="steps" aria-labelledby="steps-title">
     <div class="container">
       <h2 id="steps-title" class="steps__title">¿Cómo funciona?</h2>
