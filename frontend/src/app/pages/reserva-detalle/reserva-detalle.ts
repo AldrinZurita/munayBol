@@ -1,13 +1,22 @@
-import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, Inject, OnDestroy } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ReservasService } from '../../services/reservas.service';
 import { HotelService } from '../../services/hotel.service';
 import { HabitacionService } from '../../services/habitacion.service';
-import { PagoService, Pago } from '../../services/pago.service';
-import { RouterModule } from '@angular/router';
+import { PagoService, Pago as PagoOriginal } from '../../services/pago.service';
 import { PaqueteService } from '../../services/paquete.service';
 import { Paquete } from '../../interfaces/paquete.interface';
+import { IconsModule } from '../../icons';
+import { LoadingService } from '../../shared/services/loading';
+interface Pago {
+  id_pago?: number;
+  estado?: string;
+  metodo_pago?: string;
+  tipo_tarjeta?: string;
+  numero_tarjeta?: string;
+}
 
 interface ReservaDetalle {
   id_reserva: number;
@@ -33,12 +42,15 @@ interface ReservaDetalle {
   templateUrl: './reserva-detalle.html',
   styleUrls: ['./reserva-detalle.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule]
+  imports: [
+    CommonModule,
+    RouterModule,
+    IconsModule
+  ]
 })
-export class ReservaDetalleComponent implements OnInit {
+export class ReservaDetalleComponent implements OnInit, OnDestroy {
   reserva: ReservaDetalle | null = null;
   paquete: Paquete | null = null;
-  loading: boolean = true;
   error: string = '';
 
   constructor(
@@ -49,6 +61,7 @@ export class ReservaDetalleComponent implements OnInit {
     private readonly habitacionService: HabitacionService,
     private readonly pagoService: PagoService,
     private readonly paqueteService: PaqueteService,
+    private readonly loadingService: LoadingService,
     @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {}
 
@@ -57,12 +70,19 @@ export class ReservaDetalleComponent implements OnInit {
       const id = this.route.snapshot.paramMap.get('id');
       if (id) {
         this.cargarDetalleReserva(Number(id));
+      } else {
+        this.error = 'No se proporcionó un ID de reserva.';
       }
     }
   }
 
+  ngOnDestroy(): void {
+    this.loadingService.hide();
+  }
+
   cargarDetalleReserva(id: number) {
-    this.loading = true;
+    this.loadingService.show('Cargando detalles de la reserva...');
+
     this.reservasService.getReservaById(id).subscribe({
       next: (reserva: any) => {
         this.reserva = reserva;
@@ -70,12 +90,8 @@ export class ReservaDetalleComponent implements OnInit {
 
         if (reserva.id_paquete) {
           this.paqueteService.getPaqueteById(reserva.id_paquete).subscribe({
-            next: (paq: Paquete) => {
-              this.paquete = paq;
-            },
-            error: (err) => {
-              console.warn('No se pudo cargar el paquete:', err);
-            }
+            next: (paq: Paquete) => { this.paquete = paq; },
+            error: (err) => { console.warn('No se pudo cargar el paquete:', err); }
           });
         }
 
@@ -104,19 +120,23 @@ export class ReservaDetalleComponent implements OnInit {
 
         if (reserva.id_pago) {
           this.pagoService.getPagoById(reserva.id_pago).subscribe({
-            next: (pago: any) => {
+            next: (pago: PagoOriginal) => {
               if (this.reserva) {
-                this.reserva.pago_info = pago;
+                this.reserva.pago_info = {
+                  ...pago,
+                  metodo_pago: (pago as any).metodo_pago || 'Tarjeta de Crédito',
+                  tipo_tarjeta: (pago as any).tipo_tarjeta || 'Visa',
+                  numero_tarjeta: (pago as any).numero_tarjeta || (pago as any).cod_seguridad?.toString() || '1234567890123456'
+                };
               }
             }
           });
         }
-
-        this.loading = false;
+        this.loadingService.hide();
       },
       error: (err: any) => {
         this.error = 'Error al cargar los detalles de la reserva';
-        this.loading = false;
+        this.loadingService.hide();
         console.error(err);
       }
     });
@@ -171,7 +191,7 @@ export class ReservaDetalleComponent implements OnInit {
   }
 
   volverAMisReservas() {
-    this.router.navigate(['/mis-reservas']);
+    this.router.navigate(['/perfil']);
   }
 
   modificarReserva() {
@@ -179,13 +199,13 @@ export class ReservaDetalleComponent implements OnInit {
   }
 
   cancelarReserva() {
-    if (confirm('¿Está seguro que desea cancelar esta reserva?')) {
+    if (confirm('¿Está seguro que desea cancelar esta reserva? Esta acción no se puede deshacer.')) {
       console.log('Cancelar reserva', this.reserva?.id_reserva);
     }
   }
 
-  ocultarNumeroTarjeta(numeroTarjeta: string): string {
+  ocultarNumeroTarjeta(numeroTarjeta: string | undefined): string {
     if (!numeroTarjeta || numeroTarjeta.length < 4) return '****';
-    return '****' + numeroTarjeta.slice(-4);
+    return '**** ' + numeroTarjeta.slice(numeroTarjeta.length - 4);
   }
 }

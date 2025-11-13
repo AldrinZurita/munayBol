@@ -17,14 +17,12 @@ export class AsistenteIaService {
     private auth: AuthService
   ) {}
 
-  // Header Authorization explícito (fallback si falla el interceptor)
   private authHeaders(): { headers: HttpHeaders } {
     const token = this.auth.getToken();
     const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders();
     return { headers };
   }
 
-  // ============ Sesiones ============
   listSessions(params?: { q?: string; archived?: boolean }): Observable<ChatSession[]> {
     let httpParams = new HttpParams();
     if (params?.q) httpParams = httpParams.set('q', params.q);
@@ -48,7 +46,6 @@ export class AsistenteIaService {
     return this.http.delete<void>(`${this.sessionsUrl}${id}/`, this.authHeaders());
   }
 
-  // ============ Mensajes ============
   listMessages(id: string, opts?: { page?: number; limit?: number }): Observable<MessagesPage> {
     let params = new HttpParams();
     if (opts?.page) params = params.set('page', String(opts.page));
@@ -64,7 +61,6 @@ export class AsistenteIaService {
     );
   }
 
-  // ============ Estado actual ============
   setCurrentSession(id: string | null) {
     this.currentSessionId = id;
   }
@@ -73,7 +69,6 @@ export class AsistenteIaService {
     return this.currentSessionId;
   }
 
-  // Compat: endpoint antiguo (no se usa para historial)
   enviarPrompt(prompt: string) {
     return this.http.post<{ result: string; chat_id?: string }>(`${this.baseUrl}llm/generate/`, { prompt }, this.authHeaders());
   }

@@ -1,9 +1,6 @@
 <div class="admin-usuarios-container">
-  <!-- Page Background -->
   <div class="page-bg" aria-hidden="true"></div>
-
   <div class="container">
-    <!-- Header -->
     <header class="page-header">
       <div class="header-content">
         <h1 class="page-title">
@@ -27,18 +24,16 @@
         </div>
       </div>
     </header>
-
-    <!-- Filters -->
     <div class="filters-section">
       <div class="search-box">
         <span class="material-symbols-outlined search-icon">search</span>
-        <input 
-          type="text" 
-          [(ngModel)]="searchTerm" 
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
           placeholder="Buscar por nombre o correo..."
           class="search-input">
       </div>
-      
+
       <div class="filter-group">
         <label for="filterRole">Rol:</label>
         <select id="filterRole" [(ngModel)]="filterRole" class="filter-select">
@@ -47,7 +42,7 @@
           <option value="usuario">Usuario</option>
         </select>
       </div>
-      
+
       <div class="filter-group">
         <label for="filterStatus">Estado:</label>
         <select id="filterStatus" [(ngModel)]="filterStatus" class="filter-select">
@@ -57,96 +52,92 @@
         </select>
       </div>
     </div>
-
-    <!-- Loading State -->
-    <app-loading *ngIf="loading" message="Cargando usuarios..."></app-loading>
-
-    <!-- Users Table -->
-    <div class="users-table-container" *ngIf="!loading">
+    <div class="estado error" *ngIf="error" style="margin: 1rem 0; text-align: center; color: red; font-weight: 600;">
+      {{ error }}
+    </div>
+    <div class="users-table-container" *ngIf="!error">
       <div class="table-wrapper">
         <table class="users-table" *ngIf="filteredUsuarios.length > 0">
           <thead>
-            <tr>
-              <th>Usuario</th>
-              <th>Correo</th>
-              <th>País</th>
-              <th>Rol</th>
-              <th>Estado</th>
-              <th>Fecha Registro</th>
-              <th>Acciones</th>
-            </tr>
+          <tr>
+            <th>Usuario</th>
+            <th>Correo</th>
+            <th>País</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Fecha Registro</th>
+            <th>Acciones</th>
+          </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let usuario of filteredUsuarios" class="user-row">
-              <td>
-                <div class="user-cell">
-                  <div class="avatar">
-                    <img *ngIf="usuario.avatar_url" [src]="usuario.avatar_url" [alt]="usuario.nombre">
-                    <span *ngIf="!usuario.avatar_url" class="avatar-initials">
+          <tr *ngFor="let usuario of filteredUsuarios" class="user-row">
+            <td>
+              <div class="user-cell">
+                <div class="avatar">
+                  <img *ngIf="usuario.avatar_url" [src]="usuario.avatar_url" [alt]="usuario.nombre">
+                  <span *ngIf="!usuario.avatar_url" class="avatar-initials">
                       {{ getInitials(usuario.nombre) }}
                     </span>
-                  </div>
-                  <div class="user-info">
-                    <span class="user-name">{{ usuario.nombre }}</span>
-                    <span class="user-id">ID: {{ usuario.id }}</span>
-                  </div>
                 </div>
-              </td>
-              <td>
-                <span class="user-email">{{ usuario.correo }}</span>
-              </td>
-              <td>
-                <span class="user-country">{{ usuario.pais }}</span>
-              </td>
-              <td>
+                <div class="user-info">
+                  <span class="user-name">{{ usuario.nombre }}</span>
+                  <span class="user-id">ID: {{ usuario.id }}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="user-email">{{ usuario.correo }}</span>
+            </td>
+            <td>
+              <span class="user-country">{{ usuario.pais }}</span>
+            </td>
+            <td>
                 <span class="badge" [ngClass]="getRoleBadgeClass(usuario.rol)">
                   {{ usuario.rol === 'superadmin' ? 'Admin' : 'Usuario' }}
                 </span>
-              </td>
-              <td>
+            </td>
+            <td>
                 <span class="badge" [ngClass]="getStatusBadgeClass(usuario.estado)">
                   {{ usuario.estado ? 'Activo' : 'Inactivo' }}
                 </span>
-              </td>
-              <td>
-                <span class="date">{{ usuario.fecha_creacion | date:'shortDate' }}</span>
-              </td>
-              <td>
-                <div class="actions">
-                  <button 
-                    class="action-btn view"
-                    (click)="viewUserProfile(usuario)"
-                    title="Ver perfil">
-                    <span class="material-symbols-outlined">visibility</span>
-                  </button>
-                  
-                  <button 
-                    class="action-btn edit"
-                    [class.downgrade]="usuario.rol === 'superadmin'"
-                    (click)="changeUserRole(usuario, usuario.rol === 'superadmin' ? 'usuario' : 'superadmin')"
-                    [title]="usuario.rol === 'superadmin' ? 'Quitar rol admin' : 'Promover a admin'">
+            </td>
+            <td>
+              <span class="date">{{ usuario.fecha_creacion | date:'shortDate' }}</span>
+            </td>
+            <td>
+              <div class="actions">
+                <button
+                  class="action-btn view"
+                  (click)="viewUserProfile(usuario)"
+                  title="Ver perfil">
+                  <span class="material-symbols-outlined">visibility</span>
+                </button>
+
+                <button
+                  class="action-btn edit"
+                  [class.downgrade]="usuario.rol === 'superadmin'"
+                  (click)="changeUserRole(usuario, usuario.rol === 'superadmin' ? 'usuario' : 'superadmin')"
+                  [title]="usuario.rol === 'superadmin' ? 'Quitar rol admin' : 'Promover a admin'">
                     <span class="material-symbols-outlined">
                       {{ usuario.rol === 'superadmin' ? 'person_remove' : 'admin_panel_settings' }}
                     </span>
-                  </button>
-                  
-                  <button 
-                    class="action-btn toggle"
-                    [class.deactivate]="usuario.estado"
-                    (click)="toggleUserStatus(usuario)"
-                    [title]="usuario.estado ? 'Desactivar usuario' : 'Activar usuario'">
+                </button>
+
+                <button
+                  class="action-btn toggle"
+                  [class.deactivate]="usuario.estado"
+                  (click)="toggleUserStatus(usuario)"
+                  [title]="usuario.estado ? 'Desactivar usuario' : 'Activar usuario'">
                     <span class="material-symbols-outlined">
                       {{ usuario.estado ? 'block' : 'check_circle' }}
                     </span>
-                  </button>
-                </div>
-              </td>
-            </tr>
+                </button>
+              </div>
+            </td>
+          </tr>
           </tbody>
         </table>
-
-        <!-- Empty State -->
-        <div class="empty-state" *ngIf="filteredUsuarios.length === 0">
+        <div class="empty-state" *ngIf="filteredUsuarios.length === 0 && !error">
           <span class="empty-icon">👥</span>
           <h3>No se encontraron usuarios</h3>
           <p>Intenta ajustar los filtros de búsqueda</p>

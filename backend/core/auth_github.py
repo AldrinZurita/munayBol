@@ -19,10 +19,6 @@ def build_github_authorize_url(state: str) -> str:
     return f"{base}?client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}&state={state}&allow_signup=true"
 
 class GitHubLoginURLAPIView(APIView):
-    """
-    GET /api/auth/github/login-url/
-    Genera un state firmado y devuelve la URL para autorizar con GitHub.
-    """
     authentication_classes = []
     permission_classes = [AllowAny]
 
@@ -39,11 +35,6 @@ class GitHubLoginURLAPIView(APIView):
         return Response({"authorize_url": authorize_url, "state": signed_state})
 
 class GitHubExchangeCodeAPIView(APIView):
-    """
-    POST /api/auth/github/exchange/
-    Body: { "code": "...", "state": "..." }
-    Valida el state, intercambia code -> access_token, obtiene email y retorna JWT+usuario.
-    """
     authentication_classes = []
     permission_classes = [AllowAny]
 
@@ -58,8 +49,6 @@ class GitHubExchangeCodeAPIView(APIView):
         redirect_uri = settings.GITHUB_REDIRECT_URI
         if not client_id or not client_secret or not redirect_uri:
             return Response({"error": "GitHub OAuth not configured"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        # 1) Validar state firmado con TTL
         try:
             signing.TimestampSigner(salt=settings.GITHUB_STATE_SALT).unsign_object(
                 state, max_age=settings.GITHUB_STATE_TTL_SECONDS
@@ -68,8 +57,6 @@ class GitHubExchangeCodeAPIView(APIView):
             return Response({"error": "Invalid state signature"}, status=status.HTTP_400_BAD_REQUEST)
         except signing.SignatureExpired:
             return Response({"error": "State expired"}, status=status.HTTP_400_BAD_REQUEST)
-
-        # 2) Intercambiar code -> access_token
         token_resp = requests.post(
             "https://github.com/login/oauth/access_token",
             headers={"Accept": "application/json"},
@@ -87,8 +74,6 @@ class GitHubExchangeCodeAPIView(APIView):
         access_token = token_json.get("access_token")
         if not access_token:
             return Response({"error": "No access_token from GitHub", "details": token_json}, status=status.HTTP_400_BAD_REQUEST)
-
-        # 3) Obtener datos del usuario
         api_headers = {
             "Authorization": f"Bearer {access_token}",
             "Accept": "application/vnd.github+json",
@@ -133,8 +118,6 @@ class GitHubExchangeCodeAPIView(APIView):
             updated = True
         if updated:
             user.save()
-
-        # 5) Emitir JWT
         refresh = RefreshToken.for_user(user)
         usuario_payload = {
             "id": user.id,

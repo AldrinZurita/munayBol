@@ -36,14 +36,12 @@
     </header>
 
     <section class="content">
-      <div class="estado" *ngIf="cargando">Cargando reservas...</div>
-      <div class="estado error" *ngIf="!cargando && error">{{ error }}</div>
-      <div class="estado vacio" *ngIf="!cargando && reservas.length === 0 && !error">
+      <div class="estado error" *ngIf="error">{{ error }}</div>
+      <div class="estado vacio" *ngIf="reservas.length === 0 && !error">
         <span class="material-symbols-outlined" aria-hidden="true">hourglass_empty</span>
         No hay resultados para los filtros actuales.
       </div>
-
-      <div class="grid" *ngIf="!cargando && reservas.length > 0">
+      <div class="grid" *ngIf="reservas.length > 0 && !error">
         <article *ngFor="let r of reservas" class="card" [class.cancel]="!r.estado" [class.is-removing]="isRemoving(r.id_reserva)">
           <header class="card__header">
             <h3>#{{ r.id_reserva }}</h3>

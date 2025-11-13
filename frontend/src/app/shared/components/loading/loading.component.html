@@ -1,24 +1,57 @@
-<div class="loading-container" [class.fullscreen]="fullScreen" [class.small]="size === 'small'" [class.medium]="size === 'medium'" [class.large]="size === 'large'">
-  <div class="loading-spinner">
-    <div class="spinner-ring"></div>
-    <div class="spinner-ring"></div>
-    <div class="spinner-ring"></div>
-    <div class="spinner-logo">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#grad1)"/>
-        <path d="M2 17L12 22L22 17V12L12 17L2 12V17Z" fill="url(#grad2)"/>
-        <defs>
-          <linearGradient id="grad1" x1="2" y1="2" x2="22" y2="12">
-            <stop offset="0%" stop-color="#2563eb"/>
-            <stop offset="100%" stop-color="#0ea5e9"/>
-          </linearGradient>
-          <linearGradient id="grad2" x1="2" y1="12" x2="22" y2="22">
-            <stop offset="0%" stop-color="#10b981"/>
-            <stop offset="100%" stop-color="#22c55e"/>
-          </linearGradient>
-        </defs>
-      </svg>
+<div
+  class="loading-container"
+  [class.fullscreen]="fullScreen"
+  [class.small]="size === 'small'"
+  [class.medium]="size === 'medium'"
+  [class.large]="size === 'large'"
+>
+  <ng-container [ngSwitch]="variant">
+    <div *ngSwitchCase="'spinner'" class="loading-spinner" role="status" aria-live="polite" aria-busy="true">
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+      <div class="spinner-logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#grad1)"/>
+          <path d="M2 17L12 22L22 17V12L12 17L2 12V17Z" fill="url(#grad2)"/>
+          <defs>
+            <linearGradient id="grad1" x1="2" y1="2" x2="22" y2="12">
+              <stop offset="0%" stop-color="#2563eb"/>
+              <stop offset="100%" stop-color="#0ea5e9"/>
+            </linearGradient>
+            <linearGradient id="grad2" x1="2" y1="12" x2="22" y2="22">
+              <stop offset="0%" stop-color="#10b981"/>
+              <stop offset="100%" stop-color="#22c55e"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
     </div>
-  </div>
-  <p class="loading-message" *ngIf="message">{{ message }}</p>
+    <p class="loading-message" *ngIf="message && variant === 'spinner'">{{ message }}</p>
+    <div *ngSwitchCase="'reserve'" class="reserve-loader" aria-live="polite" aria-busy="true">
+      <div class="rl-plane" aria-hidden="true">
+        <span class="material-symbols-outlined">{{ planeIcon }}</span>
+      </div>
+      <div class="rl-clouds" aria-hidden="true"></div>
+
+      <div
+        class="rl-progress"
+        *ngIf="progress !== null && progress !== undefined"
+        role="progressbar"
+        [attr.aria-valuenow]="progress"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      >
+        <div class="rl-progress__bar" [style.width.%]="progress"></div>
+      </div>
+
+      <div class="rl-label">{{ label || message || 'Buscando tus reservas...' }}</div>
+      <div class="rl-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+    </div>
+    <div *ngSwitchDefault class="loading-spinner" role="status" aria-live="polite" aria-busy="true">
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+    </div>
+  </ng-container>
 </div>

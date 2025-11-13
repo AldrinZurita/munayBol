@@ -9,7 +9,7 @@ class Command(BaseCommand):
     help = "Importa o actualiza hoteles desde un CSV. Columnas requeridas: nombre,ubicacion,departamento,calificacion. Si faltan id_hotel, estado o fecha_creacion, se generan por defecto."
 
     def add_arguments(self, parser):
-        parser.add_argument('--file', '-f', type=str, required=True, help='hoteles.csv')
+        parser.add_argument('--file', '-f', type=str, required=True, help='hoteles.json')
         parser.add_argument('--update', action='store_true', help='Si existe el id_hotel, actualizar campos en vez de saltar')
         parser.add_argument('--batch-size', type=int, default=500, help='Tamaño de lote para bulk_create')
 

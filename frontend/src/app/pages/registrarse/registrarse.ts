@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { RegistrarseService } from '../../services/registrarse.service';
+import { LoadingService } from '../../shared/services/loading';
 
 @Component({
   selector: 'app-registrarse',
@@ -27,23 +28,21 @@ import { RegistrarseService } from '../../services/registrarse.service';
   styleUrls: ['./registrarse.scss'],
   providers: [RegistrarseService]
 })
-export class Registrarse implements OnInit {
+export class Registrarse implements OnInit, OnDestroy {
   form!: FormGroup;
   intentadoEnviar = false;
   verContrasenia = false;
-
-  // Modal de éxito
+  loading = false;
   showRegistroSuccessModal = false;
   successNombre = '';
-
-  // Fondo (mismo estilo que login)
   backgroundUrl =
     'https://res.cloudinary.com/dj5uzus8e/image/upload/v1761429463/wjrh01yodnvwtcvlqogp.jpg';
 
   constructor(
     private fb: FormBuilder,
     private registroService: RegistrarseService,
-    private router: Router
+    private router: Router,
+    private loadingService: LoadingService
   ) {}
 
   ngOnInit(): void {
@@ -57,6 +56,10 @@ export class Registrarse implements OnInit {
       },
       { validators: this.validarCoincidencia }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.loadingService.hide();
   }
 
   validarCoincidencia(group: AbstractControl): ValidationErrors | null {
@@ -76,30 +79,38 @@ export class Registrarse implements OnInit {
   onSubmit(): void {
     this.intentadoEnviar = true;
 
-    if (this.form.valid) {
-      const datos = {
-        nombre: this.form.value.nombre,
-        correo: this.form.value.correo,
-        contrasenia: this.form.value.contrasenia,
-        pasaporte: this.form.value.pasaporte,
-        pais: 'Bolivia'
-      };
-
-      this.registroService.registrarUsuario(datos).subscribe({
-        next: (res) => {
-          // eslint-disable-next-line no-console
-          console.log('Usuario creado correctamente!:', res);
-          this.successNombre = this.form.value.nombre;
-          this.showRegistroSuccessModal = true;
-        },
-        error: (err) => {
-          // eslint-disable-next-line no-console
-          console.error('Error al registrar!:', err);
-        }
-      });
-    } else {
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
+      return;
     }
+    if (this.loading) return;
+    this.loading = true;
+    this.loadingService.show('Creando tu cuenta...');
+
+    const datos = {
+      nombre: this.form.value.nombre,
+      correo: this.form.value.correo,
+      contrasenia: this.form.value.contrasenia,
+      pasaporte: this.form.value.pasaporte,
+      pais: 'Bolivia'
+    };
+
+    this.registroService.registrarUsuario(datos).subscribe({
+      next: (res) => {
+        console.log('Usuario creado correctamente!:', res);
+        this.successNombre = this.form.value.nombre;
+        this.showRegistroSuccessModal = true;
+        this.loading = false;
+        this.loadingService.hide();
+      },
+      error: (err) => {
+        console.error('Error al registrar!:', err);
+        this.loading = false;
+        this.loadingService.hide();
+        const errorMsg = err.error?.correo?.[0] || 'No se pudo completar el registro. Verifica tus datos.';
+        alert(errorMsg);
+      }
+    });
   }
 
   cerrarRegistroSuccess(): void {

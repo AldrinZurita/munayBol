@@ -1,6 +1,3 @@
-"""
-ASGI config with Django Channels for munayBol.
-"""
 import os
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter

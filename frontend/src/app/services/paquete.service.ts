@@ -25,7 +25,6 @@ export class PaqueteService {
 
   getPaquetes(): Observable<Paquete[]> {
     return this.http.get<Paquete[]>(`${this.apiUrl}paquetes/`);
-    // ← sin token porque debe ser público
   }
 
   crearPaquete(paquete: Partial<Paquete>): Observable<Paquete> {
@@ -42,6 +41,5 @@ export class PaqueteService {
 
   getPaqueteById(id: number): Observable<Paquete> {
     return this.http.get<Paquete>(`${this.apiUrl}paquetes/${id}/`);
-    // ← también puede ser público si el backend lo permite
   }
 }

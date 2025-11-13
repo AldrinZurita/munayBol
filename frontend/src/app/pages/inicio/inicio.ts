@@ -35,7 +35,8 @@ export class Inicio {
   readonly heroDescId = 'hero-descripcion';
   selectedIndex: number | null = null;
 
-  // Tres cards (centradas, grandes y con imagen en alta)
+  navigating = false;
+
   readonly destinosPopulares: Destino[] = [
     {
       nombre: 'Salar de Uyuni',
@@ -57,41 +58,75 @@ export class Inicio {
     }
   ];
 
-  // Tamaños estimados de las cards para el grid: 3 cols desktop, 2 cols tablet, 1 col móvil
   readonly cardSizes = '(min-width: 1100px) 380px, (min-width: 700px) 44vw, 92vw';
 
   constructor(private router: Router) {}
 
   get puedeBuscarHoteles(): boolean {
-    return !!this.departamentoSeleccionado && this.departamentoSeleccionado.trim().length > 0;
+    return !!(this.departamentoSeleccionado && this.departamentoSeleccionado.trim().length > 0);
   }
 
   onDepartamentoChange(value: string | null): void {
     this.a11yMensajeSeleccion = value ? `Destino seleccionado: ${value}.` : '';
   }
 
-  buscarHoteles(): void {
-    if (!this.puedeBuscarHoteles) return;
-    this.router.navigate(['/hoteles'], { queryParams: { departamento: this.departamentoSeleccionado } });
+  onEnterFromSelect(ev: Event): void {
+    ev.preventDefault();
+    if (this.puedeBuscarHoteles) this.buscarHoteles();
+  }
+
+  onFilterSubmit(ev: Event): void {
+    ev.preventDefault();
+    if (this.puedeBuscarHoteles) this.buscarHoteles();
+  }
+
+  async buscarHoteles(): Promise<void> {
+    if (!this.puedeBuscarHoteles || this.navigating) return;
+    try {
+      this.navigating = true;
+      await this.router.navigate(['/hoteles'], {
+        queryParams: { departamento: this.departamentoSeleccionado },
+        queryParamsHandling: 'merge'
+      });
+    } finally {
+      setTimeout(() => (this.navigating = false), 150);
+    }
   }
 
   explorarTours(): void {
-    this.router.navigate(['/paquetes']);
+    if (this.navigating) return;
+    this.navigating = true;
+    this.router.navigate(
+      ['/paquetes'],
+      {
+        queryParams: this.departamentoSeleccionado ? { departamento: this.departamentoSeleccionado } : undefined,
+        queryParamsHandling: 'merge'
+      }
+    ).finally(() => setTimeout(() => (this.navigating = false), 150));
   }
 
   inspirarme(): void {
+    if (this.navigating) return;
     const seed = this.departamentoSeleccionado
       ? `Quiero ideas de viaje en ${this.departamentoSeleccionado}: qué ver, cuántos días y un plan breve.`
       : 'Inspírame un viaje por Bolivia: mejores destinos según temporada, plan sugerido de 5 días.';
-    this.router.navigate(['/asistente-ia'], { queryParams: { prompt: seed } });
+    this.navigating = true;
+    this.router.navigate(['/asistente-ia'], { queryParams: { prompt: seed } })
+      .finally(() => setTimeout(() => (this.navigating = false), 150));
   }
 
   verHotelesDestino(dep: string): void {
-    this.router.navigate(['/hoteles'], { queryParams: { departamento: dep } });
+    if (this.navigating) return;
+    this.navigating = true;
+    this.router.navigate(['/hoteles'], { queryParams: { departamento: dep }, queryParamsHandling: 'merge' })
+      .finally(() => setTimeout(() => (this.navigating = false), 150));
   }
 
   verToursDestino(dep: string): void {
-    this.router.navigate(['/paquetes'], { queryParams: { departamento: dep } });
+    if (this.navigating) return;
+    this.navigating = true;
+    this.router.navigate(['/paquetes'], { queryParams: { departamento: dep }, queryParamsHandling: 'merge' })
+      .finally(() => setTimeout(() => (this.navigating = false), 150));
   }
 
   selectCard(i: number): void {
@@ -100,21 +135,16 @@ export class Inicio {
 
   trackByDestino = (_: number, d: Destino) => d.nombre;
 
-  // URL con transformaciones Cloudinary (nitidez sin peso excesivo)
   hiRes(url: string, w = 1280): string {
     if (!url.includes('res.cloudinary.com') || !url.includes('/image/upload/')) return url;
     return url.replace('/image/upload/', `/image/upload/f_auto,q_auto:good,w_${w},dpr_2/`);
   }
 
-  // srcset responsive para las cards
   srcset(url: string): string {
     const widths = [480, 720, 960, 1280, 1600];
-    return widths
-      .map(w => `${this.hiRes(url, w)} ${w}w`)
-      .join(', ');
+    return widths.map(w => `${this.hiRes(url, w)} ${w}w`).join(', ');
   }
 
-  // Color de acento por departamento (se usa como color de borde del card)
   accentColor(dep: string): string {
     const map: Record<string, string> = {
       'Potosí': '#f59e0b',

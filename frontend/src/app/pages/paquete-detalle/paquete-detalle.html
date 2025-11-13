@@ -1,67 +1,301 @@
-<div class="paquete-detalle" *ngIf="paquete">
-  <div class="content-container">
-    <div class="info-section">
-      <div class="header-section">
-        <h2 class="package-title">{{ paquete.lugar?.nombre }} + {{ paquete.hotel?.nombre }}</h2>
-        <div class="price-block">
-          <div class="price-value">{{ paquete.precio.toFixed(2) }} BOB</div>
-          <div class="price-label">Precio por paquete</div>
-        </div>
-      </div>
+<main class="paquete-page">
+  <div class="page-container">
+    <a class="btn-back" routerLink="/paquetes" aria-label="Volver a Paquetes">
+      <i-bs name="arrow-left" width="18" height="18" class="icon-center"></i-bs>
+      Volver a Paquetes
+    </a>
 
-      <p class="package-description">{{ paquete.lugar?.descripcion }}</p>
+    <section class="state error" *ngIf="error">
+      <i-bs name="x-circle" width="18" height="18" class="icon-center"></i-bs>
+      {{ error }}
+    </section>
 
-      <p><strong>Ubicación:</strong> {{ paquete.lugar?.ubicacion }}</p>
-      <p><strong>Departamento:</strong> {{ paquete.lugar?.departamento }}</p>
-      <p><strong>Disponible:</strong> {{ paquete.estado ? 'Sí' : 'No' }}</p>
-      <p><strong>Hotel asignado:</strong> {{ paquete.hotel?.nombre }}</p>
+    <div class="grid" *ngIf="!error && paquete as p">
+      <section class="left-col">
+        <article class="card media-card">
+          <div class="media">
+            <img
+              *ngIf="hasLugarImage"
+              class="media-img"
+              [class.active]="activeMedia==='lugar'"
+              [src]="lugarImg"
+              alt="Imagen del lugar"
+              loading="eager"
+              decoding="async"
+              (error)="mediaFallback($event)"
+            />
 
-      <div class="itinerary-section" *ngIf="itinerario.length">
-        <h3>Itinerario</h3>
-        <div class="itinerary-list">
-          <div class="itinerary-day" *ngFor="let dia of itinerario; let i = index">
-            <div class="day-number">Día {{ i + 1 }}</div>
-            <div class="day-description">{{ dia }}</div>
+            <img
+              *ngIf="hasHotelImage"
+              class="media-img"
+              [class.active]="activeMedia==='hotel'"
+              [src]="hotelImg"
+              alt="Imagen del hotel"
+              loading="lazy"
+              decoding="async"
+              (error)="mediaFallback($event)"
+            />
+
+            <div class="media-empty" *ngIf="!hasLugarImage && !hasHotelImage">
+              <div class="media-empty-inner">
+                <i-bs name="image" width="36" height="36" class="icon-center"></i-bs>
+                <p>Sin imagen disponible</p>
+              </div>
+            </div>
+
+            <div class="thumbs" *ngIf="hasLugarImage || hasHotelImage">
+              <button
+                class="thumb"
+                [class.active]="activeMedia==='lugar'"
+                *ngIf="hasLugarImage"
+                (click)="activeMedia='lugar'"
+                aria-label="Ver imagen del lugar"
+              >
+                <img [src]="lugarImg" alt="Miniatura lugar" (error)="thumbFallback($event)" />
+                <span class="thumb-badge"><i-bs name="image" width="14" height="14" class="icon-center"></i-bs> Lugar</span>
+              </button>
+
+              <button
+                class="thumb"
+                [class.active]="activeMedia==='hotel'"
+                *ngIf="hasHotelImage"
+                (click)="activeMedia='hotel'"
+                aria-label="Ver imagen del hotel"
+              >
+                <img [src]="hotelImg" alt="Miniatura hotel" (error)="thumbFallback($event)" />
+                <span class="thumb-badge"><i-bs name="building" width="14" height="14" class="icon-center"></i-bs> Hotel</span>
+              </button>
+            </div>
+
+            <div class="image-tabs" *ngIf="hasLugarImage && hasHotelImage">
+              <button type="button" class="tab-btn" [class.active]="activeMedia==='lugar'" (click)="activeMedia='lugar'">
+                <i-bs name="image" width="14" height="14" class="icon-center"></i-bs> Lugar
+              </button>
+              <button type="button" class="tab-btn" [class.active]="activeMedia==='hotel'" (click)="activeMedia='hotel'">
+                <i-bs name="building" width="14" height="14" class="icon-center"></i-bs> Hotel
+              </button>
+            </div>
+
+            <div class="chips-top">
+              <span class="chip type" *ngIf="p.tipo">
+                <i-bs name="tag" width="14" height="14" class="icon-center"></i-bs>
+                {{ p.tipo | titlecase }}
+              </span>
+              <span class="chip depto" *ngIf="p.lugar?.departamento || p.hotel?.departamento">
+                <i-bs name="flag" width="14" height="14" class="icon-center"></i-bs>
+                {{ p.lugar?.departamento || p.hotel?.departamento }}
+              </span>
+            </div>
+
+            <div class="chip estado" [class.inactivo]="!p.estado">
+              <i-bs [name]="p.estado ? 'check-circle' : 'x-circle'" width="14" height="14" class="icon-center"></i-bs>
+              {{ p.estado ? 'Disponible' : 'No disponible' }}
+            </div>
+          </div>
+        </article>
+
+        <article class="card info-card">
+          <header class="header">
+            <h1 class="title">
+              <i-bs name="briefcase" width="18" height="18" class="icon-center accent"></i-bs>
+              <span class="clamp-2">
+                {{ p.nombre || (p.lugar?.nombre + ' + ' + p.hotel?.nombre) }}
+              </span>
+            </h1>
+
+            <div class="meta">
+              <div class="meta-item" *ngIf="p.lugar?.ubicacion || p.hotel?.ubicacion">
+                <i-bs name="geo-alt" width="16" height="16" class="icon-center"></i-bs>
+                <span class="text clamp-2">{{ p.lugar?.ubicacion || p.hotel?.ubicacion }}</span>
+                <div class="actions">
+                  <button class="btn btn-chip" type="button" (click)="openMaps()" title="Ver mapa">
+                    <i-bs name="map" width="14" height="14" class="icon-center"></i-bs> Mapa
+                  </button>
+                  <button class="btn btn-chip" type="button" (click)="copyAddress()" title="Copiar dirección">
+                    <i-bs name="clipboard" width="14" height="14" class="icon-center"></i-bs> Copiar
+                  </button>
+                </div>
+              </div>
+
+              <div class="meta-inline">
+                <span class="pill" *ngIf="p.fecha_creacion">
+                  <i-bs name="calendar3" width="14" height="14" class="icon-center"></i-bs>
+                  {{ p.fecha_creacion }}
+                </span>
+                <span class="pill" *ngIf="p.lugar?.tipo">
+                  <i-bs name="grid" width="14" height="14" class="icon-center"></i-bs>
+                  {{ p.lugar?.tipo | titlecase }}
+                </span>
+                <span class="pill" *ngIf="p.hotel?.calificacion !== undefined && p.hotel?.calificacion !== null" [attr.aria-label]="'Calificación ' + formatFiveScale(p.hotel!.calificacion!)">
+                  <i-bs name="star-fill" width="14" height="14" class="icon-center"></i-bs>
+                  {{ p.hotel!.calificacion | number:'1.1-1' }}/10
+                </span>
+              </div>
+            </div>
+          </header>
+
+          <section class="desc-block" *ngIf="p.lugar?.descripcion">
+            <p class="description">{{ p.lugar?.descripcion }}</p>
+          </section>
+
+          <ul class="facts">
+            <li class="fact">
+              <i-bs name="building" width="16" height="16" class="icon-center"></i-bs>
+              <span>Hotel asignado: <strong>{{ p.hotel?.nombre || '—' }}</strong></span>
+            </li>
+            <li class="fact" *ngIf="p.hotel?.departamento || p.lugar?.departamento">
+              <i-bs name="flag" width="16" height="16" class="icon-center"></i-bs>
+              <span>Departamento: <strong>{{ p.hotel?.departamento || p.lugar?.departamento }}</strong></span>
+            </li>
+          </ul>
+
+          <section class="itinerary" *ngIf="itinerario?.length">
+            <h2 class="section-title">
+              <i-bs name="list-ol" width="18" height="18" class="icon-center"></i-bs> Itinerario
+            </h2>
+            <ol class="timeline">
+              <li class="tl-item" *ngFor="let dia of itinerario; index as i">
+                <div class="badge">D{{ i + 1 }}</div>
+                <div class="content">{{ dia }}</div>
+              </li>
+            </ol>
+          </section>
+
+          <section class="important" *ngIf="infoImportante?.length">
+            <h2 class="section-title">
+              <i-bs name="info-circle" width="18" height="18" class="icon-center"></i-bs> Información importante
+            </h2>
+            <ul class="important-list">
+              <li *ngFor="let info of infoImportante">
+                <i-bs name="check-circle" width="16" height="16" class="icon-center good"></i-bs>
+                <span>{{ info }}</span>
+              </li>
+            </ul>
+          </section>
+
+          <div class="share-row">
+            <button class="btn btn-ghost" (click)="share()">
+              <i-bs name="share" width="18" height="18" class="icon-center"></i-bs>
+              Compartir
+            </button>
+            <button class="btn btn-outline" (click)="copyLink()">
+              <i-bs name="link-45deg" width="18" height="18" class="icon-center"></i-bs>
+              Copiar enlace
+            </button>
+          </div>
+        </article>
+      </section>
+
+      <aside class="right-col">
+        <div class="sticky">
+          <div class="price-card">
+            <div class="price-top">
+              <span class="label">Precio por paquete</span>
+              <div class="price">{{ p.precio | number:'1.2-2' }} BOB</div>
+            </div>
+
+            <div class="hotel-rating" *ngIf="p.hotel?.calificacion !== undefined && p.hotel?.calificacion !== null">
+              <div class="stars" aria-hidden="true">
+                <ng-container *ngFor="let s of getStarIcons(p.hotel!.calificacion!)">
+                  <i-bs
+                    [name]="s==='full' ? 'star-fill' : (s==='half' ? 'star-half' : 'star')"
+                    width="16"
+                    height="16"
+                    class="icon-center star"
+                    [class.dim]="s==='empty'"
+                  ></i-bs>
+                </ng-container>
+              </div>
+              <span class="rating-text">
+                Calificación del hotel: {{ formatFiveScale(p.hotel!.calificacion!) }}
+              </span>
+            </div>
+
+            <div class="cta-group">
+              <button
+                class="btn btn-primary"
+                (click)="reservarPaquete()"
+                [disabled]="!p.estado"
+                [title]="p.estado ? 'Reservar este paquete' : 'Paquete no disponible'"
+              >
+                <i-bs name="calendar-check" width="18" height="18" class="icon-center"></i-bs>
+                {{ p.estado ? 'Reservar paquete' : 'No disponible' }}
+              </button>
+            </div>
+
+            <p class="nota">
+              <i-bs name="shield-check" width="14" height="14" class="icon-center"></i-bs>
+              Cancelación gratuita
+            </p>
+            <p class="nota">
+              <i-bs name="credit-card" width="14" height="14" class="icon-center"></i-bs>
+              No se requiere pago por adelantado
+            </p>
           </div>
         </div>
-      </div>
-
-      <div class="important-info-section" *ngIf="infoImportante.length">
-        <h3>Información importante</h3>
-        <ul>
-          <li *ngFor="let info of infoImportante">{{ info }}</li>
-        </ul>
-      </div>
+      </aside>
     </div>
-
-    <div class="imagen-lugar">
-      <img [src]="paquete.lugar?.url_image_lugar_turistico" alt="Imagen lugar" />
-    </div>
-
-    <!-- Botón de reserva -->
-    <button class="btn" (click)="reservarPaquete()">Reservar Paquete</button>
   </div>
-</div>
 
-<!-- Modal de selección de fechas -->
-<div class="modal-backdrop" *ngIf="showConflictModal">
-  <dialog class="modal-card warning" open aria-labelledby="conflictoTitulo">
-    <h2 id="conflictoTitulo">Selecciona tus fechas</h2>
-    <p>La fecha más próxima disponible es: <b>{{ formatearFecha(proxDisponible) }}</b></p>
+  <div class="modal-backdrop" *ngIf="showConflictModal" (click)="cancelarReserva()" aria-hidden="true"></div>
+  <div
+    class="modal-root"
+    *ngIf="showConflictModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalFechasTitle"
+    (click)="cancelarReserva()"
+  >
+    <div class="modal-card modal-fechas animate-in" (click)="$event.stopPropagation()">
+      <header class="modal-header">
+        <h3 id="modalFechasTitle">
+          <i-bs name="calendar-range" width="18" height="18" class="icon-center accent"></i-bs>
+          Selecciona tus fechas
+        </h3>
+        <button class="icon-btn" (click)="cancelarReserva()" aria-label="Cerrar">
+          <i-bs name="x" width="24" height="24" class="icon-center"></i-bs>
+        </button>
+      </header>
 
+      <div class="modal-body">
+        <p class="modal-desc">
+          Este paquete incluye la habitación <strong>#{{ habitacionSeleccionada?.num }}</strong>.
+          La próxima fecha de check-in disponible es el <strong>{{ formatearFecha(proxDisponible) }}</strong>.
+        </p>
+        <p class="modal-desc">
+          Puedes usar esta fecha o seleccionar otra e intentar validar la disponibilidad.
+        </p>
 
-    <div class="fecha-selector">
-      <label>Fecha de entrada:</label>
-      <input type="date" [(ngModel)]="fechaReserva" (change)="onChangeFechaReserva()" />
-      <label>Fecha de salida:</label>
-      <input type="date" [(ngModel)]="fechaCaducidad" />
-      <button class="btn-sec" (click)="probarFechasPersonalizadas()">Probar fechas</button>
+        <div class="fechas-group">
+          <div class="date-row">
+            <label for="fechaReserva">Check-in:</label>
+            <input id="fechaReserva" type="date" [(ngModel)]="fechaReserva" name="fechaReserva" (change)="onChangeFechaReserva()" />
+          </div>
+          <div class="date-row">
+            <label for="fechaCaducidad">Check-out:</label>
+            <input id="fechaCaducidad" type="date" [(ngModel)]="fechaCaducidad" name="fechaCaducidad" />
+          </div>
+        </div>
+
+        <div class="toast-fechas" [class.visible]="mensajeFechaLibre" [class.error]="mensajeFechaLibre.includes('❌')">
+          {{ mensajeFechaLibre }}
+        </div>
+      </div>
+
+      <footer class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelarReserva()">
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="probarFechasPersonalizadas()"
+          [disabled]="!fechaReserva || !fechaCaducidad || mensajeFechaLibre.includes('🎉')"
+        >
+          <i-bs name="check-circle" width="18" height="18" class="icon-center"></i-bs>
+          {{ mensajeFechaLibre.includes('🎉') ? 'Confirmado' : 'Validar Fechas' }}
+        </button>
+      </footer>
     </div>
-
-    <p class="mensaje-validacion" *ngIf="mensajeFechaLibre">{{ mensajeFechaLibre }}</p>
-
-    <div class="modal-actions">
-      <button class="btn-cancelar" (click)="cancelarReserva()">Cancelar</button>
-    </div>
-  </dialog>
-</div>
+  </div>
+</main>

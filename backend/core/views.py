@@ -12,8 +12,8 @@ from .serializers import (
     ChatSessionListSerializer, ChatSessionDetailSerializer, ChatSessionCreateSerializer, ChatSessionPatchSerializer,
     ChatMessageSerializer
 )
-from .permissions import IsSuperAdmin, IsUsuario
-from .llm_client import send_message
+from .permissions import IsSuperAdmin
+from llm.llm_client import send_message
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from datetime import date, timedelta
@@ -24,14 +24,12 @@ from rest_framework.decorators import action
 from django.contrib.auth.hashers import check_password
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-
 from django.db.models import Q
 from django.utils.dateparse import parse_datetime
 
 
 def home(request):
     return HttpResponse("Bienvenido a la API MunayBol")
-
 
 class HabitacionDisponibilidadView(APIView):
     permission_classes = [AllowAny]
@@ -170,17 +168,10 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         return Usuario.objects.none()
 
     def partial_update(self, request, *args, **kwargs):
-        """
-        Reglas de seguridad:
-        - No permitir desactivar al último superadmin.
-        - No permitir quitar el rol de superadmin al último superadmin.
-        - No permitir que el admin se desactive a sí mismo ni se quite su propio rol.
-        """
         instance = self.get_object()
         user = request.user
         data = request.data or {}
 
-        # Normalizar new_estado a boolean si viene como string
         def to_bool(v):
             if isinstance(v, bool):
                 return v
@@ -188,7 +179,6 @@ class UsuarioViewSet(viewsets.ModelViewSet):
                 return v.lower() in ('true', '1', 'yes', 'on')
             return bool(v)
 
-        # Validaciones de rol
         if 'rol' in data:
             new_role = data.get('rol')
             if instance.pk == user.pk and new_role != 'superadmin':
@@ -199,7 +189,6 @@ class UsuarioViewSet(viewsets.ModelViewSet):
                 if remaining == 0:
                     return Response({"error": "No puedes quitar el rol del último superadmin."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Validaciones de estado
         if 'estado' in data:
             new_estado = to_bool(data.get('estado'))
             if instance.pk == user.pk and new_estado is False:
@@ -392,7 +381,6 @@ class ReservaViewSet(viewsets.ModelViewSet):
                         status=status.HTTP_201_CREATED)
 
     def partial_update(self, request, *args, **kwargs):
-        """Dueño puede modificar SOLO fechas; superadmin sin restricción."""
         reserva = self.get_object()
         user = self.request.user
 
@@ -407,7 +395,6 @@ class ReservaViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'], url_path='cancelar')
     def cancelar(self, request, pk=None):
-        """Cancelar (soft delete) una reserva. Dueño o superadmin."""
         reserva = self.get_object()
         user = request.user
 
@@ -439,7 +426,6 @@ class ReservaViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'], url_path='reactivar')
     def reactivar(self, request, pk=None):
-        """Reactivar una reserva cancelada (estado=True) si no hay solapamientos activos. Dueño o superadmin."""
         reserva = self.get_object()
         user = request.user
 
@@ -480,7 +466,6 @@ class ReservaViewSet(viewsets.ModelViewSet):
         return Response({"message": "Reserva reactivada correctamente", "id_reserva": reserva.id_reserva}, status=200)
 
     def destroy(self, request, *args, **kwargs):
-        """Soft-cancel mediante DELETE para compatibilidad."""
         reserva = self.get_object()
         user = self.request.user
         if getattr(user, "rol", None) != "superadmin" and reserva.id_usuario_id != user.id:
@@ -597,22 +582,7 @@ class LLMGenerateView(APIView):
         result, chat_id = send_message(prompt, chat_id=chat_id, usuario=user)
         return Response({'result': result, 'chat_id': chat_id})
 
-
-# =========================
-# Chat – ViewSet de sesiones
-# =========================
-
 class ChatSessionViewSet(viewsets.ViewSet):
-    """
-    Rutas:
-      GET    /api/chat/sessions
-      POST   /api/chat/sessions
-      GET    /api/chat/sessions/{id}
-      PATCH  /api/chat/sessions/{id}
-      DELETE /api/chat/sessions/{id}
-
-      GET/POST /api/chat/sessions/{id}/messages   -> GET lista paginada, POST agrega y responde IA
-    """
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -687,10 +657,6 @@ class ChatSessionViewSet(viewsets.ViewSet):
 
     @action(detail=True, methods=['get', 'post'], url_path='messages')
     def messages(self, request, pk=None):
-        """
-        GET: lista mensajes paginados
-        POST: agrega mensaje de usuario y devuelve respuesta de la IA
-        """
         try:
             s = self._user_qs(request).get(pk=pk)
         except ChatSession.DoesNotExist:
@@ -714,7 +680,6 @@ class ChatSessionViewSet(viewsets.ViewSet):
                 "items": msg_ser.data
             })
 
-        # POST
         body = request.data or {}
         role = (body.get('role') or 'user').strip()
         content = (body.get('content') or '').strip()

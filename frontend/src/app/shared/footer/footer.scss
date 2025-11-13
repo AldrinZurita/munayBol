@@ -1,13 +1,9 @@
-/* Fonts are loaded in index.html */
-
-/* Colores bandera (base) */
 :root {
   --flag-red: #d32f2f;
   --flag-yellow: #facc15;
   --flag-green: #16a34a;
 }
 
-/* Tonos suaves de fondo */
 :root {
   --flag-red-soft: color-mix(in srgb, var(--flag-red) 55%, white);
   --flag-yellow-soft: color-mix(in srgb, var(--flag-yellow) 60%, white);
@@ -19,7 +15,6 @@
   --accent: color-mix(in srgb, var(--flag-red) 65%, #0b1220);
 }
 
-/* Footer con fondo suave R/Y/G y animación */
 .ff-footer {
   position: relative;
   z-index: 1;
@@ -48,8 +43,6 @@
   margin: 0 auto;
 }
 
-/* TOP: 3 columnas para centrar exactamente los enlaces.
-   Col 1: marca (izquierda) • Col 2: enlaces (centrados) • Col 3: espacio (derecha) */
 .ff-top {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -57,7 +50,6 @@
   column-gap: 12px;
 }
 
-/* Marca (columna izquierda) */
 .ff-brand {
   grid-column: 1;
   justify-self: start;
@@ -77,7 +69,6 @@
 }
 .ff-brand__bol { color: var(--text-ink); }
 
-/* Enlaces legales perfectamente centrados (columna central) */
 .ff-links {
   grid-column: 2;
   justify-self: center;
@@ -119,7 +110,6 @@
   letter-spacing: .3em;
 }
 
-/* Separador fino centrado */
 .ff-divider {
   border: 0;
   height: 1px;
@@ -128,7 +118,6 @@
   max-width: 920px;
 }
 
-/* Legal centrado */
 .ff-legal {
   text-align: center;
   color: var(--text-ink-muted);
@@ -138,7 +127,6 @@
 }
 .ff-legal p { margin: 6px 0; }
 
-/* Responsivo: en móviles, una sola columna y todo centrado */
 @media (max-width: 720px) {
   .ff-top {
     grid-template-columns: 1fr;
@@ -149,7 +137,6 @@
   .ff-links { grid-column: 1; justify-self: center; gap: 14px; }
 }
 
-/* Reduce motion */
 @media (prefers-reduced-motion: reduce) {
   .ff-footer { animation: none !important; }
   .ff-links a,

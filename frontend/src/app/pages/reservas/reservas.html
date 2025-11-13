@@ -1,107 +1,282 @@
-<div class="reserva-container">
-  <a class="back-link" routerLink="/habitacion-detalle">
-    &larr; Volver a los detalles
-  </a>
-  <h1>Completar Reserva</h1>
-  <div class="reserva-main">
-    <section class="pago-card">
-      <h3><span class="icon material-symbols-rounded">credit_card</span> Información de Pago</h3>
-      <p class="pago-desc">Ingresa los datos de tu tarjeta de crédito o débito</p>
-      <form>
-        <label>
-          Número de tarjeta
-          <input type="text" maxlength="19" placeholder="1234 5678 9012 3456" [(ngModel)]="tarjeta" name="tarjeta" required (input)="onTarjetaInput($event)" />
-        </label>
-        <label>
-          Nombre del titular
-          <input type="text" placeholder="Nombre como aparece en la tarjeta" [(ngModel)]="nombre" name="nombre" required />
-        </label>
-        <div class="row">
-          <label>
-            Fecha de expiración
-            <input type="text" maxlength="5" placeholder="MM/AA" [(ngModel)]="expiracion" name="expiracion" required (input)="onExpiracionInput($event)" />
-          </label>
-          <label>
-            CVV
-            <input type="text" maxlength="3" placeholder="123" [(ngModel)]="cvv" name="cvv" required />
-          </label>
-        </div>
-        <div class="pago-seguro">
-          <span class="icon material-symbols-rounded">shield_lock</span>
-          <span>
-            <b>Pago 100% seguro</b><br />
-            Tus datos están protegidos con encriptación SSL
+<main class="reserva-page">
+  <div class="reserva-container" [attr.aria-busy]="creating ? 'true' : 'false'">
+    <a class="back-link" routerLink="/habitacion-detalle" aria-label="Volver a los detalles">
+      <i-bs name="arrow-left" width="18" height="18" class="icon"></i-bs>
+      Volver a los detalles
+    </a>
+
+    <header class="header">
+      <h1 class="title">
+        <span class="badge-step">Paso 2/2</span>
+        Completar Reserva
+      </h1>
+      <div class="badges">
+        <span class="badge-secure">
+          <i-bs name="shield-lock" width="16" height="16" class="icon"></i-bs>
+          Pago seguro SSL
+        </span>
+        <span class="badge-24">
+          <i-bs name="headset" width="16" height="16" class="icon"></i-bs>
+          Soporte 24/7
+        </span>
+      </div>
+    </header>
+
+    <div class="reserva-main">
+      <section class="card pago-card">
+        <h3 class="card-title">
+          <i-bs name="credit-card" width="18" height="18" class="icon accent"></i-bs>
+          Información de Pago
+        </h3>
+        <p class="muted pago-desc">Ingresa los datos de tu tarjeta de crédito o débito</p>
+
+        <div class="brands-row" aria-live="polite">
+          <span class="brand visa">VISA</span>
+          <span class="brand mc">Mastercard</span>
+          <span class="brand amex">Amex</span>
+          <span class="brand dsc">Discover</span>
+          <span class="detected" *ngIf="cardBrand !== 'unknown'">
+            <i-bs name="shield-check" width="16" height="16" class="icon"></i-bs>
+            {{ cardBrand | titlecase }}
           </span>
         </div>
-        <button class="btn btn--pago" type="button" (click)="confirmarPago()" [disabled]="creating || pagoInvalido()" [attr.aria-busy]="creating ? 'true' : 'false'">
-          <span class="spinner" *ngIf="creating"></span>
-          <span *ngIf="!creating">Confirmar Pago - {{ total }} BOB</span>
-          <span *ngIf="creating">Procesando...</span>
-        </button>
-      </form>
-    </section>
-    <aside class="resumen-card">
-      <h4>Resumen de reserva</h4>
-      <div class="hotel-info">
-        <b>{{ hotel.nombre }}</b>
-        <div><span class="icon material-symbols-rounded">location_on</span> {{ hotel.ciudad }}</div>
-      </div>
-      <div class="resumen-datos">
-        <div><span class="icon material-symbols-rounded">group</span> Huéspedes <span class="right">{{ huespedes }}</span></div>
-        <div>Noches <span class="right">{{ noches }}</span></div>
-        <div class="fechas-grid">
-          <label class="fecha-item">
-            <span class="lbl">Check-in</span>
-            <input type="date" [min]="minFechaReserva" [(ngModel)]="fecha_reserva" name="fecha_reserva" (change)="onChangeFechaReserva()" />
+
+        <form class="form-grid" novalidate>
+          <label class="field">
+            <span class="label">Número de tarjeta</span>
+            <div class="input-affix" [class.invalid]="!isCardNumberValid() && touched.tarjeta">
+              <i-bs name="credit-card-2-front" width="16" height="16" class="affix"></i-bs>
+              <input
+                type="text"
+                inputmode="numeric"
+                autocomplete="cc-number"
+                maxlength="19"
+                placeholder="1234 5678 9012 3456"
+                [(ngModel)]="tarjeta"
+                name="tarjeta"
+                required
+                (focus)="touched.tarjeta = true"
+                (input)="onTarjetaInput($event)"
+                [attr.aria-invalid]="!isCardNumberValid() && touched.tarjeta ? 'true' : 'false'"
+              />
+              <button class="clear-btn" type="button" *ngIf="tarjeta" (click)="clearCard()" aria-label="Limpiar número de tarjeta">
+                <i-bs name="x" width="16" height="16" class="icon"></i-bs>
+              </button>
+            </div>
+            <small class="help" *ngIf="touched.tarjeta && !isCardNumberValid()">
+              Verifica el número de la tarjeta.
+            </small>
           </label>
-          <label class="fecha-item">
-            <span class="lbl">Check-out</span>
-            <input type="date" [min]="minFechaCaducidad" [(ngModel)]="fecha_caducidad" name="fecha_caducidad" (change)="onChangeFechaCaducidad()" />
+
+          <label class="field">
+            <span class="label">Nombre del titular</span>
+            <div class="input-affix" [class.invalid]="!isNameValid() && touched.nombre">
+              <i-bs name="person-badge" width="16" height="16" class="affix"></i-bs>
+              <input
+                type="text"
+                autocomplete="cc-name"
+                placeholder="Nombre como aparece en la tarjeta"
+                [(ngModel)]="nombre"
+                name="nombre"
+                required
+                (focus)="touched.nombre = true"
+                [attr.aria-invalid]="!isNameValid() && touched.nombre ? 'true' : 'false'"
+              />
+            </div>
           </label>
+
+          <div class="row">
+            <label class="field">
+              <span class="label">Fecha de expiración</span>
+              <div class="input-affix" [class.invalid]="!isExpiryValid() && touched.expiracion">
+                <i-bs name="calendar3" width="16" height="16" class="affix"></i-bs>
+                <input
+                  type="text"
+                  inputmode="numeric"
+                  autocomplete="cc-exp"
+                  maxlength="5"
+                  placeholder="MM/AA"
+                  [(ngModel)]="expiracion"
+                  name="expiracion"
+                  required
+                  (focus)="touched.expiracion = true"
+                  (input)="onExpiracionInput($event)"
+                  [attr.aria-invalid]="!isExpiryValid() && touched.expiracion ? 'true' : 'false'"
+                />
+              </div>
+              <small class="help" *ngIf="touched.expiracion && !isExpiryValid()">
+                Usa el formato MM/AA y una fecha futura.
+              </small>
+            </label>
+
+            <label class="field">
+              <span class="label">CVV</span>
+              <div class="input-affix" [class.invalid]="!isCvvValid() && touched.cvv">
+                <i-bs name="shield-lock" width="16" height="16" class="affix"></i-bs>
+                <input
+                  [type]="showCvv ? 'text' : 'password'"
+                  inputmode="numeric"
+                  [maxlength]="cvvMaxLength"
+                  placeholder="{{ cvvPlaceholder }}"
+                  [(ngModel)]="cvv"
+                  name="cvv"
+                  required
+                  (focus)="touched.cvv = true"
+                />
+                <button class="clear-btn" type="button" (click)="showCvv = !showCvv" [attr.aria-pressed]="showCvv" [attr.aria-label]="showCvv ? 'Ocultar CVV' : 'Mostrar CVV'">
+                  <i-bs [name]="showCvv ? 'eye-slash' : 'eye'" width="16" height="16" class="icon"></i-bs>
+                </button>
+              </div>
+              <small class="help">Código de seguridad ({{ cvvMaxLength }} dígitos)</small>
+            </label>
+          </div>
+
+          <div class="pago-seguro">
+            <i-bs name="shield-lock" width="16" height="16" class="icon"></i-bs>
+            <span>
+              <b>Pago 100% seguro</b><br />
+              Tus datos están protegidos con encriptación SSL
+            </span>
+          </div>
+
+          <button
+            class="btn btn-primary btn--pago"
+            type="button"
+            (click)="confirmarPago()"
+            [disabled]="creating || pagoInvalido()"
+            [attr.aria-busy]="creating ? 'true' : 'false'"
+          >
+            <span class="btn-text">
+              <i-bs name="shield-lock" width="18" height="18" class="icon"></i-bs>
+              Confirmar Pago - {{ total }} BOB
+            </span>
+          </button>
+
+          <p class="terms">
+            Al confirmar aceptas nuestras
+            <a href="#" (click)="$event.preventDefault()" aria-label="Términos y condiciones">Condiciones</a>
+            y
+            <a href="#" (click)="$event.preventDefault()" aria-label="Política de privacidad">Política de Privacidad</a>.
+          </p>
+        </form>
+      </section>
+
+      <aside class="card resumen-card">
+        <h4 class="card-title">
+          <i-bs name="receipt" width="18" height="18" class="icon accent"></i-bs>
+          Resumen de reserva
+        </h4>
+
+        <div class="hotel-info">
+          <div class="hotel-name">
+            <i-bs name="building" width="16" height="16" class="icon"></i-bs>
+            <b>{{ hotel.nombre || 'Hotel' }}</b>
+          </div>
+          <div class="hotel-city" *ngIf="hotel.ciudad">
+            <i-bs name="geo-alt" width="16" height="16" class="icon"></i-bs>
+            {{ hotel.ciudad }}
+          </div>
         </div>
-      </div>
-      <div class="resumen-precio">
-        <div>{{ hotel.precio }} BOB x {{ noches }} noches <span class="right">{{ subtotal }} BOB</span></div>
-        <div>IVA (13%) <span class="right">{{ iva }} BOB</span></div>
-      </div>
-      <div class="resumen-total">
-        <b>Total <span class="orange">{{ total }} BOB</span></b>
-      </div>
-      <ul class="beneficios">
-        <li>✓ Cancelación gratuita hasta 24 horas antes</li>
-        <li>✓ Confirmación inmediata</li>
-        <li>✓ Atención al cliente 24/7</li>
-      </ul>
-    </aside>
+
+        <div class="resumen-datos">
+          <div class="line">
+            <i-bs name="people" width="16" height="16" class="icon"></i-bs>
+            Huéspedes
+            <span class="right">{{ huespedes }}</span>
+          </div>
+          <div class="line">
+            <i-bs name="moon-stars" width="16" height="16" class="icon"></i-bs>
+            Noches
+            <span class="right">{{ noches }}</span>
+          </div>
+
+          <div class="fechas-grid">
+            <label class="fecha-item">
+              <span class="lbl">Check-in</span>
+              <input
+                type="date"
+                [min]="minFechaReserva"
+                [(ngModel)]="fecha_reserva"
+                name="fecha_reserva"
+                (change)="onChangeFechaReserva()"
+              />
+            </label>
+
+            <label class="fecha-item">
+              <span class="lbl">Check-out</span>
+              <input
+                type="date"
+                [min]="minFechaCaducidad"
+                [(ngModel)]="fecha_caducidad"
+                name="fecha_caducidad"
+                (change)="onChangeFechaCaducidad()"
+              />
+            </label>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="resumen-precio">
+          <div class="line">
+            {{ hotel.precio }} BOB × {{ noches }} noches
+            <span class="right">{{ subtotal }} BOB</span>
+          </div>
+          <div class="line">
+            IVA (13%)
+            <span class="right">{{ iva }} BOB</span>
+          </div>
+        </div>
+
+        <div class="resumen-total">
+          <div class="total-row">
+            <span>Total</span>
+            <span class="price">{{ total }} BOB</span>
+          </div>
+          <p class="muted mini">Impuestos incluidos</p>
+        </div>
+
+        <ul class="beneficios">
+          <li><i-bs name="shield-check" width="16" height="16" class="icon good"></i-bs> Cancelación gratuita hasta 24h antes</li>
+          <li><i-bs name="lightning-charge" width="16" height="16" class="icon good"></i-bs> Confirmación inmediata</li>
+          <li><i-bs name="headset" width="16" height="16" class="icon good"></i-bs> Atención al cliente 24/7</li>
+        </ul>
+      </aside>
+    </div>
+
+    <div class="modal-backdrop" *ngIf="showSuccessModal">
+      <dialog class="modal-card success" open aria-labelledby="reservaConfirmadaTitulo">
+        <div class="icon-circle success">✔</div>
+        <h2 id="reservaConfirmadaTitulo">¡Reserva Confirmada!</h2>
+        <p>Tu reserva de habitación ha sido confirmada exitosamente. Recibirás un email con todos los detalles.</p>
+        <p class="reserva-id">Código de reserva: <strong>{{ successCodigo }}</strong></p>
+        <p class="reserva-total">Total pagado: <strong>{{ successTotal | number:'1.2-2' }} BOB</strong></p>
+        <button class="btn btn-primary" (click)="cerrarSuccess()">
+          Ver detalle de mi reserva
+          <i-bs name="arrow-right-short" width="20" height="20" class="icon"></i-bs>
+        </button>
+      </dialog>
+    </div>
+
+    <div class="modal-backdrop" *ngIf="showConflictModal" (click)="cerrarConflict()">
+      <dialog class="modal-card conflict" open aria-labelledby="conflictoFechasTitulo">
+        <div class="icon-circle error">!</div>
+        <h2 id="conflictoFechasTitulo">Fechas Ocupadas</h2>
+        <p>Las fechas seleccionadas ({{ fecha_reserva }} a {{ fecha_caducidad }}) ya no están disponibles para esta habitación.</p>
+        <p>La próxima fecha disponible es el <strong>{{ conflictNextAvailable | date:'longDate' }}</strong>.</p>
+        <div class="btn-group">
+          <button class="btn btn-secondary" (click)="cerrarConflict()">Cancelar</button>
+          <button class="btn btn-primary" (click)="usarFechaSugerida()">Usar fecha sugerida</button>
+        </div>
+      </dialog>
+    </div>
+
+    <div class="toast error" [class.show]="showErrorToast">
+      <i-bs name="x-circle" width="18" height="18" class="icon"></i-bs>
+      {{ errorMessage }}
+      <button class="close-btn" (click)="showErrorToast = false" aria-label="Cerrar">
+        <i-bs name="x" width="20" height="20" class="icon"></i-bs>
+      </button>
+    </div>
   </div>
-
-  <!-- Modal Éxito -->
-  <div class="modal-backdrop" *ngIf="showSuccessModal">
-    <dialog class="modal-card" open aria-labelledby="reservaConfirmadaTitulo">
-      <div class="icon-circle success">✔</div>
-      <h2 id="reservaConfirmadaTitulo">¡Reserva Confirmada!</h2>
-      <p>Tu reserva de habitación ha sido confirmada exitosamente. Recibirás un email con todos los detalles.</p>
-      <p><b>Confirmación:</b> {{ successCodigo }}<br>
-         <b>Total pagado:</b> {{ successTotal }} BOB</p>
-      <button class="btn-modal" (click)="cerrarSuccess()">Volver al Inicio</button>
-    </dialog>
-  </div>
-
-  <!-- Modal Conflicto -->
-  <div class="modal-backdrop" *ngIf="showConflictModal">
-    <dialog class="modal-card warning" open aria-labelledby="conflictoTitulo">
-      <div class="icon-circle warn">!</div>
-      <h2 id="conflictoTitulo">Fechas ocupadas</h2>
-      <p>Otro usuario reservó ese rango mientras completabas el pago.</p>
-      <p>Próxima fecha disponible: <b>{{ conflictNextAvailable }}</b></p>
-      <div class="modal-actions">
-        <button class="btn-sec" (click)="cerrarConflict()">Cerrar</button>
-        <button class="btn-principal" (click)="usarFechaSugerida()">Usar fecha sugerida</button>
-      </div>
-    </dialog>
-  </div>
-
-  <!-- Toast Error -->
-  <div class="toast-error" *ngIf="showErrorToast">{{ errorMessage }}</div>
-</div>
-
+</main>

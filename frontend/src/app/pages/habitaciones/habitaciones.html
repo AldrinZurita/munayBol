@@ -1,6 +1,5 @@
 <div class="habitaciones-container">
   <h1 class="title">Administración de Habitaciones</h1>
-
   <div class="header-acciones">
     <button *ngIf="isSuperAdmin" class="btn btn-primary" (click)="openAddModal()">
       <span class="material-symbols-outlined icon-ms">add</span>
@@ -23,18 +22,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="filtro">
-        <label for="hotel">Código Hotel</label>
-        <div class="select-wrapper">
-          <select id="hotel" [(ngModel)]="hotelSeleccionado">
-            <option value="">Todos</option>
-            <option *ngFor="let id of hoteles" [value]="id">{{ id }}</option>
-          </select>
-          <div class="chevron-icon">
-            <span class="material-symbols-outlined">expand_more</span>
-          </div>
-        </div>
-      </div> -->
       <div class="acciones">
         <button class="btn btn-primary" (click)="aplicarFiltros()">Aplicar</button>
       </div>
@@ -42,9 +29,8 @@
   </section>
 
   <div class="estado">
-    <div *ngIf="cargando">Cargando habitaciones...</div>
     <div *ngIf="error" class="error">{{ error }}</div>
-    <div *ngIf="!cargando && habitacionesFiltradas.length === 0 && !error">No hay habitaciones que coincidan con el
+    <div *ngIf="habitacionesFiltradas.length === 0 && !error">No hay habitaciones que coincidan con el
       filtro.</div>
   </div>
 
@@ -56,7 +42,7 @@
         <ul class="meta">
           <li class="meta-item">
             <span class="status-dot" [class.disponible]="habitacion.disponible"
-              [class.no-disponible]="!habitacion.disponible"></span>
+                  [class.no-disponible]="!habitacion.disponible"></span>
             {{ habitacion.disponible ? 'Disponible' : 'No disponible' }}
           </li>
           <li class="meta-item">
@@ -75,7 +61,6 @@
       </div>
       <div class="card-right">
         <a class="btn btn-accent" [routerLink]="['/habitaciones', habitacion.num]">Ver Detalle</a>
-        <!-- --- UPDATED BUTTONS --- -->
         <div class="admin-actions" *ngIf="isSuperAdmin">
           <button class="btn btn-secondary btn-icon" (click)="openEditModal(habitacion)" aria-label="Editar Habitación">
             <span class="material-symbols-outlined">edit</span>
@@ -88,10 +73,9 @@
     </div>
   </section>
 
-  <!-- Modal Agregar -->
   <div class="modal-backdrop" *ngIf="showAddModal" (click)="closeAddModal()" aria-hidden="true"></div>
   <div class="modal-root" *ngIf="showAddModal" role="dialog" aria-modal="true" aria-labelledby="addHabitacionTitle"
-    (click)="closeAddModal()">
+       (click)="closeAddModal()">
     <div class="modal-card" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3 id="addHabitacionTitle">Agregar habitación</h3>
@@ -106,18 +90,18 @@
 
           <label class="form-label" for="add_caracteristicas">Características *</label>
           <input id="add_caracteristicas" name="caracteristicas" type="text" class="form-input"
-            [(ngModel)]="newModel.caracteristicas" required />
+                 [(ngModel)]="newModel.caracteristicas" required />
 
           <label class="form-label" for="add_precio">Precio *</label>
           <input id="add_precio" name="precio" type="number" class="form-input" [(ngModel)]="newModel.precio" required />
 
           <label class="form-label" for="add_codigo_hotel">Código de Hotel *</label>
           <input id="add_codigo_hotel" name="codigo_hotel" type="number" class="form-input"
-            [(ngModel)]="newModel.codigo_hotel" required />
-            
+                 [(ngModel)]="newModel.codigo_hotel" required />
+
           <label class="form-label" for="add_cant_huespedes">Cantidad de Huéspedes *</label>
           <input id="add_cant_huespedes" name="cant_huespedes" type="number" class="form-input"
-            [(ngModel)]="newModel.cant_huespedes" required/>
+                 [(ngModel)]="newModel.cant_huespedes" required/>
 
           <div class="form-group checkbox-group">
             <input id="add_disponible" name="disponible" type="checkbox" [(ngModel)]="newModel.disponible" />
@@ -135,10 +119,9 @@
     </div>
   </div>
 
-  <!-- Modal Edición -->
   <div class="modal-backdrop" *ngIf="showEditModal" (click)="closeEditModal()" aria-hidden="true"></div>
   <div class="modal-root" *ngIf="showEditModal" role="dialog" aria-modal="true" aria-labelledby="editHabitacionTitle"
-    (click)="closeEditModal()">
+       (click)="closeEditModal()">
     <div class="modal-card" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3 id="editHabitacionTitle">Editar habitación</h3>
@@ -153,18 +136,18 @@
 
           <label class="form-label" for="edit_caracteristicas">Características *</label>
           <input id="edit_caracteristicas" name="caracteristicas" type="text" class="form-input"
-            [(ngModel)]="editModel.caracteristicas" required />
+                 [(ngModel)]="editModel.caracteristicas" required />
 
           <label class="form-label" for="edit_precio">Precio *</label>
           <input id="edit_precio" name="precio" type="number" class="form-input" [(ngModel)]="editModel.precio" required />
 
           <label class="form-label" for="edit_codigo_hotel">Código de Hotel *</label>
           <input id="edit_codigo_hotel" name="codigo_hotel" type="number" class="form-input"
-            [(ngModel)]="editModel.codigo_hotel" required />
-            
+                 [(ngModel)]="editModel.codigo_hotel" required />
+
           <label class="form-label" for="edit_cant_huespedes">Cantidad de Huéspedes *</label>
           <input id="edit_cant_huespedes" name="cant_huespedes" type="number" class="form-input"
-            [(ngModel)]="editModel.cant_huespedes" required/>
+                 [(ngModel)]="editModel.cant_huespedes" required/>
 
           <div class="form-group checkbox-group">
             <input id="edit_disponible" name="disponible" type="checkbox" [(ngModel)]="editModel.disponible" />

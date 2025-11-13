@@ -39,13 +39,10 @@ export class NotificationComponent {
     private readonly auth: AuthService,
     private router: Router
   ) {
-    // Stream principal de notificaciones
     this.notifications$ = this.notificationService.notifications$;
-    // Derivar contador de no leídas del stream para reaccionar a WS y actualizaciones locales
     this.unreadCount$ = this.notifications$.pipe(
       map(list => list.filter(n => !n.read).length)
     );
-    // Cuando el usuario inicie sesión, conectar socket y traer lista inicial
     this.auth.user$.pipe(switchMap(u => u ? this.notificationService.fetchNotifications() : of([]))).subscribe();
   }
 
@@ -53,7 +50,6 @@ export class NotificationComponent {
   toggleNotifications(): void {
     this.showNotifications = !this.showNotifications;
     if (this.showNotifications) {
-      // Al abrir, refresca la lista desde el backend (ya enviará token)
       this.notificationService.fetchNotifications().subscribe();
     }
   }

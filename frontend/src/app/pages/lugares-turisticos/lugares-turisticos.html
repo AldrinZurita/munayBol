@@ -1,5 +1,4 @@
 <main class="lugares-page container">
-  <!-- Título principal + acción global (superadmin) -->
   <header class="page-header">
     <h1 class="page-title">
       <span class="title-icon">
@@ -18,11 +17,9 @@
     </button>
   </header>
 
-  <!-- Filtros -->
   <section class="filtros-card card">
     <h2 class="card-title">Filtros de búsqueda</h2>
     <div class="filtros-grid">
-      <!-- Buscador -->
       <div class="filtro filtro-busqueda">
         <label for="busqueda" class="form-label">Buscar (nombre o tipo)</label>
         <div class="search-wrapper">
@@ -49,7 +46,6 @@
         </div>
       </div>
 
-      <!-- Departamento -->
       <div class="filtro filtro-depto">
         <label for="ciudad" class="form-label">Departamento</label>
         <div class="select-wrapper">
@@ -69,7 +65,6 @@
         </div>
       </div>
 
-      <!-- Acciones filtros (icon-only) -->
       <div class="acciones">
         <button class="btn btn-accent icon-only" (click)="aplicarFiltros()" title="Aplicar filtros" aria-label="Aplicar filtros">
           <i-bs name="funnel" width="18" height="18" class="icon-center"></i-bs>
@@ -85,19 +80,16 @@
     </div>
   </section>
 
-  <!-- Estado -->
   <section class="estado" role="status" aria-live="polite">
-    <div *ngIf="cargando" class="loading">
-      <span class="spinner"></span> Cargando lugares…
-    </div>
+
     <div *ngIf="error" class="error">{{ error }}</div>
-    <div *ngIf="!cargando && lugaresFiltrados.length === 0 && !error" class="no-result">
+
+    <div *ngIf="lugaresFiltrados.length === 0 && !error" class="no-result">
       <span class="material-symbols-outlined icon-center icon-secondary" aria-hidden="true">info</span>
       No hay lugares que coincidan con el filtro.
     </div>
   </section>
 
-  <!-- Lista de lugares -->
   <section class="lista">
     <article
       *ngFor="let l of lugaresFiltrados; trackBy: trackByLugar"
@@ -128,7 +120,6 @@
         <p class="descripcion" *ngIf="l.ubicacion">{{ l.ubicacion }}</p>
       </div>
 
-      <!-- Acciones centradas (icon-only) -->
       <div class="card-right card-actions-centered">
         <button
           class="btn btn-ghost icon-only"
@@ -161,7 +152,6 @@
     </article>
   </section>
 
-  <!-- Loader navegación -->
   <div class="route-loader" *ngIf="routeLoading">
     <div class="route-loader__backdrop"></div>
     <div class="route-loader__content" role="status" aria-live="polite">
@@ -171,7 +161,6 @@
     </div>
   </div>
 
-  <!-- Modal (Agregar / Editar) -->
   <div class="modal-backdrop" *ngIf="showModal" (click)="closeModal()" aria-hidden="true"></div>
   <div
     class="modal-root"
@@ -203,7 +192,6 @@
         (ngSubmit)="isEditMode ? saveEdit(modalForm) : saveNewLugar(modalForm)"
         novalidate
       >
-        <!-- Cuerpo con web scroll visible, fondo suave tricolor y sin cortes bajo la imagen -->
         <div class="modal-body" aria-describedby="modalScrollHelp">
           <div id="modalScrollHelp" class="sr-only">Desplázate dentro de este área para ver todo el contenido del formulario.</div>
 
@@ -250,7 +238,6 @@
             </div>
           </div>
         </div>
-
         <footer class="modal-footer">
           <button type="button" class="btn btn-secondary-soft icon-only" (click)="closeModal()" title="Cancelar" aria-label="Cancelar">
             <i-bs name="x-circle" width="18" height="18" class="icon-center"></i-bs>

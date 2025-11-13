@@ -61,7 +61,6 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
   paletteOpen = false;
   paletteQuery = '';
 
-  // Base items; los de admin se agregan dinámicamente si corresponde
   private readonly basePaletteItems: PaletteItem[] = [
     { label: 'Inicio', icon: 'home', path: '/' },
     { label: 'Lugares Turísticos', icon: 'attractions', path: '/lugares-turisticos' },
@@ -108,8 +107,6 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
       this.username = user ? (user.nombre || user.correo || '') : '';
       this.isSuperAdmin = !!user && user.estado === true && user.rol === 'superadmin';
 
-      // Cuando cambian los ítems del menú (ej. aparece "Gestión Reservas"),
-      // re-sincroniza el indicador (ink)
       setTimeout(() => this.syncActiveInk(), 0);
     });
 
@@ -152,7 +149,6 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
     this.routerSub?.unsubscribe();
   }
 
-  // Ink indicator helpers
   onNavItemEnter(ev: Event): void {
     if (!this.isBrowser || !this.navListRef) return;
     const target = ev.currentTarget as HTMLElement;
@@ -178,7 +174,6 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
     this.inkVisible = true;
   }
 
-  // Visual feedback
   onNavItemSelect(ev: Event): void {
     const a = ev.currentTarget as HTMLElement;
     this.applyFlash(a);
@@ -190,13 +185,10 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   private applyFlash(el: HTMLElement): void {
     el.classList.remove('flash');
-    // reflow para reiniciar animación
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     el.offsetWidth;
     el.classList.add('flash');
   }
 
-  // Palette
   @HostListener('window:keydown', ['$event'])
   onWindowKeydown(ev: KeyboardEvent): void {
     if (!this.isBrowser) return;
@@ -220,7 +212,6 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
     void this.router.navigate([item.path]);
   }
 
-  // Scroll + resize
   @HostListener('window:scroll')
   onScroll(): void {
     if (!this.isBrowser) return;
@@ -261,7 +252,6 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
     this.scrollProgress = scrollable > 0 ? Math.min(100, Math.max(0, (y / scrollable) * 100)) : 0;
   }
 
-  // Contraste dinámico del header
   private updateHeaderContrast(): void {
     if (!this.isBrowser) return;
 
@@ -297,7 +287,6 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
     };
   })();
 
-  // Menús y logout
   toggleMobile(): void {
     this.mobileOpen = !this.mobileOpen;
     if (this.mobileOpen) { this.hidden = false; }
@@ -316,7 +305,6 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
     void this.router.navigate(['/']);
   }
 
-  // Cerrar con clics fuera / Esc
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
     if (!this.isBrowser) return;

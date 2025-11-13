@@ -1,132 +1,106 @@
 <div class="habitacion-detalle">
-    <div class="hotel-contenido">
-
-        <!-- Contenedor de información -->
-        <div class="info-contenedor">
-
-            <!-- Card principal estilo ficha -->
-            <div class="hotel-info" *ngIf="habitacion">
-                <div class="hotel-info-layout">
-                    <div class="hotel-info-texto">
-                        <ng-container *ngIf="!loadingHotel; else titleSkeleton">
-                            <h2 class="hotel-title">{{ getNombreSeccion() }}</h2>
-                        </ng-container>
-                        <ng-template #titleSkeleton>
-                            <div class="title-skeleton"></div>
-                        </ng-template>
-                        <p class="hotel-ubicacion" *ngIf="hotel">{{ getUbicacionCompuesta() }}</p>
-                        <div class="hotel-rating" *ngIf="hotel">
-                            <span class="stars" [style.--rating]="hotel.calificacion">★★★★★</span>
-                            <span class="score">{{ getCalificacion() }}</span>
-                        </div>
-                        <div class="amenities" *ngIf="amenidades.length">
-                            <span class="chip" *ngFor="let a of amenidades"><span class="chip-icon">{{ a.icon }}</span> {{ a.label }}</span>
-                        </div>
-                        <ul class="meta-lines">
-                            <li><span class="icon">🛏️</span>Capacidad: {{ habitacion.cant_huespedes }} huéspedes</li>
-                            <li><span class="icon">🕒</span>Check-in: 12:00</li>
-                            <li><span class="icon">🕒</span>Check-out: 12:00</li>
-                            <li><span class="icon">👤</span><span [class.disponible]="habitacion.disponible" [class.no-disponible]="!habitacion.disponible">{{ getDisponibilidadLabel() }}</span></li>
-                        </ul>
-                    </div>
-                    <div class="price-wrapper">
-                        <div class="price-big">{{ getPrecio() }}</div>
-                        <div class="price-label">por noche</div>
-                    </div>
-                </div>
+  <div class="hotel-contenido">
+    <div class="info-contenedor">
+      <div class="hotel-info" *ngIf="habitacion">
+        <div class="hotel-info-layout">
+          <div class="hotel-info-texto">
+            <h2 class="hotel-title">{{ getNombreSeccion() }}</h2>
+            <p class="hotel-ubicacion" *ngIf="hotel">{{ getUbicacionCompuesta() }}</p>
+            <div class="hotel-rating" *ngIf="hotel">
+              <span class="stars" [style.--rating]="hotel.calificacion">★★★★★</span>
+              <span class="score">{{ getCalificacion() }}</span>
             </div>
-
-            <!-- Reviews -->
-<div class="hotel-reviews">
-  <h3 class="reviews-title">Reviews de huéspedes</h3>
-
-  <div class="review">
-    <p class="review-header">María G. —
-      <span class="stars" style="--rating: 4.5">★★★★★</span>
-      <span class="score">4.5/5</span>
-    </p>
-    <p class="review-text">“La habitación estaba impecable y la vista era espectacular. Volvería sin dudar.”</p>
-    <p class="review-fecha">15 de septiembre de 2025</p>
-  </div>
-
-  <div class="review">
-    <p class="review-header">Carlos R. —
-      <span class="stars" style="--rating: 5">★★★★★</span>
-      <span class="score">5/5</span>
-    </p>
-    <p class="review-text">“Excelente atención y ubicación. Muy recomendable para parejas.”</p>
-    <p class="review-fecha">10 de septiembre de 2025</p>
-  </div>
-
-  <div class="review">
-    <p class="review-header">Lucía M. —
-      <span class="stars" style="--rating: 4">★★★★★</span>
-      <span class="score">4/5</span>
-    </p>
-    <p class="review-text">“Todo bien, aunque el desayuno podría mejorar. La cama muy cómoda.”</p>
-    <p class="review-fecha">5 de septiembre de 2025</p>
-  </div>
-</div>
-
-<!-- Ubicación del tour -->
-<div class="location-wrapper">
-  <div class="location-section">
-    <h3 class="location-title">Ubicación del tour</h3>
-    <div class="location-box">
-      <div class="location-icon">📍</div>
-      <div class="location-text">
-        <div class="map-label">Mapa del recorrido</div>
-        <div class="map-location">{{ hotel?.ubicacion }}</div>
+            <div class="amenities" *ngIf="amenidades.length">
+              <span class="chip" *ngFor="let a of amenidades"><span class="chip-icon">{{ a.icon }}</span> {{ a.label }}</span>
+            </div>
+            <ul class="meta-lines">
+              <li><span class="icon">🛏️</span>Capacidad: {{ habitacion.cant_huespedes }} huéspedes</li>
+              <li><span class="icon">🕒</span>Check-in: 12:00</li>
+              <li><span class="icon">🕒</span>Check-out: 12:00</li>
+              <li><span class="icon">👤</span><span [class.disponible]="habitacion.disponible" [class.no-disponible]="!habitacion.disponible">{{ getDisponibilidadLabel() }}</span></li>
+            </ul>
+          </div>
+          <div class="price-wrapper">
+            <div class="price-big">{{ getPrecio() }}</div>
+            <div class="price-label">por noche</div>
+          </div>
+        </div>
+      </div>
+      <div class="hotel-reviews">
+        <h3 class="reviews-title">Reviews de huéspedes</h3>
+        <div class="review">
+          <p class="review-header">María G. —
+            <span class="stars" style="--rating: 4.5">★★★★★</span>
+            <span class="score">4.5/5</span>
+          </p>
+          <p class="review-text">“La habitación estaba impecable y la vista era espectacular. Volvería sin dudar.”</p>
+          <p class="review-fecha">15 de septiembre de 2025</p>
+        </div>
+        <div class="review">
+          <p class="review-header">Carlos R. —
+            <span class="stars" style="--rating: 5">★★★★★</span>
+            <span class="score">5/5</span>
+          </p>
+          <p class="review-text">“Excelente atención y ubicación. Muy recomendable para parejas.”</p>
+          <p class="review-fecha">10 de septiembre de 2025</p>
+        </div>
+        <div class="review">
+          <p class="review-header">Lucía M. —
+            <span class="stars" style="--rating: 4">★★★★★</span>
+            <span class="score">4/5</span>
+          </p>
+          <p class="review-text">“Todo bien, aunque el desayuno podría mejorar. La cama muy cómoda.”</p>
+          <p class="review-fecha">5 de septiembre de 2025</p>
+        </div>
+      </div>
+      <div class="location-wrapper">
+        <div class="location-section">
+          <h3 class="location-title">Ubicación del tour</h3>
+          <div class="location-box">
+            <div class="location-icon">📍</div>
+            <div class="location-text">
+              <div class="map-label">Mapa del recorrido</div>
+              <div class="map-location">{{ hotel?.ubicacion }}</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-
+    <div class="reserva">
+      <h2 class="reserva-title">Reserva tu habitación</h2>
+      <div class="precio-panel">
+        <div class="price-big">{{ getPrecio() }}</div>
+        <div class="precio-label">por noche</div>
+      </div>
+      <p class="reserva-capacidad">Máximo {{ getCapacidadHabitacion() }} huéspedes por habitación</p>
+      <div class="fechas-inline">
+        <div class="date-row">
+          <label for="fechaReserva">Check-in:</label>
+          <input id="fechaReserva" type="date" [(ngModel)]="fechaReserva" name="fechaReserva" (change)="onChangeFechaReserva()" [min]="minFecha" />
         </div>
-
-        <!-- Panel de reserva -->
-        <div class="reserva">
-            <h2 class="reserva-title">Reserva tu habitación</h2>
-
-            <div class="precio-panel">
-                <div class="price-big">{{ getPrecio() }}</div>
-                <div class="precio-label">por noche</div>
-            </div>
-
-            <p class="reserva-capacidad">Máximo {{ getCapacidadHabitacion() }} huéspedes por habitación</p>
-
-            <div class="fechas-inline">
-                <div class="date-row">
-                    <label for="fechaReserva">Check-in:</label>
-                    <input id="fechaReserva" type="date" [(ngModel)]="fechaReserva" name="fechaReserva" (change)="onChangeFechaReserva()" [min]="minFecha" />
-                </div>
-                <div class="date-row">
-                    <label for="fechaCaducidad">Check-out:</label>
-                    <input id="fechaCaducidad" type="date" [(ngModel)]="fechaCaducidad" name="fechaCaducidad" (change)="onChangeFechaCaducidad()" [min]="minFechaSalida" />
-                </div>
-            </div>
-
-            <div class="accion-reservar">
-                <a class="btn-reservar" (click)="$event.preventDefault(); onIntentarReservar();">Reservar Ahora</a>
-                <button *ngIf="showToast" type="button" class="toast-ocupado" (click)="cerrarToast()">
-                    {{ mensajeDisponibilidad }}. Disponible desde {{ formatear(proxDisponible) }} (cerrar)
-                </button>
-            </div>
-
-            <div class="modal-ocupado-backdrop" *ngIf="showModal">
-                <div class="modal-ocupado">
-                    <h3>Fechas ocupadas</h3>
-                    <p>La habitación está ocupada en el rango elegido.<br>Próxima fecha disponible desde <b>{{ formatear(proxDisponible) }}</b>.</p>
-                    <div class="acciones-modal">
-                        <button class="btn-sec" (click)="cerrarModal()">Cerrar</button>
-                        <button class="btn-principal" (click)="usarProximaFecha()">Usar próxima fecha</button>
-                    </div>
-                </div>
-            </div>
-
-            <p class="reserva-info">✓ Cancelación gratuita hasta 24 horas antes</p>
-            <p class="reserva-info">✓ No se requiere pago por adelantado</p>
+        <div class="date-row">
+          <label for="fechaCaducidad">Check-out:</label>
+          <input id="fechaCaducidad" type="date" [(ngModel)]="fechaCaducidad" name="fechaCaducidad" (change)="onChangeFechaCaducidad()" [min]="minFechaSalida" />
         </div>
-
+      </div>
+      <div class="accion-reservar">
+        <a class="btn-reservar" (click)="$event.preventDefault(); onIntentarReservar();">Reservar Ahora</a>
+        <button *ngIf="showToast" type="button" class="toast-ocupado" (click)="cerrarToast()">
+          {{ mensajeDisponibilidad }}. Disponible desde {{ formatear(proxDisponible) }} (cerrar)
+        </button>
+      </div>
+      <div class="modal-ocupado-backdrop" *ngIf="showModal">
+        <div class="modal-ocupado">
+          <h3>Fechas ocupadas</h3>
+          <p>La habitación está ocupada en el rango elegido.<br>Próxima fecha disponible desde <b>{{ formatear(proxDisponible) }}</b>.</p>
+          <div class="acciones-modal">
+            <button class="btn-sec" (click)="cerrarModal()">Cerrar</button>
+            <button class="btn-principal" (click)="usarProximaFecha()">Usar próxima fecha</button>
+          </div>
+        </div>
+      </div>
+      <p class="reserva-info">✓ Cancelación gratuita hasta 24 horas antes</p>
+      <p class="reserva-info">✓ No se requiere pago por adelantado</p>
     </div>
+  </div>
 </div>

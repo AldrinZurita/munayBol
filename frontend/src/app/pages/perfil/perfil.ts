@@ -1,16 +1,37 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
-import { Usuario } from '../../interfaces/usuario.interface';
-import { ReservasService } from '../../services/reservas.service';
-import { Reserva } from '../../interfaces/reserva.interface';
 import { RouterModule } from '@angular/router';
+import { forkJoin, of, Observable } from 'rxjs';
+import { map, switchMap, catchError } from 'rxjs/operators';
+import { AuthService } from '../../services/auth.service';
+import { ReservasService } from '../../services/reservas.service';
 import { HotelService } from '../../services/hotel.service';
-import { forkJoin, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
-
-const CONFIRM_TRANSITION_MS = 300; // Mantener en sync con --confirm-ms en SCSS
+import { PaqueteService } from '../../services/paquete.service';
+import { LugaresService } from '../../services/lugares.service';
+import { LoadingService } from '../../shared/services/loading';
+import { Usuario } from '../../interfaces/usuario.interface';
+import { Hotel } from '../../interfaces/hotel.interface';
+import { Paquete } from '../../interfaces/paquete.interface';
+import { LugarTuristico } from '../../interfaces/lugar-turistico.interface';
+const CONFIRM_TRANSITION_MS = 300;
+interface Reserva {
+  id_reserva: number;
+  estado: boolean;
+  fecha_reserva: string | Date;
+  codigo_hotel?: number;
+  id_paquete?: number;
+  fecha_entrada: string | Date;
+  fecha_salida: string | Date;
+  numero_huespedes: number;
+  num_habitacion?: number | string;
+  fecha_caducidad?: string | Date;
+}
+type ReservaEnriquecida = Reserva & {
+  hotel?: Hotel;
+  paquete?: Paquete;
+  lugar?: LugarTuristico;
+};
 
 @Component({
   selector: 'app-perfil',
@@ -21,12 +42,6 @@ const CONFIRM_TRANSITION_MS = 300; // Mantener en sync con --confirm-ms en SCSS
 })
 export class Perfil implements OnInit, OnDestroy {
   usuario: Usuario | null = null;
-  cargando = true;
-
-  loaderVisible = false;
-  loaderProgress = 0;
-  private loaderTimer?: any;
-
   editando = false;
   guardando = false;
   errorGuardar = '';
@@ -34,28 +49,30 @@ export class Perfil implements OnInit, OnDestroy {
     nombre: '', pais: '', pasaporte: '', avatar_url: ''
   };
 
-  reservas: (Reserva & { hotel?: any })[] = [];
-  cargandoReservas = true;
+  reservas: ReservaEnriquecida[] = [];
   errorReservas = '';
 
-  // Estados de cancelación y animación
   cancelling: Set<number> = new Set<number>();
   removing: Set<number> = new Set<number>();
   confirmId: number | null = null;
 
-  // Modo animación extra
   animateFun = false;
   private funTimer?: any;
 
   constructor(
     private authService: AuthService,
     private reservasService: ReservasService,
-    private hotelService: HotelService
+    private hotelService: HotelService,
+    private paqueteService: PaqueteService,
+    private lugaresService: LugaresService,
+    private loadingService: LoadingService
   ) {}
 
   ngOnInit(): void {
+    this.loadingService.show('Cargando tu perfil...');
+    this.loadingService.setProgress(10);
+
     this.usuario = this.authService.getUser();
-    this.cargando = false;
 
     if (this.usuario) {
       this.form = {
@@ -65,76 +82,78 @@ export class Perfil implements OnInit, OnDestroy {
         avatar_url: this.usuario.avatar_url || ''
       };
 
-      this.startLoader();
+      this.loadingService.setProgress(30);
 
       this.reservasService.getMisReservas().pipe(
         switchMap(reservas => {
-          if (!reservas || reservas.length === 0) return of<((Reserva & { hotel?: any })[])>([]);
-          const hotelIds = [...new Set(reservas.map(r => r.codigo_hotel))];
-          const hotelRequests = hotelIds.map(id => this.hotelService.getHotelById(id));
-          return forkJoin(hotelRequests).pipe(
-            map(hoteles => {
-              const hotelMap = new Map(hoteles.map(h => [h.id_hotel, h]));
-              const enriched = reservas.map(reserva => ({ ...reserva, hotel: hotelMap.get(reserva.codigo_hotel) }));
-              return enriched.sort((a, b) => {
-                const da = new Date(a.fecha_reserva as any).getTime();
-                const db = new Date(b.fecha_reserva as any).getTime();
-                return db - da;
-              });
+          this.loadingService.setProgress(50);
+          if (!reservas || reservas.length === 0) {
+            return of<ReservaEnriquecida[]>([]);
+          }
+          const reservasReales = (reservas as any) as Reserva[];
+          const hotelIds = [...new Set(reservasReales.map(r => r.codigo_hotel).filter(id => !!id))] as number[];
+          const paqueteIds = [...new Set(reservasReales.map(r => r.id_paquete).filter(id => !!id))] as number[];
+          const hotelRequests$ = hotelIds.length > 0 ?
+            forkJoin(hotelIds.map(id =>
+              this.hotelService.getHotelById(id).pipe(catchError(() => of(undefined)))
+            )) : of([]);
+          const paqueteRequests$ = paqueteIds.length > 0 ?
+            forkJoin(paqueteIds.map(id =>
+              this.paqueteService.getPaqueteById(id).pipe(catchError(() => of(undefined)))
+            )) : of([]);
+          return forkJoin({
+            hoteles: hotelRequests$ as Observable<(Hotel | undefined)[]>,
+            paquetes: paqueteRequests$ as Observable<(Paquete | undefined)[]>
+          }).pipe(
+            switchMap(({ hoteles, paquetes }) => {
+              this.loadingService.setProgress(70);
+              const hotelMap = new Map(hoteles.filter((h): h is Hotel => !!h).map(h => [h.id_hotel, h]));
+              const paqueteMap = new Map(paquetes.filter((p): p is Paquete => !!p).map(p => [p.id_paquete, p]));
+              const lugarIds = [...new Set(paquetes.filter((p): p is Paquete => !!p).map(p => p.id_lugar).filter(id => !!id))] as number[];
+              const lugarRequests$ = lugarIds.length > 0 ?
+                forkJoin(lugarIds.map(id =>
+                  this.lugaresService.getLugarById(id).pipe(catchError(() => of(undefined)))
+                )) : of([]);
+              return (lugarRequests$ as Observable<(LugarTuristico | undefined)[] >).pipe(
+                map(lugares => {
+                  this.loadingService.setProgress(90);
+                  const lugarMap = new Map(lugares.filter((l): l is LugarTuristico => !!l).map(l => [l.id_lugar, l]));
+                  const enriched = reservasReales.map(reserva => {
+                    const hotel = reserva.codigo_hotel ? hotelMap.get(reserva.codigo_hotel) : undefined;
+                    const paquete = reserva.id_paquete ? paqueteMap.get(reserva.id_paquete) : undefined;
+                    const lugar = (paquete && paquete.id_lugar) ? lugarMap.get(paquete.id_lugar) : undefined;
+                    return { ...reserva, hotel, paquete, lugar };
+                  });
+                  return enriched.sort((a, b) => new Date(b.fecha_reserva as any).getTime() - new Date(a.fecha_reserva as any).getTime());
+                })
+              );
             })
           );
         })
       ).subscribe({
-        next: (reservasConHotel) => {
-          this.reservas = reservasConHotel;
-          this.cargandoReservas = false;
-          this.finishLoader(true);
+        next: (reservasConTodo) => {
+          this.reservas = reservasConTodo;
+          this.loadingService.hide();
+          if (reservasConTodo.length > 0) {
+            setTimeout(() => {
+              this.triggerFun(1600);
+            }, 300);
+          }
         },
-        error: () => {
+        error: (err) => {
+          console.error("Error al cargar reservas y datos:", err);
           this.errorReservas = 'No se pudieron cargar tus reservas.';
-          this.cargandoReservas = false;
-          this.finishLoader(false);
+          this.loadingService.hide();
         }
       });
     } else {
-      this.cargandoReservas = false;
-      this.loaderVisible = false;
+      this.loadingService.hide();
     }
   }
 
   ngOnDestroy(): void {
-    if (this.loaderTimer) clearInterval(this.loaderTimer);
+    this.loadingService.hide();
     if (this.funTimer) clearTimeout(this.funTimer);
-  }
-
-  private startLoader(): void {
-    this.loaderVisible = true;
-    this.loaderProgress = 0;
-    if (this.loaderTimer) clearInterval(this.loaderTimer);
-    this.loaderTimer = setInterval(() => {
-      const inc = Math.random() * 6 + 2; // 2% - 8%
-      const targetCap = 90;
-      this.loaderProgress = Math.min(targetCap, this.loaderProgress + inc);
-    }, 250);
-  }
-
-  private finishLoader(success: boolean): void {
-    if (this.loaderTimer) {
-      clearInterval(this.loaderTimer);
-      this.loaderTimer = undefined;
-    }
-    const step = () => {
-      if (this.loaderProgress < 100) {
-        this.loaderProgress = Math.min(100, this.loaderProgress + 5);
-        requestAnimationFrame(step);
-      } else {
-        setTimeout(() => {
-          this.loaderVisible = false;
-          if (success) this.triggerFun(1600);
-        }, 250);
-      }
-    };
-    step();
   }
 
   triggerFun(durationMs: number = 1200): void {
@@ -151,16 +170,12 @@ export class Perfil implements OnInit, OnDestroy {
     this.confirmId = null;
   }
 
-  confirmarCancel(reserva: Reserva & { hotel?: any }): void {
+  confirmarCancel(reserva: ReservaEnriquecida): void {
     if (!reserva.estado || this.cancelling.has(reserva.id_reserva)) return;
-
     this.cancelling.add(reserva.id_reserva);
-    // Marca para animación de salida (suavizado)
     this.removing.add(reserva.id_reserva);
-
     this.reservasService.cancelarReserva(reserva.id_reserva).subscribe({
       next: () => {
-        // Esperar a que termine la transición CSS para remover del array
         setTimeout(() => {
           this.reservas = this.reservas.filter(r => r.id_reserva !== reserva.id_reserva);
           this.cancelling.delete(reserva.id_reserva);
@@ -170,7 +185,6 @@ export class Perfil implements OnInit, OnDestroy {
         }, CONFIRM_TRANSITION_MS);
       },
       error: (err) => {
-        // Revertir la animación
         this.cancelling.delete(reserva.id_reserva);
         this.removing.delete(reserva.id_reserva);
         this.confirmId = null;
@@ -204,11 +218,17 @@ export class Perfil implements OnInit, OnDestroy {
     this.errorGuardar = '';
     const payload: any = {};
     const trim = (v: any) => typeof v === 'string' ? v.trim() : v;
+
     if (trim(this.form.nombre) !== trim(this.usuario.nombre)) payload.nombre = trim(this.form.nombre);
     if (trim(this.form.pais) !== trim(this.usuario.pais)) payload.pais = trim(this.form.pais);
     if (trim(this.form.pasaporte) !== trim(this.usuario.pasaporte)) payload.pasaporte = trim(this.form.pasaporte);
     if (trim(this.form.avatar_url || '') !== trim(this.usuario.avatar_url || '')) payload.avatar_url = trim(this.form.avatar_url);
-    if (Object.keys(payload).length === 0) { this.editando = false; this.guardando = false; return; }
+
+    if (Object.keys(payload).length === 0) {
+      this.editando = false;
+      this.guardando = false;
+      return;
+    }
 
     this.authService.updateMe(payload).subscribe({
       next: (updated: Usuario) => {
@@ -224,11 +244,10 @@ export class Perfil implements OnInit, OnDestroy {
     });
   }
 
-  trackByReserva = (_: number, item: Reserva & { hotel?: any }) => item.id_reserva;
+  trackByReserva = (_: number, item: ReservaEnriquecida) => item.id_reserva;
 
   onAvatarError(evt: Event): void {
-    const img = evt.target as HTMLImageElement;
-    img.style.display = 'none';
+    (evt.target as HTMLImageElement).src = 'https://via.placeholder.com/96/e6ebf5/4a5568?text=Error';
   }
 
   private leerError(err: any): string {
@@ -246,19 +265,16 @@ export class Perfil implements OnInit, OnDestroy {
     return '';
   }
 
-  // Atajos de teclado: guardar/cancelar en edición y cerrar confirmación con Escape
   @HostListener('document:keydown', ['$event'])
   onDocKey(ev: KeyboardEvent): void {
     const key = ev.key.toLowerCase();
 
-    // Si está el confirm abierto, cerrar con Escape
     if (this.confirmId !== null && key === 'escape') {
       ev.preventDefault();
       this.closeConfirm();
       return;
     }
 
-    // Atajos de edición
     if (!this.editando) return;
 
     const isSave = key === 's' && (ev.ctrlKey || ev.metaKey);

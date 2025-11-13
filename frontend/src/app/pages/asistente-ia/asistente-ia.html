@@ -29,7 +29,6 @@
     </header>
 
     <div class="layout">
-      <!-- Sidebar: historial -->
       <aside class="sidebar" [class.closed]="!sidebarOpen" aria-label="Historial de conversaciones">
         <div class="sb-header">
           <div class="search">
@@ -54,20 +53,9 @@
           </button>
         </div>
 
-        <div class="sb-body" [class.loading]="loadingSessions">
-          <!-- Skeleton cards while loading -->
-          <ng-container *ngIf="loadingSessions">
-            <div class="group">
-              <div class="group-title">Cargando...</div>
-              <div class="session-skel" *ngFor="let k of [1,2,3,4,5,6]">
-                <div class="skel-title"></div>
-                <div class="skel-meta"></div>
-              </div>
-            </div>
-          </ng-container>
+        <div class="sb-body">
 
-          <!-- Saved chats groups -->
-          <ng-container *ngIf="!loadingSessions">
+          <ng-container>
             <div class="group" *ngFor="let g of groupedSessions()">
               <div class="group-title">{{ g.label }}</div>
 
@@ -108,9 +96,7 @@
         </div>
       </aside>
 
-      <!-- Chat body -->
       <section class="chat" #chatScroll (scroll)="onChatScroll($event)" aria-live="polite" aria-label="Historial del chat">
-        <!-- Load older messages -->
         <div class="load-more" *ngIf="hasMore && !loadingMessages">
           <button class="load-btn" (click)="loadMore()">
             <span class="material-symbols-outlined" aria-hidden="true">expand_less</span>
@@ -121,7 +107,6 @@
           <div class="loader"></div>
         </div>
 
-        <!-- Welcome -->
         <div class="message ia welcome" *ngIf="respuestas.length === 0 && !typing">
           <div class="bubble">
             <div class="bubble-head">
@@ -135,7 +120,6 @@
           </div>
         </div>
 
-        <!-- Messages -->
         <ng-container *ngFor="let r of respuestas; let i = index; trackBy: trackByMsg">
           <div class="day-separator" *ngIf="isNewDay(i)">
             <span>{{ r.t | date:'fullDate' }}</span>
@@ -180,7 +164,6 @@
           </div>
         </ng-container>
 
-        <!-- Typing -->
         <div class="message ia typing" *ngIf="typing">
           <div class="bubble">
             <div class="bubble-head">
@@ -194,14 +177,12 @@
           </div>
         </div>
 
-        <!-- FAB -->
         <button class="fab-down" *ngIf="showScrollToBottom" (click)="scrollToBottom()" title="Ir al último mensaje" aria-label="Ir al último mensaje">
           <span class="material-symbols-outlined" aria-hidden="true">south</span>
         </button>
       </section>
     </div>
 
-    <!-- Input area -->
     <footer class="input-container" aria-label="Ingresar mensaje">
       <button class="icon-btn reset" (click)="nuevoChat()" [disabled]="sending" title="Nueva conversación" aria-label="Nueva conversación">
         <span class="material-symbols-outlined" aria-hidden="true">delete_sweep</span>

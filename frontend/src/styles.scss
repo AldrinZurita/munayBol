@@ -1,9 +1,4 @@
 
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
 html {
@@ -18,36 +13,23 @@ html {
 }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
   color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
   margin: 0;
 }
-/* You can add global styles to this file, and also import other style files */
-
 html, body { height: 100%; }
-body { 
-  margin: 0; 
+body {
+  margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
-  /* Consistent soft professional background for all pages */
-  background: linear-gradient(180deg, 
-    rgba(200, 16, 46, 0.04) 0%,    /* Soft red */
-    rgba(255, 215, 0, 0.04) 33%,   /* Soft yellow */
-    rgba(0, 122, 51, 0.04) 66%,    /* Soft green */
-    rgba(240, 248, 255, 1) 100%    /* Light blue/white */
+  background: linear-gradient(180deg,
+    rgba(200, 16, 46, 0.04) 0%,
+    rgba(255, 215, 0, 0.04) 33%,
+    rgba(0, 122, 51, 0.04) 66%,
+    rgba(240, 248, 255, 1) 100%
   );
   background-attachment: fixed;
   min-height: 100vh;
@@ -55,7 +37,7 @@ body {
 
 .ms {
   font-family: 'Material Symbols Outlined';
-  font-weight: 400;         /* 300..700 works */
+  font-weight: 400;
   font-style: normal;
   font-size: 18px;
   line-height: 1;
@@ -64,19 +46,16 @@ body {
   color: inherit;
 }
 
-/* Global smooth transitions for all interactive elements */
 * {
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
   transition-duration: 0.2s;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Remove transitions for specific elements that shouldn't animate */
 *:where(html, body, input, textarea, select) {
   transition: none;
 }
 
-/* Smooth page transitions */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -88,12 +67,10 @@ body {
   }
 }
 
-/* Apply fade-in to router-outlet content */
 router-outlet ~ * {
   animation: fadeIn 0.3s ease-out;
 }
 
-/* Improved button hover effects globally */
 button:not(:disabled) {
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -109,7 +86,6 @@ button:not(:disabled):active {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Card hover effects */
 .card, [class*="card"] {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -119,7 +95,6 @@ button:not(:disabled):active {
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
-/* Input focus effects */
 input:not([type="checkbox"]):not([type="radio"]),
 textarea,
 select {
@@ -134,7 +109,6 @@ select:focus {
   border-color: #3b82f6;
 }
 
-/* Loading spinner animation */
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -145,7 +119,6 @@ select:focus {
   animation: spin 1s linear infinite;
 }
 
-/* Skeleton loading animation */
 @keyframes shimmer {
   0% {
     background-position: -1000px 0;
@@ -161,7 +134,6 @@ select:focus {
   animation: shimmer 2s infinite;
 }
 
-/* Improved scrollbar */
 ::-webkit-scrollbar {
   width: 12px;
   height: 12px;
@@ -182,7 +154,6 @@ select:focus {
   background: linear-gradient(135deg, #2563eb, #7c3aed);
 }
 
-/* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -193,7 +164,6 @@ select:focus {
   }
 }
 
-/* Focus visible for accessibility */
 *:focus-visible {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;

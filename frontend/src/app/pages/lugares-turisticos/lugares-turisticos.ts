@@ -9,6 +9,7 @@ import { LugaresService } from '../../services/lugares.service';
 import { IconsModule } from '../../icons';
 import { PLATFORM_ID } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { LoadingService } from '../../shared/services/loading';
 
 @Component({
   selector: 'app-lugares-turisticos',
@@ -17,23 +18,18 @@ import { Subscription } from 'rxjs';
   templateUrl: './lugares-turisticos.html',
   styleUrls: ['./lugares-turisticos.scss'],
 })
-export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
+class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
   lugares: LugarTuristico[] = [];
   lugaresFiltrados: LugarTuristico[] = [];
   ciudades: string[] = [];
   tipos: string[] = [];
-
   ciudadSeleccionada = '';
   selectedTipo = '';
   searchTerm = '';
-
-  cargando = false;
   error = '';
-
   routeLoading = false;
   private routerSub?: Subscription;
   private qpSub?: Subscription;
-
   showModal = false;
   isEditMode = false;
   savingModal = false;
@@ -48,6 +44,7 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
     public authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
+    private loadingService: LoadingService,
     @Inject(PLATFORM_ID) platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
@@ -55,8 +52,6 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.cargarLugares();
-
-    // Loader navegación
     this.routerSub = this.router.events.subscribe((evt) => {
       if (evt instanceof NavigationStart) {
         this.routeLoading = true;
@@ -64,14 +59,11 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
         this.routeLoading = false;
       }
     });
-
-    // Reaccionar a filtros desde el Navbar (query params)
     this.qpSub = this.route.queryParams.subscribe((qp) => {
       const d = (qp['departamento'] ?? '').toString();
       const t = (qp['tipo'] ?? '').toString();
       if (typeof d === 'string') this.ciudadSeleccionada = d;
       if (typeof t === 'string') this.selectedTipo = t;
-      // No tocamos searchTerm desde la URL aquí
       this.aplicarFiltros();
     });
   }
@@ -86,6 +78,7 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
     this.routerSub?.unsubscribe();
     this.qpSub?.unsubscribe();
     if (this.isBrowser) document.body.classList.remove('no-scroll');
+    this.loadingService.hide();
   }
 
   get isSuperAdmin(): boolean {
@@ -106,8 +99,9 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
   }
 
   cargarLugares(): void {
-    this.cargando = true;
+    this.loadingService.show('Cargando lugares...',);
     this.error = '';
+
     this.lugaresService.getLugares().subscribe({
       next: (rows) => {
         this.lugares = rows ?? [];
@@ -115,19 +109,17 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
           .map((l) => (l?.departamento ?? '').toString().trim())
           .filter((s) => s.length > 0);
         this.ciudades = Array.from(new Set(allCities)).sort((a, b) => a.localeCompare(b));
-
         const allTipos = this.lugares
           .map((l) => (l?.tipo ?? '').toString().trim())
           .filter((s) => s.length > 0);
         this.tipos = Array.from(new Set(allTipos)).sort((a, b) => a.localeCompare(b));
-
         this.lugaresFiltrados = [...this.lugares];
-        this.cargando = false;
+        this.loadingService.hide();
         if (this.isBrowser) requestAnimationFrame(() => this.observeRevealTargets());
       },
       error: () => {
         this.error = 'No se pudo cargar la lista de lugares.';
-        this.cargando = false;
+        this.loadingService.hide();
       },
     });
   }
@@ -157,11 +149,9 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
     this.selectedTipo = '';
     this.searchTerm = '';
     this.aplicarFiltros();
-    // También limpiar query params
     void this.router.navigate([], { relativeTo: this.route, queryParams: { departamento: null, tipo: null }, queryParamsHandling: 'merge' });
   }
 
-  // Navegar a detalles con loader
   goToDetalle(id: number): void {
     this.routeLoading = true;
     this.router.navigate(['/lugares-turisticos', id]).catch(() => {
@@ -283,11 +273,6 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
-  /* ===== Reveal on scroll (SSR-safe) ===== */
-  ngOnChanges(): void {
-    // no-op
-  }
-
   private setupRevealObserver(): void {
     if (!this.isBrowser) {
       this.io = null;
@@ -330,7 +315,6 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
     document.querySelectorAll<HTMLElement>('.reveal').forEach((n) => n.classList.add('in-view'));
   }
 
-  /* ===== Utils ===== */
   private normalize(s: string | undefined | null): string {
     return (s ?? '')
       .toString()
@@ -340,3 +324,4 @@ export class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
       .trim();
   }
 }
+export default LugaresTuristicos

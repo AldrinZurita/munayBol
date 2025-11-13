@@ -1,21 +1,17 @@
 @use "sass:color";
-
 :host {
   display: block;
 }
-
-// --- Sistema de Diseño (Variables para consistencia) ---
 $primary-text: #0f172a;
 $secondary-text: #334155;
 $light-text: #64748b;
 $border-color: #e5e7eb;
 $card-bg: #fff;
-$primary-color: #16a34a; // Verde para acciones principales
-$accent-color: #16a34a;  // Verde para "Ver Detalle"
-$danger-color: #dc2626;  // Rojo para "Eliminar" y estado "No disponible"
-$secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
+$primary-color: #16a34a;
+$accent-color: #16a34a;
+$danger-color: #dc2626;
+$secondary-btn-bg: #f1f5f9;
 
-// --- Contenedor Principal ---
 .habitaciones-container {
   max-width: 1100px;
   margin: 0 auto;
@@ -29,14 +25,12 @@ $secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
   }
 }
 
-// --- Encabezado de Acciones ---
 .header-acciones {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 22px;
 }
 
-// --- Estilos de Botones Unificados ---
 .btn {
   display: inline-flex;
   align-items: center;
@@ -80,9 +74,8 @@ $secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
     &:hover { background: #fecaca; }
   }
 
-  // --- NEW: Styles for Icon-Only Buttons ---
   &.btn-icon {
-    padding: 10px; // Make it square
+    padding: 10px;
     width: 40px;
     height: 40px;
 
@@ -92,7 +85,6 @@ $secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
   }
 }
 
-// --- Tarjeta de Filtros ---
 .filtros-card {
   background: $card-bg;
   border: 1px solid $border-color;
@@ -156,7 +148,6 @@ $secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
   }
 }
 
-// --- Indicador de Estado ---
 .estado {
   color: $primary-text;
   padding: 10px 0;
@@ -165,7 +156,6 @@ $secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
   &.error { color: $danger-color; }
 }
 
-// --- Lista y Tarjetas de Habitación ---
 .lista-habitaciones {
   display: grid;
   gap: 18px;
@@ -240,8 +230,7 @@ $secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
     @media (min-width: 768px) {
       align-items: flex-end;
     }
-    
-    // --- NEW: Styles for Admin Action Buttons ---
+
     .admin-actions {
       display: flex;
       gap: 8px;
@@ -250,8 +239,6 @@ $secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
   }
 }
 
-
-/* ===== Backdrop ===== */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -260,7 +247,6 @@ $secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
   z-index: 9998;
 }
 
-/* ===== Root: centers card and allows viewport scrolling if needed ===== */
 .modal-root {
   position: fixed;
   inset: 0;
@@ -270,24 +256,20 @@ $secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
   padding: 24px;
   z-index: 9999;
 
-  /* If the card is taller than the viewport, let the page scroll */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 
-/* ===== Card: flex column, header/footer fixed, body scrolls ===== */
 .modal-card {
   width: 100%;
   max-width: 640px;
-  max-height: min(90vh, 720px); /* cap height; below, body will scroll */
+  max-height: min(90vh, 720px);
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 14px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
-
-  /* Keep rounded corners; we'll avoid outer focus glows so no clipping issues */
   overflow: hidden;
   animation: modalIn 160ms ease-out both;
 }
@@ -310,7 +292,7 @@ $secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
 
 .modal-body {
   flex: 1 1 auto;
-  min-height: 0;                /* Safari fix so overflow works */
+  min-height: 0;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   padding: 16px 20px;
@@ -325,7 +307,6 @@ $secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
   display: flex; justify-content: flex-end; gap: 10px;
 }
 
-/* Form controls */
 .form-label { font-size: 12px; font-weight: 600; color: #64748b; }
 
 .form-input,
@@ -337,12 +318,10 @@ $secondary-btn-bg: #f1f5f9; // Gris claro para "Editar"
   font-size: 14px;
   color: #0f172a;
   background: #fff;
-
-  /* Avoid outer glow that gets clipped by rounded container */
   &:focus {
     outline: none;
     border-color: #16a34a;
-    box-shadow: inset 0 0 0 2px rgba(22, 163, 74, 0.35); /* inner ring */
+    box-shadow: inset 0 0 0 2px rgba(22, 163, 74, 0.35);
   }
 }
 

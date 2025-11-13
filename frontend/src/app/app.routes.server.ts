@@ -1,7 +1,6 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
-  // Routes with parameters - use Client mode
   {
     path: 'reservas/:id',
     renderMode: RenderMode.Client
@@ -26,13 +25,11 @@ export const serverRoutes: ServerRoute[] = [
     path: 'asistente-ia/:sessionId',
     renderMode: RenderMode.Client
   },
-  // Routes requiring auth or dynamic data - use Client mode
   {
     path: 'habitaciones',
     renderMode: RenderMode.Client
   },
   {
-    // Base AI assistant route (redirects to a session)
     path: 'asistente-ia',
     renderMode: RenderMode.Client
   },
@@ -68,7 +65,6 @@ export const serverRoutes: ServerRoute[] = [
     path: 'login',
     renderMode: RenderMode.Client
   },
-  // All other routes - use Prerender
   {
     path: '**',
     renderMode: RenderMode.Prerender

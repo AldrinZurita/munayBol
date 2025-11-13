@@ -8,12 +8,13 @@ import DOMPurify from 'dompurify';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChatMessage, ChatSession } from '../../interfaces/chat.interface';
 import { AuthService } from '../../services/auth.service';
+import { LoadingService } from '../../shared/services/loading';
 
 type Actor = 'user' | 'ia';
 interface Respuesta {
   from: Actor;
   text: string;
-  t: number; // timestamp (ms)
+  t: number;
 }
 
 @Component({
@@ -25,31 +26,20 @@ interface Respuesta {
 })
 export class AsistenteIa implements OnInit, OnDestroy {
   @ViewChild('chatScroll', { static: false }) chatEl?: ElementRef<HTMLDivElement>;
-
-  // Chat state
   prompt = '';
   respuestas: Respuesta[] = [];
   typing = false;
   sending = false;
-
-  // UI helpers
   showScrollToBottom = false;
   sidebarOpen = true;
-
-  // Perceived speed (streaming)
   streamEffect = true;
-  streamSpeedMs = 6;         // lower = faster updates
+  streamSpeedMs = 6;
   private streamTimer: any = null;
-  private streamChunkSize = 12; // chars per tick
-
-  // Track lightning draw animation for newly added user messages
+  private streamChunkSize = 12;
   private animatedBolts = new Set<number>();
-
-  // Sessions & pagination
   sessions: ChatSession[] = [];
   search = '';
   showArchived = false;
-  loadingSessions = false;
   renamingId: string | null = null;
   archivingId: string | null = null;
   deletingId: string | null = null;
@@ -68,7 +58,8 @@ export class AsistenteIa implements OnInit, OnDestroy {
     private readonly sanitizer: DomSanitizer,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    public readonly auth: AuthService // public for template
+    public readonly auth: AuthService,
+    private readonly loadingService: LoadingService
   ) {
     marked.setOptions({ breaks: true, gfm: true });
   }
@@ -106,11 +97,11 @@ export class AsistenteIa implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.streamTimer) { clearInterval(this.streamTimer); this.streamTimer = null; }
+    this.loadingService.hide(); // <-- 6. AÑADIDO POR SEGURIDAD
   }
 
-  // -------- Sessions & messages --------
   async loadSessions(): Promise<void> {
-    this.loadingSessions = true;
+    this.loadingService.show('Cargando historial...');
     try {
       const list = await this.iaService.listSessions({
         q: this.search.trim() || undefined,
@@ -120,7 +111,7 @@ export class AsistenteIa implements OnInit, OnDestroy {
     } catch {
       this.sessions = [];
     } finally {
-      this.loadingSessions = false;
+      this.loadingService.hide();
     }
   }
 
@@ -235,13 +226,10 @@ export class AsistenteIa implements OnInit, OnDestroy {
   async applyFilters(): Promise<void> {
     await this.loadSessions();
   }
-
-  // -------- Messaging & perceived speed --------
   private push(from: Actor, text: string): void {
     const t = Date.now();
     this.respuestas.push({ from, text, t });
     if (from === 'user') {
-      // Trigger draw animation for lightning on new user messages
       this.animatedBolts.add(t);
       setTimeout(() => this.animatedBolts.delete(t), 4000);
     }
@@ -293,12 +281,8 @@ export class AsistenteIa implements OnInit, OnDestroy {
       await this.createAndOpenSession();
     }
     if (!this.currentSessionId) return;
-
-    // Show user message immediately (will animate lightning)
     this.push('user', msg);
     this.prompt = '';
-
-    // Assistant placeholder (for speed perception)
     const placeholderT = Date.now();
     this.respuestas.push({ from: 'ia', text: '', t: placeholderT });
     this.scrollToBottomSoon();
@@ -338,8 +322,6 @@ export class AsistenteIa implements OnInit, OnDestroy {
       setTimeout(() => (this.typing = false), 200);
     }
   }
-
-  // Template helpers
   isLastUser(i: number): boolean {
     for (let k = this.respuestas.length - 1; k >= 0; k--) {
       if (this.respuestas[k]?.from === 'user') return i === k;
@@ -389,103 +371,87 @@ export class AsistenteIa implements OnInit, OnDestroy {
     catch { this.push('ia', 'No pude copiar la conversación automáticamente. Intenta manualmente.'); }
   }
 
-  // Heuristic Markdown normalization to avoid flattened bullets
   private improveMarkdownHeuristics(text: string): string {
     if (!text) return text;
     let s = text;
-
-    // If there are multiple "* " bullets but few line breaks, insert newlines before bullets
     const starBullets = (s.match(/\*\s/g) || []).length;
-    const hasFewBreaks = (s.match(/\n/g) || []).length < 2;
-    if (starBullets >= 2 && hasFewBreaks) {
-      s = s.replace(/\s\*\s/g, '\n* ');
+    const breaks = (s.match(/\n/g) || []).length;
+    if (starBullets > 1 && breaks < starBullets) {
+      s = s.replace(/(\S)\s(\*\s)/g, '$1\n$2');
     }
-
-    // Bold headings to H3 for spacing
-    s = s.replace(/(^|\n)\s*\*\*(.+?)\*\*\s*/g, '$1### $2\n');
-
-    // Ensure break before next list/heading
-    s = s.replace(/([.!?])\s+(\*|\-|\#)/g, '$1\n$2');
-
     return s;
   }
 
   renderMarkdown(text: string): SafeHtml {
-    if (!text) return '' as unknown as SafeHtml;
-    try {
-      const normalized = this.improveMarkdownHeuristics(text);
-      const html = marked.parse(normalized);
-      const safe = DOMPurify.sanitize(typeof html === 'string' ? html : String(html), { USE_PROFILES: { html: true } });
-      return this.sanitizer.bypassSecurityTrustHtml(safe);
-    } catch {
-      return this.sanitizer.bypassSecurityTrustHtml(String(text));
-    }
+    if (!text) return '';
+    const fixed = this.improveMarkdownHeuristics(text);
+    const html = marked.parse(fixed);
+    const clean = DOMPurify.sanitize(html as string);
+    return this.sanitizer.bypassSecurityTrustHtml(clean);
   }
 
-  trackByMsg = (_: number, r: Respuesta) => r.t;
+  scrollToBottom(): void {
+    try { this.chatEl?.nativeElement?.scrollTo({ top: this.chatEl.nativeElement.scrollHeight, behavior: 'smooth' }); } catch {}
+  }
+  scrollToBottomSoon(delay = 50): void {
+    setTimeout(() => this.scrollToBottom(), delay);
+  }
+
+  onChatScroll(e: Event): void {
+    const el = e.target as HTMLDivElement;
+    if (!el) return;
+    const atBottom = (el.scrollHeight - el.scrollTop - el.clientHeight) < 200;
+    this.showScrollToBottom = !atBottom;
+  }
+
+  groupedSessions(): { label: string, items: ChatSession[] }[] {
+    const groups = new Map<string, ChatSession[]>();
+    const today = new Date(); today.setHours(0,0,0,0);
+    const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
+    const startOfWeek = new Date(today); startOfWeek.setDate(startOfWeek.getDate() - today.getDay());
+    const startOfMonth = new Date(today); startOfMonth.setDate(1);
+
+    const sorted = [...this.sessions].sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+
+    for (const s of sorted) {
+      const d = new Date(s.updated_at);
+      let key: string;
+      if (d >= today) key = 'Hoy';
+      else if (d >= yesterday) key = 'Ayer';
+      else if (d >= startOfWeek) key = 'Esta semana';
+      else if (d >= startOfMonth) key = 'Este mes';
+      else key = d.toLocaleString('es-BO', { month: 'long', year: 'numeric' });
+
+      const k = key.charAt(0).toUpperCase() + key.slice(1);
+      if (!groups.has(k)) groups.set(k, []);
+      groups.get(k)!.push(s);
+    }
+    return Array.from(groups.entries()).map(([label, items]) => ({ label, items }));
+  }
+
+  goToSession(s: ChatSession): void {
+    if (s.id === this.currentSessionId) return;
+    this.router.navigate(['/asistente-ia', s.id]);
+  }
 
   isGroupStart(i: number): boolean {
     if (i === 0) return true;
-    return this.respuestas[i].from !== this.respuestas[i - 1].from;
+    const prev = this.respuestas[i-1];
+    const curr = this.respuestas[i];
+    if (prev.from !== curr.from) return true;
+    const tPrev = new Date(prev.t);
+    const tCurr = new Date(curr.t);
+    return (tCurr.getTime() - tPrev.getTime()) > (3 * 60 * 1000); // 3 minutes
   }
 
   isNewDay(i: number): boolean {
     if (i === 0) return true;
-    const d1 = new Date(this.respuestas[i].t);
-    const d0 = new Date(this.respuestas[i - 1].t);
-    return d1.getFullYear() !== d0.getFullYear() || d1.getMonth() !== d0.getMonth() || d1.getDate() !== d0.getDate();
+    const prev = new Date(this.respuestas[i-1].t);
+    const curr = new Date(this.respuestas[i].t);
+    return prev.toDateString() !== curr.toDateString();
   }
 
-  onChatScroll(_: Event): void {
-    const el = this.chatEl?.nativeElement;
-    if (!el) return;
-    const nearBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 120;
-    this.showScrollToBottom = !nearBottom;
-  }
-
-  scrollToBottom(): void {
-    const el = this.chatEl?.nativeElement;
-    if (!el) return;
-    el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
-    this.showScrollToBottom = false;
-  }
-
-  private scrollToBottomSoon(): void {
-    setTimeout(() => this.scrollToBottom(), 0);
-  }
-
-  groupLabelFor(dateIso?: string | null): string {
-    if (!dateIso) return 'Anteriores';
-    const d = new Date(dateIso);
-    const today = new Date();
-    const oneDay = 24 * 60 * 60 * 1000;
-    const diffDays = Math.floor((today.setHours(0,0,0,0) - new Date(d.setHours(0,0,0,0)).getTime()) / oneDay);
-    if (diffDays <= 0) return 'Hoy';
-    if (diffDays === 1) return 'Ayer';
-    if (diffDays <= 7) return 'Esta semana';
-    const thisMonth = new Date().getMonth();
-    if (d.getMonth() === thisMonth) return 'Este mes';
-    return 'Más antiguas';
-  }
-
-  groupedSessions(): { label: string; items: ChatSession[] }[] {
-    const groups = new Map<string, ChatSession[]>();
-    for (const s of this.sessions) {
-      const label = this.groupLabelFor(s.updated_at || s.created_at);
-      if (!groups.has(label)) groups.set(label, []);
-      groups.get(label)!.push(s);
-    }
-    const order = ['Hoy', 'Ayer', 'Esta semana', 'Este mes', 'Más antiguas', 'Anteriores'];
-    return order
-      .filter(g => groups.has(g))
-      .map(g => ({
-        label: g,
-        items: groups.get(g)!.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
-      }));
-  }
-
-  async goToSession(s: ChatSession): Promise<void> {
-    if (this.currentSessionId === s.id) return;
-    this.router.navigate(['/asistente-ia', s.id]);
+  trackByMsg(i: number, r: Respuesta): number {
+    return r.t;
   }
 }

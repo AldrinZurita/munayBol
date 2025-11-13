@@ -18,7 +18,6 @@ class UsuarioSerializer(serializers.ModelSerializer):
             'fecha_creacion',
             'avatar_url',
         ]
-        # Hacemos 'rol' y 'estado' editables para que el superadmin pueda cambiarlos
         read_only_fields = ['id', 'correo', 'fecha_creacion']
         extra_kwargs = {
             'pais': {'required': False, 'allow_blank': True},
@@ -154,11 +153,6 @@ class NotificationSerializer(serializers.ModelSerializer):
         model = Notification
         fields = ['id', 'title', 'message', 'read', 'created_at', 'link']
 
-
-# =========================
-# Chat – serializers nuevos
-# =========================
-
 class ChatMessageSerializer(serializers.Serializer):
     role = serializers.ChoiceField(choices=['user', 'assistant'])
     content = serializers.CharField()
@@ -172,12 +166,10 @@ class ChatSessionBaseSerializer(serializers.ModelSerializer):
 
 
 class ChatSessionListSerializer(ChatSessionBaseSerializer):
-    # Derivados por compatibilidad (si no hay metadatos, se calculan en view)
     pass
 
 
 class ChatSessionDetailSerializer(ChatSessionBaseSerializer):
-    # Detalle básico de la sesión; los mensajes se obtienen por endpoint /messages
     pass
 
 
@@ -195,10 +187,6 @@ class ChatSessionPatchSerializer(serializers.ModelSerializer):
             'title': {'required': False, 'allow_blank': True},
             'archived': {'required': False}
         }
-
-# =========================
-# Reviews – serializers
-# =========================
 
 class ReviewSerializer(serializers.ModelSerializer):
     usuario = UsuarioSerializer(read_only=True)

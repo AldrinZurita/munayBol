@@ -9,7 +9,6 @@ export const adminGuard: CanActivateFn = (route, state): boolean | UrlTree => {
   const platformId = inject(PLATFORM_ID);
   const isBrowser = isPlatformBrowser(platformId);
 
-  // En SSR deja pasar; el cliente revalidará y cargará datos
   if (!isBrowser) {
     return true;
   }
@@ -19,7 +18,6 @@ export const adminGuard: CanActivateFn = (route, state): boolean | UrlTree => {
     return true;
   }
 
-  // Fallback por si el servicio aún no hidrató
   try {
     const token = localStorage.getItem('token');
     const userJson = localStorage.getItem('user');

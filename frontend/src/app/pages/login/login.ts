@@ -6,6 +6,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { LoadingService } from '../../shared/services/loading';
 
 declare const google: any;
 
@@ -25,16 +26,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   error = '';
   loading = false;
   isBrowser = false;
-
-  // UI state
   passwordVisible = false;
   googleReady = false;
   githubLoading = false;
-
-  // Background (Cloudinary)
   loginBackgroundUrl = 'https://res.cloudinary.com/dj5uzus8e/image/upload/v1761429463/wjrh01yodnvwtcvlqogp.jpg';
-
-  // Cleanup
   private removeResize?: () => void;
   private googleInitInterval?: number;
 
@@ -43,6 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
+    private loadingService: LoadingService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -50,12 +46,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.isBrowser) setTimeout(() => this.emailInput?.nativeElement?.focus(), 200);
-
-    // Google Identity Services
     if (this.isBrowser) {
       const initGoogle = () => {
         if (!environment.googleClientId) {
-          // eslint-disable-next-line no-console
           console.warn('Falta environment.googleClientId. Google no estará disponible.');
           return;
         }
@@ -68,8 +61,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             use_fedcm_for_prompt: true
           });
           this.renderGoogleButton();
-
-          // Re-render al redimensionar
           let raf = 0;
           const onResize = () => {
             if (raf) cancelAnimationFrame(raf);
@@ -94,8 +85,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         }, 10000);
       }
     }
-
-    // Callback de GitHub si vuelve de OAuth
     if (this.isBrowser) {
       this.route.queryParamMap.subscribe(params => {
         const code = params.get('code');
@@ -103,9 +92,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         if (code && state) {
           this.loading = true;
           this.githubLoading = false;
+          this.loadingService.show('Validando con GitHub...');
+
           this.auth.githubExchange(code, state).subscribe({
             next: async (resp: LoginResponse) => {
-              this.loading = false;
+              this.loadingService.setProgress(100); // Avanza antes de navegar
               this.snackBar.open('¡Inicio de sesión con GitHub exitoso!', '', { duration: 2500 });
               await this.router.navigate([], { queryParams: {}, replaceUrl: true });
               if (resp.usuario.rol === 'superadmin') await this.router.navigate(['/admin']);
@@ -113,6 +104,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             },
             error: (_err: unknown) => {
               this.loading = false;
+              this.loadingService.hide();
               this.snackBar.open('Error al iniciar sesión con GitHub', '', { duration: 2500 });
             }
           });
@@ -124,15 +116,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.removeResize?.();
     if (this.googleInitInterval) window.clearInterval(this.googleInitInterval);
+    this.loadingService.hide();
   }
 
   private renderGoogleButton(): void {
     const host = document.getElementById('googleButton');
     if (!host) return;
-
-    // Limpia render previo
     host.innerHTML = '';
-
     if (typeof google !== 'undefined' && google?.accounts?.id) {
       google.accounts.id.renderButton(host, {
         type: 'icon',
@@ -140,8 +130,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         theme: 'outline',
         size: 'large'
       });
-
-      // Verifica que el botón haya quedado visible; si no, crea un fallback con SVG
       setTimeout(() => {
         const rendered = host.querySelector('iframe, div[role="button"]');
         if (!rendered) {
@@ -159,7 +147,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             try {
               google.accounts.id.prompt();
             } catch {
-              // no-op
             }
           });
           host.appendChild(btn);
@@ -169,7 +156,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Acciones
   onKeyDownEnter(event: KeyboardEvent): void {
     if (event.key === 'Enter' && !this.loading) this.login();
   }
@@ -182,13 +168,19 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginWithGitHub(): void {
     if (!this.isBrowser || this.loading) return;
     this.githubLoading = true;
+    this.loading = true;
+    this.loadingService.show('Redirigiendo a GitHub...');
+
     this.auth.githubLoginUrl().subscribe({
       next: (data: GithubLoginUrlResponse) => {
         const { authorize_url } = data;
+        this.loadingService.setProgress(100);
         window.location.href = authorize_url;
       },
       error: (_err: unknown) => {
         this.githubLoading = false;
+        this.loading = false;
+        this.loadingService.hide();
         this.snackBar.open('No se pudo iniciar el flujo de GitHub', '', { duration: 2500 });
       }
     });
@@ -201,15 +193,18 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
     this.loading = true;
+    this.loadingService.show('Validando con Google...');
+
     this.auth.googleLogin(id_token).subscribe({
       next: async (resp: LoginResponse) => {
-        this.loading = false;
+        this.loadingService.setProgress(100);
         this.snackBar.open('¡Inicio de sesión con Google exitoso!', '', { duration: 2500 });
         if (resp.usuario.rol === 'superadmin') await this.router.navigate(['/admin']);
         else await this.router.navigate(['/']);
       },
       error: (_err: unknown) => {
         this.loading = false;
+        this.loadingService.hide();
         this.snackBar.open('Error al iniciar sesión con Google', '', { duration: 2500 });
       }
     });
@@ -219,21 +214,26 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.loading) return;
     this.loading = true;
     this.error = '';
+    this.loadingService.show('Iniciando sesión...');
+
     this.auth.login({ correo: this.correo, contrasenia: this.contrasenia }).subscribe({
       next: async (resp: LoginResponse) => {
         if (resp.usuario && resp.usuario.estado) {
+          this.loadingService.setProgress(100);
           this.snackBar.open('¡Inicio de sesión exitoso!', '', { duration: 2500 });
           if (resp.usuario.rol === 'superadmin') await this.router.navigate(['/admin']);
           else await this.router.navigate(['/']);
         } else {
           this.error = 'Usuario inactivo o no autorizado.';
           this.auth.logout();
+          this.loadingService.hide();
+          this.loading = false;
         }
-        this.loading = false;
       },
       error: (_err: unknown) => {
         this.error = 'Credenciales inválidas o usuario no autorizado.';
         this.snackBar.open(this.error, '', { duration: 2500 });
+        this.loadingService.hide();
         this.loading = false;
 
         const card = document.querySelector('.login-card');

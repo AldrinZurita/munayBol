@@ -17,15 +17,27 @@ services:
       DJANGO_DEBUG: "True"
       DJANGO_ALLOWED_HOSTS: "localhost 127.0.0.1 backend 0.0.0.0"
       OLLAMA_BASE_URL: "http://ollama:11434"
-      OLLAMA_MODEL: "llama3.2:1b"
+      OLLAMA_MODEL: "llama3.1:8b-instruct-q4_K_M"
+      OLLAMA_TIMEOUT: "600.0"
+      OLLAMA_READ_TIMEOUT: "600.0"
+      OLLAMA_CONNECT_TIMEOUT: "10.0"
+      OLLAMA_WRITE_TIMEOUT: "10.0"
+      OLLAMA_POOL_TIMEOUT: "10.0"
+      OLLAMA_NUM_CTX: "4096"
+      OLLAMA_MAX_TOKENS: "512"
       GOOGLE_CLIENT_ID: "152411335033-meomkvc2136t317jgcqusbq3r7fo687m.apps.googleusercontent.com"
       GITHUB_CLIENT_ID: "Ov23lifxaogIQ25M8Xd3"
       GITHUB_CLIENT_SECRET: "f785366ad20b1f859b06fe1723593814bc2e54dd"
       GITHUB_REDIRECT_URI: "http://localhost:4200/login"
+      WEAVIATE_HOST: "weaviate"
+      WEAVIATE_PORT: "8080"
+      WEAVIATE_GRPC_PORT: "50051"
+      PYTHONPATH: /app
     networks:
       - turismo-net
     depends_on:
       - ollama
+      - weaviate
 
   frontend:
     build: ./frontend
@@ -40,11 +52,11 @@ services:
       - turismo-net
 
   ollama:
-    image: ollama/ollama:latest
+    build: ./ollama
     ports:
       - "11434:11434"
     volumes:
-      - ${OLLAMA_MODELS:-/home/lautaro/.ollama/models}:/root/.ollama/models
+      - ${OLLAMA_MODELS:-/home/patriot/.ollama/models}:/root/.ollama/models
     healthcheck:
       test: curl -f http://localhost:11434/api/version || exit 1
       interval: 10s
@@ -53,6 +65,31 @@ services:
       retries: 10
     networks:
       - turismo-net
+
+  weaviate:
+    image: semitechnologies/weaviate:latest
+    ports:
+      - "8080:8080"
+      - "50051:50051"
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      ENABLE_MODULES: ""
+      PERSISTENCE_DATA_PATH: "/var/lib/weaviate"
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
+      CLUSTER_HOSTNAME: "node1"
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    networks:
+      - turismo-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/v1/.well-known/ready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  weaviate_data:
 
 networks:
   turismo-net:

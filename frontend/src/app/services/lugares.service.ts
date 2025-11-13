@@ -4,13 +4,11 @@ import { Observable, map } from 'rxjs';
 import { LugarTuristico } from '../interfaces/lugar-turistico.interface';
 import { AuthService } from './auth.service';
 
-// DTO para crear (el backend pone id_lugar y fecha_creacion)
 export type CrearLugarDTO = Pick<
   LugarTuristico,
   'nombre' | 'ubicacion' | 'departamento' | 'tipo' | 'horario' | 'descripcion' | 'url_image_lugar_turistico'
 >;
 
-// DTO para actualizar (enviamos solo los campos editables)
 export type ActualizarLugarDTO = Partial<Pick<
   LugarTuristico,
   'nombre' | 'ubicacion' | 'departamento' | 'tipo' | 'horario' | 'descripcion' | 'url_image_lugar_turistico'
