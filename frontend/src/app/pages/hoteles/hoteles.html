@@ -77,7 +77,6 @@
     </section>
 
     <section class="estado" role="status" aria-live="polite">
-
       <div *ngIf="error" class="error">{{ error }}</div>
 
       <div *ngIf="hotelesFiltrados.length === 0 && !error" class="no-result">
@@ -212,7 +211,7 @@
                 [(ngModel)]="modalHotelModel.url_imagen_hotel" />
             </div>
 
-            <div classd="field span-2">
+            <div class="field span-2">
               <label class="form-label">Previsualización</label>
               <div class="img-preview-wrapper">
                 <img [src]="modalHotelModel.url_imagen_hotel || 'assets/no-image.svg'" alt="Previsualización"

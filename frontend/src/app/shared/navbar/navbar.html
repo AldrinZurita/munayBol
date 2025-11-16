@@ -88,6 +88,17 @@
         <div class="user-actions">
           <app-notification class="notif-ani" (click)="onControlSelect($event)"></app-notification>
 
+          <!-- --- NUEVO: Botón para cambiar el tema --- -->
+          <button 
+            class="icon-btn theme-toggle" 
+            type="button" 
+            [attr.aria-label]="(theme$ | async) === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro'"
+            (click)="toggleTheme(); onControlSelect($event)">
+            <span *ngIf="(theme$ | async) === 'dark'" class="material-symbols-outlined">light_mode</span>
+            <span *ngIf="(theme$ | async) === 'light'" class="material-symbols-outlined">dark_mode</span>
+          </button>
+          <!-- --- Fin del nuevo botón --- -->
+
           <div class="user-menu" [class.open]="userMenuOpen">
             <button class="user-menu-trigger" type="button" aria-haspopup="menu"
                     [attr.aria-expanded]="userMenuOpen" (click)="toggleUserMenu($event); onControlSelect($event)">
