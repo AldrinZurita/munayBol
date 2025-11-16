@@ -254,6 +254,8 @@ i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
 button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible {
   outline: 3px solid rgba(15,107,255,.25); outline-offset: 2px; border-radius: 8px;
 }
+.paquete-manage, .stars{margin-left: 2rem;}
+.filtro-busqueda{width: 3rem;}
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
