@@ -1,24 +1,30 @@
+/*
+* NOTA: Este archivo ha sido refactorizado para usar las variables CSS
+* globales definidas en styles.scss. Esto arregla el error de
+* compilación y habilita el modo oscuro.
+*/
 :host {
-  --bg: #e6ebf5;
-  --bg-accent-1: rgba(37, 99, 235, 0.10);
-  --bg-accent-2: rgba(6, 182, 212, 0.10);
-  --card: #ffffff;
-  --card-2: #fbfdff;
-  --border: #cfd7e6;
-  --text: #0a0f1a;
-  --text-2: #111111;
-  --text-3: #4a5568;
-  --text-strong: #0a0f1a;
-  --brand: #2563eb;
-  --accent: #06b6d4;
-  --success: #16a34a;
-  --success-bg: #dcfce7;
-  --danger: #dc2626;
-  --icon: #111111;
-  --icon-strong: #0a0f1a;
-  --ring: rgba(37, 99, 235, .30);
-  --shadow-1: 0 10px 24px rgba(23, 38, 64, .08);
-  --shadow-2: 0 18px 36px rgba(23, 38, 64, .12);
+  /* --- Mapeo de variables locales a globales (Modo Claro) --- */
+  --bg: var(--color-bg-page);
+  --card: var(--color-bg-card);
+  --card-2: color.adjust(var(--color-bg-card), $lightness: -2%);
+  --border: var(--color-border);
+  --text: var(--color-text-primary);
+  --text-2: var(--color-text-primary);
+  --text-3: var(--color-text-secondary);
+  --text-strong: var(--color-text-primary);
+  --brand: var(--color-primary); /* Usando tu verde global */
+  --accent: var(--color-accent); /* Usando tu verde de acento global */
+  --success: var(--color-primary);
+  --success-bg: var(--color-success-bg);
+  --danger: var(--color-danger);
+  --icon: var(--color-text-secondary);
+  --icon-strong: var(--color-text-primary);
+  --ring: var(--color-brand-transparent); /* Usando la nueva variable transparente */
+  --shadow-1: 0 10px 24px var(--color-shadow);
+  --shadow-2: 0 18px 36px color.adjust(var(--color-shadow), $alpha: -0.88);
+
+  /* Variables de layout (se mantienen igual) */
   --radius-lg: 16px;
   --radius-md: 12px;
   --radius-sm: 10px;
@@ -28,18 +34,49 @@
   --trans-slow: .36s cubic-bezier(.2,.7,.2,1);
   --confirm-ms: 300ms;
 }
+
+/*
+* NOTA: Este bloque es el que realmente activa el modo oscuro.
+* Cuando el body tiene la clase .dark-theme, estas variables
+* anulan a las de :root, cambiando el tema de la página.
+*/
+body.dark-theme :host {
+  --bg: var(--color-bg-page);
+  --card: var(--color-bg-card);
+  --card-2: color.adjust(var(--color-bg-card), $lightness: +2%);
+  --border: var(--color-border);
+  --text: var(--color-text-primary);
+  --text-2: var(--color-text-primary);
+  --text-3: var(--color-text-secondary);
+  --text-strong: var(--color-text-primary);
+  --brand: var(--color-primary);
+  --accent: var(--color-accent);
+  --success: var(--color-primary);
+  --success-bg: var(--color-success-bg);
+  --danger: var(--color-danger);
+  --icon: var(--color-text-secondary);
+  --icon-strong: var(--color-text-primary);
+  --ring: var(--color-brand-transparent); /* Usando la nueva variable transparente */
+  --shadow-1: 0 10px 24px var(--color-shadow);
+  --shadow-2: 0 18px 36px color.adjust(var(--color-shadow), $alpha: -0.8);
+}
+/* --- FIN DE LA ACTUALIZACIÓN DE VARIABLES --- */
+
+
 :host {
   display: block;
   min-height: 100vh;
 }
 
 .perfil-root { position: relative; isolation: isolate; }
+
+/* --- FIX: Usando las nuevas variables transparentes de styles.scss --- */
 .bg.fx {
   position: absolute; inset: -20% -10% auto -10%;
   height: 60vmin; opacity: .14; filter: blur(60px) saturate(1.02);
   background:
-    radial-gradient(42% 42% at 30% 50%, rgba(6,182,212,.18), transparent 70%),
-    radial-gradient(38% 38% at 70% 50%, rgba(37,99,235,.16), transparent 70%);
+    radial-gradient(42% 42% at 30% 50%, var(--color-accent-transparent), transparent 70%),
+    radial-gradient(38% 38% at 70% 50%, var(--color-brand-transparent), transparent 70%);
   animation: driftA 26s ease-in-out infinite alternate;
   pointer-events: none; z-index: 0;
 }
@@ -47,8 +84,8 @@
   inset: auto -10% -30% -10%;
   height: 70vmin; opacity: .12; filter: blur(70px);
   background:
-    radial-gradient(46% 46% at 60% 40%, rgba(37,99,235,.14), transparent 70%),
-    radial-gradient(40% 40% at 30% 60%, rgba(6,182,212,.14), transparent 70%);
+    radial-gradient(46% 46% at 60% 40%, var(--color-brand-transparent), transparent 70%),
+    radial-gradient(40% 40% at 30% 60%, var(--color-accent-transparent), transparent 70%);
   animation: driftB 30s ease-in-out infinite alternate-reverse;
 }
 @keyframes driftA { from { transform: translateY(0) } to { transform: translateY(16px) } }
@@ -81,7 +118,7 @@
 .title__icon { color: var(--icon); font-size: 32px; }
 .title__glow {
   position: absolute; left: -12px; right: -12px; bottom: -10px; height: 3px; border-radius: 999px;
-  background: linear-gradient(90deg, transparent, rgba(37,99,235,.35), rgba(6,182,212,.35), transparent);
+  background: linear-gradient(90deg, transparent, var(--color-brand-transparent), var(--color-accent-transparent), transparent);
   animation: shine 4s ease-in-out infinite;
 }
 @keyframes shine { 0%,100% { opacity: .7 } 50% { opacity: 1 } }
@@ -98,10 +135,15 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-1);
   margin-bottom: 28px;
-  transition: transform var(--trans-med), box-shadow var(--trans-med), border-color var(--trans-med);
+  transition: transform var(--trans-med), box-shadow var(--trans-med), border-color var(--trans-med), filter var(--trans-med);
   color: var(--text-strong);
 }
-.perfil-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); border-color: #c3cee1; }
+.perfil-card:hover { 
+  transform: translateY(-2px); 
+  box-shadow: var(--shadow-2);
+  /* FIX: Usamos un filtro CSS para oscurecer el borde en hover */
+  filter: brightness(0.97);
+}
 
 .perfil-card :where(h1,h2,h3,h4,h5,h6,p,span,small,label,strong,em,div,li,a,button,input,textarea),
 .perfil-card :where(.material-symbols-outlined) {
@@ -111,7 +153,8 @@
   display: grid; grid-template-columns: auto 1fr auto; align-items: center;
   gap: 24px; padding: 18px 20px;
   border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,0));
+  /* FIX: Usamos un color sólido de las variables globales */
+  background: var(--color-bg-hover);
 }
 .avatar-wrapper { position: relative; }
 .avatar-wrapper.ring::before {
@@ -124,36 +167,36 @@
 .avatar-placeholder {
   position: relative; z-index: 1;
   width: clamp(72px, 8.5vw, 96px); height: clamp(72px, 8.5vw, 96px);
-  border-radius: 50%; border: 2px solid #fff;
+  border-radius: 50%; border: 2px solid var(--card);
   box-shadow: 0 8px 18px rgba(23,38,64,.08);
 }
-.avatar-img { object-fit: cover; background: #f4f6fa; }
+.avatar-img { object-fit: cover; background: var(--bg); }
 .avatar-placeholder {
   display: grid; place-items: center;
   background: linear-gradient(135deg, var(--accent), var(--brand));
-  color: #fff !important;
+  color: var(--color-text-inverted) !important;
   font-weight: 900; font-size: clamp(30px, 4vw, 40px);
 }
 .info-principal .nombre-usuario {
   margin: 0 0 4px; font-size: clamp(20px, 2.2vw, 26px);
   font-weight: 900; letter-spacing: .01em;
 }
-.info-principal .rol-usuario { margin: 0; font-size: 14px; font-weight: 800; }
+.info-principal .rol-usuario { margin: 0; font-size: 14px; font-weight: 800; color: var(--text-3) !important; }
 .badge.role {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 6px 10px; border-radius: var(--radius-pill);
   font-size: 11px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase;
-  background: #e7f0ff; color: var(--text-strong) !important; border: 1px solid #a3c4ff;
+  background: var(--color-bg-hover-primary); color: var(--text-strong) !important; border: 1px solid var(--brand);
 }
 .header-actions { display: inline-flex; gap: 10px; align-items: center; }
 .chip {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 8px 12px; border-radius: var(--radius-pill);
-  background: var(--success-bg); color: var(--text-strong) !important; border: 1px solid #86efac;
+  background: var(--success-bg); color: var(--color-text-success) !important; border: 1px solid var(--success);
   font-weight: 900; font-size: 12px;
 }
 .chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
-.chip.nope { color: var(--text-strong) !important; background: #fee2e2; border-color: #fecaca; }
+.chip.nope { color: var(--color-text-danger) !important; background: var(--color-danger-bg); border-color: var(--danger); }
 .chip.nope .dot { background: var(--danger); }
 .perfil-body { padding: 14px 20px 18px; display: grid; gap: 10px; }
 .detalle-item {
@@ -161,7 +204,7 @@
   padding: 10px 0; border-bottom: 1px solid var(--border);
 }
 .detalle-item:last-child { border-bottom: 0; }
-.detalle-item .label { font-weight: 900; letter-spacing: .01em; }
+.detalle-item .label { font-weight: 900; letter-spacing: .01em; color: var(--text-3) !important; }
 .detalle-item .valor { font-weight: 900; }
 .perfil-form { padding: 14px 20px 18px; }
 .perfil-form .form-grid {
@@ -170,12 +213,12 @@
 .campo { display: grid; gap: 6px; }
 .campo label { font-weight: 900; letter-spacing: .01em; }
 .campo input {
-  padding: 12px; border: 1px solid #aab6c8; border-radius: var(--radius-sm); font-size: 14px;
-  background: #ffffff; color: var(--text-strong) !important; caret-color: var(--text-strong);
+  padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px;
+  background: var(--card); color: var(--text-strong) !important; caret-color: var(--text-strong);
   transition: border-color var(--trans-med), box-shadow var(--trans-med), transform var(--trans-fast);
 }
-.campo input::placeholder { color: #4a5568; opacity: .95; }
-.campo input:hover { border-color: #92a1b8; }
+.campo input::placeholder { color: var(--text-3); opacity: .95; }
+.campo input:hover { border-color: var(--text-3); }
 .campo input:focus {
   outline: none; border-color: var(--brand);
   box-shadow: 0 0 0 3px var(--ring); transform: translateY(-1px);
@@ -195,7 +238,7 @@
   color: var(--text-strong) !important;
 }
 :where(.btn-primario,.btn-secundario,.btn-detalle,.btn-cancel,.btn-danger,.btn-link) .material-symbols-outlined {
-  color: var(--text-strong) !important;
+  color: inherit !important;
   transition: transform .1s ease;
 }
 :where(.btn-primario,.btn-secundario,.btn-detalle,.btn-cancel,.btn-danger):hover {
@@ -209,34 +252,35 @@
   filter: none;
 }
 .btn-primario {
-  background: #ffffff; border: 2px solid var(--brand);
-  box-shadow: 0 10px 22px rgba(37,99,235,.12);
+  background: var(--brand); color: var(--color-text-inverted) !important; border: 1px solid var(--color-primary-dark);
+  box-shadow: 0 10px 22px var(--color-brand-transparent);
 }
-.btn-primario:hover { filter: brightness(1.02); }
+.btn-primario:hover { filter: brightness(1.1); }
 .btn-secundario {
-  background: #ffffff; border: 1px solid var(--border);
+  background: var(--card); border: 1px solid var(--border);
 }
-.btn-secundario:hover { border-color: #c3cee1; box-shadow: 0 10px 22px rgba(23,38,64,.08); }
+.btn-secundario:hover { border-color: var(--color-text-secondary); box-shadow: 0 10px 22px var(--color-shadow); }
 .btn-detalle {
-  background: #ffffff; border: 2px solid var(--brand); padding: 9px 14px;
-  box-shadow: 0 10px 22px rgba(37,99,235,.10);
+  background: var(--brand); color: var(--color-text-inverted) !important; padding: 9px 14px;
+  box-shadow: 0 10px 22px var(--color-brand-transparent);
 }
-.btn-detalle:hover { filter: brightness(1.02); }
+.btn-detalle:hover { filter: brightness(1.1); }
 .btn-cancel {
-  background: #ffffff; border: 1px solid #f2a6a6; padding: 9px 14px;
+  background: var(--card); border: 1px solid var(--danger); padding: 9px 14px;
 }
-.btn-cancel:hover { border-color: #ef4444; box-shadow: 0 10px 22px rgba(23,38,64,.08); }
+.btn-cancel:hover { border-color: var(--danger); box-shadow: 0 10px 22px var(--color-shadow); }
 .btn-cancel.is-loading { position: relative; color: transparent !important; }
 .btn-cancel.is-loading::after {
   content: ""; position: absolute; inset: 50% auto auto 50%;
   width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%;
-  border: 2px solid #fcb5b5; border-top-color: #ef4444; animation: spin .7s linear infinite;
+  border: 2px solid var(--color-danger-bg); border-top-color: var(--danger); animation: spin .7s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg) } }
 .btn-danger {
-  background: #ffffff; border: 2px solid #ef4444; padding: 8px 12px;
+  background: var(--color-danger-bg); border: 1px solid var(--danger); padding: 8px 12px;
+  color: var(--color-text-danger) !important;
 }
-.btn-danger:hover { filter: brightness(1.02); }
+.btn-danger:hover { filter: brightness(0.95); }
 .btn-link {
   background: transparent; border: 0; text-decoration: underline; padding: 4px;
 }
@@ -251,7 +295,7 @@
   border: 1px dashed var(--border);
   border-radius: var(--radius-md);
   margin-top: 16px;
-  background: rgba(255,255,255,.3);
+  background: var(--color-bg-hover);
 }
 .estado .material-symbols-outlined {
   font-size: 36px;
@@ -260,9 +304,9 @@
 }
 .estado p { margin: 0; font-size: 15px; font-weight: 800; }
 .estado.error {
-  background: #fff0f0;
+  background: var(--color-danger-bg);
   border-color: var(--danger);
-  color: var(--danger) !important;
+  color: var(--color-text-danger) !important;
   font-weight: 900;
 }
 .reservas-section {
@@ -332,7 +376,7 @@
 
   &.is-cancelled {
     opacity: 0.75;
-    background: #f8fafc;
+    background: var(--bg);
   }
   &.is-removing {
     opacity: 0;
@@ -400,14 +444,14 @@
 
     &.activa {
       background: var(--success-bg);
-      color: var(--text-strong) !important;
-      border: 1px solid #86efac;
+      color: var(--color-text-success) !important;
+      border: 1px solid var(--success);
       .dot { background: var(--success); }
     }
     &.cancelada {
-      background: #fee2e2;
-      color: var(--text-strong) !important;
-      border: 1px solid #fecaca;
+      background: var(--color-danger-bg);
+      color: var(--color-text-danger) !important;
+      border: 1px solid var(--danger);
       .dot { background: var(--danger); }
     }
     .dot { width: 8px; height: 8px; border-radius: 50%; }
@@ -492,10 +536,10 @@
     margin-top: auto;
   }
 }
-.sk-block { background: #eef2f7; animation: pulse 1.5s infinite; }
-.sk-line { height: 16px; border-radius: 6px; background: #eef2f7; animation: pulse 1.5s infinite; }
-.sk-pill { height: 24px; border-radius: 99px; background: #eef2f7; animation: pulse 1.5s infinite; }
-.sk-btn { height: 38px; border-radius: var(--radius-sm); background: #eef2f7; animation: pulse 1.5s infinite; }
+.sk-block { background: var(--color-bg-hover); animation: pulse 1.5s infinite; }
+.sk-line { height: 16px; border-radius: 6px; background: var(--color-bg-hover); animation: pulse 1.5s infinite; }
+.sk-pill { height: 24px; border-radius: 999px; background: var(--color-bg-hover); animation: pulse 1.5s infinite; }
+.sk-btn { height: 38px; border-radius: var(--radius-sm); background: var(--color-bg-hover); animation: pulse 1.5s infinite; }
 .w-30 { width: 30%; }
 .w-40 { width: 40%; }
 .w-50 { width: 50%; }
@@ -514,6 +558,7 @@
 .confirm-cancel {
   position: absolute;
   inset: 0;
+  /* FIX: Usamos un color CSS estándar, no una función Sass */
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(4px);
   padding: 16px;
@@ -529,6 +574,11 @@
     pointer-events: auto;
   }
 }
+/* Agregamos el fondo oscuro para el modo oscuro */
+body.dark-theme .confirm-cancel {
+  background: rgba(30, 41, 59, 0.85);
+}
+
 .confirm-cancel-box {
   display: grid;
   grid-template-columns: auto 1fr;

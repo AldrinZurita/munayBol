@@ -12,96 +12,98 @@ html {
   ));
 }
 
-/* --- INICIO DE NUEVAS VARIABLES DE TEMA --- */
+/* --- VARIABLES DE TEMA --- */
 :root {
-  /* Paleta de colores principal (Modo Claro) */
-  --color-primary: #2e7d32; /* Tu verde principal */
-  --color-primary-dark: #205723; /* Un verde más oscuro para hover */
-  --color-accent: #16a34a; /* Un verde más brillante para acentos */
+  /* Paleta de colores (Modo Claro) */
+  --color-primary: #2e7d32;
+  --color-primary-dark: #205723;
+  --color-accent: #16a34a;
   --color-danger: #dc2626;
 
+  /* --- NUEVO: Colores transparentes para fondos y efectos --- */
+  --color-brand-transparent: rgba(46, 125, 50, 0.16);  /* Transparencia de --color-primary */
+  --color-accent-transparent: rgba(22, 163, 74, 0.14); /* Transparencia de --color-accent */
+
   /* Fondos */
-  --color-bg-page: #f8fafc; /* Fondo de página gris muy claro */
-  --color-bg-card: #ffffff; /* Fondo de tarjetas, modales, etc. */
-  --color-bg-hover: #f1f5f9; /* Hover sutil */
-  --color-bg-hover-primary: #eaf5ea; /* Hover verde claro */
-  --color-bg-navbar: rgba(255, 255, 255, 0.85); /* Fondo de navbar (blanco semi-transparente) */
-  --color-bg-navbar-solid: #ffffff; /* Fondo de navbar en móvil/scroll */
+  --color-bg-page: #f8fafc;
+  --color-bg-card: #ffffff;
+  --color-bg-hover: #f1f5f9;
+  --color-bg-hover-primary: #eaf5ea;
+  --color-bg-navbar: rgba(255, 255, 255, 0.85);
+  --color-bg-navbar-solid: #ffffff;
 
   /* Texto */
-  --color-text-primary: #0f172a; /* Texto principal oscuro */
+  --color-text-primary: #0f172a;
   --color-text-secondary: #334155;
   --color-text-light: #64748b;
-  --color-text-inverted: #ffffff; /* Texto sobre fondos oscuros/verdes */
+  --color-text-inverted: #ffffff;
   --color-text-danger: #991b1b;
   --color-text-success: #166534;
-  --color-nav-fg: #2e7d32; /* Color de texto específico de la navbar */
-  --color-nav-fg-darker: #0b1220; /* Color de texto de navbar en modo 'contrast-dark' */
+  --color-nav-fg: #2e7d32;
+  --color-nav-fg-darker: #0b1220;
 
-  /* Bordes */
+  /* Bordes y Sombras */
   --color-border: #e5e7eb;
+  --color-shadow: rgba(0, 0, 0, 0.07);
   
-  /* Misceláneos */
+  /* Fondos de Insignias */
   --color-success-bg: #dcfce7;
   --color-danger-bg: #fee2e2;
-  --color-shadow: rgba(0, 0, 0, 0.07);
 }
 
 body.dark-theme {
   /* Paleta de colores (Modo Oscuro) */
-  --color-primary: #16a34a; /* Verde más brillante para destacar */
+  --color-primary: #16a34a;
   --color-primary-dark: #15803d;
   --color-accent: #22c55e;
-  --color-danger: #f87171; /* Rojo más claro */
+  --color-danger: #f87171;
+
+  /* --- NUEVO: Colores transparentes para fondos y efectos (Modo Oscuro) --- */
+  --color-brand-transparent: rgba(22, 163, 74, 0.16);
+  --color-accent-transparent: rgba(34, 197, 94, 0.14);
 
   /* Fondos */
-  --color-bg-page: #0b1120; /* Fondo de página azul muy oscuro */
-  --color-bg-card: #1e293b; /* Fondo de tarjetas azul-gris */
-  --color-bg-hover: #334155; /* Hover azul-gris más claro */
-  --color-bg-hover-primary: #1c4532; /* Hover verde oscuro */
-  --color-bg-navbar: rgba(11, 17, 32, 0.85); /* Fondo de navbar oscuro */
-  --color-bg-navbar-solid: #1e293b; /* Fondo de navbar oscuro en móvil/scroll */
+  --color-bg-page: #0b1120;
+  --color-bg-card: #1e293b;
+  --color-bg-hover: #334155;
+  --color-bg-hover-primary: #1c4532;
+  --color-bg-navbar: rgba(11, 17, 32, 0.85);
+  --color-bg-navbar-solid: #1e293b;
 
   /* Texto */
-  --color-text-primary: #e2e8f0; /* Texto principal claro */
+  --color-text-primary: #e2e8f0;
   --color-text-secondary: #94a3b8;
   --color-text-light: #64748b;
-  --color-text-inverted: #0f172a; /* Texto sobre fondos claros */
+  --color-text-inverted: #0f172a;
   --color-text-danger: #fecaca;
   --color-text-success: #bbf7d0;
-  --color-nav-fg: #e2e8f0; /* Color de texto de navbar claro */
-  --color-nav-fg-darker: #e2e8f0; /* Mismo color claro para consistencia */
+  --color-nav-fg: #e2e8f0;
+  --color-nav-fg-darker: #e2e8f0;
 
-  /* Bordes */
-  --color-border: #334155; /* Bordes más oscuros */
-  
-  /* Misceláneos */
-  --color-success-bg: #1c4532;
-  --color-danger-bg: #5f1d1d;
+  /* Bordes y Sombras */
+  --color-border: #334155;
   --color-shadow: rgba(0, 0, 0, 0.2);
   
-  color-scheme: dark; /* Le dice al navegador que use scrollbars oscuros, etc. */
+  /* Fondos de Insignias */
+  --color-success-bg: #1c4532;
+  --color-danger-bg: #5f1d1d;
+  
+  color-scheme: dark;
 }
-/* --- FIN DE NUEVAS VARIABLES DE TEMA --- */
+/* --- FIN DE VARIABLES DE TEMA --- */
 
 
 body {
-  /* Modificado para usar variables */
-  color-scheme: light; /* Esto será sobreescrito por .dark-theme si está presente */
+  color-scheme: light;
   background-color: var(--color-bg-page);
   color: var(--color-text-primary);
   font: var(--mat-sys-body-medium);
   margin: 0;
-}
-html, body { height: 100%; }
-body {
-  margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
-  /* --- Tu fondo degradado original (solo para modo claro) --- */
-  background: linear-gradient(180deg,
+
+  background-image: linear-gradient(180deg,
     rgba(200, 16, 46, 0.04) 0%,
     rgba(255, 215, 0, 0.04) 33%,
     rgba(0, 122, 51, 0.04) 66%,
@@ -110,15 +112,15 @@ body {
   background-attachment: fixed;
   min-height: 100vh;
 }
+html, body { height: 100%; }
 
-/* --- NUEVO: Fondo degradado para modo oscuro --- */
 body.dark-theme {
-  background: linear-gradient(180deg,
-    rgba(22, 163, 74, 0.05) 0%,
+  background-image: linear-gradient(180deg,
+    rgba(22, 163, 74, 0.08) 0%,
     rgba(34, 197, 94, 0.05) 50%,
-    rgba(11, 17, 32, 1) 100%
+    #0b1120 100%
   );
-  background-attachment: fixed;
+  background-color: var(--color-bg-page);
 }
 
 
@@ -133,10 +135,14 @@ body.dark-theme {
   color: inherit;
 }
 
-/* --- Tus estilos globales existentes --- */
+/* --- (El resto de tus estilos globales se mantienen) --- */
 * {
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
   transition-duration: 0.2s;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*:where(html, body, input, textarea, select) {
+  transition: none;
 }
 /* ... (el resto de tus estilos globales) ... */
