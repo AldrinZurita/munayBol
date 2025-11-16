@@ -8,13 +8,8 @@
         Hoteles en Bolivia
       </h1>
 
-      <button
-        *ngIf="isSuperAdmin"
-        class="btn btn-add icon-only"
-        (click)="openAddHotelModal()"
-        title="Agregar Hotel"
-        aria-label="Agregar Hotel"
-      >
+      <button *ngIf="isSuperAdmin" class="btn btn-add icon-only" (click)="openAddHotelModal()" title="Agregar Hotel"
+        aria-label="Agregar Hotel">
         <i-bs name="plus-square-fill" width="22" height="22" class="icon-center"></i-bs>
       </button>
     </header>
@@ -25,25 +20,13 @@
         <div class="filtro filtro-busqueda">
           <label for="busqueda" class="form-label">Buscar (nombre o ubicación)</label>
           <div class="search-wrapper">
-            <i-bs name="search" width="18" height="18" class="search-icon icon-center icon-secondary" aria-hidden="true"></i-bs>
-            <input
-              id="busqueda"
-              type="search"
-              class="form-input"
-              placeholder="Ej.: Marriott, Centro…"
-              [(ngModel)]="searchTerm"
-              (ngModelChange)="aplicarFiltros()"
-              aria-label="Buscar hoteles"
-            />
-            <button
-              type="button"
-              class="btn btn-secondary-soft icon-only clear-btn"
-              *ngIf="searchTerm"
-              (click)="searchTerm=''; aplicarFiltros()"
-              title="Limpiar búsqueda"
-              aria-label="Limpiar búsqueda"
-            >
-              <i-bs name="x-circle" width="18" height="18" class="icon-center"></i-bs>
+            <i-bs name="search" width="18" height="18" class="search-icon icon-center icon-secondary"
+              aria-hidden="true"></i-bs>
+            <input id="busqueda" type="search" class="form-input" placeholder="Ej.: Marriott, Centro…"
+              [(ngModel)]="searchTerm" (ngModelChange)="aplicarFiltros()" aria-label="Buscar hoteles" />
+            <button type="button" class="btn btn-secondary-soft icon-only clear-btn" *ngIf="searchTerm"
+              (click)="searchTerm=''; aplicarFiltros()" title="Limpiar búsqueda" aria-label="Limpiar búsqueda">
+              <i-bs name="funnel" width="18" height="18" class="icon-center"></i-bs>
             </button>
           </div>
         </div>
@@ -51,44 +34,38 @@
         <div class="filtro filtro-depto">
           <label for="ciudad" class="form-label">Departamento</label>
           <div class="select-wrapper">
-            <select
-              id="ciudad"
-              class="form-select"
-              [(ngModel)]="ciudadSeleccionada"
-              (change)="aplicarFiltros()"
-              aria-label="Filtrar por departamento"
-            >
+            <select id="ciudad" class="form-select" [(ngModel)]="ciudadSeleccionada" (change)="aplicarFiltros()"
+              aria-label="Filtrar por departamento">
               <option value="">Todos los departamentos</option>
               <option *ngFor="let ciudad of ciudades" [value]="ciudad">
                 {{ ciudad }}
               </option>
             </select>
-            <i-bs class="chevron-icon icon-center icon-secondary" name="chevron-down" width="16" height="16" aria-hidden="true"></i-bs>
+            <i-bs class="chevron-icon icon-center icon-secondary" name="chevron-down" width="16" height="16"
+              aria-hidden="true"></i-bs>
           </div>
         </div>
 
         <div class="filtro filtro-calif">
           <label for="calificacion" class="form-label">Calificación</label>
           <div class="select-wrapper">
-            <select
-              id="calificacion"
-              class="form-select"
-              [(ngModel)]="calificacionSeleccionada"
-              (change)="aplicarFiltros()"
-              aria-label="Filtrar por calificación"
-            >
+            <select id="calificacion" class="form-select" [(ngModel)]="calificacionSeleccionada"
+              (change)="aplicarFiltros()" aria-label="Filtrar por calificación">
               <option value="">Todas</option>
               <option *ngFor="let cal of [10,9,8,7,6,5,4,3,2,1,0]" [value]="cal">{{ cal }}</option>
             </select>
-            <i-bs class="chevron-icon icon-center icon-secondary" name="chevron-down" width="16" height="16" aria-hidden="true"></i-bs>
+            <i-bs class="chevron-icon icon-center icon-secondary" name="chevron-down" width="16" height="16"
+              aria-hidden="true"></i-bs>
           </div>
         </div>
 
         <div class="acciones">
-          <button class="btn btn-accent icon-only" (click)="aplicarFiltros()" title="Aplicar filtros" aria-label="Aplicar filtros">
+          <button class="btn btn-accent icon-only" (click)="aplicarFiltros()" title="Aplicar filtros"
+            aria-label="Aplicar filtros">
             <i-bs name="funnel" width="18" height="18" class="icon-center"></i-bs>
           </button>
-          <button class="btn btn-secondary-soft icon-only" (click)="clearFilters()" title="Limpiar filtros" aria-label="Limpiar filtros">
+          <button class="btn btn-secondary-soft icon-only" (click)="clearFilters()" title="Limpiar filtros"
+            aria-label="Limpiar filtros">
             <i-bs name="x-circle" width="18" height="18" class="icon-center"></i-bs>
           </button>
         </div>
@@ -114,38 +91,34 @@
           <h3 class="hotel-nombre">{{ hotel.nombre }}</h3>
 
           <div class="img-frame" *ngIf="hotel.url_imagen_hotel">
-            <img
-              [src]="hotel.url_imagen_hotel"
-              alt="Imagen de {{ hotel.nombre }}"
-              class="hotel-imagen"
-              (error)="hotel.url_imagen_hotel = 'assets/no-image.svg'"
-            />
+            <img [src]="hotel.url_imagen_hotel" alt="Imagen de {{ hotel.nombre }}" class="hotel-imagen"
+              (error)="hotel.url_imagen_hotel = 'assets/no-image.svg'" />
           </div>
-
-          <ul class="facts">
-            <li class="fact">
+          <br>
+          <div class="facts" style="text-decoration: none;">
+            <span class="fact">
               <i-bs name="geo-alt" width="16" height="16" class="icon-center"></i-bs>
-              <span class="fact-text">{{ hotel.departamento || '—' }}</span>
-            </li>
-            <li class="fact">
+              <span class="fact-text"> {{ hotel.departamento || '—' }}</span>
+            </span>
+            <br>
+            <span class="fact">
               <i-bs name="building" width="16" height="16" class="icon-center"></i-bs>
-              <span class="fact-text">Hotel <span class="estado-pill" [class.inactivo]="hotel.estado===false">{{ hotel.estado === false ? 'Inactivo' : 'Activo' }}</span></span>
-            </li>
-          </ul>
-
+              <span class="fact-text"> Hotel <span class="estado-pill" [class.inactivo]="hotel.estado===false">{{
+                  hotel.estado === false ? 'Inactivo' : 'Activo' }}</span></span>
+            </span>
+          </div>
+          <br>
           <div class="rating-row" *ngIf="hotel.calificacion !== undefined && hotel.calificacion !== null">
             <span class="stars">
               <ng-container *ngFor="let s of getStarIcons(hotel.calificacion)">
-                <i-bs
-                  [name]="s === 'full' ? 'star-fill' : (s === 'half' ? 'star-half' : 'star')"
-                  width="16" height="16" class="icon-center"
-                ></i-bs>
+                <i-bs [name]="s === 'full' ? 'star-fill' : (s === 'half' ? 'star-half' : 'star')" width="16" height="16"
+                  class="icon-center"></i-bs>
               </ng-container>
             </span>
             <span class="rating-text">{{ formatFiveScale(hotel.calificacion) }}</span>
           </div>
 
-          <p class="descripcion" *ngIf="hotel.ubicacion">{{ hotel.ubicacion }}</p>
+          <p class="descripcion" style="margin-left: 2rem;" *ngIf="hotel.ubicacion">{{ hotel.ubicacion }}</p>
 
           <div class="fecha-admin" *ngIf="isSuperAdmin && hotel.fecha_creacion">
             <span class="label">Fecha de creación:</span> {{ hotel.fecha_creacion | date:'longDate' }}
@@ -153,15 +126,18 @@
         </div>
 
         <div class="card-actions-centered">
-          <button class="btn btn-ghost icon-only" (click)="onVerDetalles(hotel.id_hotel)" title="Ver Detalles" aria-label="Ver Detalles">
+          <button class="btn btn-ghost icon-only hotel-manage" (click)="onVerDetalles(hotel.id_hotel)"
+            title="Ver Detalles" aria-label="Ver Detalles">
             <i-bs name="eye" width="18" height="18" class="icon-center"></i-bs>
           </button>
 
           <ng-container *ngIf="isSuperAdmin">
-            <button class="icon-btn btn-edit" (click)="openEditHotelModal(hotel)" title="Editar" aria-label="Editar">
+            <button class="icon-btn btn-edit hotel-manage" (click)="openEditHotelModal(hotel)" title="Editar"
+              aria-label="Editar">
               <i-bs name="pencil" width="18" height="18" class="icon-center"></i-bs>
             </button>
-            <button class="icon-btn btn-delete" (click)="onEliminarHotel(hotel)" title="Eliminar" aria-label="Eliminar">
+            <button class="icon-btn btn-delete hotel-manage" (click)="onEliminarHotel(hotel)" title="Eliminar"
+              aria-label="Eliminar">
               <i-bs name="trash" width="18" height="18" class="icon-center"></i-bs>
             </button>
           </ng-container>
@@ -171,14 +147,8 @@
   </div>
 
   <div class="modal-backdrop" *ngIf="showModal" (click)="closeHotelModal()" aria-hidden="true"></div>
-  <div
-    class="modal-root"
-    *ngIf="showModal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="modalTitleHotel"
-    (click)="closeHotelModal()"
-  >
+  <div class="modal-root" *ngIf="showModal" role="dialog" aria-modal="true" aria-labelledby="modalTitleHotel"
+    (click)="closeHotelModal()">
     <div class="modal-ornaments" aria-hidden="true">
       <span class="orbit orbit-1"></span>
       <span class="orbit orbit-2"></span>
@@ -186,7 +156,8 @@
       <span class="glow glow-2"></span>
     </div>
 
-    <div class="modal-card animate-in" (click)="$event.stopPropagation()" [attr.aria-busy]="savingModal ? 'true' : 'false'">
+    <div class="modal-card animate-in" (click)="$event.stopPropagation()"
+      [attr.aria-busy]="savingModal ? 'true' : 'false'">
       <header class="modal-header">
         <h3 id="modalTitleHotel">
           {{ isEditMode ? 'Editar Hotel' : 'Agregar Nuevo Hotel' }}
@@ -198,27 +169,32 @@
 
       <form #hotelForm="ngForm" (ngSubmit)="isEditMode ? saveEditHotel(hotelForm) : saveNewHotel(hotelForm)" novalidate>
         <div class="modal-body" aria-describedby="modalScrollHelpHotel">
-          <div id="modalScrollHelpHotel" class="sr-only">Desplázate dentro de este área para ver todo el contenido del formulario.</div>
+          <div id="modalScrollHelpHotel" class="sr-only">Desplázate dentro de este área para ver todo el contenido del
+            formulario.</div>
 
           <div class="form-grid">
             <div class="field">
               <label class="form-label" for="h-nombre">Nombre *</label>
-              <input id="h-nombre" name="nombre" type="text" class="form-input" [(ngModel)]="modalHotelModel.nombre" required />
+              <input id="h-nombre" name="nombre" type="text" class="form-input" [(ngModel)]="modalHotelModel.nombre"
+                required />
             </div>
 
             <div class="field">
               <label class="form-label" for="h-departamento">Departamento *</label>
-              <input id="h-departamento" name="departamento" type="text" class="form-input" [(ngModel)]="modalHotelModel.departamento" required />
+              <input id="h-departamento" name="departamento" type="text" class="form-input"
+                [(ngModel)]="modalHotelModel.departamento" required />
             </div>
 
             <div class="field">
               <label class="form-label" for="h-ubicacion">Ubicación *</label>
-              <input id="h-ubicacion" name="ubicacion" type="text" class="form-input" [(ngModel)]="modalHotelModel.ubicacion" required />
+              <input id="h-ubicacion" name="ubicacion" type="text" class="form-input"
+                [(ngModel)]="modalHotelModel.ubicacion" required />
             </div>
 
             <div class="field">
               <label class="form-label" for="h-calificacion">Calificación (0-10)</label>
-              <input id="h-calificacion" name="calificacion" type="number" min="0" max="10" step="0.1" class="form-input" [(ngModel)]="modalHotelModel.calificacion" />
+              <input id="h-calificacion" name="calificacion" type="number" min="0" max="10" step="0.1"
+                class="form-input" [(ngModel)]="modalHotelModel.calificacion" />
             </div>
 
             <div class="field">
@@ -231,17 +207,15 @@
 
             <div class="field span-2">
               <label class="form-label" for="h-url">URL de imagen</label>
-              <input id="h-url" name="url_imagen_hotel" type="text" class="form-input" [(ngModel)]="modalHotelModel.url_imagen_hotel" />
+              <input id="h-url" name="url_imagen_hotel" type="text" class="form-input"
+                [(ngModel)]="modalHotelModel.url_imagen_hotel" />
             </div>
 
             <div class="field span-2">
               <label class="form-label">Previsualización</label>
               <div class="img-preview-wrapper">
-                <img
-                  [src]="modalHotelModel.url_imagen_hotel || 'assets/no-image.svg'"
-                  alt="Previsualización"
-                  (error)="onModalImageError($event)"
-                />
+                <img [src]="modalHotelModel.url_imagen_hotel || 'assets/no-image.svg'" alt="Previsualización"
+                  (error)="onModalImageError($event)" />
               </div>
             </div>
           </div>
