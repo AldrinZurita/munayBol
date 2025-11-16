@@ -1,71 +1,25 @@
-/* --- IMPORTANTE: Añadimos @use 'sass:color' --- */
 @use 'sass:color';
 
+/* Mantén el host simple y hereda el tema global */
 :host {
   display: block;
 
-  /* --- Variables de Modo Claro (Tu diseño original) --- */
-  --color-primary: #0F6BFF;
-  --color-accent:  #00B894;
-  --color-danger:  #E74C3C;
-  --color-secondary: #6C757D;
-
-  --bolivia-red:    #D52B1E;
-  --bolivia-yellow: #FFD700;
-  --bolivia-green:  #007A3D;
-
-  /* --- FIX: Colores transparentes definidos aquí --- */
+  /* Solo variables auxiliares propias (no pisamos --color-primary / texto global) */
   --bolivia-red-t:    rgba(213, 43, 30, 0.10);
   --bolivia-yellow-t: rgba(255, 215, 0, 0.10);
   --bolivia-green-t:  rgba(0, 122, 61, 0.10);
 
-  /* Usamos las variables globales de :root como base */
-  --color-bg:    var(--color-bg-page);
-  --color-card:  var(--color-bg-card);
-  --color-border: var(--color-border);
-  --color-text:  var(--color-text-primary);
-  --color-muted: var(--color-text-secondary);
-
-  /* Variables de layout (se mantienen) */
   --radius: 12px;
   --shadow:    0 4px 14px var(--color-shadow);
-  --shadow-lg: 0 10px 28px color.adjust(var(--color-shadow), $alpha: -0.86);
-  --shadow-modal: 0 62px 110px color.adjust(var(--color-shadow), $alpha: -0.5);
+  --shadow-lg: 0 10px 28px color.adjust(#000, $alpha: -0.9);
+  --shadow-modal: 0 62px 110px color.adjust(#000, $alpha: -0.5);
   --transition: all 0.25s ease;
-  
-  /* Variable transparente para el focus ring */
-  --ring-transparent: rgba(15,107,255,0.18);
+
+  /* Ring consistente con el global */
+  --ring-transparent: var(--color-brand-transparent);
 }
 
-/* --- NUEVO: Redefinición de variables para Modo Oscuro --- */
-body.dark-theme :host {
-  --color-primary: #3b82f6; /* Azul más brillante */
-  --color-accent:  #14b8a6; /* Verde azulado más brillante */
-  --color-danger:  #f87171; /* Rojo más claro */
-  --color-secondary: #94a3b8;
-
-  /* Mantenemos los colores de la bandera, pero más brillantes */
-  --bolivia-red:    #ef4444;
-  --bolivia-yellow: #facc15;
-  --bolivia-green:  #22c55e;
-  
-  /* Colores transparentes para modo oscuro */
-  --bolivia-red-t:    rgba(239, 68, 68, 0.1);
-  --bolivia-yellow-t: rgba(234, 179, 8, 0.1);
-  --bolivia-green-t:  rgba(34, 197, 94, 0.1);
-
-  /* El resto de variables globales se heredan automáticamente */
-  --color-text:  var(--color-text-primary);
-  --color-muted: var(--color-text-secondary);
-  --color-bg:    var(--color-bg-page);
-  --color-card:  var(--color-bg-card);
-  --color-border: var(--color-border);
-  
-  --ring-transparent: rgba(59, 130, 246, 0.25);
-}
-/* --- Fin de la configuración del tema --- */
-
-
+/* Accesibilidad */
 .sr-only {
   position: absolute !important;
   width: 1px !important;
@@ -78,14 +32,14 @@ body.dark-theme :host {
   border: 0 !important;
 }
 
+/* Fondo con diagonales, igual a Lugares y responsivo al dark mode global */
 .hoteles-page {
   position: relative; z-index: 0;
-  /* --- FIX: Usando las nuevas variables transparentes --- */
   background:
     radial-gradient(1200px 520px at 10% -10%, var(--bolivia-red-t) 0%, transparent 70%),
     radial-gradient(1200px 520px at 90% 10%,  var(--bolivia-green-t) 0%, transparent 70%),
     radial-gradient(1000px 520px at 50% -12%, var(--bolivia-yellow-t) 0%, transparent 70%),
-    var(--color-bg);
+    var(--color-bg-page);
 }
 .hoteles-page::before {
   content: ""; position: absolute; inset: 0; pointer-events: none; z-index: -1; opacity: .5;
@@ -94,20 +48,19 @@ body.dark-theme :host {
     repeating-linear-gradient(45deg,  rgba(2,6,23,0.025) 0 1px, transparent 1px 20px);
 }
 body.dark-theme .hoteles-page::before {
-  /* Fondo de líneas más claro para el modo oscuro */
   background:
     repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 16px),
     repeating-linear-gradient(45deg,  rgba(255,255,255,0.025) 0 1px, transparent 1px 20px);
 }
 
-
+/* Iconos (usan el verde global) */
 .icon-center { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; line-height: 1; transition: transform .15s ease, color .2s ease; }
 i-bs { display: inline-flex; align-items: center; justify-content: center; }
 
 i-bs[name="plus-square-fill"] { color: var(--color-accent); }
 i-bs[name="funnel"]           { color: var(--color-accent); }
-i-bs[name="x-circle"]         { color: var(--color-secondary); }
-i-bs[name="chevron-down"]     { color: var(--color-secondary); }
+i-bs[name="x-circle"]         { color: var(--color-text-secondary); }
+i-bs[name="chevron-down"]     { color: var(--color-text-secondary); }
 i-bs[name="geo-alt"]          { color: var(--color-primary); }
 i-bs[name="eye"]              { color: var(--color-accent); }
 i-bs[name="pencil"]           { color: var(--color-primary); }
@@ -119,6 +72,7 @@ i-bs[name="check2-circle"]    { color: var(--color-primary); }
 i-bs[name="search"]           { color: var(--color-primary); }
 i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
 
+/* Layout */
 .hoteles-container { max-width: 1280px; margin: 0 auto; padding: 24px; }
 .header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .title {
@@ -133,20 +87,18 @@ body.dark-theme .title-icon {
   box-shadow: 0 10px 24px var(--color-shadow), inset 0 0 0 1px rgba(255,255,255,0.04);
 }
 
-/* --- Botones --- */
+/* Botones */
 .btn, .icon-btn { transition: var(--transition); }
 .btn-add.icon-only,
 .btn.icon-only {
   display: inline-flex; align-items: center; justify-content: center;
   width: 44px; height: 44px; padding: 0; border-radius: 12px; border: 1px solid rgba(2,6,23,0.08);
-  background: linear-gradient(180deg, var(--color-card), var(--color-bg-hover));
+  background: linear-gradient(180deg, var(--color-bg-card), var(--color-bg-hover));
   box-shadow: 0 6px 16px var(--color-shadow);
   color: var(--color-text-secondary);
 }
 body.dark-theme .btn-add.icon-only,
-body.dark-theme .btn.icon-only {
-  border-color: rgba(255,255,255,0.08);
-}
+body.dark-theme .btn.icon-only { border-color: rgba(255,255,255,0.08); }
 
 .btn-ghost { 
   display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; 
@@ -159,26 +111,25 @@ body.dark-theme .btn.icon-only {
 .btn.icon-only:hover,
 .btn-ghost:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
 
-/* Variantes extra usadas por filtros/modal para paridad con Lugares */
 .btn-accent { background: var(--color-accent); color: #fff; border: none; border-radius: 10px; padding: 10px 14px; font-weight: 700; }
 .btn-secondary-soft { background: var(--color-bg-hover); color: var(--color-text-secondary); border: 1px solid var(--color-border); border-radius: 10px; padding: 10px; }
 .btn-primary { background: var(--color-primary); color: #fff; border: none; border-radius: 10px; padding: 10px 14px; font-weight: 700; }
 .btn-secondary { background: var(--color-text-secondary); color: #fff; border: none; border-radius: 10px; padding: 10px 14px; font-weight: 700; }
 .btn-danger { background: var(--color-danger); color: #fff; border: none; border-radius: 10px; padding: 10px 14px; font-weight: 700; }
 
-/* Icon buttons admin (gradiente en botón, icono solo color) */
+/* Admin icon buttons */
 .icon-btn { display: inline-flex; justify-content: center; align-items: center; width: 48px; height: 48px; border-radius: 14px; border: none; line-height: 0; }
 .icon-btn.btn-edit { background: linear-gradient(135deg, #2e7cff, #0f6bff); box-shadow: 0 10px 22px rgba(15,107,255,.22); }
 .icon-btn.btn-delete { background: linear-gradient(135deg, #ff6a6a, #e74c3c); box-shadow: 0 10px 22px rgba(231,76,60,.22); }
 .icon-btn:hover { transform: translateY(-2px); filter: saturate(1.05); }
 
-/* --- Tarjeta de Filtros --- */
-.card { background: var(--color-card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1rem; transition: var(--transition); overflow: visible; }
-.card-title { margin: 0 0 .75rem; font-size: 1rem; font-weight: 800; color: var(--color-text); }
+/* Tarjeta de Filtros */
+.card { background: var(--color-bg-card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1rem; transition: var(--transition); overflow: visible; }
+.card-title { margin: 0 0 .75rem; font-size: 1rem; font-weight: 800; color: var(--color-text-primary); }
 
 .filtros-card { 
   margin-bottom: 1.75rem; 
-  background: linear-gradient(180deg, var(--color-card) 0%, var(--color-bg) 100%); 
+  background: linear-gradient(180deg, var(--color-bg-card) 0%, var(--color-bg-page) 100%); 
   border: 1px solid var(--color-border); 
   border-radius: 14px; 
 }
@@ -186,25 +137,25 @@ body.dark-theme .btn.icon-only {
 @media (max-width: 900px) { .filtros-grid { grid-template-columns: 1fr 1fr; } .acciones { display: flex; gap: .75rem; } .resultados { justify-self: end; } }
 @media (max-width: 640px) { .filtros-grid { grid-template-columns: 1fr; } .resultados { justify-self: start; } }
 
-.filtro .form-label { display: block; margin-bottom: 0.45rem; font-weight: 800; color: var(--color-muted); letter-spacing: .2px; }
+.filtro .form-label { display: block; margin-bottom: 0.45rem; font-weight: 800; color: var(--color-text-secondary); letter-spacing: .2px; }
 
 .search-wrapper { position: relative; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: .55rem; }
 .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--color-primary); transition: var(--transition); }
-.search-wrapper .form-input { padding-left: 38px; border: 1px solid var(--color-border); border-radius: var(--radius); height: 42px; transition: var(--transition); background: var(--color-card); color: var(--color-text); }
+.search-wrapper .form-input { padding-left: 38px; border: 1px solid var(--color-border); border-radius: var(--radius); height: 42px; transition: var(--transition); background: var(--color-bg-card); color: var(--color-text-primary); }
 .search-wrapper .form-input:focus { border-color: var(--color-primary); box-shadow: 0 0 0 2px var(--ring-transparent); }
 .search-wrapper:focus-within .search-icon { transform: translateY(-50%) scale(1.08); }
 
-.select-wrapper, .filtro .select { position: relative; } /* Soportando ambos */
-.form-select, .filtro .select select { 
-  width: 100%; border: 1px solid var(--color-border); border-radius: var(--radius); padding: 0.6rem 2.2rem 0.6rem 0.8rem; font-size: 0.95rem; outline: none; background: var(--color-card); color: var(--color-text); appearance: none; transition: var(--transition); height: 42px; 
+.select-wrapper { position: relative; }
+.form-select { 
+  width: 100%; border: 1px solid var(--color-border); border-radius: var(--radius); padding: 0.6rem 2.2rem 0.6rem 0.8rem; font-size: 0.95rem; outline: none; background: var(--color-bg-card); color: var(--color-text-primary); appearance: none; transition: var(--transition); height: 42px; 
 }
-.form-select:focus, .filtro .select select:focus { border-color: var(--color-primary); box-shadow: 0 0 0 2px var(--ring-transparent); }
-.select-wrapper .chevron-icon, .filtro .select .chev { 
-  position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--color-muted); opacity: .95; transition: var(--transition); 
+.form-select:focus { border-color: var(--color-primary); box-shadow: 0 0 0 2px var(--ring-transparent); }
+.select-wrapper .chevron-icon { 
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--color-text-secondary); opacity: .95; transition: var(--transition); 
 }
-.select-wrapper:focus-within .chevron-icon, .filtro .select:focus-within .chev { transform: translateY(-50%) rotate(180deg); color: var(--color-primary); }
+.select-wrapper:focus-within .chevron-icon { transform: translateY(-50%) rotate(180deg); color: var(--color-primary); }
 
-/* --- FIX: Estilo para Resultados restaurado --- */
+/* Pill de resultados (misma idea que Lugares) */
 .resultados {
   align-self: center; justify-self: end; display: inline-flex; align-items: center; gap: .5rem;
   padding: .45rem .8rem; 
@@ -212,22 +163,22 @@ body.dark-theme .btn.icon-only {
     var(--bolivia-red-t) 0 33%, 
     var(--bolivia-yellow-t) 33% 66%, 
     var(--bolivia-green-t) 66% 100%
-  ), var(--color-card);
+  ), var(--color-bg-card);
   border: 1px solid var(--color-border); 
-  color: var(--color-muted); 
+  color: var(--color-text-secondary); 
   border-radius: 999px; font-weight: 800; font-size: .9rem; 
   box-shadow: 0 1px 2px var(--color-shadow);
 }
 
-
-.estado { text-align: center; margin: 1.25rem 0; color: var(--color-text); }
+/* Estado */
+.estado { text-align: center; margin: 1.25rem 0; color: var(--color-text-primary); }
 .loading { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
 .spinner { width: 18px; height: 18px; border: 2px solid var(--color-primary); border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .error { color: var(--color-danger); font-weight: 700; }
-.no-result { color: var(--color-muted); display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
+.no-result { color: var(--color-text-secondary); display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
 
-/* --- Lista de Tarjetas de Hotel --- */
+/* Lista */
 .lista {
   display: grid;
   grid-template-columns: repeat(3, minmax(280px, 1fr));
@@ -237,11 +188,12 @@ body.dark-theme .btn.icon-only {
   @media (max-width: 700px)  { grid-template-columns: 1fr; }
 }
 
+/* Cards */
 .card {
   display: grid;
   grid-template-columns: 1fr;
   gap: 12px;
-  background: var(--color-card);
+  background: var(--color-bg-card);
   border: 1px solid var(--color-border);
   border-radius: 14px;
   padding: 16px;
@@ -251,7 +203,7 @@ body.dark-theme .btn.icon-only {
 }
 .card::after {
   content: ""; position: absolute; inset: -2px; border-radius: 18px; padding: 2px;
-  background: conic-gradient(from 180deg at 50% 50%, var(--color-primary), var(--color-accent), var(--bolivia-yellow), var(--bolivia-red), var(--color-primary));
+  background: conic-gradient(from 180deg at 50% 50%, var(--color-primary), var(--color-accent), #fbbf24, #ef4444, var(--color-primary));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude;
   opacity: 0; transition: opacity .25s ease; pointer-events: none; filter: blur(0.6px);
@@ -260,7 +212,7 @@ body.dark-theme .btn.icon-only {
 .card:hover::after { opacity: 1; }
 
 .card-left {
-  .hotel-nombre { margin: 0 0 8px; font-size: 20px; color: var(--color-text); font-weight: 800; }
+  .hotel-nombre { margin: 0 0 8px; font-size: 20px; color: var(--color-text-primary); font-weight: 800; }
 
   .img-frame {
     position: relative; display: block; width: 100%;
@@ -276,34 +228,30 @@ body.dark-theme .btn.icon-only {
     background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
   }
   .img-frame:hover::after { animation-duration: 3s; }
-  .hotel-imagen { display: block; width: 100%; height: 180px; object-fit: cover; background: var(--color-bg); }
+  .hotel-imagen { display: block; width: 100%; height: 180px; object-fit: cover; background: var(--color-bg-page); }
 
-  .meta {
-    display: flex; flex-wrap: wrap; gap: 14px; padding: 0; margin: 10px 0; list-style: none; color: var(--color-muted);
-    .meta-item { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; }
-    .rating  { display: inline-flex; align-items: center; gap: 6px; }
-  }
+  .facts { list-style: none; padding: 0; margin: 10px 0; display: grid; gap: 8px; color: var(--color-text-secondary); }
+  .fact { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; }
+  .estado-pill { margin-left: 6px; padding: 2px 8px; border-radius: 999px; background: var(--color-bg-hover); color: var(--color-text-primary); font-weight: 700; }
+  .estado-pill.inactivo { background: var(--color-danger-bg, #fee2e2); color: var(--color-text-danger); }
 
-  .descripcion { margin: 0 0 10px; color: var(--color-muted); line-height: 1.45; }
-  .fecha-admin { color: var(--color-muted); }
-  .fecha-admin .label { color: var(--color-muted); margin-right: 6px; }
+  .rating-row { display: inline-flex; align-items: center; gap: 8px; }
+  .rating-text { color: var(--color-text-secondary); }
+  .descripcion { margin: 0 0 10px; color: var(--color-text-secondary); line-height: 1.45; }
+  .fecha-admin { color: var(--color-text-secondary); }
+  .fecha-admin .label { color: var(--color-text-secondary); margin-right: 6px; }
 }
 
-.card-right {
+.card-actions-centered {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 10px;
   flex-wrap: wrap;
 }
-.admin-actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
 
+/* Reveal */
 .reveal { opacity: 0; transform: translateY(10px) scale(.98); transition: opacity .5s ease, transform .5s ease; }
 .reveal.in-view { opacity: 1; transform: translateY(0) scale(1); }
 
@@ -312,15 +260,13 @@ body.dark-theme .btn.icon-only {
   100% { transform: translateX(120%)  skewX(12deg); }
 }
 
-/* --- Estilos de Modal (Unificados) --- */
+/* Modal */
 .modal-backdrop {
   position: fixed; inset: 0;
   background: rgba(2, 6, 23, 0.55);
   backdrop-filter: blur(3px); z-index: 90;
 }
-body.dark-theme .modal-backdrop {
-  background: rgba(11, 17, 32, 0.7);
-}
+body.dark-theme .modal-backdrop { background: rgba(11, 17, 32, 0.7); }
 
 .modal-root {
   position: fixed; inset: 0;
@@ -328,10 +274,9 @@ body.dark-theme .modal-backdrop {
   z-index: 100; padding: 16px; 
   overflow: auto;
 }
-
 .modal-card {
   position: relative;
-  background: var(--color-card);
+  background: var(--color-bg-card);
   border-radius: 14px; box-shadow: var(--shadow-modal);
   border: 1px solid var(--color-border);
   width: 100%; max-width: 640px; z-index: 1;
@@ -353,14 +298,14 @@ body.dark-theme .modal-backdrop {
   flex: 1 1 auto; min-height: 0;
   overflow: auto; padding: 1rem 1.5rem;
   display: grid; gap: 14px;
-  background: var(--color-card);
+  background: var(--color-bg-card);
 }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; }
 @media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
-.field, .form-group { display: flex; flex-direction: column; gap: 6px; }
-.form-label { font-size: 13px; font-weight: 800; color: var(--color-muted); }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-size: 13px; font-weight: 800; color: var(--color-text-secondary); }
 .form-input, .form-textarea, .form-select {
-  width: 100%; background: var(--color-card); color: var(--color-text);
+  width: 100%; background: var(--color-bg-card); color: var(--color-text-primary);
   border: 1px solid var(--color-border); 
   border-radius: 12px; padding: 12px 14px; font-size: 14px;
 }
@@ -369,13 +314,6 @@ body.dark-theme .modal-backdrop {
   box-shadow: 0 0 0 3px var(--ring-transparent);
 }
 .span-2 { grid-column: 1 / -1; }
-.checkbox-group {
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-  label { margin: 0; }
-  input { width: auto; }
-}
 
 :host ::ng-deep body.no-scroll { overflow: hidden; }
 button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible {
