@@ -22,6 +22,8 @@ import {
 import { AuthService } from '../../services/auth.service';
 import { Usuario } from '../../interfaces/usuario.interface';
 import { NotificationComponent } from '../components/notification/notification.component';
+import { ThemeService } from '../../services/theme.service'; // 1. Importar ThemeService
+import { Observable } from 'rxjs'; // 2. Importar Observable
 
 type PaletteItem = { label: string; icon: string; path: string };
 
@@ -61,6 +63,9 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
   paletteOpen = false;
   paletteQuery = '';
 
+  // 3. Añadir la propiedad theme$ para el modo oscuro
+  theme$: Observable<'light' | 'dark'>;
+
   private readonly basePaletteItems: PaletteItem[] = [
     { label: 'Inicio', icon: 'home', path: '/' },
     { label: 'Lugares Turísticos', icon: 'attractions', path: '/lugares-turisticos' },
@@ -95,9 +100,11 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
     private authService: AuthService,
     private router: Router,
     private el: ElementRef<HTMLElement>,
+    private themeService: ThemeService, // 4. Inyectar ThemeService
     @Inject(PLATFORM_ID) platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
+    this.theme$ = this.themeService.theme$; // 5. Asignar el observable
   }
 
   ngOnInit(): void {
@@ -303,6 +310,11 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
   logout(): void {
     this.authService.logout();
     void this.router.navigate(['/']);
+  }
+
+  // 7. Añadir la función para el botón de tema
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
   }
 
   @HostListener('document:click', ['$event'])

@@ -1,19 +1,21 @@
 @use 'sass:color';
 
-$ink-900: #0b1220;
-
+/* Ya no necesitamos variables de color locales, usamos las globales de :root */
 :root {
   --nav-height: 72px;
   --container-max: 1140px;
 }
 .navbar.shrink { --nav-height: 56px; }
 
+/* Actualizamos las variables locales de la navbar para que usen
+  nuestras nuevas variables globales del tema.
+*/
 .navbar {
-  --nav-fg: #1f6c2a;
-  --ink-bg: linear-gradient(90deg, #22c55e, #06b6d4, #60a5fa);
+  --nav-fg: var(--color-nav-fg); /* Usará --color-nav-fg de :root */
+  --ink-bg: linear-gradient(90deg, #22c55e, #06b6d4, #60a5fa); /* Se mantiene, ya que es un degradado */
 }
 .navbar.contrast-dark {
-  --nav-fg: #0b1220;
+  --nav-fg: var(--color-nav-fg-darker); /* Usará --color-nav-fg-darker de :root */
   --ink-bg: linear-gradient(90deg, #16a34a, #22c55e, #06b6d4);
 }
 
@@ -24,11 +26,12 @@ $ink-900: #0b1220;
   color: var(--nav-fg);
   font-size:15px;
   width: 100%;
-  background: rgba(31, 108, 42, 0.12) !important;
+  /* Usamos las nuevas variables de fondo de la navbar */
+  background: var(--color-bg-navbar) !important;
   border: 0 !important;
   box-shadow: none !important;
   transform: translateY(0);
-  transition: transform .28s ease, color .2s ease;
+  transition: transform .28s ease, color .2s ease, background-color .2s ease; /* Añadida transition para background-color */
   isolation: isolate;
 
   &::before,
@@ -36,16 +39,21 @@ $ink-900: #0b1220;
     content: none !important;
   }
 
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
+  -webkit-backdrop-filter: blur(10px); /* Restaurado para el efecto "glass" */
+  backdrop-filter: blur(10px);
 
   &.hidden { transform: translateY(-120%); }
-  &.scrolled { background: transparent !important; }
+  &.scrolled { 
+    /* El fondo sólido y la sombra aparecerán al hacer scroll */
+    background: var(--color-bg-navbar-solid) !important; 
+    box-shadow: 0 2px 8px var(--color-shadow) !important;
+  }
 }
 .navbar.contrast-dark {
-  background: transparent !important;
+  /* .scrolled se encarga del fondo ahora, esta regla puede no ser necesaria */
+  /* background: transparent !important; */
   border: 0 !important;
-  box-shadow: none !important;
+  /* box-shadow: none !important; */
 }
 
 .navbar__route {
@@ -54,7 +62,7 @@ $ink-900: #0b1220;
   background-size: 200% 100%;
   animation: route-indeterminate 1.2s linear infinite;
 }
-@keyframes route-indeterminate { 0% { background-position: -50% 0; } 100% { background-position: 150% 0; } }
+/* El modo oscuro necesitaría un gradiente oscuro, pero lo dejamos así por ahora */
 
 .navbar__progress {
   position: absolute; top: 0; left: 0; height: 2px; z-index: 3;
@@ -75,7 +83,7 @@ $ink-900: #0b1220;
 }
 
 .logo a {
-  color: #1f6c2a !important;
+  color: var(--color-primary) !important; /* CAMBIADO */
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -94,7 +102,7 @@ $ink-900: #0b1220;
   }
 }
 .logo__munay {
-  color: #1f6c2a !important;
+  color: var(--color-primary) !important; /* CAMBIADO */
   background: none !important;
   -webkit-background-clip: initial !important;
   background-clip: initial !important;
@@ -104,7 +112,7 @@ $ink-900: #0b1220;
 .hamburger {
   display: none; width: 44px; height: 44px; border: 0; background: transparent; border-radius: 10px;
   position: relative; cursor: pointer; justify-self: end;
-  &:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(255,255,255,.35); }
+  &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--color-primary); } /* CAMBIADO */
 }
 .hamburger__bar { position: absolute; left: 10px; right: 10px; height: 2px; border-radius: 1px; background: var(--nav-fg); transition: transform .25s ease, opacity .2s ease, top .25s ease; }
 .hamburger__bar:nth-child(1) { top: 15px; }
@@ -125,12 +133,12 @@ $ink-900: #0b1220;
     display: none;
     position: absolute; top: var(--nav-height); left: 0; right: 0;
     padding: 12px 18px 16px;
-    background: rgba(11,18,32,.90);
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-    border-bottom: 0;
+    background: var(--color-bg-navbar-solid); /* CAMBIADO */
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--color-border); /* CAMBIADO */
   }
-  .navbar.contrast-dark .nav-list { background: rgba(255,255,255,.95); }
+  .navbar.contrast-dark .nav-list { background: var(--color-bg-navbar-solid); } /* CAMBIADO */
   .nav-list.open { display: flex; flex-direction: column; gap: 12px; }
 }
 .nav-ink {
@@ -155,37 +163,63 @@ $ink-900: #0b1220;
 }
 
 .session-actions { display: inline-flex; align-items: center; gap: 10px; justify-self: end; }
-.icon-btn.search-btn {
+
+/* --- NUEVO: Estilo base para botones de icono --- */
+.icon-btn {
   width: 40px; height: 40px; border-radius: 10px; display: inline-grid; place-items: center;
-  background: rgba(255,255,255,.10); color: var(--nav-fg); border: 0; cursor: pointer;
-  transition: background-color .2s ease, transform .15s ease;
+  background: rgba(255,255,255,.10); /* Esto es de tu tema original, lo mantendremos */
+  color: var(--nav-fg); 
+  border: 0; 
+  cursor: pointer;
+  transition: background-color .2s ease, transform .15s ease, color .2s ease;
 }
-.icon-btn.search-btn:hover { background: rgba(255,255,255,.18); transform: translateY(-1px); }
+.icon-btn:hover { background: rgba(255,255,255,.18); transform: translateY(-1px); }
+
+/* Sobreescribimos el fondo para que funcione con el modo oscuro */
+.icon-btn.search-btn,
+.icon-btn.theme-toggle {
+  background: var(--color-bg-hover);
+  color: var(--color-text-secondary);
+}
+.icon-btn.search-btn:hover,
+.icon-btn.theme-toggle:hover {
+  background: var(--color-bg-hover-primary);
+  color: var(--color-primary);
+  transform: translateY(-1px);
+}
+/* --- Fin de estilos de botón de icono --- */
+
 
 .user-actions { display: inline-flex; align-items: center; gap: 12px; }
-.avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: rgba(255,255,255,.85); border: 1px solid rgba(0,0,0,.15); }
-.avatar.initials { display: inline-grid; place-items: center; color: #0f5132; font-weight: 900; background: #ffffff; }
+.avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: var(--color-bg-card); border: 1px solid var(--color-border); }
+.avatar.initials { display: inline-grid; place-items: center; color: var(--color-primary-dark); font-weight: 900; background: var(--color-bg-card); }
 
 .user-menu { position: relative; }
 .user-menu-trigger {
   display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 10px;
-  background: rgba(255,255,255,.10); border: 0; color: var(--nav-fg);
+  background: var(--color-bg-hover); border: 0; color: var(--nav-fg);
   transition: transform .15s ease, background-color .2s ease;
 }
-.user-menu-trigger:hover { background: rgba(255,255,255,.18); transform: translateY(-1px); }
+.user-menu-trigger:hover { background: var(--color-bg-hover-primary); color: var(--color-primary); transform: translateY(-1px); }
 .user-menu.open .chevron { transform: rotate(180deg); }
 .user-menu-content {
   position: absolute; right: 0; top: calc(100% + 8px); min-width: 220px;
-  background: #ffffff; color: #0b1220; border: 1px solid rgba(0,0,0,.18); border-radius: 12px;
-  box-shadow: 0 18px 40px rgba(0,0,0,.25); padding: 8px;
+  background: var(--color-bg-card); color: var(--color-text-primary); border: 1px solid var(--color-border); border-radius: 12px;
+  box-shadow: 0 18px 40px var(--color-shadow); padding: 8px;
   opacity: 0; visibility: hidden; transform: translateY(-6px);
   transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
 }
 .user-menu.open .user-menu-content { opacity: 1; visibility: visible; transform: translateY(0); }
 .user-menu-item { display: flex; align-items: center; gap: 10px; width: 100%; text-decoration: none; color: inherit; background: transparent; border: 0; border-radius: 10px; padding: 10px 12px; font-weight: 800; cursor: pointer; }
-.user-menu-item:hover { background: #f1f5f9; }
+.user-menu-item:hover { background: var(--color-bg-hover-primary); color: var(--color-primary); }
 .btn { display: inline-flex; align-items: center; gap: 8px; border-radius: 12px; padding: 12px 18px; font-weight: 900; cursor: pointer; border: 0; transition: transform .08s ease, filter .2s ease, box-shadow .2s ease; }
-.cta-login { position: relative; color: #ffffff; background: #1f6c2a; box-shadow: 0 10px 24px rgba(0,0,0,.18), 0 0 0 1px rgba(16,185,129,.20) inset; overflow: hidden; }
+.cta-login { 
+  position: relative; 
+  color: var(--color-text-inverted); 
+  background: var(--color-primary); 
+  box-shadow: 0 10px 24px var(--color-shadow), 0 0 0 1px rgba(16,185,129,.20) inset; 
+  overflow: hidden; 
+}
 .cta-login:hover { filter: brightness(1.03); box-shadow: 0 12px 28px rgba(0,0,0,.22), 0 0 0 1px rgba(16,185,129,.28) inset; }
 .cta-login:active { transform: translateY(1px); }
 .cta-login:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(16,185,129,.35), 0 0 0 1px rgba(16,185,129,.45) inset; }
@@ -193,11 +227,27 @@ $ink-900: #0b1220;
 .palette__panel { width: min(720px, 92vw); background: #0b1220; color: #e5e7eb; border: 1px solid rgba(255,255,255,.08); border-radius: 14px; box-shadow: 0 24px 64px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.04) inset; }
 .palette__header { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 12px; border-bottom: 1px solid rgba(255,255,255,.08); }
 .palette__input { width: 100%; background: #0f172a; color: #e2e8f0; border: 1px solid rgba(255,255,255,.10); border-radius: 10px; padding: 10px 12px; outline: none; }
+/* Estilos del modo oscuro para el palette (aún no usan variables, podrías refactorizarlo) */
+body.dark-theme .palette__panel {
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+  box-shadow: 0 24px 64px var(--color-shadow);
+}
+body.dark-theme .palette__header {
+  border-bottom-color: var(--color-border);
+}
+body.dark-theme .palette__input {
+  background: var(--color-bg-page);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
 
 .ani-stagger { opacity: 0; transform: translateY(-6px); animation: item-enter .36s ease forwards; }
 .navbar.mounted .ani-stagger:nth-child(1) { animation-delay: .02s; }
 .navbar.mounted .ani-stagger:nth-child(2) { animation-delay: .06s; }
-.navbar.mounted .ani-stagger:nth-child(3) { animation-delay: .10s; }a
+.navbar.mounted .ani-stagger:nth-child(3) { animation-delay: .10s; }
 .navbar.mounted .ani-stagger:nth-child(4) { animation-delay: .14s; }
 .navbar.mounted .ani-stagger:nth-child(5) { animation-delay: .18s; }
 .navbar.mounted .ani-stagger:nth-child(6) { animation-delay: .22s; }
