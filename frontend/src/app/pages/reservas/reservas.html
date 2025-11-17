@@ -23,9 +23,10 @@
     </header>
 
     <div class="reserva-main">
-      <section class="card pago-card">
-        <h3 class="card-title">
-          <i-bs name="credit-card" width="18" height="18" class="icon accent"></i-bs>
+
+      <section class="pago-section">
+        <h3 class="section-title">
+          <i-bs name="credit-card" width="20" height="20" class="icon accent"></i-bs>
           Información de Pago
         </h3>
         <p class="muted pago-desc">Ingresa los datos de tu tarjeta de crédito o débito</p>
@@ -45,23 +46,25 @@
           <label class="field">
             <span class="label">Número de tarjeta</span>
             <div class="input-affix" [class.invalid]="!isCardNumberValid() && touched.tarjeta">
-              <i-bs name="credit-card-2-front" width="16" height="16" class="affix"></i-bs>
-              <input
-                type="text"
-                inputmode="numeric"
-                autocomplete="cc-number"
-                maxlength="19"
-                placeholder="1234 5678 9012 3456"
-                [(ngModel)]="tarjeta"
-                name="tarjeta"
-                required
-                (focus)="touched.tarjeta = true"
-                (input)="onTarjetaInput($event)"
-                [attr.aria-invalid]="!isCardNumberValid() && touched.tarjeta ? 'true' : 'false'"
-              />
-              <button class="clear-btn" type="button" *ngIf="tarjeta" (click)="clearCard()" aria-label="Limpiar número de tarjeta">
-                <i-bs name="x" width="16" height="16" class="icon"></i-bs>
-              </button>
+              <i-bs name="credit-card-2-front" width="18" height="18" class="affix"></i-bs>
+              <div class="input-inner-wrapper">
+                <input
+                  type="text"
+                  inputmode="numeric"
+                  autocomplete="cc-number"
+                  maxlength="19"
+                  placeholder="1234 5678 9012 3456"
+                  [(ngModel)]="tarjeta"
+                  name="tarjeta"
+                  required
+                  (focus)="touched.tarjeta = true"
+                  (input)="onTarjetaInput($event)"
+                  [attr.aria-invalid]="!isCardNumberValid() && touched.tarjeta ? 'true' : 'false'"
+                />
+                <button class="clear-btn" type="button" *ngIf="tarjeta" (click)="clearCard()" aria-label="Limpiar">
+                  <i-bs name="x" width="18" height="18" class="icon"></i-bs>
+                </button>
+              </div>
             </div>
             <small class="help" *ngIf="touched.tarjeta && !isCardNumberValid()">
               Verifica el número de la tarjeta.
@@ -71,38 +74,43 @@
           <label class="field">
             <span class="label">Nombre del titular</span>
             <div class="input-affix" [class.invalid]="!isNameValid() && touched.nombre">
-              <i-bs name="person-badge" width="16" height="16" class="affix"></i-bs>
-              <input
-                type="text"
-                autocomplete="cc-name"
-                placeholder="Nombre como aparece en la tarjeta"
-                [(ngModel)]="nombre"
-                name="nombre"
-                required
-                (focus)="touched.nombre = true"
-                [attr.aria-invalid]="!isNameValid() && touched.nombre ? 'true' : 'false'"
-              />
+              <i-bs name="person-badge" width="18" height="18" class="affix"></i-bs>
+              <div class="input-inner-wrapper">
+                <input
+                  type="text"
+                  autocomplete="cc-name"
+                  placeholder="Nombre como aparece en la tarjeta"
+                  [(ngModel)]="nombre"
+                  name="nombre"
+                  required
+                  (focus)="touched.nombre = true"
+                />
+              </div>
             </div>
+            <small class="help" *ngIf="touched.nombre && !isNameValid()">
+              Ingresa el nombre del titular.
+            </small>
           </label>
 
           <div class="row">
             <label class="field">
               <span class="label">Fecha de expiración</span>
               <div class="input-affix" [class.invalid]="!isExpiryValid() && touched.expiracion">
-                <i-bs name="calendar3" width="16" height="16" class="affix"></i-bs>
-                <input
-                  type="text"
-                  inputmode="numeric"
-                  autocomplete="cc-exp"
-                  maxlength="5"
-                  placeholder="MM/AA"
-                  [(ngModel)]="expiracion"
-                  name="expiracion"
-                  required
-                  (focus)="touched.expiracion = true"
-                  (input)="onExpiracionInput($event)"
-                  [attr.aria-invalid]="!isExpiryValid() && touched.expiracion ? 'true' : 'false'"
-                />
+                <i-bs name="calendar3" width="18" height="18" class="affix"></i-bs>
+                <div class="input-inner-wrapper">
+                  <input
+                    type="text"
+                    inputmode="numeric"
+                    autocomplete="cc-exp"
+                    maxlength="5"
+                    placeholder="MM/AA"
+                    [(ngModel)]="expiracion"
+                    name="expiracion"
+                    required
+                    (focus)="touched.expiracion = true"
+                    (input)="onExpiracionInput($event)"
+                  />
+                </div>
               </div>
               <small class="help" *ngIf="touched.expiracion && !isExpiryValid()">
                 Usa el formato MM/AA y una fecha futura.
@@ -112,27 +120,34 @@
             <label class="field">
               <span class="label">CVV</span>
               <div class="input-affix" [class.invalid]="!isCvvValid() && touched.cvv">
-                <i-bs name="shield-lock" width="16" height="16" class="affix"></i-bs>
-                <input
-                  [type]="showCvv ? 'text' : 'password'"
-                  inputmode="numeric"
-                  [maxlength]="cvvMaxLength"
-                  placeholder="{{ cvvPlaceholder }}"
-                  [(ngModel)]="cvv"
-                  name="cvv"
-                  required
-                  (focus)="touched.cvv = true"
-                />
-                <button class="clear-btn" type="button" (click)="showCvv = !showCvv" [attr.aria-pressed]="showCvv" [attr.aria-label]="showCvv ? 'Ocultar CVV' : 'Mostrar CVV'">
-                  <i-bs [name]="showCvv ? 'eye-slash' : 'eye'" width="16" height="16" class="icon"></i-bs>
-                </button>
+                <i-bs name="shield-lock" width="18" height="18" class="affix"></i-bs>
+                <div class="input-inner-wrapper">
+                  <input
+                    [type]="showCvv ? 'text' : 'password'"
+                    inputmode="numeric"
+                    [maxlength]="cvvMaxLength"
+                    placeholder="123"
+                    [(ngModel)]="cvv"
+                    name="cvv"
+                    required
+                    (focus)="touched.cvv = true"
+                  />
+                  <button class="clear-btn" type="button" (click)="showCvv = !showCvv">
+                    <i-bs [name]="showCvv ? 'eye-slash' : 'eye'" width="18" height="18" class="icon"></i-bs>
+                  </button>
+                </div>
               </div>
-              <small class="help">Código de seguridad ({{ cvvMaxLength }} dígitos)</small>
+              <small class="help" *ngIf="touched.cvv && !isCvvValid()">
+                Ingresa los {{ cvvMaxLength }} dígitos.
+              </small>
+              <small class="help" *ngIf="!cvv && !touched.cvv">
+                Código de seguridad ({{ cvvMaxLength }} dígitos)
+              </small>
             </label>
           </div>
 
           <div class="pago-seguro">
-            <i-bs name="shield-lock" width="16" height="16" class="icon"></i-bs>
+            <i-bs name="shield-lock" width="20" height="20" class="icon"></i-bs>
             <span>
               <b>Pago 100% seguro</b><br />
               Tus datos están protegidos con encriptación SSL
@@ -147,16 +162,15 @@
             [attr.aria-busy]="creating ? 'true' : 'false'"
           >
             <span class="btn-text">
-              <i-bs name="shield-lock" width="18" height="18" class="icon"></i-bs>
+              <i-bs name="lock-fill" width="18" height="18" class="icon"></i-bs>
               Confirmar Pago - {{ total }} BOB
             </span>
           </button>
 
           <p class="terms">
             Al confirmar aceptas nuestras
-            <a href="#" (click)="$event.preventDefault()" aria-label="Términos y condiciones">Condiciones</a>
-            y
-            <a href="#" (click)="$event.preventDefault()" aria-label="Política de privacidad">Política de Privacidad</a>.
+            <a href="#" (click)="$event.preventDefault()">Condiciones</a> y
+            <a href="#" (click)="$event.preventDefault()">Privacidad</a>.
           </p>
         </form>
       </section>
@@ -237,36 +251,30 @@
         </div>
 
         <ul class="beneficios">
-          <li><i-bs name="shield-check" width="16" height="16" class="icon good"></i-bs> Cancelación gratuita hasta 24h antes</li>
-          <li><i-bs name="lightning-charge" width="16" height="16" class="icon good"></i-bs> Confirmación inmediata</li>
+          <li><i-bs name="check-circle" width="16" height="16" class="icon good"></i-bs> Confirmación inmediata</li>
           <li><i-bs name="headset" width="16" height="16" class="icon good"></i-bs> Atención al cliente 24/7</li>
         </ul>
       </aside>
     </div>
 
     <div class="modal-backdrop" *ngIf="showSuccessModal">
-      <dialog class="modal-card success" open aria-labelledby="reservaConfirmadaTitulo">
+      <dialog class="modal-card success" open>
         <div class="icon-circle success">✔</div>
-        <h2 id="reservaConfirmadaTitulo">¡Reserva Confirmada!</h2>
-        <p>Tu reserva de habitación ha sido confirmada exitosamente. Recibirás un email con todos los detalles.</p>
-        <p class="reserva-id">Código de reserva: <strong>{{ successCodigo }}</strong></p>
-        <p class="reserva-total">Total pagado: <strong>{{ successTotal | number:'1.2-2' }} BOB</strong></p>
-        <button class="btn btn-primary" (click)="cerrarSuccess()">
-          Ver detalle de mi reserva
-          <i-bs name="arrow-right-short" width="20" height="20" class="icon"></i-bs>
-        </button>
+        <h2>¡Reserva Confirmada!</h2>
+        <p>Tu reserva ha sido confirmada exitosamente.</p>
+        <p class="reserva-id">Código: <strong>{{ successCodigo }}</strong></p>
+        <button class="btn btn-primary" (click)="cerrarSuccess()">Ver detalle</button>
       </dialog>
     </div>
 
     <div class="modal-backdrop" *ngIf="showConflictModal" (click)="cerrarConflict()">
-      <dialog class="modal-card conflict" open aria-labelledby="conflictoFechasTitulo">
+      <dialog class="modal-card conflict" open>
         <div class="icon-circle error">!</div>
-        <h2 id="conflictoFechasTitulo">Fechas Ocupadas</h2>
-        <p>Las fechas seleccionadas ({{ fecha_reserva }} a {{ fecha_caducidad }}) ya no están disponibles para esta habitación.</p>
+        <h2>Fechas Ocupadas</h2>
         <p>La próxima fecha disponible es el <strong>{{ conflictNextAvailable | date:'longDate' }}</strong>.</p>
         <div class="btn-group">
           <button class="btn btn-secondary" (click)="cerrarConflict()">Cancelar</button>
-          <button class="btn btn-primary" (click)="usarFechaSugerida()">Usar fecha sugerida</button>
+          <button class="btn btn-primary" (click)="usarFechaSugerida()">Usar sugerencia</button>
         </div>
       </dialog>
     </div>
@@ -274,7 +282,7 @@
     <div class="toast error" [class.show]="showErrorToast">
       <i-bs name="x-circle" width="18" height="18" class="icon"></i-bs>
       {{ errorMessage }}
-      <button class="close-btn" (click)="showErrorToast = false" aria-label="Cerrar">
+      <button class="close-btn" (click)="showErrorToast = false">
         <i-bs name="x" width="20" height="20" class="icon"></i-bs>
       </button>
     </div>
