@@ -27,7 +27,7 @@
   background-size: 180% 180%;
   animation: flag-flow 24s ease-in-out infinite alternate;
 
-  font-family: Oswald, Inter, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   text-transform: uppercase;
   letter-spacing: .14em;
   color: var(--text-ink);
@@ -135,6 +135,10 @@
   }
   .ff-brand { justify-self: center; }
   .ff-links { grid-column: 1; justify-self: center; gap: 14px; }
+}
+
+body {
+  font-family: 'Roboto', sans-serif !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
