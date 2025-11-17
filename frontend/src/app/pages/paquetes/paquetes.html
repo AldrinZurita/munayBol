@@ -286,12 +286,12 @@
           <div class="form-grid">
             <div class="field">
               <label class="form-label" for="p-nombre">Nombre *</label>
-              <input id="p-nombre" name="nombre" type="text" class="form-input" [(ngModel)]="modalPaqueteModel.nombre" required />
+              <input id="p-nombre" name="nombre" type="text" class="form-input edit-field" [(ngModel)]="modalPaqueteModel.nombre" required />
             </div>
 
             <div class="field">
               <label class="form-label" for="p-tipo">Tipo *</label>
-              <select id="p-tipo" name="tipo" class="form-select" [(ngModel)]="modalPaqueteModel.tipo" required>
+              <select id="p-tipo" name="tipo" class="form-select edit-field" [(ngModel)]="modalPaqueteModel.tipo" required>
                 <option value="" disabled>Selecciona un tipo</option>
                 <option *ngFor="let t of tipos" [value]="t">{{ t | titlecase }}</option>
               </select>
@@ -299,12 +299,12 @@
 
             <div class="field">
               <label class="form-label" for="p-precio">Precio (BOB) *</label>
-              <input id="p-precio" name="precio" type="number" min="0" step="0.01" class="form-input" [(ngModel)]="modalPaqueteModel.precio" required />
+              <input id="p-precio" name="precio" type="number" min="0" step="0.01" class="form-input edit-field" [(ngModel)]="modalPaqueteModel.precio" required />
             </div>
 
             <div class="field">
               <label class="form-label" for="p-estado">Estado</label>
-              <select id="p-estado" name="estado" class="form-select" [(ngModel)]="modalPaqueteModel.estado">
+              <select id="p-estado" name="estado" class="form-select edit-field" [(ngModel)]="modalPaqueteModel.estado">
                 <option [ngValue]="true">Activo (Disponible)</option>
                 <option [ngValue]="false">Inactivo (No disponible)</option>
               </select>
@@ -312,11 +312,11 @@
 
             <div class="field">
               <label class="form-label" for="p-hotel">ID Hotel *</label>
-              <input id="p-hotel" name="id_hotel" type="number" min="1" class="form-input" [(ngModel)]="modalPaqueteModel.id_hotel" required />
+              <input id="p-hotel" name="id_hotel" type="number" min="1" class="form-input edit-field" [(ngModel)]="modalPaqueteModel.id_hotel" required />
             </div>
             <div class="field">
               <label class="form-label" for="p-lugar">ID Lugar Turístico *</label>
-              <input id="p-lugar" name="id_lugar" type="number" min="1" class="form-input" [(ngModel)]="modalPaqueteModel.id_lugar" required />
+              <input id="p-lugar" name="id_lugar" type="number" min="1" class="form-input edit-field" [(ngModel)]="modalPaqueteModel.id_lugar" required />
             </div>
           </div>
         </div>
