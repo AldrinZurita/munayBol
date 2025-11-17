@@ -556,42 +556,17 @@ body.dark-theme .title-icon {
     color: var(--color-text-primary);
     font-weight: 800;
   }
-
-  .img-frame {
-    position: relative;
-    display: block;
-    width: 100%;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid var(--color-border);
-    box-shadow: 0 10px 24px var(--color-shadow);
-  }
-
-  .img-frame::after {
-    content: "";
-    position: absolute;
-    inset: -20%;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.22) 50%, rgba(255, 255, 255, 0) 100%);
-    transform: translateX(-120%) skewX(12deg);
-    animation: imgShine 9s linear infinite;
-    mix-blend-mode: screen;
-    pointer-events: none;
-  }
+.img-frame {
+     position: relative; display: inline-block; max-width: 100%;
+     border-radius: 12px; overflow: hidden; border: 1px solid var(--color-border);
+     box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+   }
+   .img-frame img { display: block; max-width: 100%; height: auto; object-fit: contain; }
+   .img-frame::after { content: ""; position: absolute; inset: -20%; background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.28) 50%, rgba(255,255,255,0) 100%); transform: translateX(-120%) skewX(12deg); animation: imgShine 10s linear infinite; mix-blend-mode: screen; pointer-events: none; }
+   .img-frame:hover::after { animation-duration: 3.2s; }
 
   body.dark-theme & .img-frame::after {
     background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0) 100%);
-  }
-
-  .img-frame:hover::after {
-    animation-duration: 3s;
-  }
-
-  .hotel-imagen {
-    display: block;
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    background: var(--color-bg-page);
   }
 
   .facts {
@@ -795,7 +770,6 @@ body.dark-theme .modal-backdrop {
   color: var(--color-text-primary);
   border: 1px solid var(--color-border);
   border-radius: 12px;
-  padding: 12px 14px;
   font-size: 14px;
   transition: box-shadow .18s ease, border-color .18s ease, transform .08s ease;
 }
@@ -898,6 +872,9 @@ li {
   overflow-y: scroll;
 }
 
+img{
+  max-width: 100%;
+}
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: .01ms !important;
