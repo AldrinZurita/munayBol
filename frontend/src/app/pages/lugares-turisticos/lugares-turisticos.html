@@ -191,8 +191,10 @@
         #modalForm="ngForm"
         (ngSubmit)="isEditMode ? saveEdit(modalForm) : saveNewLugar(modalForm)"
         novalidate
+        class="editModal-form"
       >
         <div class="modal-body" aria-describedby="modalScrollHelp">
+          <br>
           <div id="modalScrollHelp" class="sr-only">Desplázate dentro de este área para ver todo el contenido del formulario.</div>
 
           <div class="form-grid">
