@@ -1,100 +1,309 @@
-@use 'sass:color';
+/* ===================================================
+   GESTIÓN DE RESERVAS (Refactorizado con Theme Global)
+   =================================================== */
+   @use 'sass:color';
 
-$primary-text: #0f172a;
-$secondary-text: #334155;
-$light-text: #64748b;
-$border: #e5e7eb;
-$bg: #f8fafc;
-$white: #ffffff;
-$primary: #16a34a;
-$accent: #06b6d4;
-$danger: #dc2626;
-
-:host { display: block; background: $bg; min-height: 100vh; }
-
-.admin-reservas-root { position: relative; isolation: isolate; }
-.bg { position: fixed; inset: -20% -10% auto -10%; height: 60vmin; opacity: .18; filter: blur(60px);
-  background:
-    radial-gradient(40% 40% at 30% 50%, color.scale($primary, $alpha: -50%) 0%, transparent 100%),
-    radial-gradient(36% 36% at 70% 50%, color.scale($accent, $alpha: -45%) 0%, transparent 100%);
-  animation: drift 30s ease-in-out infinite alternate;
-}
-@keyframes drift { from { transform: translateY(0) } to { transform: translateY(24px) } }
-
-.sparkles { pointer-events: none; position: fixed; inset: 0;
-  background:
-    radial-gradient(6px 6px at 10% 20%, rgba(255,255,255,.8), transparent 70%),
-    radial-gradient(6px 6px at 30% 60%, rgba(34,197,94,.8), transparent 70%),
-    radial-gradient(6px 6px at 70% 30%, rgba(6,182,212,.8), transparent 70%),
-    radial-gradient(6px 6px at 85% 75%, rgba(255,255,255,.8), transparent 70%);
-  opacity: 0; animation: spark 1.6s ease-in-out forwards;
-}
-@keyframes spark { 0% {opacity:0; transform:scale(.98)} 30% {opacity:1} 100% {opacity:0; transform:scale(1)} }
-
-.wrapper { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 28px 20px; }
-
-.toolbar {
-  background: $white; border: 1px solid $border; border-radius: 16px; padding: 16px 16px 8px;
-  box-shadow: 0 10px 24px rgba(0,0,0,.05); margin-bottom: 18px;
-  h1 { margin: 0 0 12px; font-size: 20px; color: $primary-text; display: flex; align-items: center; gap: 8px; }
-  .filters {
-    display: grid; gap: 10px; grid-template-columns: repeat(12, 1fr); align-items: end;
-    .field { grid-column: span 3; display: grid; gap: 6px; label { font-weight: 700; color: $secondary-text; font-size: 13px; }
-      input, select { border: 1px solid $border; border-radius: 10px; padding: 8px 10px; font-size: 14px; }
-    }
-    .actions { grid-column: span 6; display: flex; gap: 10px; justify-content: flex-end; }
+   /* :host usa ahora la variable global del tema para el fondo */
+   :host {
+     display: block;
+     background: var(--color-bg-page); /* <-- Cambio clave #1 */
+     min-height: 100vh;
+   }
+   
+   .admin-reservas-root {
+     position: relative;
+     isolation: isolate;
+   }
+   
+   .bg {
+    position: fixed;
+    inset: -20% -10% auto -10%;
+    height: 60vmin;
+    opacity: 0.18;
+    filter: blur(60px);
+    background:
+      radial-gradient(40% 40% at 30% 50%, var(--color-brand-transparent) 0%, transparent 100%),
+      radial-gradient(36% 36% at 70% 50%, var(--color-accent-transparent) 0%, transparent 100%);
+  
+    animation: drift 30s ease-in-out infinite alternate;
   }
-}
-
-.btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid $border; background: $white; color: $primary-text; padding: 8px 12px; border-radius: 10px; font-weight: 800; cursor: pointer;
-  transition: transform .08s ease, box-shadow .2s ease;
-  &:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(0,0,0,.06); }
-  &.alt { background: #f8fafb; }
-  &.primary { background: linear-gradient(135deg, $primary, #10b981); color: #fff; border-color: transparent; }
-  &.danger { color: #991b1b; border-color: #fecaca; background: #fff; }
-  &.success { color: #065f46; border-color: #bbf7d0; background: #f0fdf4; }
-  &.small { padding: 6px 10px; font-size: 13px; }
-}
-.spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #fecaca; border-top-color: #991b1b; animation: spin .7s linear infinite; }
-.spinner.green { border-color: #bbf7d0; border-top-color: #166534; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.content {
-  .estado { text-align: center; padding: 40px; color: $secondary-text;
-    &.error { color: $danger; }
-    &.vacio { color: $light-text; .material-symbols-outlined { font-size: 42px; color: $light-text; display: block; margin-bottom: 8px; } }
-  }
-
-  .grid { display: grid; gap: 14px; }
-
-  .card {
-    background: $white; border: 1px solid $border; border-radius: 14px; overflow: hidden;
-    box-shadow: 0 10px 24px rgba(0,0,0,.05);
-    transition: transform .12s ease, box-shadow .2s ease, border-color .2s, max-height .32s ease, opacity .24s ease, margin .32s ease, padding .32s ease, filter .24s ease;
-    &:hover { transform: translateY(-1px); box-shadow: 0 14px 28px rgba(0,0,0,.07); border-color: color.adjust($border, $lightness: -6%); }
-    &.cancel { opacity: .78; filter: grayscale(.08); }
-    max-height: 460px;
-    &.is-removing { opacity: 0; transform: translateY(-4px) scale(.98); margin: 0 !important; padding-top: 0; padding-bottom: 0; border-width: 0; max-height: 0; pointer-events: none; }
-  }
-
-  .card__header { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border-bottom: 1px solid #f1f5f9;
-    h3 { margin: 0; font-size: 16px; color: #1e293b; font-weight: 900; }
-  }
-  .badge { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 800;
-    &.activa { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-    &.cancelada { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-  }
-  .card__body { display: grid; gap: 8px; padding: 12px 14px;
-    .row { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: start; color: $secondary-text;
-      .material-symbols-outlined { font-size: 18px; color: $light-text; }
-      p { margin: 0; strong { color: $primary-text; } }
-    }
-  }
-  .card__footer { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 14px; border-top: 1px solid #f1f5f9;
-    .actions { display: inline-flex; gap: 8px; }
-  }
-}
-
-@media (max-width: 780px) {
-  .toolbar .filters { grid-template-columns: 1fr; .field, .actions { grid-column: 1 / -1; } .actions { justify-content: flex-start; } }
-}
+   @keyframes drift {
+     from { transform: translateY(0); }
+     to { transform: translateY(24px); }
+   }
+   
+   /* (Tu animación de chispas se queda igual) */
+   .sparkles {
+     pointer-events: none;
+     position: fixed;
+     inset: 0;
+     background:
+       radial-gradient(6px 6px at 10% 20%, rgba(255, 255, 255, 0.8), transparent 70%),
+       radial-gradient(6px 6px at 30% 60%, rgba(34, 197, 94, 0.8), transparent 70%),
+       radial-gradient(6px 6px at 70% 30%, rgba(6, 182, 212, 0.8), transparent 70%),
+       radial-gradient(6px 6px at 85% 75%, rgba(255, 255, 255, 0.8), transparent 70%);
+     opacity: 0;
+     animation: spark 1.6s ease-in-out forwards;
+   }
+   @keyframes spark {
+     0% { opacity: 0; transform: scale(0.98); }
+     30% { opacity: 1; }
+     100% { opacity: 0; transform: scale(1); }
+   }
+   
+   .wrapper {
+     position: relative;
+     z-index: 1;
+     max-width: 1100px;
+     margin: 0 auto;
+     padding: 28px 20px;
+   }
+   
+   /* La barra de filtros ahora usa las variables de la tarjeta */
+   .toolbar {
+     background: var(--color-bg-card); /* <-- Cambio clave #2 */
+     border: 1px solid var(--color-border);
+     border-radius: 16px;
+     padding: 16px 16px 8px;
+     box-shadow: 0 10px 24px var(--color-shadow);
+     margin-bottom: 18px;
+   
+     h1 {
+       margin: 0 0 12px;
+       font-size: 20px;
+       color: var(--color-text-primary); /* <-- Usa variable */
+       display: flex;
+       align-items: center;
+       gap: 8px;
+     }
+     .filters {
+       display: grid;
+       gap: 10px;
+       grid-template-columns: repeat(12, 1fr);
+       align-items: end;
+   
+       .field {
+         grid-column: span 3;
+         display: grid;
+         gap: 6px;
+         label {
+           font-weight: 700;
+           color: var(--color-text-secondary); /* <-- Usa variable */
+           font-size: 13px;
+         }
+         input,
+         select {
+           /* Los inputs se ven bien con el fondo de la página */
+           background: var(--color-bg-page);
+           color: var(--color-text-primary);
+           border: 1px solid var(--color-border);
+           border-radius: 10px;
+           padding: 8px 10px;
+           font-size: 14px;
+         }
+       }
+       .actions {
+         grid-column: span 6;
+         display: flex;
+         gap: 10px;
+         justify-content: flex-end;
+       }
+     }
+   }
+   
+   /* Botones actualizados para usar variables de tema */
+   .btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 6px;
+     border: 1px solid var(--color-border);
+     background: var(--color-bg-card);
+     color: var(--color-text-primary);
+     padding: 8px 12px;
+     border-radius: 10px;
+     font-weight: 800;
+     cursor: pointer;
+     transition: transform 0.08s ease, box-shadow 0.2s ease;
+   
+     &:hover {
+       transform: translateY(-1px);
+       box-shadow: 0 8px 18px var(--color-shadow);
+     }
+     &.alt {
+       background: var(--color-bg-hover); /* <-- Usa variable */
+     }
+     &.primary {
+       background: linear-gradient(135deg, var(--color-accent), var(--color-primary));
+       color: var(--color-text-inverted); /* <-- Usa variable */
+       border-color: transparent;
+     }
+     &.danger {
+       color: var(--color-text-danger);
+       border-color: var(--color-border);
+       background: var(--color-danger-bg); /* <-- Usa variable */
+     }
+     &.success {
+       color: var(--color-text-success);
+       border-color: var(--color-border);
+       background: var(--color-success-bg); /* <-- Usa variable */
+     }
+     &.small {
+       padding: 6px 10px;
+       font-size: 13px;
+     }
+   }
+   
+   /* Spinners actualizados */
+   .spinner {
+     width: 16px;
+     height: 16px;
+     border-radius: 50%;
+     border: 2px solid var(--color-danger-bg);
+     border-top-color: var(--color-text-danger);
+     animation: spin 0.7s linear infinite;
+   }
+   .spinner.green {
+     border-color: var(--color-success-bg);
+     border-top-color: var(--color-text-success);
+   }
+   @keyframes spin {
+     to { transform: rotate(360deg); }
+   }
+   
+   .content {
+     .estado {
+       text-align: center;
+       padding: 40px;
+       color: var(--color-text-secondary); /* <-- Usa variable */
+   
+       &.error {
+         color: var(--color-danger); /* <-- Usa variable */
+       }
+       &.vacio {
+         color: var(--color-text-light); /* <-- Usa variable */
+         .material-symbols-outlined {
+           font-size: 42px;
+           color: var(--color-text-light); /* <-- Usa variable */
+           display: block;
+           margin-bottom: 8px;
+         }
+       }
+     }
+   
+     .grid {
+       display: grid;
+       gap: 14px;
+     }
+   
+     /* Tarjetas de reserva */
+     .card {
+       background: var(--color-bg-card); /* <-- Cambio clave #3 */
+       border: 1px solid var(--color-border);
+       border-radius: 14px;
+       overflow: hidden;
+       box-shadow: 0 10px 24px var(--color-shadow);
+       transition: transform 0.12s ease, box-shadow 0.2s ease, border-color 0.2s, max-height 0.32s ease, opacity 0.24s ease, margin 0.32s ease, padding 0.32s ease, filter 0.24s ease;
+   
+       &:hover {
+         transform: translateY(-1px);
+         box-shadow: 0 14px 28px var(--color-shadow);
+         border-color: var(--color-text-light); /* Un borde más notable en hover */
+       }
+       &.cancel {
+         opacity: 0.78;
+         filter: grayscale(0.08);
+       }
+       max-height: 460px;
+       &.is-removing {
+         opacity: 0;
+         transform: translateY(-4px) scale(0.98);
+         margin: 0 !important;
+         padding-top: 0;
+         padding-bottom: 0;
+         border-width: 0;
+         max-height: 0;
+         pointer-events: none;
+       }
+     }
+   
+     .card__header {
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       padding: 12px 14px;
+       border-bottom: 1px solid var(--color-border); /* <-- Usa variable */
+       h3 {
+         margin: 0;
+         font-size: 16px;
+         color: var(--color-text-primary); /* <-- Usa variable */
+         font-weight: 900;
+       }
+     }
+   
+     /* Badges de estado */
+     .badge {
+       padding: 4px 10px;
+       border-radius: 999px;
+       font-size: 12px;
+       font-weight: 800;
+       &.activa {
+         background: var(--color-success-bg);
+         color: var(--color-text-success);
+         border: 1px solid var(--color-border);
+       }
+       &.cancelada {
+         background: var(--color-danger-bg);
+         color: var(--color-text-danger);
+         border: 1px solid var(--color-border);
+       }
+     }
+   
+     .card__body {
+       display: grid;
+       gap: 8px;
+       padding: 12px 14px;
+       .row {
+         display: grid;
+         grid-template-columns: auto 1fr;
+         gap: 8px;
+         align-items: start;
+         color: var(--color-text-secondary); /* <-- Usa variable */
+         .material-symbols-outlined {
+           font-size: 18px;
+           color: var(--color-text-light); /* <-- Usa variable */
+         }
+         p {
+           margin: 0;
+           strong {
+             color: var(--color-text-primary); /* <-- Usa variable */
+           }
+         }
+       }
+     }
+     .card__footer {
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       gap: 10px;
+       padding: 10px 14px;
+       border-top: 1px solid var(--color-border); /* <-- Usa variable */
+       .actions {
+         display: inline-flex;
+         gap: 8px;
+       }
+     }
+   }
+   
+   /* Tus media queries no cambian */
+   @media (max-width: 780px) {
+     .toolbar .filters {
+       grid-template-columns: 1fr;
+       .field,
+       .actions {
+         grid-column: 1 / -1;
+       }
+       .actions {
+         justify-content: flex-start;
+       }
+     }
+   }
