@@ -707,3 +707,31 @@
      outline-offset: 2px;
      border-radius: 8px;
    }
+
+   /* Estilo del datepicker en dark theme */
+body.dark-theme .mat-calendar {
+  background: var(--color-bg-card) !important;
+  color: var(--color-text-primary) !important;
+}
+
+body.dark-theme .mat-calendar-body-cell-content {
+  color: var(--color-text-primary) !important;
+}
+
+body.dark-theme .mat-date-range-input-container input {
+  color: var(--color-text-primary) !important;
+}
+mat-form-field {
+  width: 100%;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background: var(--color-bg-page);
+  border-radius: 10px !important;
+}
+
+
+.mat-date-range-input-container input {
+  color: var(--color-text-primary) !important;
+  font-weight: 700;
+}
