@@ -32,6 +32,7 @@
     "@angular/platform-server": "^20.0.0",
     "@angular/router": "^20.0.0",
     "@angular/ssr": "^20.0.5",
+    "bootstrap-icons": "^1.13.1",
     "dompurify": "^3.3.0",
     "express": "^5.1.0",
     "flag-icons": "^7.5.0",
