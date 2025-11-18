@@ -97,7 +97,7 @@ export class AsistenteIa implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.streamTimer) { clearInterval(this.streamTimer); this.streamTimer = null; }
-    this.loadingService.hide(); // <-- 6. AÑADIDO POR SEGURIDAD
+    this.loadingService.hide();
   }
 
   async loadSessions(): Promise<void> {
@@ -127,6 +127,10 @@ export class AsistenteIa implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * MEJORA: si el getSession falla (por error de sesión inexistente),
+   * crea automáticamente una nueva sesión y navega a ella.
+   */
   async openSession(id: string, reset = false): Promise<void> {
     if (reset) {
       this.respuestas = [];
@@ -139,7 +143,9 @@ export class AsistenteIa implements OnInit, OnDestroy {
     try {
       this.currentSession = await this.iaService.getSession(id).toPromise() || undefined;
     } catch {
-      this.currentSession = undefined;
+      // Si la sesión no existe o fue borrada, crea una nueva y navega
+      await this.createAndOpenSession();
+      return;
     }
     await this.loadMessages(true);
   }
