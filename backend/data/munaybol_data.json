@@ -41,5 +41,54 @@
   {"id_lugar":14,"nombre":"Samaipata","ubicacion":"Provincia Florida, departamento de Santa Cruz, Bolivia","departamento":"Santa Cruz","tipo":"Pueblo Turístico y Sitio Arqueológico","fecha_creacion":"2025-10-16","horario":"Abierto todos los días, 24 horas (el acceso al sitio arqueológico El Fuerte es de 8:30 a 17:30)","descripcion":"Samaipata es un pintoresco pueblo ubicado en los valles de Santa Cruz, famoso por su clima templado, paisajes naturales y su cercanía al sitio arqueológico El Fuerte de Samaipata, Patrimonio Mundial de la Humanidad. El pueblo es conocido por su ambiente relajado, arquitectura colonial, bodegas de vino, y actividades de ecoturismo como senderismo, visitas a cascadas y observación de aves. El Fuerte de Samaipata es una antigua estructura preincaica tallada en piedra, rodeada de misterio y leyendas, y es uno de los principales atractivos arqueológicos de Bolivia.","url_image_lugar_turistico":"https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260469/samaipata_el_fuerte_santa_cruz_xj4kmj.jpg","estado":true},
   {"id_lugar":15,"nombre":"Salar de Coipasa","ubicacion":"Municipio de Coipasa, provincia Sabaya, departamento de Oruro, Bolivia","departamento":"Oruro","tipo":"Atractivo Natural / Salar","fecha_creacion":"2025-10-16","horario":"Abierto todos los días, 24 horas (los tours operan generalmente de 7:00 a 18:00)","descripcion":"El Salar de Coipasa es el segundo salar más grande de Bolivia, ubicado al oeste del departamento de Oruro, cerca de la frontera con Chile. Con una superficie de aproximadamente 2,500 km², ofrece paisajes deslumbrantes de sal, lagunas, aves andinas y volcanes cercanos, como el volcán Tata Sabaya. Es menos visitado que el Salar de Uyuni, lo que lo convierte en un destino ideal para quienes buscan tranquilidad y contacto con la naturaleza. El salar es también fuente de sal y minerales, y rodeado de comunidades indígenas que conservan tradiciones ancestrales.","url_image_lugar_turistico":"https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260469/salar_de_coipasa_oruro_kwuvks.jpg","estado":true},
   {"id_lugar":16,"nombre":"Carnaval de Oruro","ubicacion":"Ciudad de Oruro, departamento de Oruro, Bolivia","departamento":"Oruro","tipo":"Fiesta Folclórica y Religiosa","fecha_creacion":"2025-10-16","horario":"Anualmente durante febrero o marzo (fechas varían según el calendario), desfiles y actividades principales durante el sábado y domingo de Carnaval","descripcion":"El Carnaval de Oruro es la festividad folclórica y religiosa más grande y famosa de Bolivia, declarada Obra Maestra del Patrimonio Oral e Intangible de la Humanidad por la UNESCO. Destaca por sus impresionantes desfiles de danzas tradicionales, como la Diablada, Morenada, Caporales y Tobas, en honor a la Virgen del Socavón. Cada año, miles de bailarines y músicos recorren las calles de Oruro, mostrando la riqueza cultural, devoción y colorido del país, atrayendo a turistas nacionales e internacionales.","url_image_lugar_turistico":"https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260468/carnaval_de_oruro_ydprii.jpg","estado":true},
-  {"id_lugar":17,"nombre":"Parque Nacional Torotoro","ubicacion":"Municipio de Torotoro, provincia Charcas, departamento de Potosí, Bolivia","departamento":"Potosi","tipo":"Parque Nacional y Área Protegida","fecha_creacion":"2025-10-16","horario":"Todos los días, de 7:00 a 18:00 (el ingreso y recorridos guiados pueden variar según temporada)","descripcion":"El Parque Nacional Torotoro es un área protegida reconocida por su impresionante geología, paisajes de cañones, cavernas y formaciones rocosas, así como por sus famosos yacimientos de huellas de dinosaurios. Ubicado en la región de los valles secos de Potosí, ofrece actividades como senderismo, visitas guiadas a cavernas como Umajalanta, exploración de fósiles, observación de aves y turismo comunitario. Es un destino ideal para los amantes de la naturaleza, la aventura y la paleontología.","url_image_lugar_turistico":"https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260468/parque_nacional_torotoro_cochabamba_vfwuty.jpg","estado":true}
+  {"id_lugar":17,"nombre":"Parque Nacional Torotoro","ubicacion":"Municipio de Torotoro, provincia Charcas, departamento de Potosí, Bolivia","departamento":"Potosi","tipo":"Parque Nacional y Área Protegida","fecha_creacion":"2025-10-16","horario":"Todos los días, de 7:00 a 18:00 (el ingreso y recorridos guiados pueden variar según temporada)","descripcion":"El Parque Nacional Torotoro es un área protegida reconocida por su impresionante geología, paisajes de cañones, cavernas y formaciones rocosas, así como por sus famosos yacimientos de huellas de dinosaurios. Ubicado en la región de los valles secos de Potosí, ofrece actividades como senderismo, visitas guiadas a cavernas como Umajalanta, exploración de fósiles, observación de aves y turismo comunitario. Es un destino ideal para los amantes de la naturaleza, la aventura y la paleontología.","url_image_lugar_turistico":"https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260468/parque_nacional_torotoro_cochabamba_vfwuty.jpg","estado":true},
+  {
+    "departamentos": [
+      {
+        "nombre": "Chuquisaca",
+        "fecha_aniversario": "25 de mayo",
+        "comida_tradicional": "Mondongo"
+      },
+      {
+        "nombre": "La Paz",
+        "fecha_aniversario": "16 de julio",
+        "comida_tradicional": "Plato Paceño"
+      },
+      {
+        "nombre": "Cochabamba",
+        "fecha_aniversario": "14 de septiembre",
+        "comida_tradicional": "Pique Macho"
+      },
+      {
+        "nombre": "Santa Cruz",
+        "fecha_aniversario": "24 de septiembre",
+        "comida_tradicional": "Majadito"
+      },
+      {
+        "nombre": "Potosí",
+        "fecha_aniversario": "10 de noviembre",
+        "comida_tradicional": "K'alapurka"
+      },
+      {
+        "nombre": "Oruro",
+        "fecha_aniversario": "10 de febrero",
+        "comida_tradicional": "Charquekán"
+      },
+      {
+        "nombre": "Tarija",
+        "fecha_aniversario": "15 de abril",
+        "comida_tradicional": "Saice"
+      },
+      {
+        "nombre": "Beni",
+        "fecha_aniversario": "18 de noviembre",
+        "comida_tradicional": "Keperí Beniano"
+      },
+      {
+        "nombre": "Pando",
+        "fecha_aniversario": "24 de septiembre",
+        "comida_tradicional": "Pescado a la Tacuara"
+      }
+    ]
+  }
 ]
