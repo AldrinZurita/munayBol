@@ -1,6 +1,7 @@
 FROM ollama/ollama:latest
 RUN apt-get update --allow-insecure-repositories && \
     apt-get install -y --no-install-recommends --allow-unauthenticated \
+        bash \
         curl \
         ca-certificates \
         gnupg && \
