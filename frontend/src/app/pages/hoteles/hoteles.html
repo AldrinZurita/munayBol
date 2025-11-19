@@ -167,7 +167,7 @@
         </button>
       </header>
 
-      <form #hotelForm="ngForm" (ngSubmit)="isEditMode ? saveEditHotel(hotelForm) : saveNewHotel(hotelForm)" novalidate>
+      <form #hotelForm="ngForm" (ngSubmit)="isEditMode ? saveEditHotel(hotelForm) : saveNewHotel(hotelForm)" novalidate class="editModal-form">
         <div class="modal-body" aria-describedby="modalScrollHelpHotel">
           <div id="modalScrollHelpHotel" class="sr-only">Desplázate dentro de este área para ver todo el contenido del
             formulario.</div>
@@ -206,7 +206,7 @@
             </div>
 
             <div class="field span-2">
-              <label class="form-label" for="h-url">URL de imagen</label>
+              <label class="form-label" for="h-url" style="width: 60%;">URL de imagen</label>
               <input id="h-url" name="url_imagen_hotel" type="text" class="form-input"
                 [(ngModel)]="modalHotelModel.url_imagen_hotel" />
             </div>

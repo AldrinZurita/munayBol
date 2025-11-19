@@ -8,12 +8,27 @@ import { Paquete } from '../../interfaces/paquete.interface';
 import { Habitacion } from '../../interfaces/habitacion.interface';
 import { IconsModule } from '../../icons';
 import { LoadingService } from '../../shared/services/loading';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
 type MediaKind = 'lugar' | 'hotel';
 
 @Component({
   selector: 'app-paquete-detalle',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, IconsModule],
+  imports: [
+  CommonModule,
+  RouterModule,
+  FormsModule,
+  IconsModule,
+
+  MatFormFieldModule,
+  MatInputModule,
+  MatDatepickerModule,
+  MatNativeDateModule
+],
+
   templateUrl: './paquete-detalle.html',
   styleUrls: ['./paquete-detalle.scss']
 })
@@ -33,6 +48,7 @@ export class PaqueteDetalle implements OnInit, OnDestroy {
   showConflictModal = false;
   habitacionSeleccionada: Habitacion | null = null;
   mensajeFechaLibre = '';
+  intervalosOcupados: { inicio: string; fin: string }[] = [];
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -182,6 +198,7 @@ export class PaqueteDetalle implements OnInit, OnDestroy {
 
         this.habitacionService.getDisponibilidadHabitacion(this.habitacionSeleccionada.num).subscribe({
           next: (disp) => {
+            this.intervalosOcupados = disp?.intervalos_reservados || [];
             this.proxDisponible = disp?.next_available_from || new Date().toISOString().slice(0, 10);
             this.showConflictModal = true;
             this.fechaReserva = this.proxDisponible;
@@ -232,6 +249,42 @@ export class PaqueteDetalle implements OnInit, OnDestroy {
   cancelarReserva(): void {
     this.showConflictModal = false;
   }
+
+
+  onRangeSelected(event: any) {
+   if (event.start && event.end) {
+     const btn = document.querySelector('.mat-datepicker-toggle');
+     if (btn) (btn as HTMLElement).click();
+   }
+  }
+
+  validarFecha = (d: Date | null): boolean => {
+  if (!d) return true;
+
+  const fecha = d.toISOString().slice(0, 10);
+  console.log("Chequeando fecha", fecha, this.intervalosOcupados);
+
+  for (const intervalo of this.intervalosOcupados) {
+    if (fecha >= intervalo.inicio && fecha <= intervalo.fin) {
+      return false;
+    }
+  }
+  return true;
+};
+
+
+
+  estiloFecha = (d: Date): string => {
+  const fecha = d.toISOString().slice(0, 10);
+
+  for (const intervalo of this.intervalosOcupados) {
+    if (fecha >= intervalo.inicio && fecha <= intervalo.fin) {
+      return 'fecha-ocupada';
+    }
+  }
+  return '';
+};
+
 
   redirigirAReservas(): void {
     if (!this.paquete || !this.habitacionSeleccionada) return;

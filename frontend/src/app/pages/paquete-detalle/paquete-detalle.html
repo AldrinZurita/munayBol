@@ -266,16 +266,29 @@
           Puedes usar esta fecha o seleccionar otra e intentar validar la disponibilidad.
         </p>
 
-        <div class="fechas-group">
-          <div class="date-row">
-            <label for="fechaReserva">Check-in:</label>
-            <input id="fechaReserva" type="date" [(ngModel)]="fechaReserva" name="fechaReserva" (change)="onChangeFechaReserva()" />
-          </div>
-          <div class="date-row">
-            <label for="fechaCaducidad">Check-out:</label>
-            <input id="fechaCaducidad" type="date" [(ngModel)]="fechaCaducidad" name="fechaCaducidad" />
-          </div>
-        </div>
+        <mat-form-field appearance="fill" style="width: 100%; margin-top: 16px;">
+          <mat-label>Selecciona tus fechas</mat-label>
+          <mat-date-range-input
+              [rangePicker]="picker"
+              [dateFilter]="validarFecha"
+              (dateChange)="onRangeSelected($event)"
+          >
+            <input
+              matStartDate
+              placeholder="Check-in"
+              [(ngModel)]="fechaReserva"
+              name="fechaReserva"
+            > 
+            <input
+              matEndDate
+              placeholder="Check-out"
+              [(ngModel)]="fechaCaducidad"
+              name="fechaCaducidad"
+            > 
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker [dateClass]="estiloFecha"></mat-date-range-picker>
+        </mat-form-field>
 
         <div class="toast-fechas" [class.visible]="mensajeFechaLibre" [class.error]="mensajeFechaLibre.includes('❌')">
           {{ mensajeFechaLibre }}
@@ -287,13 +300,12 @@
           Cancelar
         </button>
         <button
-          type="button"
-          class="btn btn-primary"
-          (click)="probarFechasPersonalizadas()"
-          [disabled]="!fechaReserva || !fechaCaducidad || mensajeFechaLibre.includes('🎉')"
-        >
-          <i-bs name="check-circle" width="18" height="18" class="icon-center"></i-bs>
-          {{ mensajeFechaLibre.includes('🎉') ? 'Confirmado' : 'Validar Fechas' }}
+            type="button"
+            class="btn btn-primary"
+            (click)="redirigirAReservas()"
+            [disabled]="!fechaReserva || !fechaCaducidad"
+          >
+           Reservar ahora
         </button>
       </footer>
     </div>
