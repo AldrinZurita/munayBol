@@ -39,6 +39,15 @@ class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
   private io: IntersectionObserver | null = null;
   private readonly isBrowser: boolean;
 
+// --- Estados para modal de eliminación ---
+showDeleteModal = false;
+lugarAEliminar: LugarTuristico | null = null;
+confirmacionTexto = '';
+errorEliminar = false;
+eliminandoLugar = false;
+mensajeEliminacion = '';
+
+
   constructor(
     private lugaresService: LugaresService,
     public authService: AuthService,
@@ -160,19 +169,51 @@ class LugaresTuristicos implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onEliminarLugar(lugar: LugarTuristico): void {
-    if (!this.isSuperAdmin) return;
-    const confirmado = confirm(`¿Eliminar el lugar "${lugar.nombre}"?`);
-    if (!confirmado) return;
+  if (!this.isSuperAdmin) return;
+  this.lugarAEliminar = lugar;
+  this.confirmacionTexto = '';
+  this.errorEliminar = false;
+  this.mensajeEliminacion = '';
+  this.eliminandoLugar = false;
+  this.showDeleteModal = true;
+  document.body.classList.add('no-scroll');
+}
 
-    this.lugaresService.eliminarLugar(lugar.id_lugar).subscribe({
-      next: () => {
-        this.lugares = this.lugares.filter((l) => l.id_lugar !== lugar.id_lugar);
-        this.aplicarFiltros();
-        alert('Lugar turístico eliminado correctamente.');
-      },
-      error: () => alert('Error al eliminar el lugar turístico.'),
-    });
+cancelarEliminacionLugar(): void {
+  this.showDeleteModal = false;
+  this.lugarAEliminar = null;
+  this.confirmacionTexto = '';
+  this.errorEliminar = false;
+  this.mensajeEliminacion = '';
+  this.eliminandoLugar = false;
+  document.body.classList.remove('no-scroll');
+}
+
+confirmarEliminacionLugar(): void {
+  if (this.confirmacionTexto !== 'ELIMINAR' || !this.lugarAEliminar) {
+    this.errorEliminar = true;
+    return;
   }
+
+  this.errorEliminar = false;
+  this.eliminandoLugar = true;
+  this.mensajeEliminacion = '';
+
+  this.lugaresService.eliminarLugar(this.lugarAEliminar.id_lugar).subscribe({
+    next: () => {
+      this.lugares = this.lugares.filter(l => l.id_lugar !== this.lugarAEliminar!.id_lugar);
+      this.aplicarFiltros();
+      this.eliminandoLugar = false;
+      this.mensajeEliminacion = '✅ Lugar eliminado correctamente';
+    },
+    error: () => {
+      this.eliminandoLugar = false;
+      this.errorEliminar = true;
+      this.mensajeEliminacion = '❌ Error al eliminar lugar';
+    }
+  });
+}
+
 
   openEditModal(lugar: LugarTuristico): void {
     if (!this.isSuperAdmin) return;
