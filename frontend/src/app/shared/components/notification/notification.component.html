@@ -8,7 +8,7 @@
     <span class="badge" *ngIf="count > 0">&nbsp;</span>
   </ng-container>
   </button>
-  <div class="notification-panel" *ngIf="showNotifications">
+  <div class="notification-panel" *ngIf="showNotifications" (mouseenter)="onPanelEnter()" (mouseleave)="onPanelLeave()">
   <div class="panel-header">
     <h3>Notificaciones</h3>
     <button (click)="markAllAsRead()">Marcar todas como leídas</button>

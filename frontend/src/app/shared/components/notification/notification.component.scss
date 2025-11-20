@@ -9,43 +9,40 @@
   align-items: center;
 }
 
+
+/* Alinear al estilo de .icon-btn usado en la navbar */
 .notification-bell {
-  background: linear-gradient(135deg, #ffffff, #f8fafc);
-  border: 1px solid rgba(15, 107, 255, 0.1);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
-  color: #000;
+  background: var(--color-bg-hover);
+  color: var(--color-text-secondary);
+  border: 0;
   cursor: pointer;
   position: relative;
-  padding: 10px;
+  padding: 0;
   margin: 0;
   outline: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  width: 44px;
-  height: 44px;
+  border-radius: 10px;
+  transition: background-color .2s ease, color .2s ease, transform .15s ease;
+  width: 40px;
+  height: 40px;
 
   svg {
     transition: all 0.3s ease;
   }
 
   &:hover, &:focus {
-    color: #0F6BFF;
-    background: linear-gradient(135deg, #f0f7ff, #e0f2fe);
-    border-color: rgba(15, 107, 255, 0.3);
-    box-shadow: 0 8px 20px rgba(15, 107, 255, 0.2);
-    transform: translateY(-2px);
+    background: var(--color-bg-hover-primary);
+    color: var(--color-primary);
+    transform: translateY(-1px);
 
     svg {
       transform: rotate(12deg) scale(1.1);
     }
   }
 
-  &:active {
-    transform: translateY(0);
-  }
+  &:active { transform: translateY(0); }
 }
 
 .badge {
@@ -56,7 +53,7 @@
   height: 12px;
   border-radius: 50%;
   background: linear-gradient(135deg, #fb0000, #ff0f00);
-  border: 2px solid #ffffff;
+  border: 2px solid var(--color-bg-card);
   box-shadow: 0 2px 8px rgba(186, 42, 42, 0.4);
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
@@ -74,17 +71,16 @@
 
 .notification-panel {
   position: absolute;
-  top: calc(100% + 12px);
+  top: calc(100% + 4px);
   right: 0;
   width: 380px;
   max-height: 480px;
   overflow: hidden;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-  border: 1px solid rgba(15, 107, 255, 0.12);
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
   border-radius: 16px;
-  box-shadow:
-    0 20px 50px rgba(15, 23, 42, 0.15),
-    0 0 0 1px rgba(15, 107, 255, 0.05);
+  box-shadow: 0 20px 50px var(--color-shadow);
   z-index: 2000;
   animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -110,21 +106,21 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  background: linear-gradient(135deg, #f0f7ff, #e0f2fe);
-  border-bottom: 1px solid rgba(15, 107, 255, 0.1);
+  background: var(--color-bg-hover);
+  border-bottom: 1px solid var(--color-border);
 
   h3 {
     margin: 0;
     font-size: 16px;
     font-weight: 800;
-    color: #0f172a;
+    color: var(--color-text-primary);
     letter-spacing: 0.3px;
   }
 
   button {
-    background: none;
-    border: none;
-    color: #0F6BFF;
+    background: transparent;
+    border: 0;
+    color: var(--color-primary);
     cursor: pointer;
     font-size: 13px;
     font-weight: 700;
@@ -132,10 +128,7 @@
     border-radius: 8px;
     transition: all 0.2s ease;
 
-    &:hover {
-      background: rgba(15, 107, 255, 0.1);
-      color: #0c56d0;
-    }
+    &:hover { background: var(--color-bg-hover-primary); }
   }
 }
 
@@ -152,33 +145,30 @@
   }
 
   &::-webkit-scrollbar-track {
-    background: linear-gradient(180deg, rgba(15, 107, 255, 0.05), rgba(15, 107, 255, 0.08));
+    background: var(--color-bg-hover);
     border-radius: 10px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #0F6BFF, #0c56d0);
+    background: var(--color-primary);
     border-radius: 10px;
     border: 2px solid transparent;
     background-clip: padding-box;
 
-    &:hover {
-      background: linear-gradient(180deg, #0c56d0, #0a47a8);
-      background-clip: padding-box;
-    }
+    &:hover { background: color-mix(in srgb, var(--color-primary) 85%, black); }
   }
 
   scrollbar-width: thin;
-  scrollbar-color: #0F6BFF rgba(15, 107, 255, 0.1);
+  scrollbar-color: var(--color-primary) var(--color-bg-hover);
 }
 
 .notification-item {
   padding: 14px 20px;
-  border-bottom: 1px solid rgba(15, 107, 255, 0.06);
+  border-bottom: 1px solid var(--color-border);
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
-  background: white;
+  background: var(--color-bg-card);
 
   &::before {
     content: '';
@@ -197,17 +187,14 @@
   }
 
   &.unread {
-    background: linear-gradient(90deg, rgba(15, 107, 255, 0.04), rgba(255, 255, 255, 1));
+    background: var(--color-bg-hover);
 
     &::before {
       opacity: 1;
     }
   }
 
-  &:hover {
-    background: linear-gradient(90deg, rgba(15, 107, 255, 0.08), rgba(240, 247, 255, 1));
-    transform: translateX(4px);
-  }
+  &:hover { background: var(--color-bg-hover-primary); transform: translateX(4px); }
 
   .notification-link {
     text-decoration: none;
@@ -217,32 +204,22 @@
     strong {
       font-size: 14px;
       font-weight: 700;
-      color: #0f172a;
+      color: var(--color-text-primary);
       display: block;
       margin-bottom: 6px;
       line-height: 1.4;
     }
 
-    p {
-      margin: 0 0 8px;
-      font-size: 13px;
-      color: #475569;
-      line-height: 1.5;
-    }
+    p { margin: 0 0 8px; font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; }
 
-    small {
-      color: #94a3b8;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.2px;
-    }
+    small { color: var(--color-text-tertiary, #94a3b8); font-size: 11px; font-weight: 500; letter-spacing: 0.2px; }
   }
 }
 
 .delete-btn {
-  background: linear-gradient(135deg, #fef2f2, #fee2e2);
-  border: 1px solid transparent;
-  color: #94a3b8;
+  background: var(--color-bg-hover);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
   cursor: pointer;
   padding: 6px;
   margin-left: 8px;
@@ -255,9 +232,9 @@
   height: 32px;
 
   &:hover {
-    background: linear-gradient(135deg, #fee2e2, #fecaca);
-    border-color: rgba(220, 38, 38, 0.1);
-    color: #dc2626;
+    background: var(--color-bg-hover-primary);
+    border-color: var(--color-border);
+    color: var(--color-primary);
     transform: scale(1.08);
 
     svg {
