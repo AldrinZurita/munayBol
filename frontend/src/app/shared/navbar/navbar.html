@@ -79,10 +79,7 @@
     </ul>
 
     <div class="session-actions ani-stagger">
-      <button class="icon-btn search-btn" type="button" aria-label="Buscar o ir rápidamente (Ctrl/Cmd + K)"
-              (click)="openPalette(); onControlSelect($event)">
-        <span class="material-symbols-outlined">search</span>
-      </button>
+
 
       <ng-container *ngIf="isLoggedIn; else showLogin">
         <div class="user-actions">
@@ -151,35 +148,4 @@
     </div>
   </div>
 
-  <div class="palette" *ngIf="paletteOpen" role="dialog" aria-modal="true" aria-label="Buscar y ejecutar acciones" (click)="closePalette()">
-    <div class="palette__panel" (click)="$event.stopPropagation()">
-      <div class="palette__header">
-        <span class="material-symbols-outlined" aria-hidden="true">search</span>
-        <input
-          type="text"
-          class="palette__input"
-          [value]="paletteQuery"
-          (input)="onPaletteInput($any($event.target).value)"
-          placeholder="Buscar... (Ctrl/Cmd + K)"
-          autofocus
-        />
-        <button class="palette__close" type="button" aria-label="Cerrar" (click)="closePalette()">
-          <span class="material-symbols-outlined" aria-hidden="true">close</span>
-        </button>
-      </div>
-
-      <ul class="palette__list">
-        <li class="palette__item" *ngFor="let it of filteredPalette; let i = index" (click)="go(it)" tabindex="0">
-          <span class="material-symbols-outlined palette__icon" aria-hidden="true">{{ it.icon }}</span>
-          <span class="palette__label">{{ it.label }}</span>
-          <span class="material-symbols-outlined palette__chev" aria-hidden="true">chevron_right</span>
-        </li>
-        <li class="palette__empty" *ngIf="filteredPalette.length === 0">Sin resultados</li>
-      </ul>
-
-      <div class="palette__footer">
-        <span class="kbd">Esc</span> cerrar • <span class="kbd">Ctrl/Cmd + K</span> abrir
-      </div>
-    </div>
-  </div>
 </nav>
