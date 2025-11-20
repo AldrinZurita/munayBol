@@ -725,9 +725,10 @@ mat-form-field {
   width: 100%;
 }
 
-.mat-form-field-appearance-fill .mat-form-field-flex {
-  background: var(--color-bg-page);
-  border-radius: 10px !important;
+.mat-calendar-body-cell.fecha-ocupada .mat-calendar-body-cell-content {
+  background-color: #cc0000 !important;
+  color: #fff !important;
+  border-radius: 50% !important;
 }
 
 
@@ -735,3 +736,10 @@ mat-form-field {
   color: var(--color-text-primary) !important;
   font-weight: 700;
 }
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background: var(--color-bg-card) !important;
+  border-radius: 10px !important;
+}
+
+
