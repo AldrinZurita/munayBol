@@ -645,3 +645,122 @@
    @media (prefers-reduced-motion: reduce) {
      * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
    }
+
+/* ====== MODAL DE ELIMINACIÓN (Lugares Turísticos) ====== */
+
+/* --- Estructura general del modal --- */
+.modal-card.delete-modal-card {
+  border-radius: 16px; /* bordes curveados */
+  overflow: hidden;
+}
+
+/* --- Cuerpo del modal con espaciado extra --- */
+.modal-body.delete-modal-body {
+  padding: 1.75rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* --- Preguntas e instrucciones --- */
+.delete-pregunta,
+.delete-instruccion {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+/* --- Input con fondo diferenciado --- */
+.delete-input {
+  background: var(--color-bg-page);
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  padding: 12px 14px;
+  font-size: 14px;
+  transition: box-shadow .18s ease, border-color .18s ease;
+}
+
+.delete-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--ring-transparent);
+}
+
+/* --- Footer con botones alineados y curva inferior --- */
+.modal-footer-delete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-hover);
+  border-radius: 0 0 16px 16px;
+}
+
+/* --- Botones de acción --- */
+.footer-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* --- Área de estado (loading, éxito, error) --- */
+.status-area {
+  flex: 1;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.success-message {
+  color: #22c55e;
+}
+
+.error {
+  color: #e74c3c;
+  font-weight: 700;
+}
+
+/* --- Loading con puntitos --- */
+.loading-dots {
+  color: #64748b;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.loading-dots span {
+  animation: blink 1.5s infinite;
+  animation-delay: calc(var(--i) * 0.2s);
+}
+
+.loading-dots span:nth-child(1) { --i: 1; }
+.loading-dots span:nth-child(2) { --i: 2; }
+.loading-dots span:nth-child(3) { --i: 3; }
+
+@keyframes blink {
+  0%, 80%, 100% { opacity: 0; }
+  40% { opacity: 1; }
+}
+
+/* --- Botón eliminar con ícono rojo --- */
+.icon-btn.btn-delete i-bs[name="trash"] {
+  color: #e74c3c;
+}
+
+.icon-btn.btn-delete:hover {
+  background: linear-gradient(135deg, #ff6a6a, #e74c3c);
+  box-shadow: 0 10px 22px rgba(231, 76, 60, 0.22);
+}
+
+.icon-btn.btn-delete:hover i-bs[name="trash"] {
+  color: #fff;
+}
+
+/* --- Botón cancelar con ícono gris --- */
+.btn-secondary-soft.icon-only i-bs[name="x-circle"] {
+  color: var(--color-text-secondary);
+}
+
+.btn-secondary-soft.icon-only:hover i-bs[name="x-circle"] {
+  color: var(--color-primary);
+}
