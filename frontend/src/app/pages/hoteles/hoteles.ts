@@ -31,6 +31,14 @@ export class Hoteles implements OnInit, AfterViewInit, OnDestroy {
   private _editTarget: Hotel | null = null;
   private io?: IntersectionObserver;
 
+  // --- Estados para modal de eliminación ---
+showDeleteModal = false;
+hotelAEliminar: Hotel | null = null;
+confirmacionTexto = '';
+errorEliminar = false;
+eliminandoHotel = false;
+mensajeEliminacion = '';
+
   constructor(
     private hotelService: HotelService,
     private authService: AuthService,
@@ -110,19 +118,52 @@ export class Hoteles implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate(['/hoteles', id_hotel]);
   }
 
-  onEliminarHotel(hotel: Hotel) {
-    if (!this.isSuperAdmin) return;
-    if (confirm(`¿Eliminar hotel "${hotel.nombre}"?`)) {
-      this.hotelService.eliminarHotel(hotel.id_hotel).subscribe({
-        next: () => {
-          this.hoteles = this.hoteles.filter(h => h.id_hotel !== hotel.id_hotel);
-          this.aplicarFiltros();
-          alert('Hotel eliminado');
-        },
-        error: () => alert('Error al eliminar hotel')
-      });
-    }
+  onEliminarHotel(hotel: Hotel): void {
+  if (!this.isSuperAdmin) return;
+  this.hotelAEliminar = hotel;
+  this.confirmacionTexto = '';
+  this.errorEliminar = false;
+  this.mensajeEliminacion = '';
+  this.eliminandoHotel = false;
+  this.showDeleteModal = true;
+  document.body.classList.add('no-scroll');
+}
+
+cancelarEliminacionHotel(): void {
+  this.showDeleteModal = false;
+  this.hotelAEliminar = null;
+  this.confirmacionTexto = '';
+  this.errorEliminar = false;
+  this.mensajeEliminacion = '';
+  this.eliminandoHotel = false;
+  document.body.classList.remove('no-scroll');
+}
+
+confirmarEliminacionHotel(): void {
+  if (this.confirmacionTexto !== 'ELIMINAR' || !this.hotelAEliminar) {
+    this.errorEliminar = true;
+    return;
   }
+
+  this.errorEliminar = false;
+  this.eliminandoHotel = true;
+  this.mensajeEliminacion = '';
+
+  this.hotelService.eliminarHotel(this.hotelAEliminar.id_hotel).subscribe({
+    next: () => {
+      this.hoteles = this.hoteles.filter(h => h.id_hotel !== this.hotelAEliminar!.id_hotel);
+      this.aplicarFiltros();
+      this.eliminandoHotel = false;
+      this.mensajeEliminacion = ' Hotel eliminado correctamente';
+    },
+    error: () => {
+      this.eliminandoHotel = false;
+      this.errorEliminar = true;
+      this.mensajeEliminacion = ' Error al eliminar hotel';
+    }
+  });
+}
+
   openAddHotelModal(): void {
     if (!this.isSuperAdmin) return;
     this._editTarget = null;
