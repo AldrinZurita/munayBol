@@ -235,4 +235,63 @@
       </form>
     </div>
   </div>
+  <!-- Backdrop del modal de eliminación -->
+<div class="modal-backdrop" *ngIf="showDeleteModal" aria-hidden="true" (click)="cancelarEliminacionHotel()"></div>
+
+<!-- Modal de confirmación de eliminación -->
+<div class="modal-root confirm-delete" *ngIf="showDeleteModal" role="dialog" aria-modal="true" (click)="cancelarEliminacionHotel()">
+  <div class="modal-card animate-in" (click)="$event.stopPropagation()">
+    <header class="modal-header">
+      <h3>¿Eliminar hotel '{{ hotelAEliminar?.nombre }}'?</h3>
+      <button class="icon-btn" (click)="cancelarEliminacionHotel()" aria-label="Cerrar">
+        <span class="material-symbols-outlined icon-center icon-secondary">close</span>
+      </button>
+    </header>
+
+    <div class="modal-body">
+      <p>Para confirmar la eliminación, escribe <strong>ELIMINAR</strong> en el campo siguiente:</p>
+      <input
+        type="text"
+        class="form-input"
+        [(ngModel)]="confirmacionTexto"
+        placeholder="Escribe 'ELIMINAR'"
+        aria-label="Confirmar eliminación"
+      />
+      <div class="error" *ngIf="errorEliminar && !mensajeEliminacion">
+        Texto incorrecto. Escribe exactamente 'ELIMINAR'.
+      </div>
+    </div>
+
+    <footer class="modal-footer modal-footer-delete">
+      <div class="status-area">
+        <div class="loading-dots" *ngIf="eliminandoHotel">Eliminando<span>.</span><span>.</span><span>.</span></div>
+        <div class="success-message" *ngIf="mensajeEliminacion">{{ mensajeEliminacion }}</div>
+        <div class="error" *ngIf="errorEliminar && !mensajeEliminacion">Texto incorrecto. Escribe exactamente 'ELIMINAR'.</div>
+      </div>
+
+      <div class="footer-actions">
+        <button
+          class="btn btn-secondary-soft icon-only"
+          (click)="cancelarEliminacionHotel()"
+          aria-label="Cancelar"
+          title="Cancelar"
+          [disabled]="eliminandoHotel"
+        >
+          <i-bs name="x-circle" width="18" height="18" class="icon-center"></i-bs>
+        </button>
+
+        <button
+          class="icon-btn btn-delete"
+          [disabled]="confirmacionTexto !== 'ELIMINAR' || eliminandoHotel"
+          (click)="confirmarEliminacionHotel()"
+          aria-label="Eliminar"
+          title="Eliminar hotel"
+        >
+          <i-bs name="trash" width="18" height="18" class="icon-center"></i-bs>
+        </button>
+      </div>
+    </footer>
+  </div>
+</div>
+
 </main>

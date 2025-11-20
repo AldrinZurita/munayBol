@@ -2,10 +2,8 @@ services:
   backend:
     build: ./backend
     command: daphne -b 0.0.0.0 -p 8000 config.asgi:application
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./backend:/app
+    ports: ["8000:8000"]
+    volumes: ["./backend:/app"]
     environment:
       USE_NEON: "True"
       NEON_DB: "neondb"
@@ -16,80 +14,58 @@ services:
       DJANGO_SECRET_KEY: "$$^%pi-f!4s2z*o!+-um9)n6fe^xh!hf96ql41ml#g-$$g%qqgg1"
       DJANGO_DEBUG: "True"
       DJANGO_ALLOWED_HOSTS: "localhost 127.0.0.1 backend 0.0.0.0"
-      OLLAMA_BASE_URL: "http://ollama:11434"
-      OLLAMA_MODEL: "llama3.1:8b-instruct-q4_K_M"
-      OLLAMA_TIMEOUT: "600.0"
-      OLLAMA_READ_TIMEOUT: "600.0"
-      OLLAMA_CONNECT_TIMEOUT: "10.0"
-      OLLAMA_WRITE_TIMEOUT: "10.0"
-      OLLAMA_POOL_TIMEOUT: "10.0"
-      OLLAMA_NUM_CTX: "4096"
-      OLLAMA_MAX_TOKENS: "512"
-      GOOGLE_CLIENT_ID: "152411335033-meomkvc2136t317jgcqusbq3r7fo687m.apps.googleusercontent.com"
-      GITHUB_CLIENT_ID: "Ov23lifxaogIQ25M8Xd3"
-      GITHUB_CLIENT_SECRET: "f785366ad20b1f859b06fe1723593814bc2e54dd"
-      GITHUB_REDIRECT_URI: "http://localhost:4200/login"
-      WEAVIATE_HOST: "weaviate"
-      WEAVIATE_PORT: "8080"
-      WEAVIATE_GRPC_PORT: "50051"
       PYTHONPATH: /app
-    networks:
-      - turismo-net
+
+      OLLAMA_BASE_URL: "http://ollama:11434"
+      OLLAMA_MODEL: "qwen2.5:3b"
+      OLLAMA_NUM_CTX: "4096"
+      OLLAMA_MAX_TOKENS: "1500"
+      OLLAMA_TEMPERATURE: "0.4"
+      OLLAMA_NUM_THREADS: "4"
+      OLLAMA_TIMEOUT: "300"
+      BACKEND_STREAM: "false"
+
+      DB_CONN_MAX_AGE: "120"
+      DB_KEEPALIVES: "1"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz/'); print('ok')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
     depends_on:
-      - ollama
-      - weaviate
+      ollama:
+        condition: service_healthy
+    networks: ["turismo-net"]
+    restart: unless-stopped
 
   frontend:
     build: ./frontend
     command: npx ng serve --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.json
-    ports:
-      - "4200:4200"
-    volumes:
-      - ./frontend:/app
+    ports: ["4200:4200"]
+    volumes: ["./frontend:/app"]
     depends_on:
-      - backend
-    networks:
-      - turismo-net
+      backend:
+        condition: service_healthy
+    networks: ["turismo-net"]
+    restart: unless-stopped
 
   ollama:
     build: ./ollama
-    ports:
-      - "11434:11434"
+    environment:
+      OLLAMA_KEEP_ALIVE: "2h"
+      OLLAMA_MODEL: "qwen2.5:3b"
+    ports: ["11434:11434"]
     volumes:
       - ${OLLAMA_MODELS:-/home/patriot/.ollama/models}:/root/.ollama/models
     healthcheck:
-      test: curl -f http://localhost:11434/api/version || exit 1
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/version"]
       interval: 10s
       timeout: 10s
       start_period: 60s
       retries: 10
-    networks:
-      - turismo-net
-
-  weaviate:
-    image: semitechnologies/weaviate:latest
-    ports:
-      - "8080:8080"
-      - "50051:50051"
-    environment:
-      QUERY_DEFAULTS_LIMIT: 25
-      ENABLE_MODULES: ""
-      PERSISTENCE_DATA_PATH: "/var/lib/weaviate"
-      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
-      CLUSTER_HOSTNAME: "node1"
-    volumes:
-      - weaviate_data:/var/lib/weaviate
-    networks:
-      - turismo-net
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/v1/.well-known/ready" ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
-
-volumes:
-  weaviate_data:
+    networks: ["turismo-net"]
+    restart: unless-stopped
 
 networks:
   turismo-net:

@@ -7,18 +7,42 @@ $card-bg: #fff;
 $primary-color: #16a34a;
 $accent-color: #0F6BFF;
 $danger-color: #dc2626;
-
 :root {
   --color-primary: #0F6BFF;
   --color-accent:  #00B894;
   --color-danger:  #E74C3C;
+
   --bolivia-red:    #D52B1E;
   --bolivia-yellow: #FFD700;
   --bolivia-green:  #007A3D;
-  --radius: 12px;
-  --shadow:    0 4px 14px rgba(15, 23, 42, 0.10);
+  --bolivia-red-t:    rgba(213, 43, 30, 0.10);
+  --bolivia-yellow-t: rgba(255, 215, 0, 0.10);
+  --bolivia-green-t:  rgba(0, 122, 61, 0.10);
+
+  --color-bg-page: #f5f8fd;
+  --color-bg-card: #ffffff;
+  --color-bg-hover: #f1f5f9;
+  --color-border:  #e6ebf2;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #5f6b74;
+  --color-shadow: rgba(15, 23, 42, 0.10);
+
+  --shadow:    0 4px 14px var(--color-shadow);
   --shadow-lg: 0 10px 28px rgba(15, 23, 42, 0.14);
+  --shadow-modal: 0 62px 110px rgba(15, 23, 42, 0.5);
   --transition: all 0.25s ease;
+  --ring-transparent: rgba(15,107,255,0.18);
+}
+
+body.dark-theme {
+  --color-bg-page: #0f172a;
+  --color-bg-card: #1e293b;
+  --color-bg-hover: #334155;
+  --color-border:  #334155;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-shadow: rgba(0,0,0,0.6);
+  --ring-transparent: rgba(15,107,255,0.35);
 }
 
 .hotel-detalle-container {
@@ -28,10 +52,10 @@ $danger-color: #dc2626;
   margin: 0 auto;
   padding: 32px 18px 18px 18px;
   background:
-    radial-gradient(1200px 520px at 10% -10%, rgba(213, 43, 30, 0.08) 0%, rgba(213, 43, 30, 0) 70%),
-    radial-gradient(1200px 520px at 90% 10%,  rgba(0, 122, 61, 0.08) 0%, rgba(0, 122, 61, 0) 70%),
-    radial-gradient(1000px 520px at 50% -12%, rgba(255, 215, 0, 0.08) 0%, rgba(255, 215, 0, 0) 70%),
-    linear-gradient(180deg, #ffffff, #ffffff);
+    radial-gradient(1200px 520px at 10% -10%, var(--bolivia-red-t) 0%, transparent 70%),
+    radial-gradient(1200px 520px at 90% 10%,  var(--bolivia-green-t) 0%, transparent 70%),
+    radial-gradient(1000px 520px at 50% -12%, var(--bolivia-yellow-t) 0%, transparent 70%),
+    linear-gradient(180deg, var(--color-bg-page), var(--color-bg-card));
 
   &::before {
     content: "";
@@ -46,6 +70,12 @@ $danger-color: #dc2626;
   }
 }
 
+body.dark-theme .hotel-detalle-container::before {
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 16px),
+    repeating-linear-gradient(45deg,  rgba(255,255,255,0.025) 0 1px, transparent 1px 20px);
+}
+
 h2 {
   font-size: 24px;
   font-weight: 800;
@@ -55,24 +85,25 @@ h2 {
 }
 
 .estado {
-  color: $primary-text;
+  color: var(--color-text-primary);
   padding: 12px 0;
   text-align: center;
   font-weight: 600;
 
   &.error {
     color: var(--color-danger);
-    background: linear-gradient(90deg, rgba(220, 38, 38, 0.08), rgba(255, 255, 255, 1));
+    background: var(--color-bg-hover);
     border-radius: var(--radius);
     padding: 16px;
+    border: 1px solid var(--color-border);
   }
 }
 
 .hotel-card {
   display: flex;
   gap: 28px;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-  border: 1px solid $border-color;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
   border-radius: 16px;
   padding: 28px;
   box-shadow: var(--shadow);
@@ -105,9 +136,7 @@ h2 {
     transform: translateY(-2px);
   }
 
-  &:hover::after {
-    opacity: 1;
-  }
+  &:hover::after { opacity: 1; }
 
   @media (max-width: 750px) {
     flex-direction: column;
@@ -115,7 +144,6 @@ h2 {
     padding: 20px;
   }
 }
-
 .hotel-img-box {
   flex-shrink: 0;
   position: relative;
@@ -126,10 +154,10 @@ h2 {
     height: 200px;
     object-fit: cover;
     border-radius: 12px;
-    border: 1px solid $border-color;
-    background: #f1f5f9;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-hover);
     display: block;
-    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+    box-shadow: 0 8px 20px var(--color-shadow);
   }
 
   &::after {
@@ -144,15 +172,14 @@ h2 {
     border-radius: 12px;
   }
 
-  &:hover::after {
-    animation-duration: 3s;
-  }
+  &:hover::after { animation-duration: 3s; }
 }
 
 @keyframes imgShine {
   0% { transform: translateX(-120%) skewX(12deg); }
   100% { transform: translateX(120%) skewX(12deg); }
 }
+
 
 .hotel-info {
   flex: 1;
@@ -164,7 +191,7 @@ h2 {
     font-size: 28px;
     font-weight: 800;
     margin: 0 0 10px 0;
-    color: $primary-text;
+    color: var(--color-text-primary);
     background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -176,7 +203,7 @@ h2 {
     flex-wrap: wrap;
     gap: 16px 24px;
     font-size: 15px;
-    color: $secondary-text;
+    color: var(--color-text-secondary);
     margin-bottom: 8px;
 
     span {
@@ -186,7 +213,7 @@ h2 {
       font-weight: 600;
 
       b {
-        color: $primary-text;
+        color: var(--color-text-primary);
         font-weight: 800;
       }
     }
@@ -195,12 +222,13 @@ h2 {
   .fecha-creacion {
     margin-top: 12px;
     font-size: 13px;
-    color: $light-text;
+    color: var(--color-text-secondary);
     font-weight: 600;
     padding: 8px 12px;
-    background: linear-gradient(90deg, rgba(15,107,255,0.05), rgba(255,255,255,0.5));
+    background: var(--color-bg-hover);
     border-radius: 8px;
     border-left: 3px solid var(--color-primary);
+    border: 1px solid var(--color-border);
   }
 
   .estado-hotel {
@@ -211,10 +239,11 @@ h2 {
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    border: 1px solid var(--color-border);
+
     &.activo {
-      background: linear-gradient(135deg, #d1fae5, #a7f3d0);
-      color: #047857;
-      border: 1px solid #10b981;
+      background: var(--color-bg-hover);
+      color: #10b981;
       box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
 
       &::before {
@@ -224,9 +253,8 @@ h2 {
     }
 
     &.inactivo {
-      background: linear-gradient(135deg, #fee2e2, #fecaca);
-      color: #b91c1c;
-      border: 1px solid #ef4444;
+      background: var(--color-bg-hover);
+      color: var(--color-danger);
       box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
 
       &::before {
@@ -249,8 +277,8 @@ h2 {
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-  border: 1px solid $border-color;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
   border-radius: 14px;
   padding: 22px;
   transition: var(--transition);
@@ -282,10 +310,7 @@ h2 {
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
   }
-
-  &:hover::after {
-    opacity: 1;
-  }
+  &:hover::after { opacity: 1; }
 
   @media (min-width: 768px) {
     grid-template-columns: 1fr 200px;
@@ -295,8 +320,8 @@ h2 {
     h3 {
       margin: 0 0 10px;
       font-size: 22px;
-      color: $primary-text;
       font-weight: 800;
+      color: var(--color-text-primary);
       background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -305,7 +330,7 @@ h2 {
 
     .descripcion {
       margin: 0 0 16px;
-      color: $secondary-text;
+      color: var(--color-text-secondary);
       line-height: 1.6;
       font-size: 14px;
     }
@@ -317,7 +342,7 @@ h2 {
       padding: 0;
       margin: 0;
       list-style: none;
-      color: $secondary-text;
+      color: var(--color-text-secondary);
       font-size: 14px;
 
       .meta-item {
@@ -326,9 +351,9 @@ h2 {
         gap: 8px;
         font-weight: 600;
         padding: 6px 12px;
-        background: linear-gradient(135deg, rgba(15,107,255,0.05), rgba(0,184,148,0.05));
+        background: var(--color-bg-hover);
         border-radius: 8px;
-        border: 1px solid rgba(15,107,255,0.1);
+        border: 1px solid var(--color-border);
 
         .status-dot {
           width: 10px;
@@ -336,13 +361,8 @@ h2 {
           border-radius: 50%;
           box-shadow: 0 0 6px currentColor;
 
-          &.disponible {
-            background-color: $primary-color;
-          }
-
-          &.no-disponible {
-            background-color: $danger-color;
-          }
+          &.disponible { background-color: #16a34a; }
+          &.no-disponible { background-color: var(--color-danger); }
         }
 
         .material-symbols-outlined {
@@ -377,7 +397,7 @@ h2 {
 
       &.btn-primary {
         background: linear-gradient(135deg, var(--color-primary), #0c56d0);
-        color: white;
+        color: #fff;
         box-shadow: 0 6px 16px rgba(15, 107, 255, 0.25);
 
         &:hover {
@@ -394,7 +414,6 @@ h2 {
     }
   }
 }
-
 .btn-primary {
   background: linear-gradient(135deg, var(--color-primary), #0c56d0);
   color: #fff;

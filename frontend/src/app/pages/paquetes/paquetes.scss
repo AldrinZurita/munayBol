@@ -4,19 +4,46 @@
   --color-accent:  #00B894;
   --color-danger:  #E74C3C;
   --color-secondary: #6C757D;
-  --bolivia-red:    #D52B1E;
-  --bolivia-yellow: #FFD700;
-  --bolivia-green:  #007A3D;
-  --color-bg:    #f5f8fd;
-  --color-card:  #ffffff;
-  --color-border:#e6ebf2;
-  --color-text:  #0f172a;
-  --color-muted: #5f6b74;
-  --radius: 16px;
-  --shadow:    0 8px 20px rgba(15, 23, 42, 0.10);
-  --shadow-lg: 0 14px 34px rgba(15, 23, 42, 0.18);
-  --shadow-modal: 0 62px 110px rgba(15, 23, 42, 0.5);
-  --transition: all 0.25s ease;
+
+ /* Tokens ya existentes... */
+  --color-loading-bg: #f1f5f9;        /* fondo claro para loading */
+  --color-loading-text: #0f172a;      /* texto en claro */
+  --color-loading-icon: var(--color-primary); /* avión/spinner en claro */
+
+
+  /* Claro */
+  --color-bg-page: #f5f8fd;
+  --color-bg-card: #ffffff;
+  --color-border:  #e6ebf2;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #5f6b74;
+  --color-shadow: rgba(15, 23, 42, 0.10);
+
+   --color-icon-secondary: #0ea5e9; /* azul en claro */
+  --color-brand-transparent: rgba(15,107,255,0.18);
+}
+
+ 
+
+
+/* Oscuro */
+body.dark-theme {
+  --color-icon-secondary: #f1f5f9; /* blanco en oscuro */
+  --color-bg-page: #0f172a;
+  --color-bg-card: #1e293b;
+    --color-bg-hover: #334155;      /* hover/fondos suaves */
+  --color-border:  #334155;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-shadow: rgba(0,0,0,0.6);
+  --color-brand-transparent: rgba(15,107,255,0.35);
+
+
+
+
+  --color-loading-bg: #0f172a;        /* fondo más oscuro */
+  --color-loading-text: #f1f5f9;      /* texto claro */
+  --color-loading-icon: #38bdf8;      /* avión/spinner celeste para contraste */
 }
 
 .sr-only {
@@ -73,7 +100,23 @@ i-bs[name="gift"]             { color: #f59e0b; }
 i-bs[name="star-fill"],
 i-bs[name="star-half"]        { color: #f59e0b; }
 i-bs[name="star"]             { color: #d1d5db; }
-i-bs[name="image"]            { color: #0ea5e9; }
+/* ====== Claro ====== */
+:host-context(:not(.dark-theme)) .image-tabs .tab-btn i-bs[name="image"],
+:host-context(:not(.dark-theme)) .image-tabs .tab-btn i-bs[name="image"] svg {
+  color: #0ea5e9 !important;   /* azul */
+  fill: #0ea5e9 !important;
+}
+
+/* ====== Oscuro ====== */
+:host-context(.dark-theme) .image-tabs .tab-btn i-bs[name="image"],
+:host-context(.dark-theme) .image-tabs .tab-btn i-bs[name="image"] svg {
+  color: #f1f5f9 !important;   /* blanco */
+  fill: #f1f5f9 !important;
+}
+
+
+
+
 i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
 
 .paquetes-container { max-width: 1280px; margin: 0 auto; padding: 24px; }
@@ -100,10 +143,62 @@ i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
 .btn.icon-only:hover,
 .btn-ghost:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(15,23,42,.16); }
 
-.icon-btn { display: inline-flex; justify-content: center; align-items: center; width: 48px; height: 48px; border-radius: 14px; border: none; line-height: 0; }
-.icon-btn.btn-edit { background: linear-gradient(135deg, #2e7cff, #0f6bff); box-shadow: 0 10px 22px rgba(15,107,255,.22); }
-.icon-btn.btn-delete { background: linear-gradient(135deg, #ff6a6a, #e74c3c); box-shadow: 0 10px 22px rgba(231,76,60,.22); }
-.icon-btn:hover { transform: translateY(-2px); filter: saturate(1.05); }
+/* ===================================================
+   Botones de Admin (Estilo Unificado tipo Hoteles)
+   =================================================== */
+
+/* 1. Estilo Base Neutral */
+.icon-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  line-height: 0;
+  transition: all 0.15s ease-out;  
+  /* Fondo neutral (igual que tus otros botones ghost) */
+  border: 1px solid rgba(2,6,23,0.08);
+  background: linear-gradient(180deg, #ffffff, #f6fbff);
+  box-shadow: none; 
+}
+
+/* 2. Colores del Icono por defecto (Sin Hover) */
+/* Lápiz (Azul) */
+.icon-btn.btn-edit i-bs[name="pencil"] {
+  color: #2e7cff;
+  transition: color 0.15s ease;
+}
+/* Basura (Rojo) */
+.icon-btn.btn-delete i-bs[name="trash"] {
+  color: #e74c3c;
+  transition: color 0.15s ease;
+}
+
+/* 3. Interacción General */
+.icon-btn:hover {
+  transform: translateY(-2px);
+  filter: saturate(1.05);
+  border-color: transparent; /* Quitamos borde al tener fondo de color */
+}
+
+/* 4. Fondos de color SÓLO en HOVER */
+/* Lápiz (Azul) */
+.icon-btn.btn-edit:hover {
+  background: linear-gradient(135deg, #2e7cff, #0f6bff);
+  box-shadow: 0 10px 22px rgba(15, 107, 255, 0.22);
+}
+/* Basura (Rojo) */
+.icon-btn.btn-delete:hover {
+  background: linear-gradient(135deg, #ff6a6a, #e74c3c);
+  box-shadow: 0 10px 22px rgba(231, 76, 60, 0.22);
+}
+
+/* 5. Icono BLANCO en Hover */
+.icon-btn.btn-edit:hover i-bs[name="pencil"],
+.icon-btn.btn-delete:hover i-bs[name="trash"] {
+  color: #fff;
+}
 
 .card {
   background: var(--color-card);
@@ -224,9 +319,27 @@ i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
 .modal-footer { border-top: 1px solid rgba(2,6,23,0.06); }
 
 .modal-body {
-  flex: 1 1 auto; min-height: 0; overflow: auto; -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain; touch-action: pan-y; scrollbar-gutter: stable both-edges; padding: 1rem 1.5rem 110px;
+  flex: 1 1 auto; min-height: 0;
+  overflow: auto;
+  padding: 1rem 1.5rem 110px;
+  background: var(--color-bg-card);
 }
+.modal-footer-delete {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.modal-footer-delete .status-area {
+  text-align: center;
+}
+
+.modal-footer-delete .footer-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .modal-body::-webkit-scrollbar { width: 12px; height: 12px; }
 .modal-body::-webkit-scrollbar-track { background: linear-gradient(180deg, rgba(2,6,23,.05), rgba(2,6,23,.06)); border-radius: 12px; }
 .modal-body::-webkit-scrollbar-thumb { border-radius: 12px; border: 3px solid rgba(255,255,255,0.7); background: linear-gradient(180deg, var(--bolivia-red), var(--bolivia-yellow) 50%, var(--bolivia-green)); box-shadow: inset 0 0 0 1px rgba(2,6,23,.06); }
@@ -238,7 +351,7 @@ i-bs:hover { transform: translateY(-1px); filter: saturate(1.05); }
 .form-label { font-size: 13px; font-weight: 800; color: #475569; letter-spacing: .2px; }
 .form-input, .form-textarea, .form-select {
   width: 100%; background: #fff; color: var(--color-text);
-  border: 1px solid #dfe6ee; border-radius: 12px; font-size: 14px;
+  border: 1px solid #dfe6ee; border-radius: 12px; padding: 12px 14px; font-size: 14px;
   transition: box-shadow .18s ease, border-color .18s ease, transform .08s ease;
 }
 .form-input { height: 44px; }
@@ -255,7 +368,264 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
   outline: 3px solid rgba(15,107,255,.25); outline-offset: 2px; border-radius: 8px;
 }
 .paquete-manage, .stars{margin-left: 2rem;}
-edit-field{width:40%;}
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* Íconos dentro de tabs en modo oscuro */
+body.dark-theme .image-tabs .tab-btn i-bs[name="image"],
+body.dark-theme .image-tabs .tab-btn i-bs[name="building"] {
+  color: #f1f5f9;
+}
+
+
+
+
+
+
+
+/* ====== MODAL ROOT Y BACKDROP ====== */
+.modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(2px);
+  z-index: 90;
+}
+body.dark-theme .modal-backdrop {
+  background: rgba(0,0,0,0.7);
+}
+
+body.no-scroll {
+  overflow: hidden;
+}
+
+/* ====== MODO CLARO ====== */
+:host-context(:not(.dark-theme)) .modal-root.confirm-delete {
+  .modal-card {
+    background: #ffffff;
+    border: 1px solid #e6ebf2;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .modal-header,
+  .modal-footer {
+    background: #f5f8fd;
+    border-color: #e6ebf2;
+  }
+
+  .modal-body {
+    background: #ffffff;
+    color: #0f172a;
+  }
+
+  .form-input {
+    background: #f5f8fd;
+    border: 1px solid #e6ebf2;
+    color: #0f172a;
+    border-radius: 12px;
+  }
+
+  .btn-secondary-soft.icon-only {
+    border-radius: 14px;
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f8fd;
+    border: 1px solid #e6ebf2;
+    color: #5f6b74;
+    transition: transform 0.2s ease;
+  }
+
+  .btn-secondary-soft.icon-only:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  }
+
+  .btn-delete {
+    border-radius: 14px;
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #ff6a6a, #e74c3c);
+    color: #fff;
+    box-shadow: 0 10px 22px rgba(231, 76, 60, 0.22);
+    transition: transform 0.2s ease;
+  }
+
+  .btn-delete:hover {
+    transform: translateY(-2px);
+    filter: saturate(1.05);
+  }
+
+  .btn-delete i-bs {
+    color: #ffffff !important;
+    transition: color 0.25s ease;
+  }
+
+  .error {
+    color: #e74c3c;
+    font-weight: 700;
+    margin-top: 8px;
+  }
+}
+
+/* ====== MODO OSCURO ====== */
+:host-context(.dark-theme) .modal-root.confirm-delete {
+  .modal-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .modal-header,
+  .modal-footer {
+    background: #334155;
+    border-color: #64748b;
+  }
+
+  .modal-body {
+    background: #1e293b;
+    color: #f1f5f9;
+  }
+
+  .form-input {
+    background: #0f172a;
+    border: 1px solid #64748b;
+    color: #f1f5f9;
+    border-radius: 12px;
+  }
+
+  .btn-secondary-soft.icon-only {
+    border-radius: 14px;
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #334155;
+    border: 1px solid #64748b;
+    color: #94a3b8;
+    transition: transform 0.2s ease;
+  }
+
+  .btn-secondary-soft.icon-only:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.08);
+  }
+
+  .btn-delete {
+    border-radius: 14px;
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #1e293b;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    transition: background 0.25s ease, transform 0.2s ease;
+  }
+
+  .btn-delete i-bs {
+    color: #e74c3c !important;
+    transition: color 0.25s ease;
+  }
+
+  .btn-delete:hover {
+    background: linear-gradient(135deg, #ff6a6a, #e74c3c);
+    transform: translateY(-2px);
+    filter: saturate(1.05);
+  }
+
+  .btn-delete:hover i-bs {
+    color: #ffffff !important;
+  }
+
+  .error {
+    color: #f87171;
+    font-weight: 700;
+    margin-top: 8px;
+  }
+}
+
+/* ====== TOAST NOTIFICACIÓN ====== */
+.toast-notificacion {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  font-weight: 700;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 9999;
+}
+
+.toast-notificacion.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+body.dark-theme .toast-notificacion {
+  background: #334155;
+  color: #f1f5f9;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
+
+
+.status-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-right: auto;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.success-message {
+  color: #22c55e; // verde éxito
+}
+
+.loading-dots {
+  color: #64748b;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.loading-dots span {
+  animation: blink 1.5s infinite;
+  animation-delay: calc(var(--i) * 0.2s);
+}
+
+.loading-dots span:nth-child(1) { --i: 1; }
+.loading-dots span:nth-child(2) { --i: 2; }
+.loading-dots span:nth-child(3) { --i: 3; }
+
+@keyframes blink {
+  0%, 80%, 100% { opacity: 0; }
+  40% { opacity: 1; }
 }
