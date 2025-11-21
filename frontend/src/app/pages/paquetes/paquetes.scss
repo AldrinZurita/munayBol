@@ -236,7 +236,7 @@ body.dark-theme .title-icon {
   color: #2e7cff;
   transition: color 0.15s ease-out; 
 }
-
+  
 .icon-btn.btn-delete i-bs[name="trash"] {
   color: #e74c3c;
   transition: color 0.15s ease-out;
@@ -899,7 +899,15 @@ body.dark-theme .toast-notificacion {
 .loading-dots span:nth-child(2) { --i: 2; }
 .loading-dots span:nth-child(3) { --i: 3; }
 
+.icon-star {
+  color: goldenrod;
+}
+
 @keyframes blink {
   0%, 80%, 100% { opacity: 0; }
   40% { opacity: 1; }
+}
+
+.star-icon {
+  color: #22c55e;/* dorado */
 }
