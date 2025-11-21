@@ -224,3 +224,6 @@ finetune/dataset/*.jsonl.backup
 venv/
 
 .ollama/
+node_modules
+package-lock.json
+package.json

@@ -641,7 +641,7 @@
    button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible {
      outline: 3px solid var(--ring-transparent); outline-offset: 2px; border-radius: 8px;
    }
-   .editModal-form{overflow-y: scroll; }
+   .editModal-form{overflow-y: scroll;}
    @media (prefers-reduced-motion: reduce) {
      * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
    }

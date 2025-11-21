@@ -17,9 +17,23 @@
 
   <div class="navbar__container">
     <h1 class="logo ani-stagger">
+       <div class="title_logo">
+        <span class="ff-brand__emblem" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 48 48" focusable="false">
+            <defs>
+              <linearGradient id="ffFlagGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#d32f2f"/>
+                <stop offset="50%" stop-color="#facc15"/>
+                <stop offset="100%" stop-color="#16a34a"/>
+              </linearGradient>
+            </defs>
+            <circle cx="24" cy="24" r="18" fill="url(#ffFlagGrad)" opacity="0.95"/>
+          </svg>
+        </span>
       <a routerLink="/" aria-label="Ir a inicio" (click)="onNavItemSelect($event)">
-        <span class="logo__munay">Munay Bol</span>
+        <span class="logo__munay">MunayBol</span>
       </a>
+       </div>
     </h1>
 
     <button
@@ -79,10 +93,7 @@
     </ul>
 
     <div class="session-actions ani-stagger">
-      <button class="icon-btn search-btn" type="button" aria-label="Buscar o ir rápidamente (Ctrl/Cmd + K)"
-              (click)="openPalette(); onControlSelect($event)">
-        <span class="material-symbols-outlined">search</span>
-      </button>
+
 
       <ng-container *ngIf="isLoggedIn; else showLogin">
         <div class="user-actions">
@@ -151,35 +162,4 @@
     </div>
   </div>
 
-  <div class="palette" *ngIf="paletteOpen" role="dialog" aria-modal="true" aria-label="Buscar y ejecutar acciones" (click)="closePalette()">
-    <div class="palette__panel" (click)="$event.stopPropagation()">
-      <div class="palette__header">
-        <span class="material-symbols-outlined" aria-hidden="true">search</span>
-        <input
-          type="text"
-          class="palette__input"
-          [value]="paletteQuery"
-          (input)="onPaletteInput($any($event.target).value)"
-          placeholder="Buscar... (Ctrl/Cmd + K)"
-          autofocus
-        />
-        <button class="palette__close" type="button" aria-label="Cerrar" (click)="closePalette()">
-          <span class="material-symbols-outlined" aria-hidden="true">close</span>
-        </button>
-      </div>
-
-      <ul class="palette__list">
-        <li class="palette__item" *ngFor="let it of filteredPalette; let i = index" (click)="go(it)" tabindex="0">
-          <span class="material-symbols-outlined palette__icon" aria-hidden="true">{{ it.icon }}</span>
-          <span class="palette__label">{{ it.label }}</span>
-          <span class="material-symbols-outlined palette__chev" aria-hidden="true">chevron_right</span>
-        </li>
-        <li class="palette__empty" *ngIf="filteredPalette.length === 0">Sin resultados</li>
-      </ul>
-
-      <div class="palette__footer">
-        <span class="kbd">Esc</span> cerrar • <span class="kbd">Ctrl/Cmd + K</span> abrir
-      </div>
-    </div>
-  </div>
 </nav>
