@@ -89,7 +89,7 @@
   align-items: center;
   gap: 10px;
   font-weight: 900;
-  font-size: 22px;
+  // font-size: 22px;
   letter-spacing: .02em;
   transition: none !important;
   &:hover,
@@ -140,6 +140,10 @@
   }
   .navbar.contrast-dark .nav-list { background: var(--color-bg-navbar-solid); } /* CAMBIADO */
   .nav-list.open { display: flex; flex-direction: column; gap: 12px; }
+  .title_logo{
+    display: flex;
+    flex-direction: row;
+  }
 }
 .nav-ink {
   position: absolute; left: 0; bottom: -6px; height: 3px; border-radius: 2px;
@@ -243,6 +247,9 @@ body.dark-theme .palette__input {
   border-color: var(--color-border);
 }
 
+body {
+  font-family: 'Roboto', sans-serif !important;
+}
 
 .ani-stagger { opacity: 0; transform: translateY(-6px); animation: item-enter .36s ease forwards; }
 .navbar.mounted .ani-stagger:nth-child(1) { animation-delay: .02s; }
