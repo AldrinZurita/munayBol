@@ -555,14 +555,38 @@ body.dark-theme .title-icon {
     color: var(--color-text-primary);
     font-weight: 800;
   }
-.img-frame {
-     position: relative; display: inline-block; max-width: 100%;
-     border-radius: 12px; overflow: hidden; border: 1px solid var(--color-border);
-     box-shadow: 0 10px 24px rgba(0,0,0,0.15);
-   }
-   .img-frame img { display: block; max-width: 100%; height: auto; object-fit: contain; }
-   .img-frame::after { content: ""; position: absolute; inset: -20%; background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.28) 50%, rgba(255,255,255,0) 100%); transform: translateX(-120%) skewX(12deg); animation: imgShine 10s linear infinite; mix-blend-mode: screen; pointer-events: none; }
-   .img-frame:hover::after { animation-duration: 3.2s; }
+
+  .img-frame {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  .img-frame img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .img-frame::after {
+    content: "";
+    position: absolute;
+    inset: -20%;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.28) 50%, rgba(255, 255, 255, 0) 100%);
+    transform: translateX(-120%) skewX(12deg);
+    animation: imgShine 10s linear infinite;
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
+
+  .img-frame:hover::after {
+    animation-duration: 3.2s;
+  }
 
   body.dark-theme & .img-frame::after {
     background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0) 100%);
@@ -871,7 +895,7 @@ li {
   overflow-y: scroll;
 }
 
-img{
+img {
   max-width: 100%;
 }
 
@@ -883,6 +907,7 @@ img{
     scroll-behavior: auto !important;
   }
 }
+
 /* ====== MODAL DE ELIMINACIÓN (Hoteles) ====== */
 .modal-footer-delete {
   flex-direction: column;
@@ -926,11 +951,32 @@ img{
   animation-delay: calc(var(--i) * 0.2s);
 }
 
-.loading-dots span:nth-child(1) { --i: 1; }
-.loading-dots span:nth-child(2) { --i: 2; }
-.loading-dots span:nth-child(3) { --i: 3; }
+.loading-dots span:nth-child(1) {
+  --i: 1;
+}
+
+.loading-dots span:nth-child(2) {
+  --i: 2;
+}
+
+.loading-dots span:nth-child(3) {
+  --i: 3;
+}
+
+.icon-star {
+  color: goldenrod;
+}
+
 
 @keyframes blink {
-  0%, 80%, 100% { opacity: 0; }
-  40% { opacity: 1; }
+
+  0%,
+  80%,
+  100% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 1;
+  }
 }
