@@ -96,9 +96,9 @@
   }
   .btn--grad { background: linear-gradient(135deg, var(--brand), color-mix(in hsl, var(--brand), #000 10%)); color: #fff; border-color: color-mix(in hsl, var(--brand), #000 22%); }
   .btn--grad:hover { filter: brightness(1.06) saturate(1.06); transform: translateY(-2px); }
-  .btn--secondary { background: rgba(255,255,255,.22); color: #0f1b2a; border-color: rgba(255,255,255,.6); backdrop-filter: blur(2px); }
-  .btn--secondary:hover { background: rgba(255,255,255,.30); transform: translateY(-2px); }
-  .btn--ghost { background: transparent; color: #ffffff; border-color: rgba(255,255,255,.65); backdrop-filter: blur(2px); }
+  .btn--secondary { background: transparent; color: #ffffff; border-color: rgba(255,255,255,.6); backdrop-filter: blur(2px); }
+  .btn--secondary:hover { background: rgba(255,255,255,.18); transform: translateY(-2px); }
+  .btn--ghost { background: transparent; color: #ffffff; border-color: rgba(255,255,255,.6); backdrop-filter: blur(2px); }
   .btn--ghost:hover { background: rgba(255,255,255,.18); transform: translateY(-2px); }
   .btn--sm { padding: 10px 16px; font-size: 14px; border-radius: 11px; }
   .btn--primary { background: linear-gradient(135deg, var(--brand), color-mix(in hsl, var(--brand), #000 10%)); color: black; }
@@ -295,9 +295,8 @@
   
   /* 5) Botones */
   :host-context(.dark-theme) .btn--secondary {
-    background: rgba(148,163,184,.16);
     color: #e2e8f0;
-    border-color: rgba(148,163,184,.38);
+    border-color: rgba(148,163,184,.42);
   }
   :host-context(.dark-theme) .btn--secondary:hover { background: rgba(148,163,184,.24); }
   
@@ -310,7 +309,7 @@
   :host-context(.dark-theme) .btn--grad,
   :host-context(.dark-theme) .btn--primary {
     background: linear-gradient(135deg, var(--brand), color-mix(in hsl, var(--brand), #000 10%));
-    color: #0b1220;
+    color: #e2e8f0;
     border-color: color-mix(in hsl, var(--brand), #000 22%);
   }
   

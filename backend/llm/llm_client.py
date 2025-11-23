@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import json
 import logging
@@ -6,8 +7,11 @@ from typing import List, Dict, Any, Tuple
 
 logger = logging.getLogger(__name__)
 
+# --- CONFIGURACIÓN DE RUTAS ---
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_FILE_PATH = os.path.join(BASE_DIR, 'data', 'munaybol_data.json')
+
+# --- ENV: Configuración de Alto Rendimiento ---
 OLLAMA_BASE_URL        = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_MODEL           = os.getenv("OLLAMA_MODEL", "qwen2.5:3b")
 OLLAMA_MAX_TOKENS      = int(os.getenv("OLLAMA_MAX_TOKENS", "1500"))
@@ -16,11 +20,13 @@ OLLAMA_NUM_CTX         = int(os.getenv("OLLAMA_NUM_CTX", "4096"))
 OLLAMA_TIMEOUT         = float(os.getenv("OLLAMA_TIMEOUT", "180"))
 OLLAMA_NUM_GPU         = int(os.getenv("OLLAMA_NUM_GPU", "99"))
 
+# --- HEADERS NGROK ---
 NGROK_HEADERS = {
     "ngrok-skip-browser-warning": "true",
     "Content-Type": "application/json"
 }
 
+# --- 1. CARGA DE DATOS ESTRUCTURADA ---
 _DATA_DEPARTAMENTOS = []
 _DATA_HOTELES = []
 _DATA_LUGARES = []
@@ -60,7 +66,9 @@ def load_data():
 
 load_data()
 
+# --- 2. BÚSQUEDA INTELIGENTE POR DEPARTAMENTO ---
 def find_official_data(query: str) -> Tuple[str, str]:
+    """Busca datos oficiales (Aniversario, Comida) y el nombre del dpto."""
     query_lower = query.lower()
 
     for dpto in _DATA_DEPARTAMENTOS:
@@ -148,6 +156,7 @@ def send_message(
         )
 
     else:
+        # Prompt estándar (Información detallada del departamento)
         system_content = (
             "Eres MunayBot, un experto guía turístico de Bolivia. "
             "Tu respuesta DEBE SER COMPLETA, DETALLADA y PRECISA. NO DEBE CORTARSE. "

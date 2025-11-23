@@ -8,13 +8,8 @@
         Paquetes Turísticos
       </h1>
 
-      <button
-        *ngIf="isSuperAdmin"
-        class="btn btn-add icon-only"
-        (click)="openAddPaqueteModal()"
-        title="Agregar Paquete Turístico"
-        aria-label="Agregar Paquete Turístico"
-      >
+      <button *ngIf="isSuperAdmin" class="btn btn-add icon-only" (click)="openAddPaqueteModal()"
+        title="Agregar Paquete Turístico" aria-label="Agregar Paquete Turístico">
         <i-bs name="plus-square-fill" width="22" height="22" class="icon-center"></i-bs>
       </button>
     </header>
@@ -25,24 +20,12 @@
         <div class="filtro filtro-busqueda">
           <label for="busqueda" class="form-label">Buscar (nombre o ubicación)</label>
           <div class="search-wrapper">
-            <i-bs name="search" width="18" height="18" class="search-icon icon-center icon-secondary" aria-hidden="true"></i-bs>
-            <input
-              id="busqueda"
-              type="search"
-              class="form-input"
-              placeholder="Ej.: Aventura, Centro…"
-              [(ngModel)]="searchTerm"
-              (ngModelChange)="aplicarFiltros()"
-              aria-label="Buscar paquetes"
-            />
-            <button
-              type="button"
-              class="btn btn-secondary-soft icon-only clear-btn"
-              *ngIf="searchTerm"
-              (click)="searchTerm=''; aplicarFiltros()"
-              title="Limpiar búsqueda"
-              aria-label="Limpiar búsqueda"
-            >
+            <i-bs name="search" width="18" height="18" class="search-icon icon-center icon-secondary"
+              aria-hidden="true"></i-bs>
+            <input id="busqueda" type="search" class="form-input" placeholder="Ej.: Aventura, Centro…"
+              [(ngModel)]="searchTerm" (ngModelChange)="aplicarFiltros()" aria-label="Buscar paquetes" />
+            <button type="button" class="btn btn-secondary-soft icon-only clear-btn" *ngIf="searchTerm"
+              (click)="searchTerm=''; aplicarFiltros()" title="Limpiar búsqueda" aria-label="Limpiar búsqueda">
               <i-bs name="x-circle" width="18" height="18" class="icon-center"></i-bs>
             </button>
           </div>
@@ -51,59 +34,48 @@
         <div class="filtro filtro-depto">
           <label for="departamento" class="form-label">Departamento</label>
           <div class="select-wrapper">
-            <select
-              id="departamento"
-              class="form-select"
-              [(ngModel)]="departamentoSeleccionado"
-              (change)="aplicarFiltros()"
-              aria-label="Filtrar por departamento"
-            >
+            <select id="departamento" class="form-select" [(ngModel)]="departamentoSeleccionado"
+              (change)="aplicarFiltros()" aria-label="Filtrar por departamento">
               <option value="">Todos los departamentos</option>
               <option *ngFor="let dep of departamentos" [value]="dep">
                 {{ dep }}
               </option>
             </select>
-            <i-bs class="chevron-icon icon-center icon-secondary" name="chevron-down" width="16" height="16" aria-hidden="true"></i-bs>
+            <i-bs class="chevron-icon icon-center icon-secondary" name="chevron-down" width="16" height="16"
+              aria-hidden="true"></i-bs>
           </div>
         </div>
 
         <div class="filtro filtro-tipo">
           <label for="tipo" class="form-label">Tipo de paquete</label>
           <div class="select-wrapper">
-            <select
-              id="tipo"
-              class="form-select"
-              [(ngModel)]="tipoSeleccionado"
-              (change)="aplicarFiltros()"
-              aria-label="Filtrar por tipo de paquete"
-            >
+            <select id="tipo" class="form-select" [(ngModel)]="tipoSeleccionado" (change)="aplicarFiltros()"
+              aria-label="Filtrar por tipo de paquete">
               <option value="">Todos</option>
               <option *ngFor="let t of tipos" [value]="t">{{ t | titlecase }}</option>
             </select>
-            <i-bs class="chevron-icon icon-center icon-secondary" name="chevron-down" width="16" height="16" aria-hidden="true"></i-bs>
+            <i-bs class="chevron-icon icon-center icon-secondary" name="chevron-down" width="16" height="16"
+              aria-hidden="true"></i-bs>
           </div>
         </div>
 
         <div class="filtro filtro-disponible">
           <label for="disponible" class="form-label">Disponibilidad</label>
           <div class="select-wrapper">
-            <select
-              id="disponible"
-              class="form-select"
-              [(ngModel)]="disponibleSeleccionado"
-              (change)="aplicarFiltros()"
-              aria-label="Filtrar por disponibilidad"
-            >
+            <select id="disponible" class="form-select" [(ngModel)]="disponibleSeleccionado" (change)="aplicarFiltros()"
+              aria-label="Filtrar por disponibilidad">
               <option value="">Todas</option>
               <option value="true">Disponibles</option>
               <option value="false">No disponibles</option>
             </select>
-            <i-bs class="chevron-icon icon-center icon-secondary" name="chevron-down" width="16" height="16" aria-hidden="true"></i-bs>
+            <i-bs class="chevron-icon icon-center icon-secondary" name="chevron-down" width="16" height="16"
+              aria-hidden="true"></i-bs>
           </div>
         </div>
 
         <div class="acciones">
-          <button class="btn btn-secondary-soft icon-only" (click)="clearFilters()" title="Limpiar filtros" aria-label="Limpiar filtros">
+          <button class="btn btn-secondary-soft icon-only" (click)="clearFilters()" title="Limpiar filtros"
+            aria-label="Limpiar filtros">
             <i-bs name="x-circle" width="18" height="18" class="icon-center"></i-bs>
           </button>
         </div>
@@ -123,45 +95,23 @@
       <article *ngFor="let paquete of paquetesFiltrados; trackBy: trackByPaquete" class="card">
         <div class="media">
           <div class="img-frame">
-            <img
-              *ngIf="getLugarImage(paquete)"
-              [src]="getLugarImage(paquete)!"
-              alt="Imagen del lugar para {{ paquete.nombre }}"
-              class="paquete-imagen"
-              [class.active]="isActiveMedia(paquete.id_paquete, 'lugar')"
-              loading="lazy"
-              (error)="onCardImageError($event)"
-            />
-            <img
-              *ngIf="getHotelImage(paquete)"
-              [src]="getHotelImage(paquete)!"
-              alt="Imagen del hotel {{ paquete.hotel?.nombre }}"
-              class="paquete-imagen"
-              [class.active]="isActiveMedia(paquete.id_paquete, 'hotel')"
-              loading="lazy"
-              (error)="onCardImageError($event)"
-            />
+            <img *ngIf="getLugarImage(paquete)" [src]="getLugarImage(paquete)!"
+              alt="Imagen del lugar para {{ paquete.nombre }}" class="paquete-imagen"
+              [class.active]="isActiveMedia(paquete.id_paquete, 'lugar')" loading="lazy"
+              (error)="onCardImageError($event)" />
+            <img *ngIf="getHotelImage(paquete)" [src]="getHotelImage(paquete)!"
+              alt="Imagen del hotel {{ paquete.hotel?.nombre }}" class="paquete-imagen"
+              [class.active]="isActiveMedia(paquete.id_paquete, 'hotel')" loading="lazy"
+              (error)="onCardImageError($event)" />
 
             <div class="image-tabs" *ngIf="hasBothImages(paquete)">
-              <button
-                type="button"
-                class="tab-btn"
-                [class.active]="isActiveMedia(paquete.id_paquete, 'lugar')"
-                (click)="switchMedia(paquete.id_paquete, 'lugar')"
-                aria-label="Ver imagen del lugar"
-                title="Lugar"
-              >
+              <button type="button" class="tab-btn" [class.active]="isActiveMedia(paquete.id_paquete, 'lugar')"
+                (click)="switchMedia(paquete.id_paquete, 'lugar')" aria-label="Ver imagen del lugar" title="Lugar">
                 <i-bs name="image" width="14" height="14" class="icon-center"></i-bs>
                 Lugar
               </button>
-              <button
-                type="button"
-                class="tab-btn"
-                [class.active]="isActiveMedia(paquete.id_paquete, 'hotel')"
-                (click)="switchMedia(paquete.id_paquete, 'hotel')"
-                aria-label="Ver imagen del hotel"
-                title="Hotel"
-              >
+              <button type="button" class="tab-btn" [class.active]="isActiveMedia(paquete.id_paquete, 'hotel')"
+                (click)="switchMedia(paquete.id_paquete, 'hotel')" aria-label="Ver imagen del hotel" title="Hotel">
                 <i-bs name="building" width="14" height="14" class="icon-center"></i-bs>
                 Hotel
               </button>
@@ -172,19 +122,15 @@
               <span>{{ paquete.tipo | titlecase }}</span>
             </div>
             <div class="chip estado" [class.inactivo]="!paquete.estado">
-              <i-bs [name]="paquete.estado ? 'check-circle' : 'x-circle'" width="14" height="14" class="icon-center"></i-bs>
+              <i-bs [name]="paquete.estado ? 'check-circle' : 'x-circle'" width="14" height="14"
+                class="icon-center"></i-bs>
               <span>{{ paquete.estado ? 'Disponible' : 'No disponible' }}</span>
             </div>
 
-            <img
-              *ngIf="getHotelImage(paquete)"
-              [src]="getHotelImage(paquete)!"
-              alt="Avatar hotel {{ paquete.hotel?.nombre }}"
-              class="hotel-avatar"
-              [class.hidden]="isActiveMedia(paquete.id_paquete, 'hotel')"
-              loading="lazy"
-              (error)="onAvatarError($event)"
-            />
+            <img *ngIf="getHotelImage(paquete)" [src]="getHotelImage(paquete)!"
+              alt="Avatar hotel {{ paquete.hotel?.nombre }}" class="hotel-avatar"
+              [class.hidden]="isActiveMedia(paquete.id_paquete, 'hotel')" loading="lazy"
+              (error)="onAvatarError($event)" />
           </div>
         </div>
 
@@ -209,17 +155,16 @@
             <i-bs name="geo" width="16" height="16" class="icon-center"></i-bs>
             <span class="clamp-1">{{ paquete.hotel?.ubicacion }}</span>
           </div>
-
-          <div class="rating-row" *ngIf="paquete.hotel?.calificacion !== undefined && paquete.hotel?.calificacion !== null">
+          <br>
+          <div class="rating-row"
+            *ngIf="paquete.hotel?.calificacion !== undefined && paquete.hotel?.calificacion !== null">
             <span class="stars">
               <ng-container *ngFor="let s of getStarIcons(paquete.hotel!.calificacion!)">
-                <i-bs
-                  [name]="s === 'full' ? 'star-fill' : (s === 'half' ? 'star-half' : 'star')"
-                  width="16" height="16" class="icon-center"
-                ></i-bs>
+                <i-bs [name]="s === 'full' ? 'star-fill' : (s === 'half' ? 'star-half' : 'star')" width="20" height="20"
+                  class="icon-star"></i-bs>
               </ng-container>
             </span>
-            <span class="rating-text">{{ formatFiveScale(paquete.hotel!.calificacion!) }}</span>
+            <!-- <span class="rating-text">{{ formatFiveScale(paquete.hotel!.calificacion!) }}</span> -->
           </div>
           <p class="descripcion clamp-2" *ngIf="paquete.lugar?.descripcion">{{ paquete.lugar?.descripcion }}</p>
         </div>
@@ -230,21 +175,18 @@
           </div>
           <div class="card-actions">
             <ng-container *ngIf="isSuperAdmin">
-              <button class="icon-btn btn-edit paquete-manage" (click)="openEditPaqueteModal(paquete)" title="Editar" aria-label="Editar">
+              <button class="icon-btn btn-edit paquete-manage" (click)="openEditPaqueteModal(paquete)" title="Editar"
+                aria-label="Editar">
                 <i-bs name="pencil" width="18" height="18" class="icon-center"></i-bs>
               </button>
-              <button class="icon-btn btn-delete paquete-manage" (click)="onEliminarPaquete(paquete)" title="Eliminar" aria-label="Eliminar">
+              <button class="icon-btn btn-delete paquete-manage" (click)="onEliminarPaquete(paquete)" title="Eliminar"
+                aria-label="Eliminar">
                 <i-bs name="trash" width="18" height="18" class="icon-center"></i-bs>
               </button>
             </ng-container>
-            <button
-              class="btn btn-primary btn-ghost icon-only paquete-manage"
-              [class.full-width]="!isSuperAdmin"
-              (click)="onVerDetalles(paquete.id_paquete)"
-              [disabled]="!paquete.estado"
-              [title]="paquete.estado ? 'Ver detalles' : 'No disponible'"
-               aria-label="Ver Detalles"
-            >
+            <button class="btn btn-primary btn-ghost icon-only paquete-manage" [class.full-width]="!isSuperAdmin"
+              (click)="onVerDetalles(paquete.id_paquete)" [disabled]="!paquete.estado"
+              [title]="paquete.estado ? 'Ver detalles' : 'No disponible'" aria-label="Ver Detalles">
               <i-bs name="eye" width="18" height="18" class="icon-center"></i-bs>
             </button>
           </div>
@@ -254,14 +196,8 @@
   </div>
 
   <div class="modal-backdrop" *ngIf="showModal" (click)="closePaqueteModal()" aria-hidden="true"></div>
-  <div
-    class="modal-root"
-    *ngIf="showModal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="modalTitlePaquete"
-    (click)="closePaqueteModal()"
-  >
+  <div class="modal-root" *ngIf="showModal" role="dialog" aria-modal="true" aria-labelledby="modalTitlePaquete"
+    (click)="closePaqueteModal()">
     <div class="modal-ornaments" aria-hidden="true">
       <span class="orbit orbit-1"></span>
       <span class="orbit orbit-2"></span>
@@ -269,7 +205,8 @@
       <span class="glow glow-2"></span>
     </div>
 
-    <div class="modal-card animate-in" (click)="$event.stopPropagation()" [attr.aria-busy]="savingModal ? 'true' : 'false'">
+    <div class="modal-card animate-in" (click)="$event.stopPropagation()"
+      [attr.aria-busy]="savingModal ? 'true' : 'false'">
       <header class="modal-header">
         <h3 id="modalTitlePaquete">
           {{ isEditMode ? 'Editar Paquete' : 'Agregar Nuevo Paquete' }}
@@ -279,19 +216,23 @@
         </button>
       </header>
 
-      <form #paqueteForm="ngForm" (ngSubmit)="isEditMode ? saveEditPaquete(paqueteForm) : saveNewPaquete(paqueteForm)" novalidate>
+      <form #paqueteForm="ngForm" (ngSubmit)="isEditMode ? saveEditPaquete(paqueteForm) : saveNewPaquete(paqueteForm)"
+        novalidate>
         <div class="modal-body" aria-describedby="modalScrollHelpPaquete">
-          <div id="modalScrollHelpPaquete" class="sr-only">Desplázate dentro de este área para ver todo el contenido del formulario.</div>
+          <div id="modalScrollHelpPaquete" class="sr-only">Desplázate dentro de este área para ver todo el contenido del
+            formulario.</div>
 
           <div class="form-grid">
             <div class="field">
               <label class="form-label" for="p-nombre">Nombre *</label>
-              <input id="p-nombre" name="nombre" type="text" class="form-input edit-field" [(ngModel)]="modalPaqueteModel.nombre" required />
+              <input id="p-nombre" name="nombre" type="text" class="form-input edit-field"
+                [(ngModel)]="modalPaqueteModel.nombre" required />
             </div>
 
             <div class="field">
               <label class="form-label" for="p-tipo">Tipo *</label>
-              <select id="p-tipo" name="tipo" class="form-select edit-field" [(ngModel)]="modalPaqueteModel.tipo" required>
+              <select id="p-tipo" name="tipo" class="form-select edit-field" [(ngModel)]="modalPaqueteModel.tipo"
+                required>
                 <option value="" disabled>Selecciona un tipo</option>
                 <option *ngFor="let t of tipos" [value]="t">{{ t | titlecase }}</option>
               </select>
@@ -299,7 +240,8 @@
 
             <div class="field">
               <label class="form-label" for="p-precio">Precio (BOB) *</label>
-              <input id="p-precio" name="precio" type="number" min="0" step="0.01" class="form-input edit-field" [(ngModel)]="modalPaqueteModel.precio" required />
+              <input id="p-precio" name="precio" type="number" min="0" step="0.01" class="form-input edit-field"
+                [(ngModel)]="modalPaqueteModel.precio" required />
             </div>
 
             <div class="field">
@@ -312,26 +254,82 @@
 
             <div class="field">
               <label class="form-label" for="p-hotel">ID Hotel *</label>
-              <input id="p-hotel" name="id_hotel" type="number" min="1" class="form-input edit-field" [(ngModel)]="modalPaqueteModel.id_hotel" required />
+              <input id="p-hotel" name="id_hotel" type="number" min="1" class="form-input edit-field"
+                [(ngModel)]="modalPaqueteModel.id_hotel" required />
             </div>
             <div class="field">
               <label class="form-label" for="p-lugar">ID Lugar Turístico *</label>
-              <input id="p-lugar" name="id_lugar" type="number" min="1" class="form-input edit-field" [(ngModel)]="modalPaqueteModel.id_lugar" required />
+              <input id="p-lugar" name="id_lugar" type="number" min="1" class="form-input edit-field"
+                [(ngModel)]="modalPaqueteModel.id_lugar" required />
             </div>
           </div>
         </div>
         <footer class="modal-footer">
-          <div class="loader-inline" *ngIf="savingModal">
-            <span class="spinner"></span> Guardando...
+          <div class="status-area">
+            <div class="loading-dots" *ngIf="savingModal">Guardando<span>.</span><span>.</span><span>.</span></div>
+            <div class="success-message" *ngIf="mensajeGuardado">{{ mensajeGuardado }}</div>
           </div>
+
           <button type="button" class="btn btn-secondary" (click)="closePaqueteModal()" [disabled]="savingModal">
             Cancelar
           </button>
+
           <button type="submit" class="btn btn-primary" [disabled]="!paqueteForm.valid || savingModal">
             Guardar
           </button>
         </footer>
+
       </form>
     </div>
   </div>
+  <!-- Backdrop del modal de eliminación -->
+  <div class="modal-backdrop" *ngIf="showDeleteModal" aria-hidden="true" (click)="cancelarEliminacion()"></div>
+
+  <!-- Modal de confirmación de eliminación -->
+  <div class="modal-root confirm-delete" *ngIf="showDeleteModal" role="dialog" aria-modal="true"
+    (click)="cancelarEliminacion()">
+    <div class="modal-card animate-in" (click)="$event.stopPropagation()">
+      <header class="modal-header">
+        <h3>¿Eliminar paquete '{{ paqueteAEliminar?.nombre }}'?</h3>
+        <button class="icon-btn" (click)="cancelarEliminacion()" aria-label="Cerrar">
+          <span class="material-symbols-outlined icon-center icon-secondary">close</span>
+        </button>
+      </header>
+
+      <div class="modal-body">
+        <p>Para confirmar la eliminación, escribe <strong>ELIMINAR</strong> en el campo siguiente:</p>
+        <input type="text" class="form-input" [(ngModel)]="confirmacionTexto" placeholder="Escribe 'ELIMINAR'"
+          aria-label="Confirmar eliminación" />
+        <div class="error" *ngIf="errorEliminar && !mensajeEliminacion">
+          Texto incorrecto. Escribe exactamente 'ELIMINAR'.
+        </div>
+      </div>
+
+      <footer class="modal-footer modal-footer-delete">
+        <!-- Estado de carga y mensaje -->
+        <div class="status-area">
+          <div class="loading-dots" *ngIf="eliminandoPaquete">Eliminando<span>.</span><span>.</span><span>.</span></div>
+          <div class="success-message" *ngIf="mensajeEliminacion">{{ mensajeEliminacion }}</div>
+          <div class="error" *ngIf="errorEliminar && !mensajeEliminacion">Texto incorrecto. Escribe exactamente
+            'ELIMINAR'.</div>
+        </div>
+
+        <!-- Botones alineados separados -->
+        <div class="footer-actions">
+          <button class="btn btn-secondary-soft icon-only" (click)="cancelarEliminacion()" aria-label="Cancelar"
+            title="Cancelar" [disabled]="eliminandoPaquete">
+            <i-bs name="x-circle" width="18" height="18" class="icon-center"></i-bs>
+          </button>
+
+          <button class="icon-btn btn-delete" [disabled]="confirmacionTexto !== 'ELIMINAR' || eliminandoPaquete"
+            (click)="confirmarEliminacion()" aria-label="Eliminar" title="Eliminar paquete">
+            <i-bs name="trash" width="18" height="18" class="icon-center"></i-bs>
+          </button>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+
 </main>

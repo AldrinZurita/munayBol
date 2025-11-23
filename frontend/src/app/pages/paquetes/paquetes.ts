@@ -119,19 +119,64 @@ export class Paquetes implements OnInit, OnDestroy {
     this.router.navigate(['/paquetes', id_paquete]);
   }
 
-  onEliminarPaquete(paquete: Paquete): void {
-    if (!this.isSuperAdmin) return;
-    if (confirm(`¿Eliminar paquete "${paquete.nombre}"?`)) {
-      this.paqueteService.eliminarPaquete(paquete.id_paquete).subscribe({
-        next: () => {
-          this.paquetes = this.paquetes.filter(p => p.id_paquete !== paquete.id_paquete);
-          this.aplicarFiltros();
-          alert('Paquete eliminado');
-        },
-        error: () => alert('Error al eliminar paquete')
-      });
-    }
+
+
+
+
+
+showDeleteModal = false;
+paqueteAEliminar: Paquete | null = null;
+confirmacionTexto = '';
+errorEliminar = false;
+eliminandoPaquete = false;
+mensajeEliminacion = '';
+
+onEliminarPaquete(paquete: Paquete): void {
+  if (!this.isSuperAdmin) return;
+  this.paqueteAEliminar = paquete;
+  this.confirmacionTexto = '';
+  this.errorEliminar = false;
+  this.mensajeEliminacion = '';
+  this.eliminandoPaquete = false;
+  this.showDeleteModal = true;
+  document.body.classList.add('no-scroll');
+}
+
+cancelarEliminacion(): void {
+  this.showDeleteModal = false;
+  this.paqueteAEliminar = null;
+  this.confirmacionTexto = '';
+  this.errorEliminar = false;
+  this.mensajeEliminacion = '';
+  this.eliminandoPaquete = false;
+  document.body.classList.remove('no-scroll');
+}
+
+confirmarEliminacion(): void {
+  if (this.confirmacionTexto !== 'ELIMINAR' || !this.paqueteAEliminar) {
+    this.errorEliminar = true;
+    return;
   }
+
+  this.errorEliminar = false;
+  this.eliminandoPaquete = true;
+  this.mensajeEliminacion = '';
+
+  this.paqueteService.eliminarPaquete(this.paqueteAEliminar.id_paquete).subscribe({
+    next: () => {
+      this.paquetes = this.paquetes.filter(p => p.id_paquete !== this.paqueteAEliminar!.id_paquete);
+      this.aplicarFiltros();
+      this.eliminandoPaquete = false;
+      this.mensajeEliminacion = 'Paquete eliminado correctamente';
+    },
+    error: () => {
+      this.eliminandoPaquete = false;
+      this.errorEliminar = true;
+      this.mensajeEliminacion = 'Error al eliminar paquete';
+    }
+  });
+}
+
 
   openAddPaqueteModal(): void {
     if (!this.isSuperAdmin) return;
@@ -149,65 +194,70 @@ export class Paquetes implements OnInit, OnDestroy {
     this.openModal();
   }
 
-  saveNewPaquete(form: NgForm): void {
-    if (!form.valid || !this.isSuperAdmin) return;
+  mensajeGuardado = '';
 
-    if (!this.modalPaqueteModel.nombre || !this.modalPaqueteModel.tipo || this.modalPaqueteModel.precio == null || !this.modalPaqueteModel.id_hotel || !this.modalPaqueteModel.id_lugar) {
-      alert('Completa todos los campos obligatorios.');
-      return;
+saveNewPaquete(form: NgForm): void {
+  if (!form.valid || !this.isSuperAdmin) return;
+
+  if (!this.modalPaqueteModel.nombre || !this.modalPaqueteModel.tipo || this.modalPaqueteModel.precio == null || !this.modalPaqueteModel.id_hotel || !this.modalPaqueteModel.id_lugar) {
+    this.mensajeGuardado = '❌ Completa todos los campos obligatorios.';
+    return;
+  }
+
+  this.savingModal = true;
+  this.mensajeGuardado = '';
+
+  this.paqueteService.crearPaquete(this.modalPaqueteModel).subscribe({
+    next: (paquete) => {
+      this.paquetes.unshift(paquete as Paquete);
+      const hasLugar = Boolean(this.getLugarImage(paquete as Paquete));
+      const hasHotel = Boolean(this.getHotelImage(paquete as Paquete));
+      this.activeMedia.set((paquete as Paquete).id_paquete, hasLugar ? 'lugar' : (hasHotel ? 'hotel' : 'lugar'));
+
+      this.aplicarFiltros();
+      this.savingModal = false;
+      this.mensajeGuardado = '✅ Paquete agregado correctamente';
+    },
+    error: (err) => {
+      console.error('Error al agregar paquete:', err);
+      this.savingModal = false;
+      this.mensajeGuardado = '❌ Error al agregar paquete';
     }
+  });
+}
 
-    this.savingModal = true;
-    this.paqueteService.crearPaquete(this.modalPaqueteModel).subscribe({
-      next: (paquete) => {
-        this.paquetes.unshift(paquete as Paquete);
-        const hasLugar = Boolean(this.getLugarImage(paquete as Paquete));
-        const hasHotel = Boolean(this.getHotelImage(paquete as Paquete));
-        this.activeMedia.set((paquete as Paquete).id_paquete, hasLugar ? 'lugar' : (hasHotel ? 'hotel' : 'lugar'));
+saveEditPaquete(form: NgForm): void {
+  if (!form.valid || !this._editTarget || !this.isSuperAdmin) return;
 
-        this.aplicarFiltros();
-        this.savingModal = false;
-        this.closePaqueteModal();
-        alert('Paquete agregado correctamente');
-      },
-      error: (err) => {
-        console.error('Error al agregar paquete:', err);
-        this.savingModal = false;
-        alert('Error al agregar paquete');
-      }
-    });
-  }
+  this.savingModal = true;
+  this.mensajeGuardado = '';
 
-  saveEditPaquete(form: NgForm): void {
-    if (!form.valid || !this._editTarget || !this.isSuperAdmin) return;
-    this.savingModal = true;
+  const payload: Paquete = {
+    ...(this.modalPaqueteModel as Paquete),
+    id_paquete: this._editTarget.id_paquete
+  };
 
-    const payload: Paquete = {
-      ...(this.modalPaqueteModel as Paquete),
-      id_paquete: this._editTarget.id_paquete
-    };
+  this.paqueteService.actualizarPaquete(payload).subscribe({
+    next: (p) => {
+      Object.assign(this._editTarget!, p);
+      const hasLugar = Boolean(this.getLugarImage(this._editTarget!));
+      const hasHotel = Boolean(this.getHotelImage(this._editTarget!));
+      if (!hasLugar && hasHotel) this.activeMedia.set(this._editTarget!.id_paquete, 'hotel');
+      if (hasLugar && !hasHotel) this.activeMedia.set(this._editTarget!.id_paquete, 'lugar');
 
-    this.paqueteService.actualizarPaquete(payload).subscribe({
-      next: (p) => {
-        Object.assign(this._editTarget!, p);
-        const hasLugar = Boolean(this.getLugarImage(this._editTarget!));
-        const hasHotel = Boolean(this.getHotelImage(this._editTarget!));
-        if (!hasLugar && hasHotel) this.activeMedia.set(this._editTarget!.id_paquete, 'hotel');
-        if (hasLugar && !hasHotel) this.activeMedia.set(this._editTarget!.id_paquete, 'lugar');
+      this.aplicarFiltros();
+      this.savingModal = false;
+      this.mensajeGuardado = '✅ Paquete actualizado correctamente';
+      this._editTarget = null;
+    },
+    error: (err) => {
+      console.error('Error al actualizar paquete:', err);
+      this.savingModal = false;
+      this.mensajeGuardado = '❌ Error al actualizar paquete';
+    }
+  });
+}
 
-        this.aplicarFiltros();
-        this.savingModal = false;
-        this.closePaqueteModal();
-        alert('Paquete actualizado');
-        this._editTarget = null;
-      },
-      error: (err) => {
-        console.error('Error al actualizar paquete:', err);
-        this.savingModal = false;
-        alert('Error al actualizar paquete');
-      }
-    });
-  }
 
   closePaqueteModal(): void {
     if (this.savingModal) return;

@@ -15,9 +15,11 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class NotificationComponent {
   private mouseOver = false;
+  private closeTimer: any;
 
   onMouseEnter(): void {
     this.mouseOver = true;
+    this.cancelClose();
     if (!this.showNotifications) {
       this.showNotifications = true;
       this.notificationService.fetchNotifications().subscribe();
@@ -26,9 +28,7 @@ export class NotificationComponent {
 
   onMouseLeave(): void {
     this.mouseOver = false;
-    if (this.showNotifications) {
-      this.showNotifications = false;
-    }
+    this.scheduleClose();
   }
   showNotifications = false;
   notifications$: Observable<Notification[]>;
@@ -51,6 +51,30 @@ export class NotificationComponent {
     this.showNotifications = !this.showNotifications;
     if (this.showNotifications) {
       this.notificationService.fetchNotifications().subscribe();
+    }
+  }
+
+  onPanelEnter(): void {
+    this.mouseOver = true;
+    this.cancelClose();
+  }
+
+  onPanelLeave(): void {
+    this.mouseOver = false;
+    this.scheduleClose();
+  }
+
+  private scheduleClose(delay = 200): void {
+    this.cancelClose();
+    this.closeTimer = setTimeout(() => {
+      if (!this.mouseOver) this.showNotifications = false;
+    }, delay);
+  }
+
+  private cancelClose(): void {
+    if (this.closeTimer) {
+      clearTimeout(this.closeTimer);
+      this.closeTimer = undefined;
     }
   }
 

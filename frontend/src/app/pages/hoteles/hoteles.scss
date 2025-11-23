@@ -64,7 +64,6 @@ body.dark-theme .hoteles-page::before {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  vertical-align: middle;
   line-height: 1;
   transition: transform .15s ease, color .2s ease;
 }
@@ -556,14 +555,38 @@ body.dark-theme .title-icon {
     color: var(--color-text-primary);
     font-weight: 800;
   }
-.img-frame {
-     position: relative; display: inline-block; max-width: 100%;
-     border-radius: 12px; overflow: hidden; border: 1px solid var(--color-border);
-     box-shadow: 0 10px 24px rgba(0,0,0,0.15);
-   }
-   .img-frame img { display: block; max-width: 100%; height: auto; object-fit: contain; }
-   .img-frame::after { content: ""; position: absolute; inset: -20%; background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.28) 50%, rgba(255,255,255,0) 100%); transform: translateX(-120%) skewX(12deg); animation: imgShine 10s linear infinite; mix-blend-mode: screen; pointer-events: none; }
-   .img-frame:hover::after { animation-duration: 3.2s; }
+
+  .img-frame {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  .img-frame img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .img-frame::after {
+    content: "";
+    position: absolute;
+    inset: -20%;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.28) 50%, rgba(255, 255, 255, 0) 100%);
+    transform: translateX(-120%) skewX(12deg);
+    animation: imgShine 10s linear infinite;
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
+
+  .img-frame:hover::after {
+    animation-duration: 3.2s;
+  }
 
   body.dark-theme & .img-frame::after {
     background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0) 100%);
@@ -710,7 +733,7 @@ body.dark-theme .modal-backdrop {
 
 .modal-header,
 .modal-footer {
-  padding: 1rem 1.5rem;
+  padding: 3rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -872,14 +895,88 @@ li {
   overflow-y: scroll;
 }
 
-img{
+img {
   max-width: 100%;
 }
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ====== MODAL DE ELIMINACIÓN (Hoteles) ====== */
+.modal-footer-delete {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.modal-footer-delete .status-area {
+  text-align: center;
+}
+
+.modal-footer-delete .footer-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Estado de carga y mensajes */
+.status-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-right: auto;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.success-message {
+  color: #22c55e; // verde éxito
+}
+
+.loading-dots {
+  color: #64748b;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.loading-dots span {
+  animation: blink 1.5s infinite;
+  animation-delay: calc(var(--i) * 0.2s);
+}
+
+.loading-dots span:nth-child(1) {
+  --i: 1;
+}
+
+.loading-dots span:nth-child(2) {
+  --i: 2;
+}
+
+.loading-dots span:nth-child(3) {
+  --i: 3;
+}
+
+.icon-star {
+  color: goldenrod;
+}
+
+
+@keyframes blink {
+
+  0%,
+  80%,
+  100% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 1;
   }
 }
