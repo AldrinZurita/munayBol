@@ -91,12 +91,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         const state = params.get('state');
         if (code && state) {
           this.loading = true;
-          this.githubLoading = false;
+          // CORRECCIÓN CLAVE: Mantener githubLoading en true mientras se procesa la respuesta.
+          this.githubLoading = true;
           this.loadingService.show('Validando con GitHub...');
 
           this.auth.githubExchange(code, state).subscribe({
             next: async (resp: LoginResponse) => {
-              this.loadingService.setProgress(100); // Avanza antes de navegar
+              this.loadingService.setProgress(100);
               this.snackBar.open('¡Inicio de sesión con GitHub exitoso!', '', { duration: 2500 });
               await this.router.navigate([], { queryParams: {}, replaceUrl: true });
               if (resp.usuario.rol === 'superadmin') await this.router.navigate(['/admin']);
@@ -104,6 +105,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             },
             error: (_err: unknown) => {
               this.loading = false;
+              this.githubLoading = false; // Restablecer en caso de error
               this.loadingService.hide();
               this.snackBar.open('Error al iniciar sesión con GitHub', '', { duration: 2500 });
             }
@@ -147,6 +149,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             try {
               google.accounts.id.prompt();
             } catch {
+              // Manejo silencioso de errores de prompt si es necesario
             }
           });
           host.appendChild(btn);
