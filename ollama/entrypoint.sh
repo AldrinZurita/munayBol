@@ -1,35 +1,19 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
+set -e
 
-echo "Iniciando Ollama entrypoint personalizado..."
+# 1. Iniciar el servicio Ollama en segundo plano.
+echo "Iniciando el servicio Ollama..."
+/usr/bin/ollama serve &
 
-ollama serve &
-SERVE_PID=$!
-echo "Servidor Ollama iniciado (PID: ${SERVE_PID}). Esperando disponibilidad..."
+# 2. Esperar un momento para asegurar que el servidor esté listo
+sleep 5
 
-for i in {1..12}; do
-  if curl -sf http://localhost:11434/api/version >/dev/null; then
-    echo "Servidor Ollama está listo."
-    break
-  fi
-  echo "Esperando Ollama (${i}/12)..."
-  sleep 1
-done
+# 3. Descargar el modelo necesario. Esto es seguro de ejecutar aquí
+# porque el servidor ya está corriendo en segundo plano.
+MODEL_NAME=${OLLAMA_MODEL:-qwen2.5:3b}
+echo "Verificando y descargando modelo: ${MODEL_NAME}..."
+ollama pull "$MODEL_NAME"
 
-CHAT_MODEL="${OLLAMA_MODEL:-qwen2.5:3b-instruct-q4_K_M}"
-EMBED_MODEL="${OLLAMA_EMBED_MODEL:-nomic-embed-text}"
-
-have_model() { ollama show "$1" >/dev/null 2>&1; }
-
-if ! have_model "${CHAT_MODEL}"; then
-  echo "Descargando modelo de chat: ${CHAT_MODEL}..."
-  curl -sS -X POST http://localhost:11434/api/pull -d "{\"name\":\"${CHAT_MODEL}\"}" >/dev/null
-fi
-
-if ! have_model "${EMBED_MODEL}"; then
-  echo "Descargando modelo de embedding: ${EMBED_MODEL}..."
-  curl -sS -X POST http://localhost:11434/api/pull -d "{\"name\":\"${EMBED_MODEL}\"}" >/dev/null
-fi
-
-echo "Modelos verificados. Servidor listo."
-wait ${SERVE_PID}
+# 4. Esperar a que el proceso en background termine (en la práctica, esto
+# mantendrá el script corriendo indefinidamente mientras el servidor Ollama esté vivo).
+wait $(jobs -p)

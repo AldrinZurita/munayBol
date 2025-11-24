@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
   apiUrl: '/api/',
-  googleClientId: '152411335033-meomkvc2136t317jgcqusbq3r7fo687m.apps.googleusercontent.com',
+  googleClientId: '643155360761-mvfq6qbbl1qbh6fthl933q74cgijb0pl.apps.googleusercontent.com',
   githubRedirectUri: 'http://localhost:4200/login'
 };

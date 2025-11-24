@@ -4,6 +4,8 @@ services:
     command: daphne -b 0.0.0.0 -p 8000 config.asgi:application
     ports: ["8000:8000"]
     volumes: ["./backend:/app"]
+    env_file:
+      - .env
     environment:
       USE_NEON: "True"
       NEON_DB: "neondb"
@@ -16,8 +18,7 @@ services:
       DJANGO_ALLOWED_HOSTS: "localhost 127.0.0.1 backend 0.0.0.0"
       PYTHONPATH: /app
 
-      #OLLAMA_BASE_URL: "http://ollama:11434"
-      OLLAMA_BASE_URL: "https://enterologic-jewel-extrajudicially.ngrok-free.dev"
+      OLLAMA_BASE_URL: "http://ollama:11434"
       OLLAMA_MODEL: "qwen2.5:3b"
       OLLAMA_NUM_CTX: "4096"
       OLLAMA_MAX_TOKENS: "1500"
@@ -28,15 +29,20 @@ services:
 
       DB_CONN_MAX_AGE: "120"
       DB_KEEPALIVES: "1"
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz/'); print('ok')\""]
       interval: 10s
       timeout: 5s
       retries: 12
       start_period: 20s
-    #depends_on:
-     # ollama:
-      #  condition: service_healthy
+    depends_on:
+      ollama:
+        condition: service_healthy
     networks: ["turismo-net"]
     restart: unless-stopped
 
@@ -51,22 +57,22 @@ services:
     networks: ["turismo-net"]
     restart: unless-stopped
 
-  #   ollama:
-  #     build: ./ollama
-  #     environment:
-  #       OLLAMA_KEEP_ALIVE: "2h"
-  #       OLLAMA_MODEL: "qwen2.5:3b"
-  #     ports: ["11434:11434"]
-  #     volumes:
-  #       - ${OLLAMA_MODELS:-/home/patriot/.ollama/models}:/root/.ollama/models
-  #     healthcheck:
-  #       test: ["CMD", "curl", "-f", "http://localhost:11434/api/version"]
-  #       interval: 10s
-  #       timeout: 10s
-  #       start_period: 60s
-  #       retries: 10
-  #     networks: ["turismo-net"]
-  #     restart: unless-stopped
+  ollama:
+    build: ./ollama
+    environment:
+      OLLAMA_KEEP_ALIVE: "2h"
+      OLLAMA_MODEL: "qwen2.5:3b"
+    ports: ["11434:11434"]
+    volumes:
+      - ${OLLAMA_MODELS:-/home/patriot/.ollama/models}:/root/.ollama/models
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/version"]
+      interval: 10s
+      timeout: 10s
+      start_period: 60s
+      retries: 10
+    networks: ["turismo-net"]
+    restart: unless-stopped
 
 networks:
   turismo-net:
