@@ -716,7 +716,7 @@ body.dark-theme .modal-backdrop {
   display: flex;
   flex-direction: column;
   max-height: 96vh;
-  animation: modalIn .28s ease-out forwards;
+  animation: modalIn3D .38s cubic-bezier(.2, .8, .2, 1) forwards;
 }
 
 @keyframes modalIn {
