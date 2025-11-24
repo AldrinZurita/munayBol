@@ -1,32 +1,19 @@
-# Local Ollama model cache (for dockerized ollama)
 /.ollama/
-
-# =========================
-# GLOBAL SETTINGS
-# =========================
-
-# VS Code and IDE files
 .vscode/
 .idea/
 *.iml
 *.sublime-project
 *.sublime-workspace
-
-# MacOS and OS-specific
 .DS_Store
 Thumbs.db
 ehthumbs.db
 Icon?
 Desktop.ini
-
-# Log files
 *.log
 npm-debug.log*
 yarn-error.log*
 yarn-debug.log*
 testem.log
-
-# Environment variables
 .env
 .env.*
 .env.local
@@ -34,18 +21,12 @@ testem.log
 .env.test.local
 .env.production.local
 .venv
-
-# Database and backup files
 *.db
 *.sqlite
 *.sqlite3
 backup.sql
-
-# SonarQube
 .scannerwork/
 sonar-project.properties
-
-# Miscellaneous
 *.pid
 *.seed
 *.bak
@@ -56,11 +37,6 @@ sonar-project.properties
 *.mocha
 *.nyc_output/
 .history/
-
-# =========================
-# FRONTEND (Angular)
-# =========================
-
 frontend/node_modules/
 frontend/npm-debug.log*
 frontend/yarn-error.log*
@@ -101,11 +77,6 @@ frontend/src/environments/*.prod.ts
 frontend/src/environments/*.dev.ts
 frontend/*.tgz
 node_modules/
-
-# =========================
-# BACKEND (Django)
-# =========================
-
 backend/__pycache__/
 backend/*.py[cod]
 backend/*$py.class
@@ -119,22 +90,12 @@ backend/.vscode/
 backend/.idea/
 backend/logs/
 backend/*.log
-
-# Django migrations (ignore all except __init__.py)
 backend/**/migrations/*.py
 !backend/**/migrations/__init__.py
-
-# Virtual environments
 backend/.venv/
 backend/venv/
-
-# Docker
 backend/docker-compose.override.yml
-
-# PostgreSQL data volume
 backend/postgres_data/
-
-# Coverage reports
 backend/htmlcov/
 backend/.coverage
 backend/.coverage.*
@@ -143,11 +104,6 @@ backend/nosetests.xml
 backend/coverage.xml
 backend/*.cover
 backend/*.py,cover
-
-# =========================
-# LLM SERVICE & MODEL FILES
-# =========================
-
 llm_service/gptneo-llm/*.safetensors
 llm_service/gptneo-llm/*.pt
 llm_service/gptneo-llm/*.bin
@@ -165,23 +121,13 @@ llm_service/*.jsonl
 llm_service/*.csv
 llm_service/*.h5
 llm_service/venv_gpu/
-
-# LLM checkpoints folders
-llm_service/gptneo-llm/checkpoint-*/
 llm_service/gptneo-llm/checkpoint-*
-
-# LLM generated
 llm_service/.cache/
 llm_service/__pycache__/
 llm_service/.ipynb_checkpoints/
 llm_service/.env
 llm_service/.venv/
 llm_service/venv/
-
-# =========================
-# OTHER COMMON FILES
-# =========================
-
 *.egg-info/
 *.pot
 *.pyc
@@ -190,22 +136,8 @@ llm_service/venv/
 /media
 /staticfiles
 /static
-
-*.log
-*.pot
-*.pyc
-*.pyo
-*.pyd
-*.db
-*.sqlite3
-
-# Ignore SQL dumps and other backups
 *.sql
 *.dump
-
-# =========================
-# FINETUNE ARTIFACTS
-# =========================
 finetune/outputs/
 finetune/*.gguf
 finetune/*.safetensors
@@ -215,14 +147,8 @@ finetune/dataset/*.parquet
 finetune/dataset/*.csv
 finetune/dataset/*.json
 finetune/dataset/*.jsonl.backup
-
-# VS Code workspace files (again, in case)
-.vscode/
-
-# Entornos virtuales
 .venv/
 venv/
-
 .ollama/
 node_modules
 package-lock.json

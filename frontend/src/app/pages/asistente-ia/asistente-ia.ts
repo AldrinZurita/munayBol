@@ -14,8 +14,20 @@ type Actor = 'user' | 'ia';
 interface Respuesta {
   from: Actor;
   text: string;
-  t: number;
+  t: number; // timestamp
 }
+
+interface SessionGroup {
+  label: string;
+  items: ChatSession[];
+}
+
+// NUEVO TIPO: Define las claves permitidas explícitamente
+type ChatGroupKey = 'today' | 'yesterday' | 'last-7' | 'last-30' | 'older';
+
+type ChatGroups = {
+  [K in ChatGroupKey]: ChatSession[];
+};
 
 @Component({
   selector: 'app-asistente-ia',
@@ -47,11 +59,14 @@ export class AsistenteIa implements OnInit, OnDestroy {
   currentSessionId: string | null = null;
   currentSession?: ChatSession;
 
+  // Variables para la paginación/scroll
   page = 1;
   limit = 30;
   totalMessages = 0;
   loadingMessages = false;
   hasMore = false;
+  private isInitialLoad = true;
+  private previousScrollHeight = 0;
 
   constructor(
     private readonly iaService: AsistenteIaService,
@@ -85,6 +100,7 @@ export class AsistenteIa implements OnInit, OnDestroy {
       } else if (!sid) {
         await this.loadSessions();
         if (this.sessions.length > 0) {
+          // Si no hay sesión en la URL, navega a la más reciente
           const latest = [...this.sessions].sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())[0];
           if (latest) this.router.navigate(['/asistente-ia', latest.id]);
           else this.createAndOpenSession();
@@ -115,6 +131,52 @@ export class AsistenteIa implements OnInit, OnDestroy {
     }
   }
 
+  groupedSessions(): SessionGroup[] {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    const isToday = (date: Date) => date.toDateString() === today.toDateString();
+    const isYesterday = (date: Date) => date.toDateString() === yesterday.toDateString();
+
+    // Utilizamos el nuevo tipo para definir explícitamente las claves
+    const groups: ChatGroups = {
+      today: [],
+      yesterday: [],
+      'last-7': [],
+      'last-30': [],
+      older: [],
+    };
+
+    const sortedSessions = [...this.sessions].sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+
+    for (const s of sortedSessions) {
+      const date = new Date(s.updated_at);
+      const diffDays = Math.ceil(Math.abs(today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+
+      if (isToday(date)) {
+        groups.today.push(s); // TS ahora permite groups.today
+      } else if (isYesterday(date)) {
+        groups.yesterday.push(s); // TS ahora permite groups.yesterday
+      } else if (diffDays <= 7) {
+        groups['last-7'].push(s);
+      } else if (diffDays <= 30) {
+        groups['last-30'].push(s);
+      } else {
+        groups.older.push(s); // TS ahora permite groups.older
+      }
+    }
+
+    const result: SessionGroup[] = [];
+    if (groups.today.length > 0) result.push({ label: 'Hoy', items: groups.today }); // TS ahora permite groups.today
+    if (groups.yesterday.length > 0) result.push({ label: 'Ayer', items: groups.yesterday }); // TS ahora permite groups.yesterday
+    if (groups['last-7'].length > 0) result.push({ label: 'Últimos 7 días', items: groups['last-7'] });
+    if (groups['last-30'].length > 0) result.push({ label: 'Últimos 30 días', items: groups['last-30'] });
+    if (groups.older.length > 0) result.push({ label: 'Anteriores', items: groups.older }); // TS ahora permite groups.older
+
+    return result;
+  }
+
   async createAndOpenSession(): Promise<void> {
     try {
       const s = await this.iaService.createSession().toPromise();
@@ -127,32 +189,37 @@ export class AsistenteIa implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * MEJORA: si el getSession falla (por error de sesión inexistente),
-   * crea automáticamente una nueva sesión y navega a ella.
-   */
+  async goToSession(s: ChatSession): Promise<void> {
+    if (s.id === this.currentSessionId) return;
+    this.router.navigate(['/asistente-ia', s.id]);
+  }
+
   async openSession(id: string, reset = false): Promise<void> {
     if (reset) {
       this.respuestas = [];
       this.page = 1;
       this.totalMessages = 0;
       this.hasMore = false;
+      this.isInitialLoad = true;
+      this.previousScrollHeight = 0;
     }
     this.currentSessionId = id;
     this.iaService.setCurrentSession(id);
     try {
       this.currentSession = await this.iaService.getSession(id).toPromise() || undefined;
+      // Si la sesión existe, carga los mensajes
+      await this.loadMessages(true);
     } catch {
       // Si la sesión no existe o fue borrada, crea una nueva y navega
       await this.createAndOpenSession();
       return;
     }
-    await this.loadMessages(true);
   }
 
   async loadMore(): Promise<void> {
     if (!this.currentSessionId || this.loadingMessages || !this.hasMore) return;
     this.page += 1;
+    this.previousScrollHeight = this.chatEl?.nativeElement.scrollHeight || 0;
     await this.loadMessages(false);
   }
 
@@ -163,11 +230,22 @@ export class AsistenteIa implements OnInit, OnDestroy {
       const pageResp = await this.iaService.listMessages(this.currentSessionId, { page: this.page, limit: this.limit }).toPromise();
       if (!pageResp) return;
       this.totalMessages = pageResp.total || 0;
-      const items = (pageResp.items || []).map((m: ChatMessage) => this.mapToRespuesta(m));
+      // Recibimos los mensajes del más nuevo al más antiguo, por lo que los invertimos
+      const items = (pageResp.items || []).map((m: ChatMessage) => this.mapToRespuesta(m)).reverse();
+
+      // La lista de 'respuestas' debe estar en orden cronológico (antiguo a nuevo)
       if (resetList) this.respuestas = items;
       else this.respuestas = [...items, ...this.respuestas];
+
       this.hasMore = (this.page * this.limit) < this.totalMessages;
-      if (resetList) this.scrollToBottomSoon();
+
+      if (resetList) {
+        this.scrollToBottomSoon();
+        this.isInitialLoad = false;
+      } else {
+        this.restoreScrollPosition(); // Restaurar posición después de cargar más
+      }
+
     } finally {
       this.loadingMessages = false;
     }
@@ -181,57 +259,49 @@ export class AsistenteIa implements OnInit, OnDestroy {
     };
   }
 
-  async renameSession(s: ChatSession): Promise<void> {
-    const nuevo = prompt('Nuevo título de la conversación', s.title || '');
-    if (nuevo === null) return;
-    this.renamingId = s.id;
-    try {
-      const upd = await this.iaService.patchSession(s.id, { title: nuevo.trim() }).toPromise();
-      if (upd) {
-        this.sessions = this.sessions.map(x => x.id === s.id ? upd : x);
-        if (this.currentSessionId === s.id) this.currentSession = upd;
-      }
-    } finally {
-      this.renamingId = null;
-    }
+  // --- Lógica de Scroll ---
+  onChatScroll(event: Event): void {
+    const el = this.chatEl?.nativeElement;
+    if (!el) return;
+
+    // Altura actual - Scroll actual = Distancia al final
+    const distanceToBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+
+    // Si la distancia al final es mayor a un umbral (ej. 100px), mostrar el FAB
+    this.showScrollToBottom = distanceToBottom > 100;
   }
 
-  async toggleArchive(s: ChatSession): Promise<void> {
-    this.archivingId = s.id;
-    try {
-      const upd = await this.iaService.patchSession(s.id, { archived: !s.archived }).toPromise();
-      if (upd) {
-        this.sessions = this.sessions.map(x => x.id === s.id ? upd : x);
-        if (this.currentSessionId === s.id) this.currentSession = upd;
-      }
-    } finally {
-      this.archivingId = null;
-    }
+  scrollToBottom(): void {
+    this.chatEl?.nativeElement.scrollTo({
+      top: this.chatEl.nativeElement.scrollHeight,
+      behavior: 'smooth',
+    });
   }
 
-  async deleteSession(s: ChatSession): Promise<void> {
-    if (!confirm('¿Eliminar esta conversación? Esta acción no se puede deshacer.')) return;
-    this.deletingId = s.id;
-    try {
-      await this.iaService.deleteSession(s.id).toPromise();
-      this.sessions = this.sessions.filter(x => x.id !== s.id);
-      if (this.currentSessionId === s.id) {
-        this.currentSessionId = null;
-        this.currentSession = undefined;
-        if (this.sessions.length > 0) {
-          this.router.navigate(['/asistente-ia', this.sessions[0].id]);
-        } else {
-          await this.createAndOpenSession();
-        }
+  scrollToBottomSoon(): void {
+    setTimeout(() => {
+      // Solo hacer scroll a menos que estemos cargando el historial y no sea la carga inicial.
+      if (!this.loadingMessages && !this.isInitialLoad) {
+        this.scrollToBottom();
+      } else if (this.isInitialLoad) {
+        this.scrollToBottom(); // Forzar el scroll al inicio de la sesión.
       }
-    } finally {
-      this.deletingId = null;
-    }
+    }, 50);
   }
 
-  async applyFilters(): Promise<void> {
-    await this.loadSessions();
+  restoreScrollPosition(): void {
+    setTimeout(() => {
+      const el = this.chatEl?.nativeElement;
+      if (el && this.previousScrollHeight > 0) {
+        // Ajusta el scroll para mantener la misma posición visible
+        const newScrollTop = el.scrollHeight - this.previousScrollHeight;
+        el.scrollTop = newScrollTop;
+      }
+      this.previousScrollHeight = 0; // Reset
+    }, 0);
   }
+
+  // --- Lógica de Mensajes y Estado ---
   private push(from: Actor, text: string): void {
     const t = Date.now();
     this.respuestas.push({ from, text, t });
@@ -242,6 +312,25 @@ export class AsistenteIa implements OnInit, OnDestroy {
     this.scrollToBottomSoon();
   }
 
+  isNewDay(i: number): boolean {
+    if (i === 0) return true;
+    const currentDay = new Date(this.respuestas[i].t).toDateString();
+    const prevDay = new Date(this.respuestas[i - 1].t).toDateString();
+    return currentDay !== prevDay;
+  }
+
+  isGroupStart(i: number): boolean {
+    if (i === 0) return true;
+    const current = this.respuestas[i];
+    const prev = this.respuestas[i - 1];
+    return current.from !== prev.from || (current.t - prev.t > 1000 * 60 * 5); // 5 minutos de separación
+  }
+
+  trackByMsg(index: number, msg: Respuesta): number {
+    return msg.t; // Usar el timestamp como trackBy para rendimiento
+  }
+
+  // --- Streaming y Envío de Mensajes ---
   private async streamAssistantTextIntoPlaceholder(full: string, placeholderT?: number): Promise<void> {
     if (this.streamTimer) { clearInterval(this.streamTimer); this.streamTimer = null; }
 
@@ -287,6 +376,10 @@ export class AsistenteIa implements OnInit, OnDestroy {
       await this.createAndOpenSession();
     }
     if (!this.currentSessionId) return;
+
+    // Antes de enviar, haz scroll al final para que el usuario vea su mensaje
+    this.scrollToBottom();
+
     this.push('user', msg);
     this.prompt = '';
     const placeholderT = Date.now();
@@ -326,19 +419,11 @@ export class AsistenteIa implements OnInit, OnDestroy {
     } finally {
       this.sending = false;
       setTimeout(() => (this.typing = false), 200);
+      this.scrollToBottomSoon(); // Asegurar scroll al final después de la respuesta
     }
   }
-  isLastUser(i: number): boolean {
-    for (let k = this.respuestas.length - 1; k >= 0; k--) {
-      if (this.respuestas[k]?.from === 'user') return i === k;
-    }
-    return false;
-  }
 
-  boltShouldDraw(t: number): boolean {
-    return this.animatedBolts.has(t);
-  }
-
+  // --- Metadatos y Utilidades ---
   enviarQuick(msg: string): void {
     if (this.sending) return;
     this.prompt = msg;
@@ -351,7 +436,9 @@ export class AsistenteIa implements OnInit, OnDestroy {
   }
 
   copiar(text: string): void {
-    try { navigator.clipboard.writeText(text || ''); } catch {}
+    try {
+      navigator.clipboard.writeText(text || '');
+    } catch {}
   }
 
   getUserInitials(): string {
@@ -373,8 +460,13 @@ export class AsistenteIa implements OnInit, OnDestroy {
       lines.push(`## ${who} • ${ts}`, '', r.text, '');
     }
     const md = lines.join('\n');
-    try { navigator.clipboard.writeText(md); this.push('ia', 'Copié la conversación al portapapeles en formato Markdown.'); }
-    catch { this.push('ia', 'No pude copiar la conversación automáticamente. Intenta manualmente.'); }
+    try {
+      navigator.clipboard.writeText(md);
+      this.push('ia', 'Copié la conversación al portapapeles en formato **Markdown**. ¡Asegúrate de tener un título para el archivo!');
+    }
+    catch {
+      this.push('ia', 'No pude copiar la conversación automáticamente. Intenta manualmente.');
+    }
   }
 
   private improveMarkdownHeuristics(text: string): string {
@@ -389,75 +481,65 @@ export class AsistenteIa implements OnInit, OnDestroy {
   }
 
   renderMarkdown(text: string): SafeHtml {
-    if (!text) return '';
-    const fixed = this.improveMarkdownHeuristics(text);
-    const html = marked.parse(fixed);
-    const clean = DOMPurify.sanitize(html as string);
-    return this.sanitizer.bypassSecurityTrustHtml(clean);
+    const rawHtml = marked.parse(this.improveMarkdownHeuristics(text || '')) as string;
+    const safeHtml = DOMPurify.sanitize(rawHtml);
+    return this.sanitizer.bypassSecurityTrustHtml(safeHtml);
   }
 
-  scrollToBottom(): void {
-    try { this.chatEl?.nativeElement?.scrollTo({ top: this.chatEl.nativeElement.scrollHeight, behavior: 'smooth' }); } catch {}
-  }
-  scrollToBottomSoon(delay = 50): void {
-    setTimeout(() => this.scrollToBottom(), delay);
-  }
-
-  onChatScroll(e: Event): void {
-    const el = e.target as HTMLDivElement;
-    if (!el) return;
-    const atBottom = (el.scrollHeight - el.scrollTop - el.clientHeight) < 200;
-    this.showScrollToBottom = !atBottom;
-  }
-
-  groupedSessions(): { label: string, items: ChatSession[] }[] {
-    const groups = new Map<string, ChatSession[]>();
-    const today = new Date(); today.setHours(0,0,0,0);
-    const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
-    const startOfWeek = new Date(today); startOfWeek.setDate(startOfWeek.getDate() - today.getDay());
-    const startOfMonth = new Date(today); startOfMonth.setDate(1);
-
-    const sorted = [...this.sessions].sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
-
-    for (const s of sorted) {
-      const d = new Date(s.updated_at);
-      let key: string;
-      if (d >= today) key = 'Hoy';
-      else if (d >= yesterday) key = 'Ayer';
-      else if (d >= startOfWeek) key = 'Esta semana';
-      else if (d >= startOfMonth) key = 'Este mes';
-      else key = d.toLocaleString('es-BO', { month: 'long', year: 'numeric' });
-
-      const k = key.charAt(0).toUpperCase() + key.slice(1);
-      if (!groups.has(k)) groups.set(k, []);
-      groups.get(k)!.push(s);
+  // --- Funciones de Sesión ---
+  async renameSession(s: ChatSession): Promise<void> {
+    const nuevo = prompt('Nuevo título de la conversación', s.title || '');
+    if (nuevo === null || nuevo.trim() === '') return;
+    this.renamingId = s.id;
+    try {
+      const upd = await this.iaService.patchSession(s.id, { title: nuevo.trim() }).toPromise();
+      if (upd) {
+        this.sessions = this.sessions.map(x => x.id === s.id ? upd : x);
+        if (this.currentSessionId === s.id) this.currentSession = upd;
+      }
+    } finally {
+      this.renamingId = null;
     }
-    return Array.from(groups.entries()).map(([label, items]) => ({ label, items }));
   }
 
-  goToSession(s: ChatSession): void {
-    if (s.id === this.currentSessionId) return;
-    this.router.navigate(['/asistente-ia', s.id]);
+  async toggleArchive(s: ChatSession): Promise<void> {
+    this.archivingId = s.id;
+    try {
+      const upd = await this.iaService.patchSession(s.id, { archived: !s.archived }).toPromise();
+      if (upd) {
+        this.sessions = this.sessions.map(x => x.id === s.id ? upd : x);
+        if (this.currentSessionId === s.id) this.currentSession = upd;
+        // Si el filtro está activo y la desarchivas/archivas, recarga las sesiones
+        if (this.showArchived !== upd.archived) {
+          await this.loadSessions();
+        }
+      }
+    } finally {
+      this.archivingId = null;
+    }
   }
 
-  isGroupStart(i: number): boolean {
-    if (i === 0) return true;
-    const prev = this.respuestas[i-1];
-    const curr = this.respuestas[i];
-    if (prev.from !== curr.from) return true;
-    const tPrev = new Date(prev.t);
-    const tCurr = new Date(curr.t);
-    return (tCurr.getTime() - tPrev.getTime()) > (3 * 60 * 1000); // 3 minutes
+  async deleteSession(s: ChatSession): Promise<void> {
+    if (!confirm('¿Eliminar esta conversación? Esta acción no se puede deshacer.')) return;
+    this.deletingId = s.id;
+    try {
+      await this.iaService.deleteSession(s.id).toPromise();
+      this.sessions = this.sessions.filter(x => x.id !== s.id);
+      if (this.currentSessionId === s.id) {
+        // Navegar a la sesión más reciente o crear una nueva
+        const latest = [...this.sessions].sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())[0];
+        if (latest) {
+          this.router.navigate(['/asistente-ia', latest.id]);
+        } else {
+          await this.createAndOpenSession();
+        }
+      }
+    } finally {
+      this.deletingId = null;
+    }
   }
 
-  isNewDay(i: number): boolean {
-    if (i === 0) return true;
-    const prev = new Date(this.respuestas[i-1].t);
-    const curr = new Date(this.respuestas[i].t);
-    return prev.toDateString() !== curr.toDateString();
-  }
-
-  trackByMsg(i: number, r: Respuesta): number {
-    return r.t;
+  async applyFilters(): Promise<void> {
+    await this.loadSessions();
   }
 }

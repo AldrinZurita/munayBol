@@ -4,6 +4,8 @@ services:
     command: daphne -b 0.0.0.0 -p 8000 config.asgi:application
     ports: ["8000:8000"]
     volumes: ["./backend:/app"]
+    env_file:
+      - .env
     environment:
       USE_NEON: "True"
       NEON_DB: "neondb"
@@ -27,6 +29,11 @@ services:
 
       DB_CONN_MAX_AGE: "120"
       DB_KEEPALIVES: "1"
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz/'); print('ok')\""]
       interval: 10s
