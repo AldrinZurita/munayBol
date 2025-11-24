@@ -20,9 +20,9 @@ OLLAMA_NUM_CTX         = int(os.getenv("OLLAMA_NUM_CTX", "4096"))
 OLLAMA_TIMEOUT         = float(os.getenv("OLLAMA_TIMEOUT", "180"))
 OLLAMA_NUM_GPU         = int(os.getenv("OLLAMA_NUM_GPU", "99"))
 
-# --- HEADERS NGROK ---
-NGROK_HEADERS = {
-    "ngrok-skip-browser-warning": "true",
+# --- HEADERS: Solamente lo necesario. Se elimina 'ngrok-skip-browser-warning'
+# para evitar conflictos de enrutamiento interno.
+REQUIRED_HEADERS = {
     "Content-Type": "application/json"
 }
 
@@ -43,20 +43,29 @@ def load_data():
                 if isinstance(raw_content, list):
                     data_list = raw_content
                 elif isinstance(raw_content, dict):
-                    _DATA_DEPARTAMENTOS = raw_content.get("departamentos", [])
-                    # Consolida todos los elementos que no son "departamentos"
-                    for key, value in raw_content.items():
-                        if key != "departamentos" and isinstance(value, list):
-                            data_list.extend(value)
+                    # Manejar la estructura si viene con la clave "departamentos"
+                    # como en el JSON que generaste previamente
+                    if "departamentos_bolivia" in raw_content:
+                        _DATA_DEPARTAMENTOS = raw_content["departamentos_bolivia"]
+                    elif "departamentos" in raw_content:
+                        _DATA_DEPARTAMENTOS = raw_content["departamentos"]
 
-                # Clasificar
+                    # Consolidar todos los elementos en una sola lista para clasificar
+                    for key, value in raw_content.items():
+                        if key not in ["departamentos", "departamentos_bolivia"] and isinstance(value, list):
+                            data_list.extend(value)
+                        elif isinstance(value, list):
+                            data_list.extend(value) # Captura hoteles/lugares de la estructura antigua
+
+                # Clasificar elementos individuales que puedan estar en el array raíz
                 for item in data_list:
                     if 'id_hotel' in item:
                         _DATA_HOTELES.append(item)
                     elif 'id_lugar' in item:
                         _DATA_LUGARES.append(item)
-                    elif 'fecha_aniversario' in item and 'comida_tradicional' in item:
+                    elif 'fecha_aniversario' in item and 'comida_tradicional' in item and item not in _DATA_DEPARTAMENTOS:
                         _DATA_DEPARTAMENTOS.append(item)
+
 
             logger.info(f"✅ Datos Cargados: Deptos={len(_DATA_DEPARTAMENTOS)}, Hoteles={len(_DATA_HOTELES)}, Lugares={len(_DATA_LUGARES)}.")
         else:
@@ -66,11 +75,13 @@ def load_data():
 
 load_data()
 
+
 # --- 2. BÚSQUEDA INTELIGENTE POR DEPARTAMENTO ---
 def find_official_data(query: str) -> Tuple[str, str]:
     """Busca datos oficiales (Aniversario, Comida) y el nombre del dpto."""
     query_lower = query.lower()
 
+    # Iterar sobre la lista cargada de departamentos
     for dpto in _DATA_DEPARTAMENTOS:
         nombre = dpto.get('nombre', '').lower()
         if nombre in query_lower or query_lower in nombre:
@@ -114,7 +125,9 @@ def _chat_generate(messages: List[Dict[str, str]], options: Dict[str, Any]) -> s
         "options": options
     }
     try:
-        resp = requests.post(url, json=payload, headers=NGROK_HEADERS, timeout=OLLAMA_TIMEOUT)
+        # AQUI ES DONDE SE ELIMINA el encabezado NGROK que causaba el conflicto.
+        resp = requests.post(url, json=payload, headers=REQUIRED_HEADERS, timeout=OLLAMA_TIMEOUT)
+
         if resp.status_code != 200:
             logger.error(f"Ollama HTTP {resp.status_code}: {resp.text[:200]}")
             return ""

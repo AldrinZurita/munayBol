@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Carga de datos a Weaviate (v4.x) para RAG.
-- Conecta a Weaviate
-- Crea/usa índice 'MunayBol'
-- Inserta documentos con embeddings vía Ollama (nomic-embed-text)
-Optimizado para simplicidad (43 ítems): rápido y sin dependencias extra.
-"""
-
 import os
 import json
 import logging
