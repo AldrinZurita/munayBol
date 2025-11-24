@@ -37,6 +37,7 @@ export class PaqueteDetalle implements OnInit, OnDestroy {
   itinerario: string[] = [];
   infoImportante: string[] = [];
   error = '';
+  isLoadingReserva = false;
   lugarImg: string = 'assets/no-image.svg';
   hotelImg: string = 'assets/no-image.svg';
   hasLugarImage = false;
@@ -92,6 +93,25 @@ export class PaqueteDetalle implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.loadingService.hide();
   }
+
+  onReservarClick(evt: Event): void {
+  if (this.isLoadingReserva) return;
+  this.isLoadingReserva = true;
+
+  // “fusible” por si el backend tarda o algo falla silenciosamente
+  const safety = setTimeout(() => {
+    console.warn('[reservar] timeout de seguridad, reseteando loading');
+    this.isLoadingReserva = false;
+  }, 12000);
+
+  try {
+    this.reservarPaquete();
+  } catch (e) {
+    console.error('[reservar] error sincrónico', e);
+    this.isLoadingReserva = false;
+    clearTimeout(safety);
+  }
+}
 
   private prepareMedia(p: Paquete): void {
     const lugarRaw = (p.lugar?.url_image_lugar_turistico || '').trim();
@@ -177,46 +197,58 @@ export class PaqueteDetalle implements OnInit, OnDestroy {
     }
   }
 
-  reservarPaquete(): void {
-    if (!this.paquete?.hotel?.id_hotel) {
-      alert('No hay hotel asignado para este paquete.');
-      return;
-    }
-
-    this.habitacionService.getHabitaciones().subscribe({
-      next: (habitaciones) => {
-        const disponibles = (habitaciones || []).filter(
-          (h: Habitacion) => h.codigo_hotel === this.paquete!.hotel!.id_hotel && (h as any).disponible
-        );
-
-        if (!disponibles.length) {
-          alert('No hay habitaciones disponibles en este hotel.');
-          return;
-        }
-
-        this.habitacionSeleccionada = disponibles[0];
-
-        this.habitacionService.getDisponibilidadHabitacion(this.habitacionSeleccionada.num).subscribe({
-          next: (disp) => {
-            this.intervalosOcupados = disp?.intervalos_reservados || [];
-            this.proxDisponible = disp?.next_available_from || new Date().toISOString().slice(0, 10);
-            this.showConflictModal = true;
-            this.fechaReserva = this.proxDisponible;
-            this.fechaCaducidad = this.addDias(this.proxDisponible, 1);
-            this.mensajeFechaLibre = '';
-          },
-          error: () => {
-            this.proxDisponible = new Date().toISOString().slice(0, 10);
-            this.showConflictModal = true;
-            this.fechaReserva = this.proxDisponible;
-            this.fechaCaducidad = this.addDias(this.proxDisponible, 1);
-            this.mensajeFechaLibre = '';
-          }
-        });
-      },
-      error: () => alert('No se pudo obtener disponibilidad de habitaciones.')
-    });
+reservarPaquete(): void {
+  console.debug('[reservar] start');
+  if (!this.paquete?.hotel?.id_hotel) {
+    alert('No hay hotel asignado para este paquete.');
+    this.isLoadingReserva = false; // <- reset en salida temprana
+    return;
   }
+
+  this.habitacionService.getHabitaciones().subscribe({
+    next: (habitaciones) => {
+      console.debug('[reservar] habitaciones recibidas', habitaciones?.length ?? 0);
+      const disponibles = (habitaciones || []).filter(
+        (h: Habitacion) => h.codigo_hotel === this.paquete!.hotel!.id_hotel && (h as any).disponible
+      );
+
+      if (!disponibles.length) {
+        alert('No hay habitaciones disponibles en este hotel.');
+        this.isLoadingReserva = false; // <- reset
+        return;
+      }
+
+      this.habitacionSeleccionada = disponibles[0];
+
+      this.habitacionService.getDisponibilidadHabitacion(this.habitacionSeleccionada.num).subscribe({
+        next: (disp) => {
+          console.debug('[reservar] disponibilidad', disp);
+          this.intervalosOcupados = disp?.intervalos_reservados || [];
+          this.proxDisponible = disp?.next_available_from || new Date().toISOString().slice(0, 10);
+          this.showConflictModal = true;
+          this.fechaReserva = this.proxDisponible;
+          this.fechaCaducidad = this.addDias(this.proxDisponible, 1);
+          this.mensajeFechaLibre = '';
+          this.isLoadingReserva = false; // <- se apaga al abrir modal
+        },
+        error: (e) => {
+          console.error('[reservar] error disponibilidad', e);
+          this.proxDisponible = new Date().toISOString().slice(0, 10);
+          this.showConflictModal = true;
+          this.fechaReserva = this.proxDisponible;
+          this.fechaCaducidad = this.addDias(this.proxDisponible, 1);
+          this.mensajeFechaLibre = '';
+          this.isLoadingReserva = false; // <- reset en error
+        }
+      });
+    },
+    error: (e) => {
+      console.error('[reservar] error habitaciones', e);
+      this.isLoadingReserva = false; // <- reset en error
+    }
+  });
+}
+
 
   probarFechasPersonalizadas(): void {
     if (!this.habitacionSeleccionada || !this.fechaReserva || !this.fechaCaducidad) {
