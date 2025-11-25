@@ -161,6 +161,8 @@
     </div>
   </div>
 
+  <!-- ========== MODAL PRINCIPAL (CORREGIDO COMO HOTELES) ========== -->
+
   <div class="modal-backdrop" *ngIf="showModal" (click)="closeModal()" aria-hidden="true"></div>
   <div
     class="modal-root"
@@ -178,6 +180,8 @@
     </div>
 
     <div class="modal-card animate-in" (click)="$event.stopPropagation()" [attr.aria-busy]="savingModal ? 'true' : 'false'">
+
+      <!-- HEADER -->
       <header class="modal-header">
         <h3 id="modalTitle">
           {{ isEditMode ? 'Editar Lugar Turístico' : 'Agregar Nuevo Lugar' }}
@@ -187,17 +191,22 @@
         </button>
       </header>
 
-      <form
-        #modalForm="ngForm"
-        (ngSubmit)="isEditMode ? saveEdit(modalForm) : saveNewLugar(modalForm)"
-        novalidate
-        class="editModal-form"
-      >
-        <div class="modal-body" aria-describedby="modalScrollHelp">
-          <br>
-          <div id="modalScrollHelp" class="sr-only">Desplázate dentro de este área para ver todo el contenido del formulario.</div>
+      <!-- BODY + FORM -->
+      <div class="modal-body" aria-describedby="modalScrollHelp">
+
+        <form
+          #modalForm="ngForm"
+          (ngSubmit)="isEditMode ? saveEdit(modalForm) : saveNewLugar(modalForm)"
+          novalidate
+          class="editModal-form"
+        >
+
+          <div id="modalScrollHelp" class="sr-only">
+            Desplázate dentro de este área para ver todo el contenido del formulario.
+          </div>
 
           <div class="form-grid">
+
             <div class="field">
               <label class="form-label" for="nombre">Nombre *</label>
               <input id="nombre" name="nombre" type="text" class="form-input" [(ngModel)]="modalModel.nombre" required />
@@ -239,73 +248,87 @@
               </div>
             </div>
           </div>
+
+          <!-- FOOTER IGUAL A HOTELES -->
+          <footer class="modal-footer">
+            <button type="button" class="btn btn-secondary-soft" (click)="closeModal()">
+              Cancelar
+            </button>
+
+            <button type="submit" class="btn btn-primary" [disabled]="modalForm.invalid || savingModal">
+              <span *ngIf="savingModal" class="spinner-inline"></span>
+              Guardar
+            </button>
+          </footer>
+
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== MODAL ELIMINACIÓN (SIN CAMBIOS) ========== -->
+
+  <div class="modal-backdrop" *ngIf="showDeleteModal" (click)="cancelarEliminacionLugar()" aria-hidden="true"></div>
+  <div class="modal-root" *ngIf="showDeleteModal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle" (click)="cancelarEliminacionLugar()">
+    <div class="modal-card animate-in delete-modal-card" (click)="$event.stopPropagation()">
+      <header class="modal-header">
+        <h3 id="deleteModalTitle">Eliminar Lugar Turístico</h3>
+        <button class="btn btn-secondary-soft icon-only" (click)="cancelarEliminacionLugar()" aria-label="Cerrar">
+          <i-bs name="x-circle" width="18" height="18" class="icon-center"></i-bs>
+        </button>
+      </header>
+
+      <div class="modal-body delete-modal-body">
+        <p class="delete-pregunta">
+          ¿Seguro que deseas eliminar <strong>{{ lugarAEliminar?.nombre }}</strong>?
+        </p>
+        <p class="delete-instruccion">
+          Para confirmar, escribe <strong>ELIMINAR</strong> en el campo siguiente:
+        </p>
+
+        <input
+          type="text"
+          [(ngModel)]="confirmacionTexto"
+          class="form-input delete-input"
+          placeholder="Escribe 'ELIMINAR'"
+        />
+
+        <div *ngIf="errorEliminar" class="error">Debes escribir "ELIMINAR" para confirmar.</div>
+
+        <div class="status-area">
+          <span *ngIf="eliminandoLugar" class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+          <span *ngIf="mensajeEliminacion" [class.success-message]="!errorEliminar">
+            {{ mensajeEliminacion }}
+          </span>
         </div>
-        <footer class="modal-footer">
-          <button type="button" class="btn btn-secondary-soft icon-only" (click)="closeModal()" title="Cancelar" aria-label="Cancelar">
+      </div>
+
+      <footer class="modal-footer-delete">
+        <div class="footer-left">
+          <button type="button" class="btn btn-secondary-soft icon-only" (click)="cancelarEliminacionLugar()">
             <i-bs name="x-circle" width="18" height="18" class="icon-center"></i-bs>
           </button>
-          <button type="submit" class="btn btn-primary icon-only" [disabled]="modalForm.invalid || savingModal" title="Guardar" aria-label="Guardar">
-            <span *ngIf="savingModal" class="spinner-inline" aria-hidden="true"></span>
-            <i-bs name="check2-circle" width="18" height="18" class="icon-center" aria-hidden="true"></i-bs>
+        </div>
+
+        <div class="footer-center">
+          <div class="status-area">
+            <span *ngIf="eliminandoLugar" class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+            <span *ngIf="mensajeEliminacion" [class.success-message]="!errorEliminar">
+              {{ mensajeEliminacion }}
+            </span>
+          </div>
+        </div>
+
+        <div class="footer-right">
+          <button type="button" class="icon-btn btn-delete" (click)="confirmarEliminacionLugar()" [disabled]="eliminandoLugar">
+            <i-bs name="trash" width="20" height="20" class="icon-center"></i-bs>
           </button>
-        </footer>
-      </form>
+        </div>
+      </footer>
+
     </div>
   </div>
-
-<div class="modal-backdrop" *ngIf="showDeleteModal" (click)="cancelarEliminacionLugar()" aria-hidden="true"></div>
-<div class="modal-root" *ngIf="showDeleteModal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle" (click)="cancelarEliminacionLugar()">
-  <div class="modal-card animate-in delete-modal-card" (click)="$event.stopPropagation()">
-    <header class="modal-header">
-      <h3 id="deleteModalTitle">Eliminar Lugar Turístico</h3>
-      <button class="btn btn-secondary-soft icon-only" (click)="cancelarEliminacionLugar()" aria-label="Cerrar">
-        <i-bs name="x-circle" width="18" height="18" class="icon-center"></i-bs>
-      </button>
-    </header>
-
-    <div class="modal-body delete-modal-body">
-      <p class="delete-pregunta">¿Seguro que deseas eliminar <strong>{{ lugarAEliminar?.nombre }}</strong>?</p>
-      <p class="delete-instruccion">Para confirmar, escribe <strong>ELIMINAR</strong> en el campo siguiente:</p>
-
-      <input
-        type="text"
-        [(ngModel)]="confirmacionTexto"
-        class="form-input delete-input"
-        placeholder="Escribe 'ELIMINAR'"
-      />
-
-      <div *ngIf="errorEliminar" class="error">Debes escribir "ELIMINAR" para confirmar.</div>
-
-      <div class="status-area">
-        <span *ngIf="eliminandoLugar" class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
-        <span *ngIf="mensajeEliminacion" [class.success-message]="!errorEliminar">{{ mensajeEliminacion }}</span>
-      </div>
-    </div>
-
-    <footer class="modal-footer-delete">
-  <div class="footer-left">
-    <button type="button" class="btn btn-secondary-soft icon-only" (click)="cancelarEliminacionLugar()" title="Cancelar" aria-label="Cancelar">
-      <i-bs name="x-circle" width="18" height="18" class="icon-center"></i-bs>
-    </button>
-  </div>
-
-  <div class="footer-center">
-    <div class="status-area">
-      <span *ngIf="eliminandoLugar" class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
-      <span *ngIf="mensajeEliminacion" [class.success-message]="!errorEliminar">{{ mensajeEliminacion }}</span>
-    </div>
-  </div>
-
-  <div class="footer-right">
-    <button type="button" class="icon-btn btn-delete" (click)="confirmarEliminacionLugar()" [disabled]="eliminandoLugar" title="Eliminar" aria-label="Eliminar">
-      <i-bs name="trash" width="20" height="20" class="icon-center"></i-bs>
-    </button>
-  </div>
-</footer>
-
-  </div>
-</div>
-
-
 
 </main>

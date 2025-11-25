@@ -76,6 +76,7 @@ frontend/src/environments/*.local.ts
 frontend/src/environments/*.prod.ts
 frontend/src/environments/*.dev.ts
 frontend/*.tgz
+node_modules/
 backend/__pycache__/
 backend/*.py[cod]
 backend/*$py.class
