@@ -118,13 +118,17 @@
 }
 .modal-root{
   position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-  z-index:100; padding:16px; overflow:auto;
+  z-index:100; 
+  padding:24px;                     /* MOD: un poco más de aire general */
+  padding-top:64px;                 /* MOD: despega el header del navbar fijo */
+  overflow:auto;
 }
 .modal-card{
   position:relative; background:var(--color-bg-card);
   border-radius:14px; box-shadow:var(--shadow-modal); border:1px solid var(--color-border);
   width:100%; max-width:640px;
   display:flex; flex-direction:column; max-height:96vh;
+  overflow:hidden;                   /* MOD: evita que el header se vea “recortado” */
 }
 /* Borde con gradiente al hover del MODAL */
 .modal-card::after{
@@ -138,7 +142,7 @@
 .modal-card:hover::after{ opacity:1; }
 
 .modal-header,.modal-footer{
-  padding:1.25rem 1.75rem;
+  padding:1.75rem 1.5rem;            /* MOD: más alto, como Hoteles */
   background:var(--color-bg-hover);
   border-color:var(--color-border);
   display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
@@ -159,22 +163,22 @@
 /* Cuerpo del modal con ESPACIO holgado y scroll interno */
 .modal-body{
   flex:1 1 auto; min-height:0; overflow-y:auto!important;
-  padding:1.25rem 1.75rem;           /* ← más “aire” a los costados y arriba/abajo */
+  padding:1.5rem 1.5rem;             /* MOD: aire uniforme en laterales y vertical */
   background:var(--color-bg-card);
-  display:grid; gap:18px;            /* ← más separación entre filas */
+  display:grid; gap:16px;            /* MOD: separación visual equilibrada */
 }
 
 /* ===== Formulario dentro del modal ===== */
 .form-grid{
   display:grid; grid-template-columns:1fr 1fr;
-  gap:18px 18px;                      /* ← separación horizontal/vertical tipo Hoteles */
+  gap:16px 16px;                     /* MOD: igualamos al patrón de Hoteles */
 }
 @media (max-width:640px){ .form-grid{ grid-template-columns:1fr; } }
 
 .field{ display:flex; flex-direction:column; gap:8px; min-width:0; }
 .form-label{
   font-size:13px; font-weight:800; color:var(--color-text-secondary);
-  letter-spacing:.2px; margin-bottom:2px;
+  letter-spacing:.2px; margin-bottom:4px;   /* MOD: un poquito más de separación */
 }
 
 /* Inputs con padding y fondo que contraste (como Hoteles) */
@@ -185,11 +189,11 @@
   border:1px solid var(--color-border);
   border-radius:12px;
   font-size:14px;
-  padding:12px 14px;                 /* ← padding interno suave */
+  padding:10px 12px;                 /* MOD: un poco más compactos */
   transition:box-shadow .18s ease, border-color .18s ease, transform .08s ease;
 }
-.form-input{ height:44px; }
-.form-textarea{ min-height:110px; resize:vertical; }
+.form-input{ height:40px; }          /* MOD: altura menor (antes 44px) */
+.form-textarea{ min-height:96px; resize:vertical; }  /* MOD: textarea algo más baja */
 .form-input:focus,.form-textarea:focus,.form-select:focus{
   outline:none; border-color:var(--color-primary);
   box-shadow:0 0 0 3px var(--ring-transparent);
