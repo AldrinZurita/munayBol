@@ -1,33 +1,63 @@
+/* =========================================
+   RESERVA DETALLE — SCSS COMPLETO (HORIZONTAL 40% / 20% / 40%)
+   - Tres contenedores en una fila: General (40%), Reserva (20%), Precio (40%)
+   - Altura uniforme entre los 3 contenedores
+   - Modo claro/oscuro completo
+   - Responsive y accesibilidad
+   ========================================= */
+:host { display: block;
+overflow-x: hidden;
+overflow-y: hidden; // ✅ elimina scroll horizontal
+ }
+/* 1) Tokens base (modo claro) */
 :root {
+  /* Paleta base */
   --color-primary: #005A9C;
   --color-primary-dark: #004578;
   --color-secondary: #5a6772;
   --color-accent: #FFC107;
 
+  /* Superficies */
   --color-bg-page: #F8F9FA;
   --color-bg-card: #FFFFFF;
   --color-bg-hover: #f1f5f9;
   --color-border: #DEE2E6;
 
+  /* Texto */
   --color-text-primary: #212529;
   --color-text-secondary: #6c757d;
   --color-muted: #6b7280;
 
-  --color-success: #28a745;
-  --color-danger: #dc3545;
-  --color-warning: #ffc107;
-
+  /* Estados */
   --color-success: #28a745;
   --color-success-hover: #218838;
   --color-danger: #dc3545;
   --color-danger-hover: #c82333;
+  --color-warning: #ffc107;
+  --color-info: #0ea5e9;
 
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  /* Sombras y radios */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.16);
   --border-radius: 12px;
+
+  /* Tipografía */
   --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-size-base: 15px;
+  --line-height-base: 1.5;
+
+  /* Otros */
+  --ring: rgba(0, 90, 156, 0.28);
+  --ring-soft: rgba(0, 90, 156, 0.18);
+
+  /* Scrollbar */
+  --scrollbar-track: #e5e7eb;
+  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-thumb-hover: #94a3b8;
 }
 
+/* 2) Tokens para modo oscuro */
 body.dark-theme {
   --color-bg-page: #0f172a;
   --color-bg-card: #1e293b;
@@ -39,487 +69,882 @@ body.dark-theme {
   --color-muted: #64748b;
 
   --color-success: #22c55e;
-  --color-danger: #ef4444;
-  --color-warning: #facc15;
-
-  --shadow-sm: 0 2px 4px rgba(0,0,0,0.6);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.8);
-
-    --color-success: #22c55e;
   --color-success-hover: #16a34a;
   --color-danger: #ef4444;
   --color-danger-hover: #b91c1c;
+  --color-warning: #facc15;
+  --color-info: #38bdf8;
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.55);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.65);
+  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.75);
+
+  --ring: rgba(56, 189, 248, 0.35);
+  --ring-soft: rgba(148, 163, 184, 0.25);
+
+  --scrollbar-track: #1f2937;
+  --scrollbar-thumb: #374151;
+  --scrollbar-thumb-hover: #4b5563;
 }
 
+/* 3) Reset suave y helpers */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
+html {
+  font-size: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-page);
+}
+
+/* Accesibilidad */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Scrollbar */
+.reserva-detalle-container ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.reserva-detalle-container ::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 10px;
+}
+.reserva-detalle-container ::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 10px;
+}
+.reserva-detalle-container ::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* 4) Contenedor principal */
 .reserva-detalle-container {
-  max-width: 900px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 24px;
-  font-family: var(--font-family);
-  background-color: var(--color-bg-page);
+  background: var(--color-bg-page);
   min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 20px;
 }
 
-.icon {
-  margin-right: 8px;
-  vertical-align: middle;
-  font-size: 1.1em;
-  color: var(--color-primary); /* siempre usa el token */
-}
+/* 5) Header superior */
 .header {
-  margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px 20px;
+  align-items: center;
 
+  /* fila 1: volver y título */
   .btn-volver {
+    grid-column: 1 / 2;
     background: none;
     border: none;
     color: var(--color-primary);
     font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    padding: 0;
-    margin-bottom: 15px;
+    font-weight: 600;
     display: inline-flex;
     align-items: center;
-    transition: color 0.3s;
-
-    .icon {
-      font-size: 1.2em;
-      margin-right: 6px;
-      color: var(--color-primary);
-    }
+    gap: 8px;
+    padding: 0;
+    cursor: pointer;
+    transition: color 0.2s ease;
 
     &:hover {
       color: var(--color-primary-dark);
       text-decoration: underline;
     }
-  }
 
+    .icon {
+      font-size: 1.2em;
+      color: var(--color-primary);
+    }
+  }
 
   .titulo {
-    font-size: 30px;
-    font-weight: 700;
+    grid-column: 1 / 2;
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
     color: var(--color-text-primary);
-    margin: 10px 0;
   }
 
+  /* fila 2: id + estado */
   .header-info {
+    grid-column: 1 / 2;
     display: flex;
     align-items: center;
     gap: 16px;
     flex-wrap: wrap;
   }
 
- .reserva-id {
+  .reserva-id {
     display: inline-flex;
     align-items: center;
+    gap: 8px;
     font-size: 16px;
     color: var(--color-text-secondary);
-    font-weight: 500;
+    font-weight: 600;
+  }
 
-    .icon {
-      color: var(--color-primary);
+  .badge-estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    background: var(--color-bg-hover);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    text-transform: capitalize;
+
+    &.confirmado, &.confirmada {
+      background: rgba(40, 167, 69, 0.15);
+      color: var(--color-success);
+      border-color: color-mix(in oklab, var(--color-success), transparent 70%);
+    }
+
+    &.pendiente {
+      background: rgba(255, 193, 7, 0.15);
+      color: var(--color-warning);
+      border-color: color-mix(in oklab, var(--color-warning), transparent 70%);
+    }
+
+    &.cancelado {
+      background: rgba(220, 53, 69, 0.10);
+      color: var(--color-danger);
+      border-color: color-mix(in oklab, var(--color-danger), transparent 70%);
     }
   }
-  .badge-estado {
-  display: inline-block;
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: capitalize;
-  background-color: var(--color-bg-hover);
-  color: var(--color-text-secondary);
-  border: 1px solid var(--color-border);
-
-  &.confirmado, &.confirmada {
-    background-color: rgba(40, 167, 69, 0.15);
-    color: var(--color-success);
-  }
-
-  &.pendiente {
-    background-color: rgba(255, 193, 7, 0.15);
-    color: var(--color-warning);
-  }
-
-  &.cancelado {
-    background-color: rgba(220, 53, 69, 0.1);
-    color: var(--color-danger);
-  }
-}
 }
 
+/* 6) Layout principal horizontal (3 columnas: 40% / 20% / 40%) */
 .contenido {
+  display: grid;
+  grid-template-columns: 40% 20% 40%;
+  grid-template-areas: "general reserva precio";
+  gap: 20px;
+  align-items: stretch; /* iguala la altura de las columnas */
+}
+/* 7) Card base (misma altura entre todas, con bordes curveados y decorativos) */
+.card {
+  position: relative; /* necesario para el pseudo-elemento decorativo */
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 14px; /* más curveado, igual que filtros-card */
+  box-shadow: var(--shadow-sm);
+  padding: 16px;
+
+  max-height: 400px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-}
+  min-width: 0;
+  height: 100%; /* hace que todas se estiren igual */
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 
-.card {
-  background: var(--color-bg-card);
-  border-radius: var(--border-radius);
-  padding: 24px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--color-border);
-  transition: box-shadow 0.3s, border-color 0.3s;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: color-mix(in oklab, var(--color-primary), var(--color-border) 70%);
+  }
 
-  &:hover { box-shadow: var(--shadow-md); }
+  /* borde decorativo multicolor como en filtros de hoteles */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 18px; /* más curveado que el propio card */
+    padding: 2px;
+    background: conic-gradient(
+      from 180deg at 50% 50%,
+      var(--color-primary),
+      var(--color-accent),
+      #fbbf24,
+      #ef4444,
+      var(--color-primary)
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+    filter: blur(0.6px);
+    z-index: 1;
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
 
   .card-titulo {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 700;
     color: var(--color-primary);
-    margin: 0 0 20px 0;
-    padding-bottom: 16px;
+    margin: 0 0 12px;
+    padding-bottom: 10px;
     border-bottom: 1px solid var(--color-border);
+  }
+
+  /* sección interna: permite compactar vertical */
+  .card-section {
+    display: grid;
+    gap: 12px;
   }
 }
 
+/* 8) Áreas específicas */
+.card.general { grid-area: general; }
+.card.reserva-info { grid-area: reserva; }
+.card.card-precio { grid-area: precio; }
+
+/* 9) Información General (compacta) */
 .info-item {
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 
   .info-label {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--color-text-primary);
-    margin-bottom: 4px;
     display: flex;
     align-items: center;
-
-    .icon {
-      color: var(--color-primary);
-      font-size: 1.3em;
-    }
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text-primary);
   }
 
   .info-sublabel {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--color-text-secondary);
-    padding-left: 28px;
+    margin-left: 28px;
   }
 
   .info-valor {
-    font-size: 15px;
+    font-size: 14px;
     color: var(--color-text-primary);
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    gap: 6px;
 
     &.contacto .icon {
       color: var(--color-secondary);
     }
   }
 
-  &.principal {
-    .info-label {
-      font-size: 18px;
-    }
-    .info-location {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 15px;
-      color: var(--color-text-secondary);
-      margin-top: 6px;
-
-      .icon {
-        color: var(--color-secondary);
-        font-size: 1em;
-        margin-right: 6px;
-      }
-    }
+  &.principal .info-label {
+    font-size: 16px;
   }
 
   .icon {
+    font-size: 1.2em;
     color: var(--color-primary);
-    font-size: 1.3em;
   }
 }
 
 .info-item-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 12px;
 
-  .info-item {
-    margin-bottom: 0;
-  }
+  .info-item { margin-bottom: 0; }
 }
 
+/* 10) Fechas compactas (check-in / check-out) */
 .fechas-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin: 24px 0;
+  gap: 12px;
+  margin: 8px 0 12px;
 
   .fecha-box {
     background: var(--color-bg-card);
-    padding: 16px;
-    border-radius: 8px;
-    text-align: center;
     border: 1px solid var(--color-border);
+    border-radius: 10px;
     box-shadow: var(--shadow-sm);
+    padding: 10px;
+    text-align: center;
 
     .fecha-label {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--color-text-secondary);
+      font-weight: 700;
       text-transform: uppercase;
-      font-weight: 500;
+      letter-spacing: 0.2px;
       margin-bottom: 8px;
     }
 
     .fecha-icon i-bs {
-      font-size: 26px;
+      font-size: 22px;
       color: var(--color-primary);
-      margin: 8px 0;
     }
 
     .fecha-valor {
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 700;
       color: var(--color-text-primary);
-      margin-bottom: 4px;
+      margin-top: 6px;
     }
 
     .fecha-dia {
-      font-size: 13px;
+      font-size: 11px;
       color: var(--color-text-secondary);
     }
   }
 }
 
+/* 11) Resumen de Precio */
 .card-precio {
-  background: linear-gradient(135deg, var(--color-bg-card) 0%, var(--color-bg-hover) 100%);
+  background: linear-gradient(135deg, var(--color-bg-card), var(--color-bg-hover));
+  display: flex;
+  flex-direction: column;
+
   .precio-item {
     display: flex;
+    align-items: baseline;
     justify-content: space-between;
-    padding: 12px 0;
+    gap: 10px;
+    padding: 10px 0;
     border-bottom: 1px solid var(--color-border);
 
     .precio-label {
-      font-size: 15px;
+      font-size: 14px;
       color: var(--color-text-secondary);
+      font-weight: 600;
     }
 
     .precio-valor {
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 700;
       color: var(--color-text-primary);
     }
   }
 
   .precio-total {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px solid var(--color-primary);
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    padding: 20px 0 0 0;
-    margin-top: 12px;
-    border-top: 2px solid var(--color-primary);
 
     .total-label {
-      font-size: 18px;
-      font-weight: 700;
+      font-size: 16px;
+      font-weight: 800;
       color: var(--color-text-primary);
     }
 
     .total-valor {
-      font-size: 22px;
-      font-weight: 700;
+      font-size: 20px;
+      font-weight: 800;
       color: var(--color-primary);
     }
   }
 }
 
+/* 12) Información de Reserva (columna del medio, reducida) */
+.card.reserva-info {
+  /* menos padding visual interno para que se vea compacta */
+  padding: 16px;
+
+  .info-item {
+    margin-bottom: 8px;
+
+    .info-label {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .info-valor {
+      font-size: 14px;
+    }
+  }
+}
+
+/* 13) Pago dentro de Información de Reserva */
 .info-valor.pago {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 
   .icon {
-    font-size: 1.8em;
+    font-size: 1.5em;
     color: var(--color-secondary);
   }
 
   div {
     display: flex;
     flex-direction: column;
+    gap: 2px;
   }
 
   .pago-metodo {
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 14px;
     color: var(--color-text-primary);
-    font-size: 15px;
   }
 
   .pago-numero {
+    font-size: 13px;
     color: var(--color-text-secondary);
-    font-size: 14px;
   }
 }
 
-.card-politica {
-  .politica-item {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 16px;
-    align-items: flex-start;
-
-    .politica-icono {
-      font-size: 24px;
-      flex-shrink: 0;
-      margin-top: 2px;
-
-      &.free { color: var(--color-success); }
-      &.penalty { color: var(--color-warning); }
-    }
-
-    .politica-contenido {
-      flex: 1;
-
-      .politica-titulo {
-        font-size: 15px;
-        font-weight: 600;
-        color: var(--color-text-primary);
-        margin-bottom: 4px;
-      }
-
-      .politica-descripcion {
-        font-size: 14px;
-        color: var(--color-text-secondary);
-        line-height: 1.5;
-      }
-    }
-  }
-}
-
+/* 14) Botones de acción (si se usan en alguna card) */
 .acciones {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 24px;
+  gap: 12px;
+  margin-top: auto; /* empuja al final si hay espacio */
 
   .btn {
-    padding: 14px 24px;
-    font-size: 16px;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 800;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
 
-    .icon {
-      font-size: 1.1em;
-      margin-right: 8px;
+    .icon { font-size: 1.2em; }
+
+    &:hover {
+      transform: translateY(-2px);
+      filter: saturate(1.08);
+      box-shadow: var(--shadow-md);
     }
 
     &.btn-modificar {
-      background-color: var(--color-success);
-       color: #fff;
-      border: 2px solid var(--color-success);
+      background: var(--color-success);
+      color: #fff;
 
-       &:hover {
-    background-color: var(--color-success-hover);
-    border-color: var(--color-success-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
-  }
+      &:hover { background: var(--color-success-hover); }
     }
 
     &.btn-cancelar {
-      background-color: var(--color-danger);
+      background: var(--color-danger);
       color: #fff;
-      border: 2px solid var(--color-danger);
 
-      &:hover {
-    background-color: var(--color-danger-hover);
-    border-color: var(--color-danger-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
-  }
+      &:hover { background: var(--color-danger-hover); }
     }
   }
 }
 
-.loading-container, .error-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
-  padding: 40px;
+/* 15) Loading y error (pantallas de estado) */
+.loading-container,
+.error-container {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  padding: 24px;
   text-align: center;
 }
 
 .loading-container {
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
   .spinner {
-    width: 50px;
-    height: 50px;
-    border: 4px solid var(--color-bg-hover); /* antes #f3f3f3 */
+    width: 44px;
+    height: 44px;
+    border: 4px solid var(--color-bg-hover);
     border-top: 4px solid var(--color-primary);
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spin 0.9s linear infinite;
+    box-shadow: inset 0 0 0 1px var(--color-border);
   }
 
   p {
-    margin-top: 20px;
+    margin-top: 14px;
+    font-size: 14px;
     color: var(--color-text-secondary);
-    font-size: 16px;
   }
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
 
 .error-container {
-  color: var(--color-danger);
+  min-height: 220px;
+  display: grid;
+  place-items: center;
 
   .error-icon {
     font-size: 48px;
-    margin-bottom: 16px;
+    color: var(--color-danger);
+    margin-bottom: 10px;
   }
 
   p {
-    font-size: 18px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 700;
     color: var(--color-text-primary);
   }
 
   .btn-volver-error {
-    margin-top: 20px;
-    padding: 12px 24px;
-    background-color: var(--color-primary);
+    margin-top: 16px;
+    padding: 12px 18px;
+    background: var(--color-primary);
     color: #fff;
+    border-radius: 10px;
+    font-weight: 800;
     border: none;
-    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    transition: var(--transition);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
 
     &:hover {
-      background-color: var(--color-primary-dark);
+      background: var(--color-primary-dark);
       transform: translateY(-2px);
       box-shadow: var(--shadow-sm);
     }
   }
 }
 
+/* 16) Animaciones */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 17) Íconos generales */
+.icon,
+i-bs {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  color: var(--color-primary);
+  transition: transform 0.12s ease, color 0.18s ease, filter 0.18s ease;
+}
+
+i-bs:hover {
+  transform: translateY(-1px);
+  filter: saturate(1.05);
+}
+
+/* 18) Tablas y listas (si se integran en el futuro) */
+.list {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  .list-item {
+    background: var(--color-bg-hover);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .label { font-weight: 700; color: var(--color-text-primary); }
+    .value { color: var(--color-text-secondary); }
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+
+  thead th {
+    background: var(--color-bg-hover);
+    color: var(--color-text-secondary);
+    font-weight: 800;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--color-border);
+    text-align: left;
+    font-size: 13px;
+  }
+
+  tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 14px;
+    color: var(--color-text-primary);
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+/* 19) Chips y pills (para estados u otros) */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-hover);
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.chip.success { color: var(--color-success); border-color: color-mix(in oklab, var(--color-success), transparent 70%); }
+.chip.warning { color: var(--color-warning); border-color: color-mix(in oklab, var(--color-warning), transparent 70%); }
+.chip.danger  { color: var(--color-danger);  border-color: color-mix(in oklab, var(--color-danger),  transparent 70%); }
+.chip.info    { color: var(--color-info);    border-color: color-mix(in oklab, var(--color-info),    transparent 70%); }
+
+/* 20) Bloques de ayuda / tips */
+.tip {
+  background: var(--color-bg-hover);
+  border: 1px dashed var(--color-border);
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+
+  .tip-title {
+    font-weight: 800;
+    margin-bottom: 6px;
+    color: var(--color-text-primary);
+  }
+}
+
+/* 21) Print styles (para imprimir el detalle) */
+@media print {
+  .btn-volver,
+  .acciones,
+  .error-container,
+  .loading-container {
+    display: none !important;
+  }
+
+  .reserva-detalle-container {
+    max-width: 100%;
+    padding: 0;
+    background: #fff;
+  }
+
+  .header .titulo {
+    font-size: 22px;
+  }
+
+  .contenido {
+    gap: 12px;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .card {
+    box-shadow: none;
+    border-color: #ccc;
+  }
+}
+
+/* 22) High contrast (opcional, mejora contraste cuando sistema lo pide) */
+@media (prefers-contrast: more) {
+  :root {
+    --border-radius: 8px;
+    --shadow-sm: 0 0 0 rgba(0,0,0,0);
+    --shadow-md: 0 0 0 rgba(0,0,0,0);
+  }
+
+  .card,
+  .fecha-box,
+  .precio-item,
+  .precio-total {
+    border-width: 2px;
+  }
+
+  .badge-estado,
+  .chip {
+    border-width: 2px;
+  }
+}
+
+/* 23) Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 24) Responsive completo */
+@media (max-width: 1200px) {
+  .reserva-detalle-container { padding: 20px; }
+
+  .contenido {
+    grid-template-columns: 42% 18% 40%; /* leve ajuste */
+  }
+
+  .card .card-titulo { font-size: 17px; }
+}
+
+@media (max-width: 1024px) {
+  .contenido {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "general"
+      "reserva"
+      "precio";
+  }
+
+  .card {
+    height: auto; /* en móvil no forzamos igual altura */
+  }
+}
+
 @media (max-width: 768px) {
-  .reserva-detalle-container { padding: 15px; }
+  .reserva-detalle-container { padding: 16px; }
 
-  .header .titulo { font-size: 24px; }
+  .header {
+    grid-template-columns: 1fr;
+  }
 
-  .fechas-container,
-  .acciones { grid-template-columns: 1fr; }
+  .header .titulo { font-size: 22px; }
+
+  .fechas-container {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
 
   .info-item-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 10px;
+  }
+
+  .acciones {
+    grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 480px) {
+  .header .titulo { font-size: 20px; }
+
+  .card {
+    padding: 14px;
+  }
+
+  .card .card-titulo {
+    font-size: 16px;
+    padding-bottom: 8px;
+  }
+}
+
+/* 25) Estados visuales adicionales (hover y active) */
+.card:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* 26) Utility spacing (por si se necesita ajustar rápidamente) */
+.space-xs { margin-top: 6px; }
+.space-sm { margin-top: 10px; }
+.space-md { margin-top: 14px; }
+.space-lg { margin-top: 20px; }
+.space-xl { margin-top: 28px; }
+
+/* 27) Tipografías utilitarias */
+.text-xs { font-size: 12px; }
+.text-sm { font-size: 13px; }
+.text-md { font-size: 14px; }
+.text-lg { font-size: 16px; }
+.text-xl { font-size: 18px; }
+
+.font-light { font-weight: 400; }
+.font-normal { font-weight: 600; }
+.font-bold { font-weight: 800; }
+
+/* 28) Bordes utilitarios */
+.rounded-sm { border-radius: 8px; }
+.rounded-md { border-radius: 12px; }
+.rounded-lg { border-radius: 16px; }
+
+/* 29) Colores utilitarios (texto) */
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-muted { color: var(--color-muted); }
+.text-success { color: var(--color-success); }
+.text-danger { color: var(--color-danger); }
+.text-warning { color: var(--color-warning); }
+.text-info { color: var(--color-info); }
+
+/* 30) Fondo utilitario */
+.bg-card { background: var(--color-bg-card); }
+.bg-hover { background: var(--color-bg-hover); }
+
+/* 31) Borde utilitario */
+.border { border: 1px solid var(--color-border); }
+.border-2 { border: 2px solid var(--color-border); }
+.border-primary { border-color: var(--color-primary); }
+
+/* 32) Sombra utilitaria */
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+
+/* 33) Grid utilitario */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.grid-auto { display: grid; grid-auto-flow: dense; gap: 12px; }
+
+/* 34) Iconos específicos (si se usan nombres) */
+i-bs[name="geo-alt"],
+i-bs[name="calendar-check"],
+i-bs[name="calendar3"],
+i-bs[name="building"],
+i-bs[name="receipt"],
+i-bs[name="credit-card"],
+i-bs[name="people"],
+i-bs[name="moon-stars"],
+i-bs[name="box"] {
+  color: var(--color-primary);
+}
+
+i-bs[name="x-circle"] { color: var(--color-danger); }
+i-bs[name="info-circle"] { color: var(--color-info); }
+
+/* 35) Final: garantiza coherencia visual en el layout horizontal */
+.contenido > .card {
+  /* asegura consistencia de altura entre columnas en desktop */
+  align-self: stretch;
+}
+
+/* Fin del SCSS completo */

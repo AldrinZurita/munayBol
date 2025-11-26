@@ -1,4 +1,8 @@
-:host { display: block; }
+:host { display: block;
+overflow-x: hidden;
+overflow-y: hidden; // ✅ elimina scroll horizontal
+ }
+
 :root {
   --color-primary: #0F6BFF;
   --color-accent:  #00B894;
@@ -270,7 +274,7 @@ body.no-scroll{ overflow:hidden; }
   border:1px solid var(--color-border);
   box-shadow: 0 62px 110px rgba(0,0,0,.5);
   width:100%;
-  max-width:820px;
+  max-width:610px;
   display:flex; flex-direction:column;
   max-height:96vh;              /* límite para scroll interno */
   overflow:hidden;              /* oculta el borde arcoíris por fuera */
@@ -414,9 +418,32 @@ edit-field{ width:40%; }
   .form-input{ background:#f5f8fd; border:1px solid #e6ebf2; color:#0f172a; border-radius:12px; }
   .btn-secondary-soft.icon-only{ border-radius:14px; width:48px; height:48px; display:inline-flex; align-items:center; justify-content:center; background:#f5f8fd; border:1px solid #e6ebf2; color:#5f6b74; transition: transform .2s ease; }
   .btn-secondary-soft.icon-only:hover{ transform: translateY(-2px); box-shadow:0 4px 12px rgba(15,23,42,.08); }
-  .btn-delete{ border-radius:14px; width:48px; height:48px; display:inline-flex; align-items:center; justify-content:center; background: linear-gradient(135deg,#ff6a6a,#e74c3c); color:#fff; box-shadow:0 10px 22px rgba(231,76,60,.22); transition: transform .2s ease; }
-  .btn-delete:hover{ transform: translateY(-2px); filter:saturate(1.05); }
-  .btn-delete i-bs{ color:#ffffff !important; transition: color .25s ease; }
+  /*prueba*/
+  .btn-delete {
+    border-radius: 14px;
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--color-bg-hover);   // ✅ fondo neutro (gris claro)
+    border: 1px solid var(--color-border);
+    color: var(--color-danger);          // ✅ texto/ícono rojo
+    transition: background .25s ease, color .25s ease;
+  }
+  
+  .btn-delete:hover {
+    background: linear-gradient(135deg,#ff6a6a,#e74c3c); // ✅ fondo rojo degradado
+    filter: saturate(1.05);
+  }
+  .btn-delete i-bs {
+    color: var(--color-danger);          // ✅ ícono rojo
+    transition: color .25s ease;
+  }
+  .btn-delete:hover i-bs {
+    color: #fff !important;              // ✅ ícono blanco en hover
+  }
   .error{ color:#e74c3c; font-weight:700; margin-top:8px; }
 }
 
@@ -513,3 +540,10 @@ body.dark-theme .toast-notificacion{ background:#334155; color:#f1f5f9; box-shad
 }
 
 .filtros-card:hover::after { opacity: 1; }
+
+
+.confirm-delete .form-input {
+  max-width: 320px;       // ✅ límite de ancho
+  margin: 1rem auto 0.5rem;
+  display: block;
+}

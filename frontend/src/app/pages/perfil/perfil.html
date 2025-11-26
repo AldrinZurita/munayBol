@@ -218,24 +218,7 @@
                 <span class="material-symbols-outlined" aria-hidden="true">hotel</span>
                 Ver Hotel
               </button>
-              <div class="cancel-wrapper" *ngIf="reserva.estado">
-                <button type="button" class="btn-cancel"
-                        *ngIf="confirmId !== reserva.id_reserva"
-                        (click)="toggleConfirm(reserva.id_reserva)"
-                        [disabled]="cancelling.has(reserva.id_reserva)">
-                  <span class="material-symbols-outlined" aria-hidden="true">event_busy</span>
-                  Cancelar
-                </button>
-                <div class="confirm-box" *ngIf="confirmId === reserva.id_reserva">
-                  <span class="confirm-label">¿Seguro?</span>
-                  <button type="button" class="btn-danger" (click)="confirmarCancel(reserva)">
-                    <span class="material-symbols-outlined" aria-hidden="true">delete</span>
-                    Sí, anular
-                  </button>
-                  <button type="button" class="btn-link" (click)="closeConfirm()">No</button>
-                </div>
-              </div>
-
+              
             </div>
           </div>
         </article>
