@@ -119,15 +119,60 @@ body.dark-theme .title-icon { box-shadow:0 10px 24px var(--color-shadow), inset 
 .btn-add.icon-only,.btn.icon-only{ display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; padding:0; border-radius:12px; border:1px solid var(--color-border); background:var(--color-bg-card); box-shadow: var(--color-shadow) 0 6px 16px; color:var(--color-text-secondary); }
 .btn-add.icon-only:hover,.btn.icon-only:hover,.btn-ghost:hover{ transform:translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,.18); }
 
-.btn-ghost{ display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border-radius:14px; border:1px solid var(--color-border); background:var(--color-bg-hover); box-shadow:none; }
+/* ===================================================
+   REPLACEMENT FOR ADMIN BUTTONS (Fixes Dark Mode)
+   =================================================== */
 
-.icon-btn{ display:inline-flex; justify-content:center; align-items:center; width:48px; height:48px; border-radius:14px; line-height:0; transition:all .15s ease-out; border:1px solid rgba(2,6,23,0.08); background:linear-gradient(180deg,#ffffff,#f6fbff); box-shadow:none; }
-.icon-btn.btn-edit i-bs[name="pencil"]{ color:#2e7cff; transition:color .15s ease-out; }
-.icon-btn.btn-delete i-bs[name="trash"]{ color:#e74c3c; transition:color .15s ease-out; }
-.icon-btn:hover{ transform:translateY(-2px); filter:saturate(1.05); border-color:transparent; }
-.icon-btn.btn-edit:hover{ background:linear-gradient(135deg,#2e7cff,#0f6bff); box-shadow:0 10px 22px rgba(15,107,255,.22); }
-.icon-btn.btn-delete:hover{ background:linear-gradient(135deg,#ff6a6a,#e74c3c); box-shadow:0 10px 22px rgba(231,76,60,.22); }
-.icon-btn.btn-edit:hover i-bs[name="pencil"], .icon-btn.btn-delete:hover i-bs[name="trash"]{ color:#fff; }
+   .btn-ghost, 
+   .icon-btn { 
+     display: inline-flex; 
+     justify-content: center; 
+     align-items: center; 
+     width: 48px; 
+     height: 48px; 
+     border-radius: 14px; 
+     line-height: 0; 
+     transition: all .15s ease-out; 
+     
+     /* THIS IS THE FIX: Use variables instead of hardcoded white */
+     border: 1px solid var(--color-border); 
+     background: var(--color-bg-hover); 
+     box-shadow: none; 
+   }
+   
+   /* Specific Icon Colors (Default State) */
+   .icon-btn.btn-edit i-bs[name="pencil"] { 
+     color: #2e7cff; 
+     transition: color .15s ease-out; 
+   }
+   .icon-btn.btn-delete i-bs[name="trash"] { 
+     color: #e74c3c; 
+     transition: color .15s ease-out; 
+   }
+   
+   /* Hover Effects (Generic) */
+   .btn-ghost:hover, 
+   .icon-btn:hover { 
+     transform: translateY(-2px); 
+     filter: saturate(1.05); 
+     border-color: transparent; 
+   }
+   
+   /* Color Backgrounds ONLY on Hover */
+   .icon-btn.btn-edit:hover { 
+     background: linear-gradient(135deg, #2e7cff, #0f6bff); 
+     box-shadow: 0 10px 22px rgba(15, 107, 255, .22); 
+   }
+   .icon-btn.btn-delete:hover { 
+     background: linear-gradient(135deg, #ff6a6a, #e74c3c); 
+     box-shadow: 0 10px 22px rgba(231, 76, 60, .22); 
+   }
+   
+   /* Turn Icons White on Hover */
+   .icon-btn.btn-edit:hover i-bs[name="pencil"], 
+   .icon-btn.btn-delete:hover i-bs[name="trash"] { 
+     color: #fff; 
+   }
 
 .card{ background:var(--color-bg-card); border-radius:16px; box-shadow: var(--color-shadow) 0 4px 14px; padding:0; overflow:hidden; border:1px solid var(--color-border); transition: all .25s ease; }
 .card:hover{ transform:translateY(-4px); box-shadow:0 10px 28px rgba(0,0,0,.18); }
