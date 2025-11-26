@@ -16,7 +16,11 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background: rgba(230, 235, 245, 0.85);
+
+  /* --- FIX: STRICT VARIABLE USAGE (No white fallback) --- */
+  background: var(--color-loading-bg);
+  color: var(--color-loading-text);
+  
   backdrop-filter: blur(10px);
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
@@ -32,39 +36,30 @@
     position: absolute;
     top: 30vh;
     left: -150px;
-    color: var(--brand, #2563eb);
+    /* Icon color variable */
+    color: var(--color-loading-icon);
     font-size: 80px;
     transform: rotate(15deg);
     animation: plane-fly 4s ease-in-out infinite;
     z-index: 10;
   }
+
   .rl-clouds {
     position: relative;
     width: 300px;
     height: 4px;
-    background: linear-gradient(90deg, #b0becb, #b0becb 50%, transparent 50%);
+    /* Secondary text variable for clouds */
+    background: linear-gradient(90deg, var(--color-text-secondary), var(--color-text-secondary) 50%, transparent 50%);
     background-size: 15px 4px;
     animation: clouds-pan 12s linear infinite;
     margin-top: -20px;
-    opacity: 0.7;
+    opacity: 0.5;
     z-index: 5;
   }
 
+  /* Progress bar is removed in your HTML, but we hide it here just in case */
   .rl-progress {
-    width: 250px;
-    height: 8px;
-    background: rgba(10, 15, 26, 0.1);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-top: 40px;
-  }
-
-  .rl-progress__bar {
-    width: 0%;
-    height: 100%;
-    background: linear-gradient(90deg, var(--brand), var(--accent));
-    border-radius: 4px;
-    transition: width 0.2s linear;
+    display: none; 
   }
 
   .rl-label {
@@ -72,28 +67,41 @@
     text-align: center;
     font-size: 18px;
     font-weight: 900;
-    color: var(--text-strong, #0a0f1a);
-    margin-top: 20px;
+    color: var(--color-loading-text);
+    /* Adjust margin to pull dots up */
+    margin-top: 40px; 
+    position: relative;
+    z-index: 20;
   }
 
+  /* --- FIX FOR DOTS --- */
   .rl-dots {
     display: flex;
     justify-content: center;
     width: 250px;
-    margin-top: 10px;
+    margin-top: 15px;
+    position: relative;
+    z-index: 20; /* Ensures they sit on top of everything */
+
     span {
+      display: block;
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background: var(--text-3, #222222);
+      
+      /* Force the icon color variable */
+      background-color: var(--color-loading-icon);
+      
       margin: 0 5px;
       animation: dot-pulse 1.2s ease-in-out infinite;
+      
       &:nth-child(2) { animation-delay: 0.2s; }
       &:nth-child(3) { animation-delay: 0.4s; }
     }
   }
 }
 
+/* Animations */
 @keyframes plane-fly {
   0% { transform: translateX(-200vw) rotate(15deg); }
   25% { transform: translateX(0vw) rotate(15deg); }
