@@ -145,7 +145,7 @@ body {
 
 /* 4) Contenedor principal */
 .reserva-detalle-container {
-  max-width: 1280px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 24px;
   background: var(--color-bg-page);
@@ -154,6 +154,12 @@ body {
   grid-template-rows: auto 1fr;
   gap: 20px;
 }
+
+.contenido {
+  width: 90%; // o el valor que te funcione visualmente
+  margin-inline: auto;
+}
+
 
 /* 5) Header superior */
 .header {
@@ -947,4 +953,61 @@ i-bs[name="info-circle"] { color: var(--color-info); }
   align-self: stretch;
 }
 
-/* Fin del SCSS completo */
+@media (max-width: 768px) {
+  .reserva-detalle-container {
+    padding-inline: 16px;
+    padding-block: 20px;
+  }
+
+  .contenido {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "general"
+      "reserva"
+      "precio";
+    gap: 16px;
+  }
+
+  .card {
+    height: auto; // no forzamos altura igual
+    padding: 14px;
+  }
+
+  .card .card-titulo {
+    font-size: 18px;
+    padding-bottom: 8px;
+  }
+
+  .fechas-container {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .info-item-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .acciones {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .header {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .header .titulo {
+    font-size: 22px;
+  }
+
+  .badge-estado {
+    font-size: 12px;
+    padding: 5px 12px;
+  }
+
+  .precio-total .total-valor {
+    font-size: 18px;
+  }
+}
