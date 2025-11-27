@@ -5,9 +5,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '$^%pi-f!4s2z*o!+-um9)n6fe^xh!hf96ql41ml#g-$g%qqgg1')
-
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
-
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost 127.0.0.1 backend 0.0.0.0').split()
 
 INSTALLED_APPS = [
@@ -20,7 +18,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'rest_framework_simplejwt',
-    'channels',
+    'channels',     # Channels para WebSockets
     'core',
     'corsheaders',
 ]
@@ -81,11 +79,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 ASGI_APPLICATION = 'config.asgi.application'
+
+# Channel layers (InMemory para desarrollo)
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',
     }
 }
+# Para producción, considera Redis:
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             'hosts': [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+#         },
+#     },
+# }
 
 # Parámetros para conexiones estables a DB (Neon)
 DEFAULT_CONN_MAX_AGE = int(os.environ.get('DB_CONN_MAX_AGE', '120'))
@@ -97,7 +106,6 @@ DEFAULT_DB_KEEPALIVES_COUNT = int(os.environ.get('DB_KEEPALIVES_COUNT', '5'))
 USE_NEON = os.environ.get('USE_NEON', 'False') == 'True'
 
 if USE_NEON:
-    # Neon (pooler) con SSL y keepalives; elimina channel_binding=require para evitar cierres/policies
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -114,7 +122,6 @@ if USE_NEON:
                 'keepalives_idle': DEFAULT_DB_KEEPALIVES_IDLE,
                 'keepalives_interval': DEFAULT_DB_KEEPALIVES_INTERVAL,
                 'keepalives_count': DEFAULT_DB_KEEPALIVES_COUNT,
-                # 'channel_binding': 'prefer',  # si tu organización lo exige, usa 'prefer' en vez de 'require'
             }
         }
     }

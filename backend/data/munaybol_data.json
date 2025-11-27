@@ -1,690 +1,901 @@
 {
-  "departamentos_bolivia": [
+  "info_base_datos": {
+    "descripcion": "Base de datos estructurada para MunayBol: departamentos de Bolivia, hoteles recomendados y lugares turísticos destacados. Optimizada para respuestas con contexto oficial, cultural y logístico.",
+    "version": "2.0.0",
+    "ultima_actualizacion": "2025-11-27",
+    "estructura": [
+      "departamentos: Lista expandida con nombre, capital, aniversario, gastronomía, clima, población, festividades, cultura, costos, transporte y seguridad.",
+      "hoteles: Lista de hoteles con nombre, ubicación, departamento, calificación y enlaces de imagen.",
+      "lugares_turisticos: Lista de lugares turísticos con nombre, ubicación, tipo, descripción, horario y departamento."
+    ],
+    "convenciones": {
+      "moneda": "Bolivianos (Bs.)",
+      "formato_fechas": "día de mes (ej.: 25 de mayo)",
+      "claves_recomendadas_para_RAG": [
+        "departamentos[].nombre",
+        "departamentos[].fecha_aniversario",
+        "departamentos[].comida_tradicional",
+        "departamentos[].platos_adicionales[]",
+        "departamentos[].lugares_destacados[]",
+        "hoteles[].departamento",
+        "lugares_turisticos[].departamento"
+      ]
+    }
+  },
+  "departamentos": [
     {
-      "nombre": "Beni",
-      "capital": "Trinidad",
-      "fundacion": "1842",
-      "fecha_aniversario": "18 de noviembre",
-      "comida_tradicional": "Keperí Beniano",
-      "simbolo": "Corazón de la Amazonía boliviana",
-      "mercados_importantes": [
-        "Mercado Central de Trinidad",
-        "Mercado de Abasto Pompeya"
+      "nombre": "Chuquisaca",
+      "capital": "Sucre",
+      "fecha_aniversario": "25 de mayo",
+      "poblacion_aprox": 640000,
+      "clima": "Templado de valles; días soleados, noches frescas.",
+      "mejor_epoca_visita": "Abril–septiembre (clima más seco y templado).",
+      "comida_tradicional": "Mondongo",
+      "platos_adicionales": [
+        { "nombre": "Sopa de maní", "costo_aprox_bs": 18 },
+        { "nombre": "Chorizo chuquisaqueño", "costo_aprox_bs": 22 },
+        { "nombre": "Ají de paleta", "costo_aprox_bs": 25 }
       ],
-      "hoteles": [
-        {
-          "id_hotel": 25,
-          "nombre": "Hotel Campanario",
-          "ubicacion": "Av. 6 de Agosto Nº 80 Trinidad, Beni",
-          "calificacion": 4,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680815/ln9wpqlmmzcbs6ue9vdm.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680815/ln9wpqlmmzcbs6ue9vdm.jpg"
-        },
-        {
-          "id_hotel": 26,
-          "nombre": "Hotel Aguahí",
-          "ubicacion": "Av. Bolívar (esq. Santa Cruz) Trinidad, Beni",
-          "calificacion": 4,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680908/swqig8ojmlg8keeinop9.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680908/swqig8ojmlg8keeinop9.jpg"
-        },
-        {
-          "id_hotel": 27,
-          "nombre": "Hotel Don Bernardo",
-          "ubicacion": "Av. 18 de Noviembre N.º 351 Trinidad, Beni",
-          "calificacion": 4,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680999/x09dcjyctzah78luk0ee.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680999/x09dcjyctzah78luk0ee.jpg"
-        }
+      "festividades_principales": [
+        { "nombre": "Aniversario de Chuquisaca", "mes": "mayo", "descripcion": "Desfiles cívicos y actividades culturales en Sucre." },
+        { "nombre": "Fiesta de San Roque", "mes": "septiembre", "descripcion": "Danzas tradicionales y música en barrios históricos." }
       ],
-      "lugares_turisticos": [
-        {
-          "id_lugar": 8,
-          "nombre": "Misión Jesuítica de San Ignacio de Moxos",
-          "ubicacion": "San Ignacio de Moxos, provincia Moxos, departamento de Beni, Bolivia",
-          "tipo": "Misión Jesuítica, Patrimonio Histórico y Cultural",
-          "fecha_creacion": "2025-10-16",
-          "horario": "Lunes a domingo de 8:00 a 18:00 (la iglesia y museo pueden tener horarios específicos)",
-          "descripcion": "La Misión Jesuítica de San Ignacio de Moxos es uno de los principales testimonios del legado jesuítico en la Amazonía boliviana. Fundada en 1689, esta misión es conocida por su iglesia de arquitectura barroca mestiza, su museo de arte sacro y la rica tradición cultural de los moxeños, incluyendo la famosa Fiesta de San Ignacio. El sitio es Patrimonio Histórico y Cultural de Bolivia, y es ideal para quienes buscan conocer la historia, la música, el arte y las costumbres indígenas de la región amazónica.",
-          "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260500/mision_jesuitica_san_ignacio_de_moxos_beni_gy8asr.webp",
-          "estado": true
-        },
-        {
-          "id_lugar": 9,
-          "nombre": "Parque Nacional Madidi",
-          "ubicacion": "Noroeste de Bolivia, abarcando parte de los departamentos de La Paz y Beni. Principal acceso desde la localidad de Rurrenabaque.",
-          "tipo": "Parque Nacional y Área Protegida",
-          "fecha_creacion": "2025-10-16",
-          "horario": "Todos los días, 07:00 a 18:00 (el acceso y actividades pueden variar según tour y temporada)",
-          "descripcion": "El Parque Nacional Madidi es una de las áreas protegidas con mayor biodiversidad del mundo. Ubicado en la región amazónica del noroeste boliviano, abarca selvas, ríos y montañas, y es hogar de miles de especies de plantas, mamíferos, aves, reptiles y peces. Es ideal para el ecoturismo, la observación de aves, el senderismo y el turismo de aventura. Madidi protege comunidades indígenas, recursos naturales y paisajes únicos, y es reconocido internacionalmente por su valor ecológico y científico.",
-          "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260499/parque_nacional_madidi_beni_iflew2.jpg",
-          "estado": true
-        },
-        {
-          "nombre": "Santuario Ecológico de las Pampas del Yacuma",
-          "ubicacion": "Rurrenabaque, Beni",
-          "tipo": "Área de Vida Silvestre y Ecoturismo",
-          "descripcion": "Famoso por sus tours en bote para la observación de fauna amazónica como anacondas, capibaras, caimanes y delfines rosados de río. Es un sitio clave para el ecoturismo en la región."
-        },
-        {
-          "nombre": "Laguna Suárez",
-          "ubicacion": "Trinidad, Beni",
-          "tipo": "Atractivo Natural y Recreacional",
-          "descripcion": "Un espejo de agua artificial importante para actividades de pesca, navegación y observación de aves, ubicada cerca de la ciudad de Trinidad."
-        }
+      "descripcion_cultural": "Cuna de la independencia boliviana, arquitectura colonial conservada, tradición universitaria y religiosa.",
+      "costos_promedio": {
+        "comida_local_bs": "20–35",
+        "entrada_museos_bs": "10–30",
+        "tour_guiado_bs": "60–120"
+      },
+      "transporte": {
+        "acceso": "Aeropuerto Alcantarí, buses desde La Paz, Cochabamba y Santa Cruz.",
+        "movilidad_urbana": "Taxis, micros; caminatas en casco histórico."
+      },
+      "seguridad_consejos": "Zonas turísticas seguras; precaución nocturna en áreas alejadas. Llevar efectivo para entradas menores.",
+      "lugares_destacados": [
+        "Casa de la Libertad",
+        "Parque Cretácico",
+        "Huellas de Cal Orck'o",
+        "Catedral Metropolitana"
       ]
     },
     {
-      "nombre": "Chuquisaca",
-      "capital": "Sucre (Capital Constitucional de Bolivia)",
-      "fundacion": "1825 (Independencia de Bolivia)",
-      "fecha_aniversario": "25 de mayo",
-      "comida_tradicional": "Mondongo",
-      "simbolo": "Cuna de la Libertad / Ciudad Blanca",
-      "mercados_importantes": [
-        "Mercado Central de Sucre (Mercado 25 de Mayo)",
-        "Mercado Campesino"
+      "nombre": "La Paz",
+      "capital": "La Paz",
+      "fecha_aniversario": "16 de julio",
+      "poblacion_aprox": 2900000,
+      "clima": "Altiplano; frío seco, gran amplitud térmica.",
+      "mejor_epoca_visita": "Mayo–agosto (cielos despejados).",
+      "comida_tradicional": "Plato Paceño",
+      "platos_adicionales": [
+        { "nombre": "Sajta de pollo", "costo_aprox_bs": 25 },
+        { "nombre": "Fricasé paceño", "costo_aprox_bs": 28 },
+        { "nombre": "Api con pastel", "costo_aprox_bs": 12 }
       ],
-      "hoteles": [
-        {
-          "id_hotel": 19,
-          "nombre": "Hotel de Su Merced",
-          "ubicacion": "Avenidad Libertador, 2 cuadras al norte",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761669428/gxpmrwtuaugyhigmiuam.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761669428/gxpmrwtuaugyhigmiuam.jpg"
-        },
-        {
-          "id_hotel": 20,
-          "nombre": "Parador Santa María La Real",
-          "ubicacion": "Centro de la ciudad de Sucre",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761678082/knu7q206xfpfv9vzrhnl.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761678082/knu7q206xfpfv9vzrhnl.jpg"
-        },
-        {
-          "id_hotel": 21,
-          "nombre": "Hotel Colón Sucre",
-          "ubicacion": "Avenida Junin y Esteban Arce",
-          "calificacion": 4,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761678193/hldhuqsak2g40fofgqbl.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761678193/hldhuqsak2g40fofgqbl.jpg"
-        }
+      "festividades_principales": [
+        { "nombre": "Fiesta del 16 de Julio", "mes": "julio", "descripcion": "Actos cívicos, ferias y desfiles." },
+        { "nombre": "Gran Poder", "mes": "mayo–junio", "descripcion": "Una de las mayores entradas folklóricas de Bolivia." }
       ],
-      "lugares_turisticos": [
-        {
-          "id_lugar": 4,
-          "nombre": "Parque Cretácico",
-          "ubicacion": "Avenida Parque Cretácico, Zona El Molino, Sucre, Bolivia",
-          "tipo": "Parque Temático y Paleontológico",
-          "fecha_creacion": "2025-10-09",
-          "horario": "Lunes a domingo de 9:00 a 17:00",
-          "descripcion": "El Parque Cretácico es un parque temático y paleontológico ubicado en las afueras de Sucre, Bolivia. Es famoso por albergar una de las mayores concentraciones de huellas de dinosaurios del mundo en el farallón de Cal Orck’o, así como por sus réplicas a escala real de dinosaurios y exposiciones educativas sobre la era cretácica. El parque ofrece visitas guiadas, actividades interactivas y vistas panorámicas de la ciudad y del farallón, siendo un destino ideal para familias, estudiantes y amantes de la paleontología.",
-          "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1760642269/nepq6nhfeqtazd56qfal.jpg",
-          "estado": true
-        },
-        {
-          "id_lugar": 11,
-          "nombre": "Huellas de Dinosaurios de Cal Orck'o",
-          "ubicacion": "Farallón de Cal Orck'o, Zona El Molino, Sucre, departamento de Chuquisaca, Bolivia",
-          "tipo": "Sitio Paleontológico",
-          "fecha_creacion": "2025-10-16",
-          "horario": "Lunes a domingo de 9:00 a 17:00 (acceso a través del Parque Cretácico)",
-          "descripcion": "Las huellas de dinosaurios de Cal Orck'o constituyen uno de los yacimientos paleontológicos más importantes del mundo. Ubicadas en un gigantesco farallón a las afueras de Sucre, Chuquisaca, estas huellas datan del período cretácico y suman más de 5,000 rastros de al menos 15 especies diferentes de dinosaurios, incluyendo saurópodos, terópodos y ornitópodos. El sitio es visitable a través del Parque Cretácico, que ofrece recorridos guiados, réplicas de dinosaurios y actividades educativas para todo público.",
-          "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260474/cal_orcko_huellas_dinosaurios_chuquisaca_huzvsy.webp",
-          "estado": true
-        },
-        {
-          "id_lugar": 12,
-          "nombre": "Centro Turístico de Chuquisaca",
-          "ubicacion": "Avenida del Maestro, Zona Villa Margarita, Sucre, departamento de Chuquisaca, Bolivia",
-          "tipo": "Centro Turístico y Recreacional",
-          "fecha_creacion": "2025-10-16",
-          "horario": "Lunes a domingo de 9:00 a 18:00",
-          "descripcion": "El Centro Turístico de Chuquisaca es un espacio recreacional y cultural ubicado en la ciudad de Sucre, ideal para el esparcimiento de familias y visitantes. Ofrece áreas verdes, piscinas, juegos infantiles, canchas deportivas y zonas de picnic. Además, organiza eventos culturales y actividades comunitarias, convirtiéndose en un punto de encuentro para la recreación y el turismo local en Chuquisaca.",
-          "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260472/centro_historico_chuquisaca_hfzgyx.jpg",
-          "estado": true
-        },
-        {
-          "nombre": "Casa de la Libertad",
-          "ubicacion": "Plaza 25 de Mayo, Sucre",
-          "tipo": "Museo Histórico Nacional",
-          "descripcion": "Lugar donde se firmó el Acta de la Independencia de Bolivia. Es considerado el templo de la nación y alberga una valiosa colección de documentos y objetos históricos."
-        }
+      "descripcion_cultural": "Capital administrativa; diversidad aymara y mestiza; teleféricos urbanos, mercados tradicionales.",
+      "costos_promedio": {
+        "comida_local_bs": "20–40",
+        "teleferico_tramo_bs": "3–5",
+        "tour_valle_de_la_luna_bs": "60–100"
+      },
+      "transporte": {
+        "acceso": "Aeropuerto Internacional El Alto.",
+        "movilidad_urbana": "Red de teleféricos, buses, taxis."
+      },
+      "seguridad_consejos": "Precaución por altura (soroche); evitar portar objetos de alto valor en mercados concurridos.",
+      "lugares_destacados": [
+        "Valle de la Luna",
+        "Mercado de las Brujas",
+        "Teleférico rojo",
+        "Plaza Murillo"
       ]
     },
     {
       "nombre": "Cochabamba",
       "capital": "Cochabamba",
-      "fundacion": "1826",
       "fecha_aniversario": "14 de septiembre",
+      "poblacion_aprox": 2000000,
+      "clima": "Valles templados; conocida como 'la ciudad de la eterna primavera'.",
+      "mejor_epoca_visita": "Todo el año; menos lluvias de abril a septiembre.",
       "comida_tradicional": "Pique Macho",
-      "simbolo": "La Llajta / Granero de Bolivia",
-      "mercados_importantes": [
-        "Mercado La Cancha (principal y más grande)",
-        "Mercado Fidel Araníbar"
+      "platos_adicionales": [
+        { "nombre": "Silpancho", "costo_aprox_bs": 28 },
+        { "nombre": "Chicharrón cochabambino", "costo_aprox_bs": 35 },
+        { "nombre": "Api morado con pastel", "costo_aprox_bs": 12 }
       ],
-      "hoteles": [
-        {
-          "id_hotel": 1,
-          "nombre": "Gran Hotel Cochabamba",
-          "ubicacion": "Plaza Ubaldo Ánze E-415, barrio La Recoleta, Cochabamba.",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-05",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759259057/hotel_gran_hotel_cochabamba_bqtmym.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759259057/hotel_gran_hotel_cochabamba_bqtmym.jpg"
-        },
-        {
-          "id_hotel": 2,
-          "nombre": "Hotel Portales",
-          "ubicacion": "Av. Pando Nº 1271, Cochabamba",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-06",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761665878/qmnwikiwvc2mwsz95ulh.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761665878/qmnwikiwvc2mwsz95ulh.jpg"
-        },
-        {
-          "id_hotel": 3,
-          "nombre": "Hotel La Colonia",
-          "ubicacion": "Calle Luis Mostajo Nº 100 (Temporal de Cala Cala), Cochabamba",
-          "calificacion": 4,
-          "estado": true,
-          "fecha_creacion": "2025-10-16",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761666123/evjhgdey80smcfmj1pq8.avif",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761666123/evjhgdey80smcfmj1pq8.avif"
-        }
+      "festividades_principales": [
+        { "nombre": "Virgen de Urcupiña", "mes": "agosto", "descripcion": "Peregrinación y entradas folklóricas en Quillacollo." },
+        { "nombre": "Aniversario departamental", "mes": "septiembre", "descripcion": "Desfiles cívicos y ferias gastronómicas." }
       ],
-      "lugares_turisticos": [
-        {
-          "id_lugar": 1,
-          "nombre": "Casa de Campo",
-          "ubicacion": "Avenida Víctor Ustariz km 5.5, zona oeste de la ciudad de Cochabamba, Bolivia",
-          "tipo": "Restaurante Campestre y Centro de Eventos",
-          "fecha_creacion": "2025-10-06",
-          "horario": "Lunes a domingo de 10:00 a 18:00 (puede variar según temporada y eventos)",
-          "descripcion": "Casa de Campo es un reconocido restaurante campestre y centro de eventos en Cochabamba, Bolivia. Destacado por su ambiente rústico, amplias áreas verdes y gastronomía tradicional boliviana, es ideal para disfrutar en familia, celebrar eventos sociales, y realizar actividades recreativas. Ofrece platos típicos, parrilladas, área de juegos para niños y espacios para eventos corporativos y matrimonios.",
-          "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1760641772/ifji0nqeksduj0j7xb0o.jpg",
-          "estado": true
-        },
-        {
-          "id_lugar": 3,
-          "nombre": "Cristo de la Concordia",
-          "ubicacion": "Cerro San Pedro, ciudad de Cochabamba, Bolivia",
-          "tipo": "Monumento y Mirador",
-          "fecha_creacion": "2025-10-09",
-          "horario": "domingo de 9:00 a 18:00 (acceso al interior del monumento y mirador; el área externa está abierta todo el día)",
-          "descripcion": "El Cristo de la Concordia es una estatua monumental situada en el cerro San Pedro de Cochabamba. Con 34.2 metros de altura, es una de las estatuas de Cristo más grandes del mundo. El monumento ofrece una espectacular vista panorámica de la ciudad y el valle, y se puede acceder a la cima mediante teleférico, escaleras o vehículo. El Cristo de la Concordia es uno de los principales símbolos turísticos y religiosos de Bolivia, y un sitio ideal para la fotografía, el turismo familiar y la contemplación.",
-          "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759409725/atxmsay01eua7ugxdwfs.jpg",
-          "estado": true
-        },
-        {
-          "nombre": "Parque Nacional Tunari",
-          "ubicacion": "Cerca de Cochabamba",
-          "tipo": "Parque Nacional y Área Protegida",
-          "descripcion": "Parque de vida silvestre que protege la cordillera del Tunari. Ideal para el senderismo, el alpinismo y la observación de la flora y fauna andina y valluna."
-        },
-        {
-          "nombre": "Villa Gualberto Villarroel (Templo San Francisco)",
-          "ubicacion": "Zona Central, Cochabamba",
-          "tipo": "Edificio Histórico y Religioso",
-          "descripcion": "Una de las iglesias coloniales más antiguas y significativas de la ciudad, famosa por su arquitectura y valor patrimonial."
-        }
-      ]
-    },
-    {
-      "nombre": "La Paz",
-      "capital": "Nuestra Señora de La Paz (Sede de Gobierno de Bolivia)",
-      "fundacion": "1826",
-      "fecha_aniversario": "16 de julio",
-      "comida_tradicional": "Plato Paceño",
-      "simbolo": "Sede de Gobierno / El Alto",
-      "mercados_importantes": [
-        "Mercado de las Brujas (turístico)",
-        "Mercado Rodríguez"
-      ],
-      "hoteles": [
-        {
-          "id_hotel": 7,
-          "nombre": "Suites Camino Real",
-          "ubicacion": "Parte de la cadena Camino Real en La Paz, apuntado a viajeros de lujo.",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761667835/qx9bydl9evyzpzk2ns0a.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761667835/qx9bydl9evyzpzk2ns0a.jpg"
-        },
-        {
-          "id_hotel": 8,
-          "nombre": "Hotel Presidente",
-          "ubicacion": "calle Potosí Nro. 920, La Paz.",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761667953/qzxyq6b03wzuk890ygfb.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761667953/qzxyq6b03wzuk890ygfb.jpg"
-        },
-        {
-          "id_hotel": 9,
-          "nombre": "Hotel Gloria",
-          "ubicacion": "calle Potosí No. 909 (central), La Paz",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668070/hni5gj5cilfh71onfz30.webp",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668070/hni5gj5cilfh71onfz30.webp"
-        }
-      ],
-      "lugares_turisticos": [
-        {
-          "nombre": "Valle de la Luna",
-          "ubicacion": "Mallasa, La Paz",
-          "tipo": "Atractivo Natural",
-          "descripcion": "Un paisaje de formaciones geológicas de arcilla y arenisca que simulan un paisaje lunar. Ideal para el senderismo y la fotografía."
-        },
-        {
-          "nombre": "Teleférico La Paz - El Alto (Mi Teleférico)",
-          "ubicacion": "Conecta toda la ciudad de La Paz y El Alto",
-          "tipo": "Sistema de Transporte y Mirador Turístico",
-          "descripcion": "El sistema de teleféricos más largo del mundo, ofreciendo vistas espectaculares y panorámicas de la ciudad y las montañas circundantes."
-        },
-        {
-          "nombre": "Tiahuanaco (Tiwanaku)",
-          "ubicacion": "Provincia Ingavi, La Paz",
-          "tipo": "Sitio Arqueológico y Patrimonio de la Humanidad",
-          "descripcion": "Restos de una de las civilizaciones preincaicas más importantes de América del Sur, con estructuras como el Templo de Kalasasaya y la Puerta del Sol."
-        }
-      ]
-    },
-    {
-      "nombre": "Oruro",
-      "capital": "Oruro",
-      "fundacion": "1826",
-      "fecha_aniversario": "10 de febrero",
-      "comida_tradicional": "Charquekán",
-      "simbolo": "Capital del Folklore de Bolivia",
-      "mercados_importantes": [
-        "Mercado Campero",
-        "Mercado Fermín López"
-      ],
-      "hoteles": [
-        {
-          "id_hotel": 16,
-          "nombre": "Hotel Villa Real San Felipe",
-          "ubicacion": "San Felipe Nº 678, Oruro",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761669121/v4kwqcg0hkpqqmnh9vh6.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761669121/v4kwqcg0hkpqqmnh9vh6.jpg"
-        },
-        {
-          "id_hotel": 17,
-          "nombre": "Hotel Monarca",
-          "ubicacion": "Av. 6 de Agosto 1145, Oruro",
-          "calificacion": 4,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761669225/bdhnfh0cqabia8fsi6sz.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761669225/bdhnfh0cqabia8fsi6sz.jpg"
-        },
-        {
-          "id_hotel": 18,
-          "nombre": "Hotel Arenales",
-          "ubicacion": "Av. Pagador 5843 (Junín y Ayacucho), Oruro",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761669315/hbekgxtdqs8yfwy093hs.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761669315/hbekgxtdqs8yfwy093hs.jpg"
-        }
-      ],
-      "lugares_turisticos": [
-        {
-          "id_lugar": 15,
-          "nombre": "Salar de Coipasa",
-          "ubicacion": "Municipio de Coipasa, provincia Sabaya, departamento de Oruro, Bolivia",
-          "tipo": "Atractivo Natural / Salar",
-          "fecha_creacion": "2025-10-16",
-          "horario": "Abierto todos los días, 24 horas (los tours operan generalmente de 7:00 a 18:00)",
-          "descripcion": "El Salar de Coipasa es el segundo salar más grande de Bolivia, ubicado al oeste del departamento de Oruro, cerca de la frontera con Chile. Con una superficie de aproximadamente 2,500 km², ofrece paisajes deslumbrantes de sal, lagunas, aves andinas y volcanes cercanos, como el volcán Tata Sabaya. Es menos visitado que el Salar de Uyuni, lo que lo convierte en un destino ideal para quienes buscan tranquilidad y contacto con la naturaleza. El salar es también fuente de sal y minerales, y rodeado de comunidades indígenas que conservan tradiciones ancestrales.",
-          "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260469/salar_de_coipasa_oruro_kwuvks.jpg",
-          "estado": true
-        },
-        {
-          "id_lugar": 16,
-          "nombre": "Carnaval de Oruro",
-          "ubicacion": "Ciudad de Oruro, departamento de Oruro, Bolivia",
-          "tipo": "Fiesta Folclórica y Religiosa",
-          "fecha_creacion": "2025-10-16",
-          "horario": "Anualmente durante febrero o marzo (fechas varían según el calendario), desfiles y actividades principales durante el sábado y domingo de Carnaval",
-          "descripcion": "El Carnaval de Oruro es la festividad folclórica y religiosa más grande y famosa de Bolivia, declarada Obra Maestra del Patrimonio Oral e Intangible de la Humanidad por la UNESCO. Destaca por sus impresionantes desfiles de danzas tradicionales, como la Diablada, Morenada, Caporales y Tobas, en honor a la Virgen del Socavón. Cada año, miles de bailarines y músicos recorren las calles de Oruro, mostrando la riqueza cultural, devoción y colorido del país, atrayendo a turistas nacionales e internacionales.",
-          "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260468/carnaval_de_oruro_ydprii.jpg",
-          "estado": true
-        },
-        {
-          "nombre": "Virgen del Socavón (Santuario)",
-          "ubicacion": "Cerro Pie de Gallo, Oruro",
-          "tipo": "Santuario Religioso y Monumento",
-          "descripcion": "Importante centro de peregrinación, especialmente durante el Carnaval. La estatua de la Virgen se encuentra en la cima y ofrece vistas de la ciudad."
-        },
-        {
-          "nombre": "Museo Nacional Antropológico Eduardo López Rivas",
-          "ubicacion": "Oruro",
-          "tipo": "Museo",
-          "descripcion": "Exhibe piezas arqueológicas, etnográficas y coloniales que resaltan la historia y la cultura del departamento de Oruro."
-        }
-      ]
-    },
-    {
-      "nombre": "Pando",
-      "capital": "Cobija",
-      "fundacion": "1938",
-      "fecha_aniversario": "24 de septiembre",
-      "comida_tradicional": "Pescado a la Tacuara",
-      "simbolo": "Capital de la castaña / Perla del Acre",
-      "mercados_importantes": [
-        "Mercado Central de Cobija",
-        "Zona Comercial de la Frontera (Acre)"
-      ],
-      "hoteles": [
-        {
-          "id_hotel": 22,
-          "nombre": "Dorado Hotel",
-          "ubicacion": "Final, Av. Internacional N.º 583 Cobija, Pando",
-          "calificacion": 3,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680511/zgwada0xhr1eiyeoyhqm.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680511/zgwada0xhr1eiyeoyhqm.jpg"
-        },
-        {
-          "id_hotel": 23,
-          "nombre": "Avenida Solei",
-          "ubicacion": "Av. 9 de Febrero (esq. Otto Felipe Braun) N.º 205 Cobija, Pando",
-          "calificacion": 3,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680621/p8ufqphgwbtzeq809cmv.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680621/p8ufqphgwbtzeq809cmv.jpg"
-        },
-        {
-          "id_hotel": 24,
-          "nombre": "Hotel Solar de Bahía",
-          "ubicacion": "Calle Otto Felipe Brown (frente al Mercado Central) Cobija, Pando",
-          "calificacion": 4,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680715/ayfv3gyrnmuulrmoi2kz.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680715/ayfv3gyrnmuulrmoi2kz.jpg"
-        }
-      ],
-      "lugares_turisticos": [
-        {
-          "id_lugar": 6,
-          "nombre": "Reserva Nacional de Vida Silvestre Amazónica Manuripi",
-          "ubicacion": "Departamento de Pando, Bolivia",
-          "tipo": "Reserva Nacional de Vida Silvestre Amazónica",
-          "fecha_creacion": "2025-10-16",
-          "horario": "Todos los días, 08:00 a 18:00 (puede variar según temporada y actividades)",
-          "descripcion": "La Reserva Manuripi es un área protegida ubicada en el norte amazónico de Bolivia, en el departamento de Pando. Abarca más de 700,000 hectáreas de selva tropical y alberga una gran diversidad de fauna y flora, incluyendo caimanes, tortugas, jaguares y árboles de castaña. Es conocida por su belleza natural, sus ríos navegables y la riqueza cultural de las comunidades indígenas que habitan en la región. Es ideal para actividades de ecoturismo, observación de aves y vida silvestre, paseos en bote y senderismo.",
-          "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260501/reserva_manuripi_health_pando_vfiflv.jpg",
-          "estado": true
-        },
-        {
-          "id_lugar": 7,
-          "nombre": "Puente Internacional sobre el Río Acre",
-          "ubicacion": "Frontera entre Cobija (Bolivia) y Brasileia (Brasil), sobre el río Acre",
-          "tipo": "Puente Internacional",
-          "fecha_creacion": "2025-10-16",
-          "horario": "Abierto todos los días, 24 horas (puede variar según controles fronterizos y eventos especiales)",
-          "descripcion": "El Puente Internacional sobre el Río Acre conecta la ciudad boliviana de Cobija con la ciudad brasileña de Brasileia. Es un punto clave de tránsito fronterizo entre Bolivia y Brasil en el departamento de Pando, facilitando el comercio, el turismo y el intercambio cultural entre ambos países. El puente es utilizado tanto por peatones como por vehículos, y en sus inmediaciones se encuentran zonas comerciales y de intercambio turístico.",
-          "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260501/puente_internacional_pando_okmpn5.jpg",
-          "estado": true
-        },
-        {
-          "nombre": "Parque Piñata",
-          "ubicacion": "Cobija, Pando",
-          "tipo": "Parque y Área Recreativa",
-          "descripcion": "Un parque en Cobija, ideal para el esparcimiento familiar, con áreas verdes y juegos, reflejando el ambiente de la capital amazónica."
-        }
-      ]
-    },
-    {
-      "nombre": "Potosí",
-      "capital": "Potosí",
-      "fundacion": "1826",
-      "fecha_aniversario": "10 de noviembre",
-      "comida_tradicional": "K'alapurka",
-      "simbolo": "Villa Imperial / Cerro Rico",
-      "mercados_importantes": [
-        "Mercado Central de Potosí (Mercado Chuquimia)",
-        "Mercado Uyuni"
-      ],
-      "hoteles": [
-        {
-          "id_hotel": 13,
-          "nombre": "Coloso Potosi Hotel",
-          "ubicacion": "Calle Bolívar 965, Potosí",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668636/se6izrqueupxfxkzbe4u.avif",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668636/se6izrqueupxfxkzbe4u.avif"
-        },
-        {
-          "id_hotel": 14,
-          "nombre": "Cima Argentum Hotel",
-          "ubicacion": "Av. Villazón No. 239, Potosi",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759259058/hotel_colonial_potosi_wpn0vw.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759259058/hotel_colonial_potosi_wpn0vw.jpg"
-        },
-        {
-          "id_hotel": 15,
-          "nombre": "Samaricusun Hotel",
-          "ubicacion": "Bustillos 857, Potosi",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668868/cyetza89tnhwu9cs4h6j.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668868/cyetza89tnhwu9cs4h6j.jpg"
-        }
-      ],
-      "lugares_turisticos": [
-        {
-          "id_lugar": 5,
-          "nombre": "Casa Nacional de la Moneda",
-          "ubicacion": "Calle Ayacucho, entre calles Quijarro y Bustillos, ciudad de Potosí, Bolivia",
-          "tipo": "Museo Histórico y Tradicional",
-          "fecha_creacion": "2025-10-09",
-          "horario": "Lunes a viernes de 9:00 a 12:00 y de 14:30 a 18:00; sábados y domingos de 9:00 a 12:00",
-          "descripcion": "La Casa Nacional de la Moneda de Potosí es uno de los museos más importantes de Bolivia y Sudamérica. Construida en el siglo XVIII, fue el principal centro de acuñación de monedas durante la época colonial, utilizando la plata extraída del Cerro Rico de Potosí. El edificio es famoso por su arquitectura monumental y su historia vinculada a la economía mundial. Actualmente, alberga exposiciones de arte, historia y numismática, y es un sitio emblemático para conocer el legado colonial y minero de Bolivia.",
-          "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260470/casa_de_la_moneda_potosi_uyzz2e.avif",
-          "estado": true
-        },
-        {
-          "id_lugar": 13,
-          "nombre": "Salar de Uyuni",
-          "ubicacion": "Uyuni, provincia Daniel Campos, departamento de Potosí, Bolivia",
-          "tipo": "Atractivo Natural / Salar",
-          "fecha_creacion": "2025-10-16",
-          "horario": "Abierto todos los días, 24 horas (los tours operan generalmente de 7:00 a 18:00)",
-          "descripcion": "El Salar de Uyuni es el mayor desierto de sal continuo y alto del mundo, con una superficie de más de 10,000 km². Ubicado en el suroeste de Bolivia, es famoso por su espectacular paisaje blanco, espejos de agua durante la época de lluvias, y sus impresionantes vistas panorámicas. Es uno de los principales destinos turísticos de Bolivia, ideal para fotografía, excursiones en 4x4, visitas a islas como la Isla Incahuasi y observación de flamencos. El salar también alberga hoteles construidos con bloques de sal y es una importante fuente de litio.",
-          "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260470/salar_de_uyuni_potosi_l5ndhw.avif",
-          "estado": true
-        },
-        {
-          "id_lugar": 17,
-          "nombre": "Parque Nacional Torotoro",
-          "ubicacion": "Municipio de Torotoro, provincia Charcas, departamento de Potosí, Bolivia",
-          "tipo": "Parque Nacional y Área Protegida",
-          "fecha_creacion": "2025-10-16",
-          "horario": "Todos los días, de 7:00 a 18:00 (el ingreso y recorridos guiados pueden variar según temporada)",
-          "descripcion": "El Parque Nacional Torotoro es un área protegida reconocida por su impresionante geología, paisajes de cañones, cavernas y formaciones rocosas, así como por sus famosos yacimientos de huellas de dinosaurios. Ubicado en la región de los valles secos de Potosí, ofrece actividades como senderismo, visitas guiadas a cavernas como Umajalanta, exploración de fósiles, observación de aves y turismo comunitario. Es un destino ideal para los amantes de la naturaleza, la aventura y la paleontología.",
-          "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260468/parque_nacional_torotoro_cochabamba_vfwuty.jpg",
-          "estado": true
-        },
-        {
-          "nombre": "Cerro Rico de Potosí",
-          "ubicacion": "Potosí",
-          "tipo": "Sitio Histórico y Minero",
-          "descripcion": "La montaña histórica que hizo de Potosí una de las ciudades más ricas del mundo en la época colonial. Se ofrecen tours a las minas para conocer las condiciones de trabajo y la historia de la plata."
-        }
+      "descripcion_cultural": "Capital gastronómica de Bolivia; vida universitaria y espacios campestres.",
+      "costos_promedio": {
+        "comida_local_bs": "20–35",
+        "teleferico_cristo_bs": "8–15",
+        "entrada_parques_bs": "5–20"
+      },
+      "transporte": {
+        "acceso": "Aeropuerto Jorge Wilstermann.",
+        "movilidad_urbana": "Trufis, taxis; teleférico al Cristo de la Concordia."
+      },
+      "seguridad_consejos": "Zonas turísticas seguras; cuidar pertenencias en ferias y mercados.",
+      "lugares_destacados": [
+        "Cristo de la Concordia",
+        "Casa de Campo",
+        "Plaza 14 de Septiembre",
+        "Laguna Alalay"
       ]
     },
     {
       "nombre": "Santa Cruz",
       "capital": "Santa Cruz de la Sierra",
-      "fundacion": "1826",
       "fecha_aniversario": "24 de septiembre",
+      "poblacion_aprox": 3500000,
+      "clima": "Tropical; caluroso y húmedo, con vientos del sur (surazos) ocasionales.",
+      "mejor_epoca_visita": "Junio–agosto (menos lluvias y calor moderado).",
       "comida_tradicional": "Majadito",
-      "simbolo": "Motor Económico de Bolivia",
-      "mercados_importantes": [
-        "Mercado Abasto",
-        "La Ramada (comercial)"
+      "platos_adicionales": [
+        { "nombre": "Locro cruceño", "costo_aprox_bs": 22 },
+        { "nombre": "Sonso de yuca", "costo_aprox_bs": 15 },
+        { "nombre": "Tamales cambas", "costo_aprox_bs": 18 }
       ],
-      "hoteles": [
-        {
-          "id_hotel": 4,
-          "nombre": "Hotel Los Tajibos",
-          "ubicacion": "Ubicado en Santa Cruz de la Sierra, es considerado uno de los hoteles más importantes del país.",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-16",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761666260/rlkmz6fl0mk2gmun8td7.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761666260/rlkmz6fl0mk2gmun8td7.jpg"
-        },
-        {
-          "id_hotel": 5,
-          "nombre": "Hotel Camino Real - Santa Cruz",
-          "ubicacion": "Ubicado en el distrito de negocios de Santa Cruz, con buena infraestructura para negocios y turismo.",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761667293/axngdarkpcnacgnynpss.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761667293/axngdarkpcnacgnynpss.jpg"
-        },
-        {
-          "id_hotel": 6,
-          "nombre": "Hotel Casa Blanca - Santa Cruz",
-          "ubicacion": "Av. Marcelo Terceros Este No 205, Equipetrol, Santa Cruz.",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761667466/lozmu0uxqvm0sjrxnx2n.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761667466/lozmu0uxqvm0sjrxnx2n.jpg"
-        }
+      "festividades_principales": [
+        { "nombre": "Aniversario de Santa Cruz", "mes": "septiembre", "descripcion": "Actos cívicos, ferias y música en la plaza principal." },
+        { "nombre": "Carnaval cruceño", "mes": "febrero–marzo", "descripcion": "Comparsas y desfiles coloridos." }
       ],
-      "lugares_turisticos": [
-        {
-          "id_lugar": 14,
-          "nombre": "Samaipata",
-          "ubicacion": "Provincia Florida, departamento de Santa Cruz, Bolivia",
-          "tipo": "Pueblo Turístico y Sitio Arqueológico",
-          "fecha_creacion": "2025-10-16",
-          "horario": "Abierto todos los días, 24 horas (el acceso al sitio arqueológico El Fuerte es de 8:30 a 17:30)",
-          "descripcion": "Samaipata es un pintoresco pueblo ubicado en los valles de Santa Cruz, famoso por su clima templado, paisajes naturales y su cercanía al sitio arqueológico El Fuerte de Samaipata, Patrimonio Mundial de la Humanidad. El pueblo es conocido por su ambiente relajado, arquitectura colonial, bodegas de vino, y actividades de ecoturismo como senderismo, visitas a cascadas y observación de aves. El Fuerte de Samaipata es una antigua estructura preincaica tallada en piedra, rodeada de misterio y leyendas, y es uno de los principales atractivos arqueológicos de Bolivia.",
-          "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260469/samaipata_el_fuerte_santa_cruz_xj4kmj.jpg",
-          "estado": true
-        },
-        {
-          "nombre": "Misiones Jesuíticas de Chiquitos (San Javier, Concepción, etc.)",
-          "ubicacion": "Provincia Chiquitos y aledañas, Santa Cruz",
-          "tipo": "Patrimonio de la Humanidad (UNESCO)",
-          "descripcion": "Conjunto de pueblos misionales fundados por jesuitas, famosos por su arquitectura barroca mestiza y su rica tradición musical. Forman un circuito turístico cultural."
-        },
-        {
-          "nombre": "Parque Nacional Noel Kempff Mercado",
-          "ubicacion": "Noreste de Santa Cruz",
-          "tipo": "Parque Nacional y Patrimonio de la Humanidad",
-          "descripcion": "Una de las áreas protegidas más prístinas y con mayor biodiversidad del mundo, con sabanas, bosques y formaciones geológicas únicas como la Meseta de Caparú."
-        }
+      "descripcion_cultural": "Región de mayor crecimiento económico; mezcla de tradición camba y modernidad.",
+      "costos_promedio": {
+        "comida_local_bs": "25–45",
+        "entrada_museos_bs": "10–25",
+        "tour_samaipata_bs": "120–250"
+      },
+      "transporte": {
+        "acceso": "Aeropuerto Internacional Viru Viru.",
+        "movilidad_urbana": "Micros, taxis, transporte por aplicaciones."
+      },
+      "seguridad_consejos": "Buen nivel de servicios; precaución nocturna en áreas poco iluminadas.",
+      "lugares_destacados": [
+        "Samaipata y El Fuerte",
+        "Biocentro Güembé",
+        "Plaza 24 de Septiembre",
+        "Lomas de Arena"
+      ]
+    },
+    {
+      "nombre": "Potosí",
+      "capital": "Potosí",
+      "fecha_aniversario": "10 de noviembre",
+      "poblacion_aprox": 900000,
+      "clima": "Altiplano alto; frío y seco.",
+      "mejor_epoca_visita": "Mayo–agosto (cielos despejados; frío intenso).",
+      "comida_tradicional": "Kalapurka",
+      "platos_adicionales": [
+        { "nombre": "Chanqa de charque", "costo_aprox_bs": 26 },
+        { "nombre": "Sopa de trigo", "costo_aprox_bs": 18 },
+        { "nombre": "Ají de papa lisa", "costo_aprox_bs": 20 }
+      ],
+      "festividades_principales": [
+        { "nombre": "Aniversario de Potosí", "mes": "noviembre", "descripcion": "Actos cívicos y culturales." },
+        { "nombre": "Tata Qolla", "mes": "junio", "descripcion": "Fiesta tradicional con danzas y música en comunidades." }
+      ],
+      "descripcion_cultural": "Patrimonio minero histórico; legado colonial y arquitectura única.",
+      "costos_promedio": {
+        "comida_local_bs": "18–35",
+        "entrada_museos_bs": "15–30",
+        "tour_salar_de_uyuni_bs": "180–350"
+      },
+      "transporte": {
+        "acceso": "Vía terrestre desde Sucre, Oruro y La Paz; tours desde Uyuni.",
+        "movilidad_urbana": "Taxis, micros; caminatas en centro histórico."
+      },
+      "seguridad_consejos": "Temperaturas bajas; llevar abrigo. Precaución en minas activas, siempre con guía.",
+      "lugares_destacados": [
+        "Casa de la Moneda",
+        "Cerro Rico",
+        "Iglesia San Lorenzo",
+        "Salar de Uyuni (acceso desde Uyuni)"
+      ]
+    },
+    {
+      "nombre": "Oruro",
+      "capital": "Oruro",
+      "fecha_aniversario": "10 de febrero",
+      "poblacion_aprox": 500000,
+      "clima": "Altiplano; frío, ventoso.",
+      "mejor_epoca_visita": "Febrero (Carnaval) y mayo–agosto (clima seco).",
+      "comida_tradicional": "Charquekán",
+      "platos_adicionales": [
+        { "nombre": "Rostro asado", "costo_aprox_bs": 25 },
+        { "nombre": "Cazuela de llama", "costo_aprox_bs": 28 },
+        { "nombre": "Sopa de quinua", "costo_aprox_bs": 18 }
+      ],
+      "festividades_principales": [
+        { "nombre": "Carnaval de Oruro", "mes": "febrero–marzo", "descripcion": "Obra Maestra de la UNESCO; danzas como Diablada, Morenada y Caporales." }
+      ],
+      "descripcion_cultural": "Capital folklórica; fuerte devoción a la Virgen del Socavón.",
+      "costos_promedio": {
+        "comida_local_bs": "18–35",
+        "entrada_museos_bs": "10–20",
+        "tour_salar_de_coipasa_bs": "150–300"
+      },
+      "transporte": {
+        "acceso": "Vía terrestre y ferrocarril desde La Paz.",
+        "movilidad_urbana": "Taxis, micros."
+      },
+      "seguridad_consejos": "Altitud y clima frío; abrigarse y protegerse del viento.",
+      "lugares_destacados": [
+        "Santuario del Socavón",
+        "Museo Minero",
+        "Salar de Coipasa",
+        "Laguna de Uru Uru"
       ]
     },
     {
       "nombre": "Tarija",
       "capital": "Tarija",
-      "fundacion": "1826",
       "fecha_aniversario": "15 de abril",
+      "poblacion_aprox": 600000,
+      "clima": "Valles templados; veranos cálidos, inviernos suaves.",
+      "mejor_epoca_visita": "Todo el año; vendimias en marzo–abril.",
       "comida_tradicional": "Saice",
-      "simbolo": "Andalucía de Bolivia / La Tierra del Vino",
-      "mercados_importantes": [
-        "Mercado Central de Tarija (Mercado Abasto)",
-        "Mercado Campesino La Loma"
+      "platos_adicionales": [
+        { "nombre": "Arrope de uva con quesillo", "costo_aprox_bs": 15 },
+        { "nombre": "Humintas al horno", "costo_aprox_bs": 18 },
+        { "nombre": "Sopa de maní tarijeña", "costo_aprox_bs": 20 }
       ],
-      "hoteles": [
-        {
-          "id_hotel": 10,
-          "nombre": "Hotel Los Parrales",
-          "ubicacion": "Urbanización Carmen de Aranjuez, Tarija",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668280/v2ijixz35mlylatb0dvc.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668280/v2ijixz35mlylatb0dvc.jpg"
-        },
-        {
-          "id_hotel": 11,
-          "nombre": "Hotel Los Ceibos",
-          "ubicacion": "Avenida Panamericana Nro. 612, Tarija",
-          "calificacion": 5,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668408/bnlf6r0lwpiveeorgxfc.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668408/bnlf6r0lwpiveeorgxfc.jpg"
-        },
-        {
-          "id_hotel": 12,
-          "nombre": "Viña del Sur Hotel",
-          "ubicacion": "Zona Miraflores, Tarija",
-          "calificacion": 4,
-          "estado": true,
-          "fecha_creacion": "2025-10-28",
-          "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668540/ju60qvprijgcembjduh2.jpg",
-          "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668540/ju60qvprijgcembjduh2.jpg"
-        }
+      "festividades_principales": [
+        { "nombre": "Fiesta de la Vendimia", "mes": "marzo–abril", "descripcion": "Degustaciones y actividades en bodegas." }
       ],
-      "lugares_turisticos": [
-        {
-          "id_lugar": 10,
-          "nombre": "Ruta del Vino y Singani de Tarija",
-          "ubicacion": "Valle Central de Tarija y alrededores, departamento de Tarija, Bolivia",
-          "tipo": "Ruta Turística, Enoturismo y Gastronomía",
-          "fecha_creacion": "2025-10-16",
-          "horario": "Todos los días, de 9:00 a 18:00 (los horarios pueden variar según la bodega o viñedo)",
-          "descripcion": "La Ruta del Vino y Singani de Tarija es un recorrido turístico por bodegas y viñedos ubicados en el Valle Central de Tarija y sus alrededores. Es famosa por la producción de vinos de altura y el tradicional singani, la bebida nacional boliviana. Los visitantes pueden disfrutar degustaciones, visitas guiadas a bodegas, paisajes de viñedos, gastronomía local y actividades culturales relacionadas al mundo vitivinícola. Entre las bodegas más reconocidas se encuentran Kohlberg, Campos de Solana, La Concepción, Casa Real y otras, que ofrecen experiencias únicas y productos de alta calidad.",
-          "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260475/ruta_del_vino_singani_tarija_gislcz.jpg",
-          "estado": true
-        },
-        {
-          "nombre": "Reserva Nacional de Flora y Fauna Tariquía",
-          "ubicacion": "Sur de Tarija (Provincias Gran Chaco y Arce)",
-          "tipo": "Reserva Nacional de Flora y Fauna",
-          "descripcion": "Área de bosque húmedo de montaña, conocida por su alta biodiversidad y ser un área clave para la conservación de la vida silvestre andina y chaqueña."
-        },
-        {
-          "nombre": "Represa de San Jacinto",
-          "ubicacion": "Tarija",
-          "tipo": "Atractivo Natural y Recreacional",
-          "descripcion": "Un gran embalse utilizado para el riego, pero también popular para actividades de recreación como paseos en bote, pesca y restaurantes con vista a la laguna."
-        }
+      "descripcion_cultural": "Enoturismo, música y gastronomía de valles; tradición de singani.",
+      "costos_promedio": {
+        "comida_local_bs": "20–40",
+        "tour_vino_singani_bs": "120–250",
+        "entrada_museos_bs": "10–20"
+      },
+      "transporte": {
+        "acceso": "Aeropuerto Capitán Oriel Lea Plaza.",
+        "movilidad_urbana": "Taxis, micros; tours a bodegas."
+      },
+      "seguridad_consejos": "Destino tranquilo; precaución básica en zonas nocturnas.",
+      "lugares_destacados": [
+        "Ruta del Vino y Singani",
+        "Mirador de La Loma",
+        "Casa Dorada",
+        "Represa San Jacinto"
       ]
+    },
+    {
+      "nombre": "Beni",
+      "capital": "Trinidad",
+      "fecha_aniversario": "18 de noviembre",
+      "poblacion_aprox": 500000,
+      "clima": "Amazónico; cálido y húmedo.",
+      "mejor_epoca_visita": "Mayo–septiembre (menos lluvias).",
+      "comida_tradicional": "Keperí Beniano",
+      "platos_adicionales": [
+        { "nombre": "Masaco de yuca", "costo_aprox_bs": 12 },
+        { "nombre": "Pescado a la brasa", "costo_aprox_bs": 30 },
+        { "nombre": "Dulce de camote", "costo_aprox_bs": 10 }
+      ],
+      "festividades_principales": [
+        { "nombre": "Fiestas de Moxos", "mes": "junio–julio", "descripcion": "Tradición misional con música y desfiles." }
+      ],
+      "descripcion_cultural": "Ríos, lagunas y cultura amazónica; biodiversidad y pueblos originarios.",
+      "costos_promedio": {
+        "comida_local_bs": "18–35",
+        "tour_rio_bs": "120–220",
+        "entrada_museos_bs": "10–20"
+      },
+      "transporte": {
+        "acceso": "Aeropuertos en Trinidad y Riberalta; rutas fluviales.",
+        "movilidad_urbana": "Taxis, mototaxis."
+      },
+      "seguridad_consejos": "Precaución por lluvias y crecidas; repelente y protección solar.",
+      "lugares_destacados": [
+        "Parque Nacional Madidi (accesos desde Beni y La Paz)",
+        "Laguna Suárez",
+        "Misión de San Ignacio de Moxos",
+        "Ríos Mamoré e Iténez"
+      ]
+    },
+    {
+      "nombre": "Pando",
+      "capital": "Cobija",
+      "fecha_aniversario": "24 de septiembre",
+      "poblacion_aprox": 250000,
+      "clima": "Selva amazónica; lluvioso y cálido.",
+      "mejor_epoca_visita": "Junio–septiembre (menos lluvias).",
+      "comida_tradicional": "Pescado a la Tacuara",
+      "platos_adicionales": [
+        { "nombre": "Farofa con pescado", "costo_aprox_bs": 25 },
+        { "nombre": "Tacacá amazónico", "costo_aprox_bs": 20 },
+        { "nombre": "Dulces de castaña", "costo_aprox_bs": 12 }
+      ],
+      "festividades_principales": [
+        { "nombre": "Aniversario departamental", "mes": "septiembre", "descripcion": "Actos cívicos y actividades culturales." }
+      ],
+      "descripcion_cultural": "Frontera con Brasil; intercambio cultural y comercial; selva y ríos.",
+      "costos_promedio": {
+        "comida_local_bs": "18–35",
+        "tour_reserva_manuripi_bs": "150–300",
+        "entrada_museos_bs": "10–15"
+      },
+      "transporte": {
+        "acceso": "Aeropuerto de Cobija; puente internacional sobre el Río Acre.",
+        "movilidad_urbana": "Mototaxis, taxis."
+      },
+      "seguridad_consejos": "Clima húmedo; protección contra insectos y lluvias.",
+      "lugares_destacados": [
+        "Reserva Manuripi",
+        "Puente Internacional sobre el Río Acre",
+        "Mercado Central de Cobija",
+        "Orillas del río Acre"
+      ]
+    }
+  ],
+  "hoteles": [
+    {
+      "id_hotel": 1,
+      "nombre": "Gran Hotel Cochabamba",
+      "ubicacion": "Plaza Ubaldo Ánze E-415, barrio La Recoleta, Cochabamba.",
+      "departamento": "Cochabamba",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-05",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759259057/hotel_gran_hotel_cochabamba_bqtmym.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759259057/hotel_gran_hotel_cochabamba_bqtmym.jpg",
+      "amenidades": ["Piscina", "Gimnasio", "Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "350–700"
+    },
+    {
+      "id_hotel": 2,
+      "nombre": "Hotel Portales",
+      "ubicacion": "Av. Pando Nº 1271, Cochabamba",
+      "departamento": "Cochabamba",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-06",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761665878/qmnwikiwvc2mwsz95ulh.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761665878/qmnwikiwvc2mwsz95ulh.jpg",
+      "amenidades": ["Spa", "Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "320–650"
+    },
+    {
+      "id_hotel": 3,
+      "nombre": "Hotel La Colonia",
+      "ubicacion": "Calle Luis Mostajo Nº 100 (Temporal de Cala Cala), Cochabamba",
+      "departamento": "Cochabamba",
+      "calificacion": 4,
+      "estado": true,
+      "fecha_creacion": "2025-10-16",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761666123/evjhgdey80smcfmj1pq8.avif",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761666123/evjhgdey80smcfmj1pq8.avif",
+      "amenidades": ["Piscina", "Wi‑Fi"],
+      "rango_precios_bs": "220–450"
+    },
+    {
+      "id_hotel": 4,
+      "nombre": "Hotel Los Tajibos",
+      "ubicacion": "Santa Cruz de la Sierra",
+      "departamento": "Santa Cruz",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-16",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761666260/rlkmz6fl0mk2gmun8td7.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761666260/rlkmz6fl0mk2gmun8td7.jpg",
+      "amenidades": ["Piscina", "Business Center", "Spa", "Wi‑Fi"],
+      "rango_precios_bs": "500–1000"
+    },
+    {
+      "id_hotel": 5,
+      "nombre": "Hotel Camino Real - Santa Cruz",
+      "ubicacion": "Distrito de negocios, Santa Cruz de la Sierra",
+      "departamento": "Santa Cruz",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761667293/axngdarkpcnacgnynpss.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761667293/axngdarkpcnacgnynpss.jpg",
+      "amenidades": ["Piscina", "Gimnasio", "Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "480–900"
+    },
+    {
+      "id_hotel": 6,
+      "nombre": "Hotel Casa Blanca - Santa Cruz",
+      "ubicacion": "Av. Marcelo Terceros Este No 205, Equipetrol, Santa Cruz",
+      "departamento": "Santa Cruz",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761667466/lozmu0uxqvm0sjrxnx2n.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761667466/lozmu0uxqvm0sjrxnx2n.jpg",
+      "amenidades": ["Piscina", "Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "350–750"
+    },
+    {
+      "id_hotel": 7,
+      "nombre": "Suites Camino Real",
+      "ubicacion": "Zona residencial, La Paz",
+      "departamento": "La Paz",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761667835/qx9bydl9evyzpzk2ns0a.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761667835/qx9bydl9evyzpzk2ns0a.jpg",
+      "amenidades": ["Spa", "Piscina cubierta", "Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "520–1100"
+    },
+    {
+      "id_hotel": 8,
+      "nombre": "Hotel Presidente",
+      "ubicacion": "Calle Potosí Nro. 920, La Paz",
+      "departamento": "La Paz",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761667953/qzxyq6b03wzuk890ygfb.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761667953/qzxyq6b03wzuk890ygfb.jpg",
+      "amenidades": ["Piscina", "Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "380–800"
+    },
+    {
+      "id_hotel": 9,
+      "nombre": "Hotel Gloria",
+      "ubicacion": "Calle Potosí No. 909 (central), La Paz",
+      "departamento": "La Paz",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668070/hni5gj5cilfh71onfz30.webp",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668070/hni5gj5cilfh71onfz30.webp",
+      "amenidades": ["Restaurante", "Salones", "Wi‑Fi"],
+      "rango_precios_bs": "300–650"
+    },
+    {
+      "id_hotel": 10,
+      "nombre": "Hotel Los Parrales",
+      "ubicacion": "Urbanización Carmen de Aranjuez, Tarija",
+      "departamento": "Tarija",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668280/v2ijixz35mlylatb0dvc.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668280/v2ijixz35mlylatb0dvc.jpg",
+      "amenidades": ["Piscina", "Jardines", "Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "420–900"
+    },
+    {
+      "id_hotel": 11,
+      "nombre": "Hotel Los Ceibos",
+      "ubicacion": "Avenida Panamericana Nro. 612, Tarija",
+      "departamento": "Tarija",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668408/bnlf6r0lwpiveeorgxfc.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668408/bnlf6r0lwpiveeorgxfc.jpg",
+      "amenidades": ["Piscina", "Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "320–700"
+    },
+    {
+      "id_hotel": 12,
+      "nombre": "Viña del Sur Hotel",
+      "ubicacion": "Zona Miraflores, Tarija",
+      "departamento": "Tarija",
+      "calificacion": 4,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668540/ju60qvprijgcembjduh2.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668540/ju60qvprijgcembjduh2.jpg",
+      "amenidades": ["Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "220–500"
+    },
+    {
+      "id_hotel": 13,
+      "nombre": "Coloso Potosí Hotel",
+      "ubicacion": "Calle Bolívar 965, Potosí",
+      "departamento": "Potosí",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668636/se6izrqueupxfxkzbe4u.avif",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668636/se6izrqueupxfxkzbe4u.avif",
+      "amenidades": ["Piscina", "Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "350–800"
+    },
+    {
+      "id_hotel": 14,
+      "nombre": "Cima Argentum Hotel",
+      "ubicacion": "Av. Villazón No. 239, Potosí",
+      "departamento": "Potosí",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759259058/hotel_colonial_potosi_wpn0vw.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759259058/hotel_colonial_potosi_wpn0vw.jpg",
+      "amenidades": ["Salón de eventos", "Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "280–600"
+    },
+    {
+      "id_hotel": 15,
+      "nombre": "Samaricusun Hotel",
+      "ubicacion": "Bustillos 857, Potosí",
+      "departamento": "Potosí",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668868/cyetza89tnhwu9cs4h6j.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761668868/cyetza89tnhwu9cs4h6j.jpg",
+      "amenidades": ["Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "240–520"
+    },
+    {
+      "id_hotel": 16,
+      "nombre": "Hotel Villa Real San Felipe",
+      "ubicacion": "San Felipe Nº 678, Oruro",
+      "departamento": "Oruro",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761669121/v4kwqcg0hkpqqmnh9vh6.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761669121/v4kwqcg0hkpqqmnh9vh6.jpg",
+      "amenidades": ["Restaurante", "Wi‑Fi", "Salón"],
+      "rango_precios_bs": "260–580"
+    },
+    {
+      "id_hotel": 17,
+      "nombre": "Hotel Monarca",
+      "ubicacion": "Av. 6 de Agosto 1145, Oruro",
+      "departamento": "Oruro",
+      "calificacion": 4,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761669225/bdhnfh0cqabia8fsi6sz.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761669225/bdhnfh0cqabia8fsi6sz.jpg",
+      "amenidades": ["Wi‑Fi", "Cafetería"],
+      "rango_precios_bs": "200–420"
+    },
+    {
+      "id_hotel": 18,
+      "nombre": "Hotel Arenales",
+      "ubicacion": "Av. Pagador 5843 (Junín y Ayacucho), Oruro",
+      "departamento": "Oruro",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761669315/hbekgxtdqs8yfwy093hs.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761669315/hbekgxtdqs8yfwy093hs.jpg",
+      "amenidades": ["Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "240–520"
+    },
+    {
+      "id_hotel": 19,
+      "nombre": "Hotel de Su Merced",
+      "ubicacion": "Avenida Libertador, 2 cuadras al norte, Sucre",
+      "departamento": "Chuquisaca",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761669428/gxpmrwtuaugyhigmiuam.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761669428/gxpmrwtuaugyhigmiuam.jpg",
+      "amenidades": ["Patios coloniales", "Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "320–700"
+    },
+    {
+      "id_hotel": 20,
+      "nombre": "Parador Santa María La Real",
+      "ubicacion": "Centro histórico, Sucre",
+      "departamento": "Chuquisaca",
+      "calificacion": 5,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761678082/knu7q206xfpfv9vzrhnl.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761678082/knu7q206xfpfv9vzrhnl.jpg",
+      "amenidades": ["Spa", "Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "400–900"
+    },
+    {
+      "id_hotel": 21,
+      "nombre": "Hotel Colón Sucre",
+      "ubicacion": "Avenida Junín y Esteban Arce, Sucre",
+      "departamento": "Chuquisaca",
+      "calificacion": 4,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761678193/hldhuqsak2g40fofgqbl.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761678193/hldhuqsak2g40fofgqbl.jpg",
+      "amenidades": ["Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "220–500"
+    },
+    {
+      "id_hotel": 22,
+      "nombre": "Dorado Hotel",
+      "ubicacion": "Final Av. Internacional Nº 583, Cobija, Pando",
+      "departamento": "Pando",
+      "calificacion": 3,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680511/zgwada0xhr1eiyeoyhqm.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680511/zgwada0xhr1eiyeoyhqm.jpg",
+      "amenidades": ["Wi‑Fi", "Desayuno"],
+      "rango_precios_bs": "150–300"
+    },
+    {
+      "id_hotel": 23,
+      "nombre": "Avenida Solei",
+      "ubicacion": "Av. 9 de Febrero (esq. Otto Felipe Braun) Nº 205, Cobija, Pando",
+      "departamento": "Pando",
+      "calificacion": 3,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680621/p8ufqphgwbtzeq809cmv.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680621/p8ufqphgwbtzeq809cmv.jpg",
+      "amenidades": ["Wi‑Fi", "Aire acondicionado"],
+      "rango_precios_bs": "140–280"
+    },
+    {
+      "id_hotel": 24,
+      "nombre": "Hotel Solar de Bahía",
+      "ubicacion": "Calle Otto Felipe Brown (frente al Mercado Central), Cobija, Pando",
+      "departamento": "Pando",
+      "calificacion": 4,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680715/ayfv3gyrnmuulrmoi2kz.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680715/ayfv3gyrnmuulrmoi2kz.jpg",
+      "amenidades": ["Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "200–420"
+    },
+    {
+      "id_hotel": 25,
+      "nombre": "Hotel Campanario",
+      "ubicacion": "Av. 6 de Agosto Nº 80, Trinidad, Beni",
+      "departamento": "Beni",
+      "calificacion": 4,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680815/ln9wpqlmmzcbs6ue9vdm.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680815/ln9wpqlmmzcbs6ue9vdm.jpg",
+      "amenidades": ["Piscina", "Restaurante", "Wi‑Fi"],
+      "rango_precios_bs": "260–520"
+    },
+    {
+      "id_hotel": 26,
+      "nombre": "Hotel Aguahí",
+      "ubicacion": "Av. Bolívar (esq. Santa Cruz), Trinidad, Beni",
+      "departamento": "Beni",
+      "calificacion": 4,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680908/swqig8ojmlg8keeinop9.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680908/swqig8ojmlg8keeinop9.jpg",
+      "amenidades": ["Piscina", "Wi‑Fi"],
+      "rango_precios_bs": "240–500"
+    },
+    {
+      "id_hotel": 27,
+      "nombre": "Hotel Don Bernardo",
+      "ubicacion": "Av. 18 de Noviembre Nº 351, Trinidad, Beni",
+      "departamento": "Beni",
+      "calificacion": 4,
+      "estado": true,
+      "fecha_creacion": "2025-10-28",
+      "url": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680999/x09dcjyctzah78luk0ee.jpg",
+      "url_imagen_hotel": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1761680999/x09dcjyctzah78luk0ee.jpg",
+      "amenidades": ["Wi‑Fi", "Desayuno"],
+      "rango_precios_bs": "200–420"
+    }
+  ],
+  "lugares_turisticos": [
+    {
+      "id_lugar": 1,
+      "nombre": "Casa de Campo",
+      "ubicacion": "Avenida Víctor Ustariz km 5.5, zona oeste de Cochabamba, Bolivia",
+      "departamento": "Cochabamba",
+      "tipo": "Restaurante Campestre y Centro de Eventos",
+      "fecha_creacion": "2025-10-06",
+      "horario": "Lunes a domingo de 10:00 a 18:00 (puede variar según temporada y eventos)",
+      "descripcion": "Casa de Campo es un reconocido restaurante campestre y centro de eventos en Cochabamba. Ambiente rústico, áreas verdes, gastronomía tradicional, juegos para niños y espacios para eventos.",
+      "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1760641772/ifji0nqeksduj0j7xb0o.jpg",
+      "estado": true,
+      "costo_aprox_bs": { "entrada": 0, "plato_principal": "25–45" }
+    },
+    {
+      "id_lugar": 3,
+      "nombre": "Cristo de la Concordia",
+      "ubicacion": "Cerro San Pedro, ciudad de Cochabamba, Bolivia",
+      "departamento": "Cochabamba",
+      "tipo": "Monumento y Mirador",
+      "fecha_creacion": "2025-10-09",
+      "horario": "Domingo de 9:00 a 18:00 (interior); área externa abierta todo el día",
+      "descripcion": "Estatua de 34.2 m con vistas panorámicas de la ciudad; acceso por teleférico, escaleras o vehículo.",
+      "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759409725/atxmsay01eua7ugxdwfs.jpg",
+      "estado": true,
+      "costo_aprox_bs": { "teleferico": "8–15", "ingreso": 0 }
+    },
+    {
+      "id_lugar": 4,
+      "nombre": "Parque Cretácico",
+      "ubicacion": "Avenida Parque Cretácico, Zona El Molino, Sucre, Bolivia",
+      "departamento": "Chuquisaca",
+      "tipo": "Parque Temático y Paleontológico",
+      "fecha_creacion": "2025-10-09",
+      "horario": "Lunes a domingo de 9:00 a 17:00",
+      "descripcion": "Huellas de dinosaurios en Cal Orck'o, réplicas a escala y exposiciones educativas. Visitas guiadas e interactivas.",
+      "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1760642269/nepq6nhfeqtazd56qfal.jpg",
+      "estado": true,
+      "costo_aprox_bs": { "entrada": "20–30", "tour_guiado": "40–80" }
+    },
+    {
+      "id_lugar": 5,
+      "nombre": "Casa Nacional de la Moneda",
+      "ubicacion": "Calle Ayacucho, entre Quijarro y Bustillos, Potosí, Bolivia",
+      "departamento": "Potosí",
+      "tipo": "Museo Histórico y Tradicional",
+      "fecha_creacion": "2025-10-09",
+      "horario": "Lunes a viernes 9:00–12:00 y 14:30–18:00; sábados y domingos 9:00–12:00",
+      "descripcion": "Museo emblemático del periodo colonial y la acuñación de monedas con plata del Cerro Rico. Arquitectura monumental.",
+      "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260470/casa_de_la_moneda_potosi_uyzz2e.avif",
+      "estado": true,
+      "costo_aprox_bs": { "entrada": "15–30", "guia": "30–60" }
+    },
+    {
+      "id_lugar": 6,
+      "nombre": "Reserva Nacional de Vida Silvestre Amazónica Manuripi",
+      "ubicacion": "Departamento de Pando, Bolivia",
+      "departamento": "Pando",
+      "tipo": "Reserva Nacional de Vida Silvestre Amazónica",
+      "fecha_creacion": "2025-10-16",
+      "horario": "Todos los días, 08:00–18:00 (puede variar según temporada y actividades)",
+      "descripcion": "Área protegida de más de 700,000 ha de selva tropical con alta biodiversidad. Ideal para ecoturismo, aves y paseos en bote.",
+      "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260501/reserva_manuripi_health_pando_vfiflv.jpg",
+      "estado": true,
+      "costo_aprox_bs": { "tour_dia": "150–300", "permiso": "10–20" }
+    },
+    {
+      "id_lugar": 7,
+      "nombre": "Puente Internacional sobre el Río Acre",
+      "ubicacion": "Frontera entre Cobija (Bolivia) y Brasileia (Brasil)",
+      "departamento": "Pando",
+      "tipo": "Puente Internacional",
+      "fecha_creacion": "2025-10-16",
+      "horario": "Abierto 24 horas (según controles fronterizos)",
+      "descripcion": "Conecta Cobija con Brasil; punto clave para comercio, turismo e intercambio cultural.",
+      "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260501/puente_internacional_pando_okmpn5.jpg",
+      "estado": true,
+      "costo_aprox_bs": { "peaje": 0 }
+    },
+    {
+      "id_lugar": 8,
+      "nombre": "Misión Jesuítica de San Ignacio de Moxos",
+      "ubicacion": "San Ignacio de Moxos, provincia Moxos, Beni, Bolivia",
+      "departamento": "Beni",
+      "tipo": "Misión Jesuítica, Patrimonio Histórico y Cultural",
+      "fecha_creacion": "2025-10-16",
+      "horario": "Lunes a domingo 8:00–18:00 (iglesia y museo con horarios específicos)",
+      "descripcion": "Iglesia de arquitectura barroca mestiza, museo de arte sacro y tradición cultural moxeña.",
+      "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260500/mision_jesuitica_san_ignacio_de_moxos_beni_gy8asr.webp",
+      "estado": true,
+      "costo_aprox_bs": { "entrada": "10–20", "guia": "30–60" }
+    },
+    {
+      "id_lugar": 9,
+      "nombre": "Parque Nacional Madidi",
+      "ubicacion": "Noroeste de Bolivia; acceso principal desde Rurrenabaque",
+      "departamento": "Beni",
+      "tipo": "Parque Nacional y Área Protegida",
+      "fecha_creacion": "2025-10-16",
+      "horario": "Todos los días, 07:00–18:00 (según tour y temporada)",
+      "descripcion": "Una de las áreas con mayor biodiversidad del mundo: selvas, ríos y montañas. Turismo de naturaleza y comunidades.",
+      "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260499/parque_nacional_madidi_beni_iflew2.jpg",
+      "estado": true,
+      "costo_aprox_bs": { "tour_2dias": "600–1200", "ingreso": "20–30" }
+    },
+    {
+      "id_lugar": 10,
+      "nombre": "Ruta del Vino y Singani de Tarija",
+      "ubicacion": "Valle Central de Tarija y alrededores, Tarija",
+      "departamento": "Tarija",
+      "tipo": "Ruta Turística, Enoturismo y Gastronomía",
+      "fecha_creacion": "2025-10-16",
+      "horario": "Todos los días 9:00–18:00 (según bodega/viñedo)",
+      "descripcion": "Recorrido por bodegas y viñedos de altura; degustaciones, visitas guiadas y paisajes.",
+      "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260475/ruta_del_vino_singani_tarija_gislcz.jpg",
+      "estado": true,
+      "costo_aprox_bs": { "tour_basico": "120–250", "degustacion": "20–50" }
+    },
+    {
+      "id_lugar": 11,
+      "nombre": "Huellas de Dinosaurios de Cal Orck'o",
+      "ubicacion": "Farallón de Cal Orck'o, Zona El Molino, Sucre, Chuquisaca",
+      "departamento": "Chuquisaca",
+      "tipo": "Sitio Paleontológico",
+      "fecha_creacion": "2025-10-16",
+      "horario": "Lunes a domingo 9:00–17:00 (ingreso a través del Parque Cretácico)",
+      "descripcion": "Más de 5,000 rastros de al menos 15 especies de dinosaurios. Recorridos desde el Parque Cretácico.",
+      "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260474/cal_orcko_huellas_dinosaurios_chuquisaca_huzvsy.webp",
+      "estado": true,
+      "costo_aprox_bs": { "entrada": "20–30", "guia": "30–60" }
+    },
+    {
+      "id_lugar": 12,
+      "nombre": "Centro Turístico de Chuquisaca",
+      "ubicacion": "Avenida del Maestro, Zona Villa Margarita, Sucre, Chuquisaca",
+      "departamento": "Chuquisaca",
+      "tipo": "Centro Turístico y Recreacional",
+      "fecha_creacion": "2025-10-16",
+      "horario": "Lunes a domingo 9:00–18:00",
+      "descripcion": "Espacio recreacional con áreas verdes, piscinas, canchas y eventos culturales.",
+      "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260472/centro_historico_chuquisaca_hfzgyx.jpg",
+      "estado": true,
+      "costo_aprox_bs": { "entrada": "5–15" }
+    },
+    {
+      "id_lugar": 13,
+      "nombre": "Salar de Uyuni",
+      "ubicacion": "Uyuni, provincia Daniel Campos, Potosí, Bolivia",
+      "departamento": "Potosí",
+      "tipo": "Atractivo Natural / Salar",
+      "fecha_creacion": "2025-10-16",
+      "horario": "Abierto 24 horas (tours 7:00–18:00)",
+      "descripcion": "Mayor desierto de sal del mundo. Espejos de agua en época de lluvias, Isla Incahuasi y hoteles de sal.",
+      "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260470/salar_de_uyuni_potosi_l5ndhw.avif",
+      "estado": true,
+      "costo_aprox_bs": { "tour_dia_completo": "220–350", "ingreso_incahuasi": "20–30" }
+    },
+    {
+      "id_lugar": 14,
+      "nombre": "Samaipata",
+      "ubicacion": "Provincia Florida, Santa Cruz, Bolivia",
+      "departamento": "Santa Cruz",
+      "tipo": "Pueblo Turístico y Sitio Arqueológico",
+      "fecha_creacion": "2025-10-16",
+      "horario": "Abierto 24 horas; El Fuerte 8:30–17:30",
+      "descripcion": "Pueblo templado con bodegas y acceso al sitio arqueológico El Fuerte (Patrimonio Mundial).",
+      "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260469/samaipata_el_fuerte_santa_cruz_xj4kmj.jpg",
+      "estado": true,
+      "costo_aprox_bs": { "entrada_fuerte": "30–50", "tour_fuerte": "100–180" }
+    },
+    {
+      "id_lugar": 15,
+      "nombre": "Salar de Coipasa",
+      "ubicacion": "Municipio de Coipasa, provincia Sabaya, Oruro, Bolivia",
+      "departamento": "Oruro",
+      "tipo": "Atractivo Natural / Salar",
+      "fecha_creacion": "2025-10-16",
+      "horario": "Abierto 24 horas (tours usualmente 7:00–18:00)",
+      "descripcion": "Segundo salar más grande de Bolivia; paisajes con lagunas, aves andinas y volcanes cercanos.",
+      "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260469/salar_de_coipasa_oruro_kwuvks.jpg",
+      "estado": true,
+      "costo_aprox_bs": { "tour_dia": "150–300" }
+    },
+    {
+      "id_lugar": 16,
+      "nombre": "Carnaval de Oruro",
+      "ubicacion": "Ciudad de Oruro, Oruro, Bolivia",
+      "departamento": "Oruro",
+      "tipo": "Fiesta Folclórica y Religiosa",
+      "fecha_creacion": "2025-10-16",
+      "horario": "Anualmente (febrero o marzo); desfiles principales sábado y domingo de Carnaval",
+      "descripcion": "Obra Maestra del Patrimonio Oral e Intangible de la Humanidad (UNESCO). Danzas: Diablada, Morenada, Caporales.",
+      "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260468/carnaval_de_oruro_ydprii.jpg",
+      "estado": true,
+      "costo_aprox_bs": { "graderias": "80–250" }
+    },
+    {
+      "id_lugar": 17,
+      "nombre": "Parque Nacional Torotoro",
+      "ubicacion": "Municipio de Torotoro, provincia Charcas, Potosí, Bolivia",
+      "departamento": "Potosí",
+      "tipo": "Parque Nacional y Área Protegida",
+      "fecha_creacion": "2025-10-16",
+      "horario": "Todos los días 7:00–18:00",
+      "descripcion": "Geología impresionante, cañones, cavernas (Uvajalanta/Umajalanta), huellas de dinosaurios y turismo comunitario.",
+      "url_image_lugar_turistico": "https://res.cloudinary.com/dj5uzus8e/image/upload/v1759260468/parque_nacional_torotoro_cochabamba_vfwuty.jpg",
+      "estado": true,
+      "costo_aprox_bs": { "ingreso": "30–40", "guia_circuito": "120–220" }
     }
   ]
 }

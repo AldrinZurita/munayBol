@@ -186,7 +186,6 @@ class ChatSession(models.Model):
                 self.last_message_at = self.updated_at
                 changed = True
         if not self.title:
-            # Usa el primer prompt del usuario como título
             for h in (self.history or []):
                 if h.get("role") == "user":
                     txt = (h.get("content") or "").strip()
@@ -196,6 +195,24 @@ class ChatSession(models.Model):
                         break
         if changed:
             self.save(update_fields=["messages_count", "last_message_at", "title", "updated_at"])
+
+    def add_message(self, role: str, content: str, meta: dict = None):
+        """
+        Agrega un mensaje al historial con timestamp ISO.
+        role: 'user' | 'assistant' | 'system'
+        """
+        msg = {
+            "role": role,
+            "content": content,
+            "ts": timezone.now().isoformat(),
+        }
+        if meta:
+            msg.update({"meta": meta})
+        hist = list(self.history or [])
+        hist.append(msg)
+        self.history = hist
+        self.messages_count = len(self.history)
+        self.last_message_at = timezone.now()
 
 
 class Notification(models.Model):
@@ -218,18 +235,18 @@ class Review(models.Model):
     MIN_RATING = 1
     MAX_RATING = 5
     RATING_CHOICES = [(i, i) for i in range(MIN_RATING, MAX_RATING + 1)]
-    
+
     id_review = models.BigAutoField(primary_key=True)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='reviews')
 
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, null=True, blank=True, related_name='reviews')
     lugar_turistico = models.ForeignKey(LugarTuristico, on_delete=models.CASCADE, null=True, blank=True, related_name='reviews')
     paquete = models.ForeignKey(Paquete, on_delete=models.CASCADE, null=True, blank=True, related_name='reviews')
-    
+
     calificacion = models.IntegerField(choices=RATING_CHOICES)
     comentario = models.TextField()
     fecha_creacion = models.DateTimeField(auto_now_add=True)
-    estado = models.BooleanField(default=True)  # Active/inactive
+    estado = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['-fecha_creacion']
@@ -248,7 +265,6 @@ class Review(models.Model):
         self._validate_single_target()
 
     def _validate_single_target(self):
-        """Ensure exactly one target (hotel, lugar_turistico, or paquete) is set"""
         from django.core.exceptions import ValidationError
         targets = sum([
             self.hotel is not None,
