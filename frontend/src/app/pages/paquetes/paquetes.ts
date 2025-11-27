@@ -59,7 +59,9 @@ export class Paquetes implements OnInit, OnDestroy {
         }
         this.loadingService.hide();
         this.route.queryParams.subscribe(params => {
-          this.departamentoSeleccionado = params['departamento'] ?? '';
+          const rawDep = params['departamento'] ?? '';
+          const found = this.departamentos.find(d => this.normalize(d) === this.normalize(rawDep));
+          this.departamentoSeleccionado = found || rawDep;
           this.aplicarFiltros();
         });
       },
@@ -77,12 +79,17 @@ export class Paquetes implements OnInit, OnDestroy {
     return this.authService.isSuperadmin();
   }
 
+  private normalize(s: string): string {
+    return (s || '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+  }
+
   aplicarFiltros(): void {
-    const term = (this.searchTerm || '').trim().toLowerCase();
+    const term = this.normalize(this.searchTerm);
 
     let filtrados = this.paquetes.filter(p => {
+      const dep = p.hotel?.departamento || p.lugar?.departamento || '';
       const okDep = this.departamentoSeleccionado
-        ? (p.hotel?.departamento || (p as any).lugar?.departamento || '') === this.departamentoSeleccionado
+        ? this.normalize(dep) === this.normalize(this.departamentoSeleccionado)
         : true;
       if (!okDep) return false;
       const okTipo = this.tipoSeleccionado ? p.tipo === this.tipoSeleccionado : true;
@@ -92,10 +99,10 @@ export class Paquetes implements OnInit, OnDestroy {
         if (p.estado !== disp) return false;
       }
       if (!term) return true;
-      const nombre = (p.nombre || '').toLowerCase();
-      const hotelNombre = (p.hotel?.nombre || '').toLowerCase();
-      const lugarNombre = ((p as any).lugar?.nombre || '').toLowerCase();
-      const ubic = (p.hotel?.ubicacion || '').toLowerCase();
+      const nombre = this.normalize(p.nombre);
+      const hotelNombre = this.normalize(p.hotel?.nombre || '');
+      const lugarNombre = this.normalize(p.lugar?.nombre || '');
+      const ubic = this.normalize(p.hotel?.ubicacion || '');
       return (
         nombre.includes(term) ||
         hotelNombre.includes(term) ||
