@@ -1,4 +1,4 @@
-:root {
+:host {
   /* Fondo general más gris para diferenciar del card */
   --bg: #f3f4f6;
   --card: #ffffff;
@@ -29,7 +29,7 @@
   --pill: 999px;
 }
 
-body.dark-theme {
+:host-context(body.dark-theme) {
   /* Fondo general */
   --bg: #0f172a;
 
@@ -48,7 +48,7 @@ body.dark-theme {
   --brand: #60a5fa;
   --brand-2: #3b82f6;
   --brand-3: #0ea5e9;
-  --brand-gradient: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+  --brand-gradient: linear-gradient(135deg, #1e7a43 0%, #6366f1 100%);
   --send-bg: #4caf50; /* Nuevo color verde oscuro para el botón de enviar */
 
   /* Bordes y sombras */
@@ -119,9 +119,9 @@ body.dark-theme {
   border-radius: 12px;
   display: grid;
   place-items: center;
-  font-size: 22px;
-  background: var(--brand-gradient);
-  color: #fff;
+  font-size: 32px;
+  background: transparent;
+  color: var(--text);
   box-shadow: none;
 }
 .header .title h1 {
@@ -143,8 +143,9 @@ body.dark-theme {
 
 /* Botones de acción */
 .icon-btn {
-  display: inline-grid;
-  place-items: center;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   width: 40px;
   height: 40px;
   border-radius: 10px;
@@ -153,6 +154,7 @@ body.dark-theme {
   color: var(--text);
   cursor: pointer;
   transition: background .2s ease, border-color .2s ease;
+  padding: 0;
 }
 .icon-btn:hover {
   border-color: var(--brand);
@@ -201,9 +203,9 @@ body.dark-theme {
 
 .sb-header .new-session {
   width: 100%;
-  background: var(--brand-gradient);
-  color: #fff;
-  border: none;
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
   font-weight: 700;
   padding: 10px 16px;
   border-radius: 12px;
@@ -212,9 +214,12 @@ body.dark-theme {
   justify-content: center;
   gap: 6px;
   cursor: pointer;
-  transition: opacity .2s ease;
+  transition: background .2s ease, border-color .2s ease;
 }
-.sb-header .new-session:hover:not(:disabled) { opacity: .9; }
+.sb-header .new-session:hover:not(:disabled) {
+  background: var(--card-2);
+  border-color: var(--brand);
+}
 .sb-header .new-session:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* Buscador */
@@ -332,6 +337,10 @@ body.dark-theme {
   border-radius: 8px;
   background: var(--card);
   color: var(--text-3);
+  padding: 0;
+}
+.icon-btn.mini .material-symbols-outlined {
+  font-size: 18px;
 }
 .icon-btn.mini:hover {
   border-color: var(--brand);
@@ -387,7 +396,7 @@ body.dark-theme {
   width: 20px;
   height: 20px;
   border: 3px solid var(--border);
-  border-top-color: var(--brand);
+  border-top-color: #4caf50; /* Verde claro */
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-right: 8px;
@@ -419,7 +428,6 @@ body.dark-theme {
 .input-container,
 .quick-buttons .option,
 .day-separator span,
-.bubble-actions .copy,
 .typing-animated,
 .fab-down {
   border: 1px solid var(--border);
@@ -433,6 +441,11 @@ body.dark-theme {
 
 .message.ia .bubble {
   background: var(--card-2) !important;
+  color: var(--text);
+}
+
+.message.ia .bubble ::ng-deep .prose {
+  color: var(--text);
 }
 .message.user .bubble {
   background: var(--card) !important;
@@ -443,31 +456,46 @@ body.dark-theme {
 }
 .message.user .bubble {
   max-width: 80%;
-  background: var(--brand-gradient) !important; /* Burbuja de usuario con gradiente */
-  color: #fff;
-  border-color: var(--brand);
+  background: var(--card) !important;
+  color: var(--text);
+  border: 1px solid var(--border);
   box-shadow: var(--shadow-1);
 }
 .message.user .bubble .who,
 .message.user .bubble .when {
-  color: #fff;
+  color: var(--text-3);
 }
 .message.user .bubble .prose {
-  color: #fff;
+  color: var(--text);
 }
 .message.user .bubble .bubble-head .user-avatar {
-  border-color: #fff;
+  border-color: var(--brand);
 }
 .message.user .bubble .bubble-head .avatar-initials {
   color: var(--text); /* Mantener el color de iniciales */
 }
+.bubble-actions .copy {
+  background: transparent;
+  border: none;
+  color: var(--text-3);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background .2s ease, color .2s ease;
+}
+.bubble-actions .copy:hover {
+  background: var(--card-2);
+  color: var(--text);
+}
+
 .message.user .bubble .copy {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.4);
-  color: #fff;
+  background: transparent;
+  border: none;
+  color: var(--text-3);
 }
 .message.user .bubble .copy:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--card-2);
+  color: var(--text);
 }
 
 /* Cabecera de burbuja - Ajuste para avatar en usuario */
@@ -505,9 +533,9 @@ body.dark-theme {
   display: grid;
   place-items: center;
   border-radius: 8px;
-  background: var(--brand); /* IA icono con color de marca */
-  color: #fff;
-  border: 1px solid var(--brand);
+  background: transparent;
+  color: var(--text);
+  border: none;
   font-size: 16px;
 }
 
@@ -529,7 +557,7 @@ body.dark-theme {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--brand);
+  background: #4caf50; /* Verde claro */
   animation: bounce 1s infinite;
 }
 .typing-animated .dot:nth-child(2) { animation-delay: 0.1s; }
@@ -548,16 +576,18 @@ body.dark-theme {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: var(--brand) !important;
-  color: #fff;
-  border: 1px solid #fff;
+  background: transparent !important;
+  color: var(--text);
+  border: 1px solid #4caf50;
   box-shadow: var(--shadow-2);
-  transition: opacity .3s ease, transform .3s ease;
+  transition: opacity .3s ease, transform .3s ease, background .2s ease;
   z-index: 10;
   cursor: pointer;
+  display: grid;
+  place-items: center;
 }
 .fab-down:hover {
-  opacity: .9;
+  background: var(--card-2) !important;
 }
 
 /* Input container */
@@ -621,7 +651,7 @@ body.dark-theme {
 .quick-buttons .option h3 {
   margin: 0;
   font-size: 15px;
-  color: var(--brand);
+  color: #4caf50; /* Verde claro */
 }
 .quick-buttons .option span {
   font-size: 12px;
