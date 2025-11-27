@@ -14,7 +14,7 @@ DATA_FILE_PATH = os.path.join(BASE_DIR, 'data', 'munaybol_data.json')
 # --- ENV: Configuración de Alto Rendimiento ---
 OLLAMA_BASE_URL        = os.getenv("OLLAMA_BASE_URL", "https://enterologic-jewel-extrajudicially.ngrok-free.dev")
 #OLLAMA_BASE_URL        = os.getenv("OLLAMA_BASE_URL", "https://localhost:11434")
-OLLAMA_MODEL           = os.getenv("OLLAMA_MODEL", "qwen2.5:3b")
+OLLAMA_MODEL           = os.getenv("OLLAMA_MODEL", "llama3.1:latest")
 OLLAMA_MAX_TOKENS      = int(os.getenv("OLLAMA_MAX_TOKENS", "1500"))
 OLLAMA_TEMPERATURE     = float(os.getenv("OLLAMA_TEMPERATURE", "0.3")) # Precisión máxima
 OLLAMA_NUM_CTX         = int(os.getenv("OLLAMA_NUM_CTX", "4096"))
