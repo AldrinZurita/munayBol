@@ -2,11 +2,12 @@ from django.urls import path, include
 from rest_framework import routers
 
 from .views import (
+    # Importas normalmente todos tus viewsets/clases como antes
     UsuarioViewSet, HotelViewSet, LugarTuristicoViewSet,
     PagoViewSet, HabitacionViewSet, ReservaViewSet, PaqueteViewSet, SugerenciasViewSet,
     NotificationViewSet, home, LLMGenerateView, HabitacionDisponibilidadView,
     RegistroView, LoginView, SuperUsuarioRegistroView, SuperadminLoginView, MeView,
-    ChatSessionViewSet
+    ChatSessionViewSet, healthz,   # <-- añadimos healthz
 )
 from .auth_google import GoogleLoginAPIView
 from .auth_github import GitHubLoginURLAPIView, GitHubExchangeCodeAPIView
@@ -27,6 +28,7 @@ reserva_reactivar_view = ReservaViewSet.as_view({'post': 'reactivar'})
 
 urlpatterns = [
     path('', home, name='home'),
+    path('healthz/', healthz, name='healthz'),  # <-- endpoint simple para healthcheck
     path('usuarios/registro-superusuario/', SuperUsuarioRegistroView.as_view(), name='superusuario-registro'),
     path('usuarios/registro/', RegistroView.as_view(), name='usuario-registro'),
     path('usuarios/login/', LoginView.as_view(), name='usuario-login'),

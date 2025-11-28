@@ -13,7 +13,7 @@ from .serializers import (
     ChatMessageSerializer
 )
 from .permissions import IsSuperAdmin
-from llm.llm_client import send_message
+import logging
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from datetime import date, timedelta
@@ -24,12 +24,28 @@ from rest_framework.decorators import action
 from django.contrib.auth.hashers import check_password
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from django.utils import timezone
 from django.db.models import Q
-from django.utils.dateparse import parse_datetime
 
+logger = logging.getLogger(__name__)
 
 def home(request):
     return HttpResponse("Bienvenido a la API MunayBol")
+
+# Healthcheck muy básico
+def healthz(request):
+    return HttpResponse("ok", content_type="text/plain")
+
+# Import del LLM en tiempo de uso y con fallback robusto
+def send_message_safe(prompt, chat_id=None, usuario=None, **kwargs):
+    try:
+        from llm.llm_client import send_message as _send_message
+        return _send_message(prompt, chat_id=chat_id, usuario=usuario, **kwargs)
+    except Exception as e:
+        logger.exception("LLM import/exec failed: %s", e)
+        fallback = "El servicio de IA no está disponible en este momento. Intenta nuevamente en unos minutos."
+        return fallback, [{"role": "user", "content": prompt}]
+
 
 class HabitacionDisponibilidadView(APIView):
     permission_classes = [AllowAny]
@@ -92,6 +108,21 @@ class RegistroView(APIView):
         return Response(serializer.errors, status=400)
 
 
+class SuperUsuarioRegistroView(APIView):
+    """
+    Registro de superusuario vía API.
+    Usa SuperUsuarioRegistroSerializer que crea un Usuario con rol='superadmin'.
+    """
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = SuperUsuarioRegistroSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"msg": "Superusuario registrado correctamente"}, status=201)
+        return Response(serializer.errors, status=400)
+
+
 class LoginView(APIView):
     permission_classes = [AllowAny]
 
@@ -149,6 +180,25 @@ class SuperadminLoginView(APIView):
         return Response({"error": "Credenciales inválidas o usuario no autorizado"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
+class MeView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UsuarioSerializer(request.user)
+        return Response(serializer.data)
+
+    def patch(self, request):
+        user = request.user
+        allowed = {'nombre', 'pais', 'pasaporte', 'avatar_url'}
+        data = {k: v for k, v in request.data.items() if k in allowed}
+        serializer = UsuarioSerializer(user, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
@@ -183,7 +233,6 @@ class UsuarioViewSet(viewsets.ModelViewSet):
             new_role = data.get('rol')
             if instance.pk == user.pk and new_role != 'superadmin':
                 return Response({"error": "No puedes quitarte tu propio rol de superadmin."}, status=status.HTTP_400_BAD_REQUEST)
-
             if instance.rol == 'superadmin' and new_role != 'superadmin':
                 remaining = Usuario.objects.filter(rol='superadmin', estado=True).exclude(pk=instance.pk).count()
                 if remaining == 0:
@@ -193,43 +242,12 @@ class UsuarioViewSet(viewsets.ModelViewSet):
             new_estado = to_bool(data.get('estado'))
             if instance.pk == user.pk and new_estado is False:
                 return Response({"error": "No puedes desactivarte a ti mismo."}, status=status.HTTP_400_BAD_REQUEST)
-
             if instance.rol == 'superadmin' and new_estado is False:
                 remaining = Usuario.objects.filter(rol='superadmin', estado=True).exclude(pk=instance.pk).count()
                 if remaining == 0:
                     return Response({"error": "No puedes desactivar al último superadmin."}, status=status.HTTP_400_BAD_REQUEST)
 
         return super().partial_update(request, *args, **kwargs)
-
-
-class SuperUsuarioRegistroView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        serializer = SuperUsuarioRegistroSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"msg": "Superusuario registrado correctamente"}, status=201)
-        return Response(serializer.errors, status=400)
-
-
-@method_decorator(csrf_exempt, name='dispatch')
-class MeView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        serializer = UsuarioSerializer(request.user)
-        return Response(serializer.data)
-
-    def patch(self, request):
-        user = request.user
-        allowed = {'nombre', 'pais', 'pasaporte', 'avatar_url'}
-        data = {k: v for k, v in request.data.items() if k in allowed}
-        serializer = UsuarioSerializer(user, data=data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
 
 
 class HotelViewSet(viewsets.ModelViewSet):
@@ -574,13 +592,54 @@ class NotificationViewSet(viewsets.ModelViewSet):
 @method_decorator(csrf_exempt, name='dispatch')
 class LLMGenerateView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes = [JWTAuthentication]
 
     def post(self, request):
-        prompt = request.data.get('prompt', '')
-        chat_id = request.data.get('chat_id')
+        prompt = (request.data.get('prompt') or '').strip()
+        chat_id = (request.data.get('chat_id') or '').strip()
         user = request.user if getattr(request.user, 'is_authenticated', False) else None
-        result, chat_id = send_message(prompt, chat_id=chat_id, usuario=user)
-        return Response({'result': result, 'chat_id': chat_id})
+
+        if not prompt:
+            return Response({'error': 'Prompt vacío'}, status=400)
+
+        session = None
+        if user:
+            if chat_id:
+                try:
+                    session = ChatSession.objects.get(pk=chat_id, usuario=user)
+                except ChatSession.DoesNotExist:
+                    session = ChatSession.objects.create(usuario=user, title="")
+            else:
+                session = ChatSession.objects.create(usuario=user, title="")
+            session.add_message('user', prompt)
+            session.save(update_fields=['history', 'messages_count', 'last_message_at', 'updated_at'])
+
+        reply, _history_items = send_message_safe(
+            prompt,
+            chat_id=str(session.id) if session else None,
+            usuario=user,
+            output_format="html",
+            structured_output=True,
+            format_guard=True,
+            max_gastronomy_items=5
+        )
+
+        if session:
+            session.add_message('assistant', reply)
+            session.ensure_metadata()
+            session.save(update_fields=['history', 'messages_count', 'last_message_at', 'title', 'updated_at'])
+
+            try:
+                channel_layer = get_channel_layer()
+                async_to_sync(channel_layer.group_send)(
+                    f"user_{user.id}",
+                    {"type": "notify", "payload": {"event": "chat_message", "session": str(session.id)}}
+                )
+            except Exception:
+                pass
+
+        return Response({'result': reply, 'chat_id': str(session.id) if session else None})
+
 
 class ChatSessionViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
@@ -688,9 +747,30 @@ class ChatSessionViewSet(viewsets.ViewSet):
         if not content:
             return Response({"error": "Contenido vacío"}, status=400)
 
-        reply, _ = send_message(content, chat_id=str(s.id), usuario=request.user)
-        s.refresh_from_db()
+        s.add_message('user', content)
+        s.save(update_fields=['history', 'messages_count', 'last_message_at', 'updated_at'])
+
+        reply, _ = send_message_safe(
+            content,
+            chat_id=str(s.id),
+            usuario=request.user,
+            output_format="html",
+            structured_output=True
+        )
+
+        s.add_message('assistant', reply)
         s.ensure_metadata()
+        s.save(update_fields=['history', 'messages_count', 'last_message_at', 'title', 'updated_at'])
+
+        try:
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                f"user_{request.user.id}",
+                {"type": "notify", "payload": {"event": "chat_message", "session": str(s.id)}}
+            )
+        except Exception:
+            pass
+
         return Response({
             "session": str(s.id),
             "assistant": {"role": "assistant", "content": reply}

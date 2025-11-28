@@ -105,7 +105,6 @@ class ReservaSerializer(serializers.ModelSerializer):
         if fecha_reserva and fecha_caducidad and fecha_caducidad < fecha_reserva:
             raise serializers.ValidationError('La fecha_caducidad no puede ser anterior a fecha_reserva.')
 
-        # Validación de solapamiento SOLO contra reservas activas
         if habitacion and fecha_reserva and fecha_caducidad:
             overlapping = Reserva.objects.filter(
                 num_habitacion=habitacion,
@@ -153,10 +152,12 @@ class NotificationSerializer(serializers.ModelSerializer):
         model = Notification
         fields = ['id', 'title', 'message', 'read', 'created_at', 'link']
 
+
 class ChatMessageSerializer(serializers.Serializer):
-    role = serializers.ChoiceField(choices=['user', 'assistant'])
+    role = serializers.ChoiceField(choices=['user', 'assistant', 'system'])
     content = serializers.CharField()
     ts = serializers.CharField()
+    meta = serializers.DictField(required=False)
 
 
 class ChatSessionBaseSerializer(serializers.ModelSerializer):
@@ -188,6 +189,7 @@ class ChatSessionPatchSerializer(serializers.ModelSerializer):
             'archived': {'required': False}
         }
 
+
 class ReviewSerializer(serializers.ModelSerializer):
     usuario = UsuarioSerializer(read_only=True)
     usuario_id = serializers.IntegerField(write_only=True, required=False)
@@ -202,7 +204,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         read_only_fields = ['id_review', 'fecha_creacion']
 
     def validate(self, data):
-        # Validate that exactly one target is set
         targets = sum([
             data.get('hotel') is not None,
             data.get('lugar_turistico') is not None,
