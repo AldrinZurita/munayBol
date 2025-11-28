@@ -9,6 +9,11 @@ import { AuthService } from '../../services/auth.service';
 import { Reserva } from '../../interfaces/reserva.interface';
 import { IconsModule } from '../../icons';
 import { LoadingService } from '../../shared/services/loading';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+
 type CardBrand = 'visa' | 'mastercard' | 'amex' | 'discover' | 'diners' | 'unionpay' | 'unknown';
 
 @Component({
@@ -16,17 +21,33 @@ type CardBrand = 'visa' | 'mastercard' | 'amex' | 'discover' | 'diners' | 'union
   templateUrl: './reservas.html',
   styleUrls: ['./reservas.scss'],
   standalone: true,
-  imports: [FormsModule, CommonModule, IconsModule]
+  imports: [
+    FormsModule,
+    CommonModule,
+    IconsModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule
+  ]
 })
 export class ReservaComponent implements OnInit, OnDestroy {
   hotel = { nombre: '', ciudad: '', precio: 0 };
   huespedes = 1;
   noches = 1;
+
   Habitacion = { num: '', precio: 0, hotel: '', capacidad: 1 };
+
   fecha_reserva: string = '';
   fecha_caducidad: string = '';
   minFechaReserva: string = '';
   minFechaCaducidad: string = '';
+
+  esPaquete = false;
+
+  // Para el calendario de paquetes (mat-date-range-input)
+  fechaReservaDate: Date | null = null;
+  fechaCaducidadDate: Date | null = null;
 
   get subtotal(): number { return Math.round(this.hotel.precio * this.noches * 100) / 100; }
   get iva(): number { return Math.round(this.subtotal * 0.13 * 100) / 100; }
@@ -41,6 +62,7 @@ export class ReservaComponent implements OnInit, OnDestroy {
   showErrorToast = false;
   errorMessage = '';
   successReservaId: number | null = null;
+
   tarjeta = '';
   nombre = '';
   expiracion = '';
@@ -60,23 +82,39 @@ export class ReservaComponent implements OnInit, OnDestroy {
     private readonly loadingService: LoadingService
   ) {}
 
-  ngOnInit() {
+  // ==============================
+  //   Ciclo de vida
+  // ==============================
+  ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.Habitacion.num = params['num'] || '';
-      this.Habitacion.precio = params['precio'] ? Number(params['precio']) : 0;
-      this.Habitacion.hotel = params['hotel'] || '';
+      this.Habitacion.num       = params['num'] || '';
+      this.Habitacion.precio    = params['precio'] ? Number(params['precio']) : 0;
+      this.Habitacion.hotel     = params['hotel'] || '';
       this.Habitacion.capacidad = params['capacidad'] ? Number(params['capacidad']) : 1;
-      this.fecha_reserva = params['fecha_reserva'] || new Date().toISOString().slice(0,10);
+
+      this.esPaquete = !!params['id_paquete'];
+
+      const hoy = new Date();
+
+      // Strings YYYY-MM-DD que vienen desde paquete-detalle (o fallback)
+      this.fecha_reserva = params['fecha_reserva'] || this.formatDateOnly(hoy);
+
       if (params['fecha_caducidad']) {
         this.fecha_caducidad = params['fecha_caducidad'];
       } else {
-        const d = new Date(this.fecha_reserva);
+        const d = this.toLocalDate(this.fecha_reserva) || hoy;
         d.setDate(d.getDate() + 1);
-        this.fecha_caducidad = d.toISOString().slice(0,10);
+        this.fecha_caducidad = this.formatDateOnly(d);
       }
-      this.hotel.precio = this.Habitacion.precio;
-      this.huespedes = this.Habitacion.capacidad;
-      this.minFechaReserva = new Date().toISOString().slice(0,10);
+
+      // Fechas como Date para el calendario de paquetes
+      this.fechaReservaDate   = this.toLocalDate(this.fecha_reserva);
+      this.fechaCaducidadDate = this.toLocalDate(this.fecha_caducidad);
+
+      this.hotel.precio    = this.Habitacion.precio;
+      this.huespedes       = this.Habitacion.capacidad;
+      this.minFechaReserva = this.formatDateOnly(hoy);
+
       this.ajustarFechas();
     });
   }
@@ -85,24 +123,70 @@ export class ReservaComponent implements OnInit, OnDestroy {
     this.loadingService.hide();
   }
 
-  private ajustarFechas() {
-    if (this.fecha_caducidad <= this.fecha_reserva) {
-      const d = new Date(this.fecha_reserva);
-      d.setDate(d.getDate() + 1);
-      this.fecha_caducidad = d.toISOString().slice(0,10);
-    }
-    const start = new Date(this.fecha_reserva);
-    const end = new Date(this.fecha_caducidad);
-    const diffMs = end.getTime() - start.getTime();
-    const dias = Math.max(1, Math.round(diffMs / (1000*60*60*24)));
-    this.noches = dias;
+  // ==============================
+  //   Helpers de fecha
+  // ==============================
 
-    const minSalida = new Date(this.fecha_reserva);
-    minSalida.setDate(minSalida.getDate() + 1);
-    this.minFechaCaducidad = minSalida.toISOString().slice(0,10);
+  /** Devuelve YYYY-MM-DD a partir de una Date local */
+  private formatDateOnly(d: Date): string {
+    const year  = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day   = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
-  onChangeFechaReserva() { this.ajustarFechas(); }
-  onChangeFechaCaducidad() { this.ajustarFechas(); }
+
+  /** Crea una Date LOCAL desde un string YYYY-MM-DD */
+  private toLocalDate(dateStr: string | null | undefined): Date | null {
+    if (!dateStr) return null;
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return null;
+
+    const [yearStr, monthStr, dayStr] = parts;
+    const year  = Number(yearStr);
+    const month = Number(monthStr);
+    const day   = Number(dayStr);
+
+    if (!year || !month || !day) return null;
+
+    // new Date(año, mesIndex, día) => fecha local, sin problemas de UTC
+    return new Date(year, month - 1, day);
+  }
+
+  /** Ajusta coherencia entre fechas, noches y mínimos para inputs tipo date */
+  private ajustarFechas(): void {
+    const hoy = new Date();
+
+    let start = this.toLocalDate(this.fecha_reserva) || hoy;
+    let end   = this.toLocalDate(this.fecha_caducidad) || new Date(start);
+
+    // Si la salida es <= a la entrada, forzamos al menos 1 noche
+    if (end <= start) {
+      end = new Date(start);
+      end.setDate(end.getDate() + 1);
+      this.fecha_caducidad = this.formatDateOnly(end);
+    }
+
+    const diffMs = end.getTime() - start.getTime();
+    const dias   = Math.max(1, Math.round(diffMs / (1000 * 60 * 60 * 24)));
+    this.noches  = dias;
+
+    const minSalida = new Date(start);
+    minSalida.setDate(minSalida.getDate() + 1);
+    this.minFechaCaducidad = this.formatDateOnly(minSalida);
+
+    // Si es paquete, mantenemos también los Date del calendario sincronizados
+    if (this.esPaquete) {
+      this.fechaReservaDate   = start;
+      this.fechaCaducidadDate = end;
+    }
+  }
+
+  onChangeFechaReserva(): void { this.ajustarFechas(); }
+  onChangeFechaCaducidad(): void { this.ajustarFechas(); }
+
+  // ==============================
+  //   Helpers de tarjeta
+  // ==============================
   private onlyDigits(s: string): string { return (s || '').replace(/\D/g, ''); }
 
   private detectBrand(digits: string): CardBrand {
@@ -147,7 +231,9 @@ export class ReservaComponent implements OnInit, OnDestroy {
     if (digits.length < 15) return false;
     return this.luhnValid(digits);
   }
+
   isNameValid(): boolean { return this.nombre.trim().length >= 3; }
+
   isExpiryValid(): boolean {
     const m = this.expiracion.match(/^(\d{2})\/(\d{2})$/);
     if (!m) return false;
@@ -159,6 +245,7 @@ export class ReservaComponent implements OnInit, OnDestroy {
     const endOfMonth = new Date(fullYear, mm, 0);
     return endOfMonth >= new Date(now.getFullYear(), now.getMonth(), 1);
   }
+
   isCvvValid(): boolean { return this.cvv.trim().length === this.cvvMaxLength; }
 
   get cvvMaxLength(): number { return this.cardBrand === 'amex' ? 4 : 3; }
@@ -168,7 +255,7 @@ export class ReservaComponent implements OnInit, OnDestroy {
     return !(this.isCardNumberValid() && this.isNameValid() && this.isExpiryValid() && this.isCvvValid());
   }
 
-  onTarjetaInput(event: any) {
+  onTarjetaInput(event: any): void {
     let digits = this.onlyDigits(event.target.value).slice(0, 19);
     this.cardBrand = this.detectBrand(digits);
     digits = this.cardBrand === 'amex' ? digits.slice(0, 15) : digits.slice(0, 16);
@@ -176,15 +263,21 @@ export class ReservaComponent implements OnInit, OnDestroy {
     this.tarjeta = formatted;
   }
 
-  clearCard(): void { this.tarjeta = ''; this.cardBrand = 'unknown'; }
+  clearCard(): void {
+    this.tarjeta = '';
+    this.cardBrand = 'unknown';
+  }
 
-  onExpiracionInput(event: any) {
+  onExpiracionInput(event: any): void {
     let value = event.target.value.replace(/[^\d]/g, '').slice(0, 4);
     if (value.length >= 3) value = value.slice(0, 2) + '/' + value.slice(2);
     this.expiracion = value;
   }
 
-  confirmarPago() {
+  // ==============================
+  //   Pago y reserva
+  // ==============================
+  confirmarPago(): void {
     if (this.creating) return;
 
     this.touched = { tarjeta: true, nombre: true, expiracion: true, cvv: true };
@@ -201,11 +294,13 @@ export class ReservaComponent implements OnInit, OnDestroy {
 
     this.creating = true;
     this.loadingService.show('Procesando tu reserva...');
+
     this.habitacionService.getDisponibilidadHabitacion(num).subscribe({
       next: disp => {
         const conflicto = disp.intervalos_reservados?.some((i: any) =>
           this.fecha_reserva <= i.fin && this.fecha_caducidad >= i.inicio
         );
+
         if (conflicto) {
           this.conflictNextAvailable = disp.next_available_from;
           this.showConflictModal = true;
@@ -214,8 +309,13 @@ export class ReservaComponent implements OnInit, OnDestroy {
           return;
         }
 
-        const hoy = new Date().toISOString().slice(0, 10);
-        const pago: Pago = { tipo_pago: 'tarjeta', monto: this.total, fecha: hoy, fecha_creacion: hoy };
+        const hoy = this.formatDateOnly(new Date());
+        const pago: Pago = {
+          tipo_pago: 'tarjeta',
+          monto: this.total,
+          fecha: hoy,
+          fecha_creacion: hoy
+        };
 
         this.pagoService.crearPago(pago).subscribe({
           next: (res) => {
@@ -233,10 +333,10 @@ export class ReservaComponent implements OnInit, OnDestroy {
             this.reservasService.crearReserva(reserva).subscribe({
               next: (r) => {
                 this.successReservaId = r.id_reserva;
-                this.successCodigo = '#MNY' + r.id_reserva.toString(36).toUpperCase();
-                this.successTotal = this.total;
+                this.successCodigo    = '#MNY' + r.id_reserva.toString(36).toUpperCase();
+                this.successTotal     = this.total;
                 this.showSuccessModal = true;
-                this.creating = false;
+                this.creating         = false;
                 this.loadingService.hide();
               },
               error: (err) => {
@@ -261,11 +361,13 @@ export class ReservaComponent implements OnInit, OnDestroy {
     });
   }
 
-  cerrarSuccess() {
+  cerrarSuccess(): void {
     this.showSuccessModal = false;
+
     const newId = this.successReservaId;
+
     this.tarjeta = '';
-    this.nombre = '';
+    this.nombre  = '';
     this.expiracion = '';
     this.cvv = '';
     this.cardBrand = 'unknown';
@@ -279,21 +381,38 @@ export class ReservaComponent implements OnInit, OnDestroy {
     }
   }
 
-  cerrarConflict() { this.showConflictModal = false; }
-  usarFechaSugerida() {
+  cerrarConflict(): void { this.showConflictModal = false; }
+
+  usarFechaSugerida(): void {
     if (this.conflictNextAvailable) {
       this.fecha_reserva = this.conflictNextAvailable;
-      const d = new Date(this.fecha_reserva);
+
+      const d = this.toLocalDate(this.fecha_reserva) || new Date();
       d.setDate(d.getDate() + 1);
-      this.fecha_caducidad = d.toISOString().slice(0,10);
+      this.fecha_caducidad = this.formatDateOnly(d);
+
+      // Mantener también los Date del calendario en caso de paquete
+      this.fechaReservaDate   = this.toLocalDate(this.fecha_reserva);
+      this.fechaCaducidadDate = this.toLocalDate(this.fecha_caducidad);
+
       this.showConflictModal = false;
       this.ajustarFechas();
     }
   }
 
-  lanzarError(msg: string) {
+  lanzarError(msg: string): void {
     this.errorMessage = msg;
     this.showErrorToast = true;
-    setTimeout(() => this.showErrorToast = false, 4500);
+    setTimeout(() => (this.showErrorToast = false), 4500);
+  }
+  
+  formatFechaSimple(fecha: string): string {
+    if (!fecha) return '';
+    const partes = fecha.split('-'); // esperamos "YYYY-MM-DD"
+    if (partes.length !== 3) return fecha;
+    const [y, m, d] = partes;
+    return `${d}/${m}/${y}`;
   }
 }
+
+

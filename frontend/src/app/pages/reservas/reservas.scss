@@ -217,6 +217,39 @@
      width: 100%; box-sizing: border-box;
    }
    
+   /* === Fechas del paquete (Angular Material) === */
+
+/* La grilla para paquetes va en una sola columna */
+.fechas-grid.fechas-paquete {
+  grid-template-columns: 1fr;
+}
+
+/* Que el mat-form-field ocupe todo el ancho */
+.paquete-range-field {
+  width: 100%;
+}
+
+/* Estilo del form-field para que parezca al de paquete-detalle */
+.fechas-paquete .mat-form-field-appearance-fill .mat-form-field-flex {
+  background: var(--color-bg-card) !important;
+  border-radius: 10px !important;
+}
+
+/* Estilo del texto dentro del rango */
+.fechas-paquete .mat-date-range-input-container input {
+  color: var(--color-text-primary) !important;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* Texto de “(2 noches)” debajo del calendario */
+.noches-text {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--color-text-light);
+  text-align: right;
+}
+
    .divider {
      height: 1px; background: var(--color-border); margin: 20px 0;
      background-image: linear-gradient(to right, var(--color-border) 50%, transparent 50%);

@@ -204,7 +204,8 @@
             <span class="right">{{ noches }}</span>
           </div>
 
-          <div class="fechas-grid">
+          <!-- Fechas editables SOLO para reservas normales (no paquete) -->
+          <div class="fechas-grid" *ngIf="!esPaquete">
             <label class="fecha-item">
               <span class="lbl">Check-in</span>
               <input
@@ -226,6 +227,20 @@
                 (change)="onChangeFechaCaducidad()"
               />
             </label>
+          </div>
+
+          <!-- Fechas del PAQUETE: resumen solo lectura, sin Angular Material -->
+          <div class="fechas-grid fechas-paquete" *ngIf="esPaquete">
+            <div class="fecha-item">
+              <span class="lbl">Fechas del paquete</span>
+              <div class="fecha-rango-readonly">
+                <i-bs name="calendar3" width="16" height="16" class="icon"></i-bs>
+                <span class="fecha-rango-text">
+                  {{ formatFechaSimple(fecha_reserva) }} – {{ formatFechaSimple(fecha_caducidad) }}
+                </span>
+              </div>
+              <p class="muted mini">({{ noches }} noches)</p>
+            </div>
           </div>
         </div>
 
