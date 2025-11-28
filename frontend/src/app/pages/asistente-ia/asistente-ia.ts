@@ -9,16 +9,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ChatMessage, ChatSession } from '../../interfaces/chat.interface';
 import { AuthService } from '../../services/auth.service';
 import { LoadingService } from '../../shared/services/loading';
-
 type Actor = 'user' | 'ia';
 interface Respuesta { from: Actor; text: string; t: number; }
-
-/* Extiende ChatSession con un preview de la última consulta del usuario */
 interface SessionWithPreview extends ChatSession {
   preview_query?: string;
 }
 
-/* Para agrupar sesiones en la sidebar con tipado fuerte */
 interface SessionGroup<TItem = ChatSession> {
   label: string;
   items: TItem[];
@@ -244,7 +240,6 @@ export class AsistenteIa implements OnInit, OnDestroy {
     return { from: m.role === 'assistant' ? 'ia' : 'user', text: m.content, t: new Date(m.ts || Date.now()).getTime() };
   }
 
-  /* Consulta del usuario para el header de la conversación */
   lastUserQuery(): string | null {
     for (let i = this.respuestas.length - 1; i >= 0; i--) {
       const r = this.respuestas[i];
@@ -482,7 +477,6 @@ export class AsistenteIa implements OnInit, OnDestroy {
     }
     if (!this.currentSessionId) return;
 
-    // Mostrar inmediatamente la consulta en el header y en la tarjeta de la sesión activa (RT preview)
     const active = this.sessions.find(x => x.id === this.currentSessionId);
     if (active) {
       active.preview_query = msg;
@@ -508,7 +502,6 @@ export class AsistenteIa implements OnInit, OnDestroy {
       const s = await this.iaService.getSession(this.currentSessionId).toPromise();
       if (s) {
         this.currentSession = s;
-        // ya actualizamos preview_query antes; mantenemos consistencia
         this.sessions = this.sessions.map(x => x.id === s.id ? ({ ...(x as SessionWithPreview) }) : x);
       }
     } catch {

@@ -1,18 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-MunayBol LLM client (formato definitivo v3: Conversacional + Tarjetas)
-- 100% basado en munaybol_data.json
-- Geografía estricta
-- Respuesta híbrida:
-   1) Bloque conversacional inicial (saludo + resumen corto + CTA)
-   2) Tarjetas semánticas (section/article + headings + listas)
-   3) SCRIPT embebido (application/json) con estructura para UI avanzada
-- Secciones: Lugares, Hoteles, Gastronomía, Historia/Cultura/Festividades,
-             Información Práctica, Costos, Transporte, Seguridad, Dato curioso.
-- Modo itinerario: si el usuario pide itinerario/plan/sugerencias, se genera un plan de 3 días
-  con actividades de mañana/tarde y costos aproximados (en Bs.), y se integra también en tarjetas.
-"""
-
 import os
 import re
 import json
@@ -49,8 +34,6 @@ def load_data():
         _PLACES = []
 
 load_data()
-
-# Helpers
 def _strip_accents(s: str) -> str:
     return "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
 
@@ -167,10 +150,8 @@ def _is_itinerary_request(prompt: str) -> bool:
 
 def _build_itinerary(dep: Dict[str, Any]) -> Dict[str, Any]:
     dep_name = dep.get("nombre") or "Destino"
-    # Basado en dataset: algunos costos promedio si están disponibles
     costos = dep.get("costos_promedio") or {}
     comida_cost = costos.get("comida_local_bs", "20–40")
-    # Itinerario de ejemplo (adaptable)
     return {
         "titulo": f"Itinerario sugerido: {dep_name} (3 días)",
         "dias": [
@@ -256,7 +237,6 @@ def _build_structured(dep: Dict[str, Any], hotels: List[Dict[str, Any]], places:
 
 def _markdown_from_structured(d: Dict[str, Any], prompt: str) -> str:
     md = []
-    # Conversacional inicial
     dep = d.get('departamento') or 'este destino'
     saludo = f"Hola 👋 Soy tu asistente de MunayBol. ¡Excelente elección! Te ayudo con {dep}. A continuación, te muestro lo más importante."
     md.append(saludo)
@@ -265,7 +245,6 @@ def _markdown_from_structured(d: Dict[str, Any], prompt: str) -> str:
         md.append(f"Resumen: {d['resumen']}")
         md.append("")
 
-    # Itinerario si existe
     if d.get("itinerario"):
         it = d["itinerario"]
         md.append(f"### {it['titulo']}")
@@ -277,7 +256,6 @@ def _markdown_from_structured(d: Dict[str, Any], prompt: str) -> str:
             md.append(f"Nota: {it['notas']}")
         md.append("")
 
-    # Secciones en H2
     md.append("## 📍 **Lugares Turísticos**")
     md.append("---")
     for l in d["lugares_turisticos"]:
@@ -377,7 +355,6 @@ def send_message(
     structured = _build_structured(dep or {}, hotels, places, is_itinerary)
     md = _markdown_from_structured(structured, prompt)
 
-    # Conversacional HTML (intro)
     intro_html = ""
     intro_lines = []
     for ln in md.splitlines():
@@ -388,7 +365,6 @@ def send_message(
     if intro_lines:
         intro_html = "<section aria-labelledby='intro'><h2>Conversación</h2><hr>" + "".join(f"<p>{l}</p>" for l in intro_lines) + "</section>"
 
-    # Tarjetas HTML por secciones
     def section(h2_text: str, inner_md: str) -> str:
         lines = inner_md.strip().splitlines()
         html_parts = []
