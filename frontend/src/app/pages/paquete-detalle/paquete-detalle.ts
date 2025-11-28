@@ -60,6 +60,7 @@ export class PaqueteDetalle implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
     this.loadingService.show('Cargando paquete...');
 
     const id = Number(this.route.snapshot.paramMap.get('id'));
