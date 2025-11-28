@@ -9,19 +9,35 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ChatMessage, ChatSession } from '../../interfaces/chat.interface';
 import { AuthService } from '../../services/auth.service';
 import { LoadingService } from '../../shared/services/loading';
-
 type Actor = 'user' | 'ia';
-interface Respuesta {
-  from: Actor;
-  text: string;
-  t: number;
+interface Respuesta { from: Actor; text: string; t: number; }
+interface SessionWithPreview extends ChatSession {
+  preview_query?: string;
 }
-interface SessionGroup {
+
+interface SessionGroup<TItem = ChatSession> {
   label: string;
-  items: ChatSession[];
+  items: TItem[];
 }
-type ChatGroupKey = 'today' | 'yesterday' | 'last-7' | 'last-30' | 'older';
-type ChatGroups = { [K in ChatGroupKey]: ChatSession[] };
+
+interface StructuredSection {
+  id: string;
+  title: string;
+  type: 'list' | 'hoteles' | 'gastronomia' | 'texto' | 'unknown';
+  items?: any[];
+  plato_tradicional?: string;
+  extras?: any[];
+  paragraphs?: string[];
+  list?: string[];
+}
+
+interface ChatGroups<TItem = SessionWithPreview> {
+  today: TItem[];
+  yesterday: TItem[];
+  last7: TItem[];
+  last30: TItem[];
+  older: TItem[];
+}
 
 @Component({
   selector: 'app-asistente-ia',
@@ -39,13 +55,9 @@ export class AsistenteIa implements OnInit, OnDestroy {
   sending = false;
   showScrollToBottom = false;
   sidebarOpen = true;
+  compactMode = false;
 
-  streamEffect = true;
-  streamSpeedMs = 6;
-  private streamTimer: any = null;
-  private streamChunkSize = 12;
-
-  sessions: ChatSession[] = [];
+  sessions: SessionWithPreview[] = [];
   search = '';
   showArchived = false;
   renamingId: string | null = null;
@@ -62,6 +74,8 @@ export class AsistenteIa implements OnInit, OnDestroy {
   hasMore = false;
   private isInitialLoad = true;
   private previousScrollHeight = 0;
+
+  collapsedSections = new Set<string>();
 
   constructor(
     private readonly iaService: AsistenteIaService,
@@ -104,7 +118,6 @@ export class AsistenteIa implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.streamTimer) { clearInterval(this.streamTimer); this.streamTimer = null; }
     this.loadingService.hide();
   }
 
@@ -112,7 +125,21 @@ export class AsistenteIa implements OnInit, OnDestroy {
     this.loadingService.show('Cargando historial...');
     try {
       const list = await this.iaService.listSessions({ q: this.search.trim() || undefined, archived: this.showArchived }).toPromise();
-      this.sessions = (list || []).map((s) => ({ ...s }));
+      const raw = (list || []).map(s => ({ ...s })) as ChatSession[];
+      const enriched: SessionWithPreview[] = [];
+      for (const s of raw) {
+        let preview = '';
+        try {
+          const msgs = await this.iaService.listMessages(s.id, { page: 1, limit: 10 }).toPromise();
+          const items = (msgs?.items || []).slice().reverse();
+          for (let i = items.length - 1; i >= 0; i--) {
+            const m = items[i];
+            if (m.role === 'user' && m.content) { preview = m.content; break; }
+          }
+        } catch {}
+        enriched.push({ ...(s as SessionWithPreview), preview_query: preview });
+      }
+      this.sessions = enriched;
     } catch {
       this.sessions = [];
     } finally {
@@ -120,13 +147,13 @@ export class AsistenteIa implements OnInit, OnDestroy {
     }
   }
 
-  groupedSessions(): SessionGroup[] {
+  groupedSessions(): SessionGroup<SessionWithPreview>[] {
     const today = new Date();
     const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
     const isToday = (d: Date) => d.toDateString() === today.toDateString();
     const isYesterday = (d: Date) => d.toDateString() === yesterday.toDateString();
 
-    const groups: ChatGroups = { today: [], yesterday: [], 'last-7': [], 'last-30': [], older: [] };
+    const groups: ChatGroups<SessionWithPreview> = { today: [], yesterday: [], last7: [], last30: [], older: [] };
     const sorted = [...this.sessions].sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
 
     for (const s of sorted) {
@@ -134,17 +161,17 @@ export class AsistenteIa implements OnInit, OnDestroy {
       const diff = Math.ceil(Math.abs(today.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
       if (isToday(d)) groups.today.push(s);
       else if (isYesterday(d)) groups.yesterday.push(s);
-      else if (diff <= 7) groups['last-7'].push(s);
-      else if (diff <= 30) groups['last-30'].push(s);
+      else if (diff <= 7) groups.last7.push(s);
+      else if (diff <= 30) groups.last30.push(s);
       else groups.older.push(s);
     }
 
-    const result: SessionGroup[] = [];
-    if (groups.today.length) result.push({ label: 'Hoy', items: groups.today });
+    const result: SessionGroup<SessionWithPreview>[] = [];
+    if (groups.today.length)    result.push({ label: 'Hoy', items: groups.today });
     if (groups.yesterday.length) result.push({ label: 'Ayer', items: groups.yesterday });
-    if (groups['last-7'].length) result.push({ label: 'Últimos 7 días', items: groups['last-7'] });
-    if (groups['last-30'].length) result.push({ label: 'Últimos 30 días', items: groups['last-30'] });
-    if (groups.older.length) result.push({ label: 'Anteriores', items: groups.older });
+    if (groups.last7.length)    result.push({ label: 'Últimos 7 días', items: groups.last7 });
+    if (groups.last30.length)   result.push({ label: 'Últimos 30 días', items: groups.last30 });
+    if (groups.older.length)    result.push({ label: 'Anteriores', items: groups.older });
     return result;
   }
 
@@ -152,7 +179,7 @@ export class AsistenteIa implements OnInit, OnDestroy {
     try {
       const s = await this.iaService.createSession().toPromise();
       if (s) {
-        this.sessions = [s, ...this.sessions];
+        this.sessions = [{ ...(s as SessionWithPreview), preview_query: '' }, ...this.sessions];
         this.router.navigate(['/asistente-ia', s.id]);
       }
     } catch {
@@ -160,7 +187,7 @@ export class AsistenteIa implements OnInit, OnDestroy {
     }
   }
 
-  async goToSession(s: ChatSession): Promise<void> {
+  async goToSession(s: SessionWithPreview): Promise<void> {
     if (s.id === this.currentSessionId) return;
     this.router.navigate(['/asistente-ia', s.id]);
   }
@@ -181,7 +208,6 @@ export class AsistenteIa implements OnInit, OnDestroy {
       await this.loadMessages(true);
     } catch {
       await this.createAndOpenSession();
-      return;
     }
   }
 
@@ -214,7 +240,15 @@ export class AsistenteIa implements OnInit, OnDestroy {
     return { from: m.role === 'assistant' ? 'ia' : 'user', text: m.content, t: new Date(m.ts || Date.now()).getTime() };
   }
 
-  // Métodos requeridos por el template
+  lastUserQuery(): string | null {
+    for (let i = this.respuestas.length - 1; i >= 0; i--) {
+      const r = this.respuestas[i];
+      if (r.from === 'user' && r.text) return r.text;
+    }
+    const s = this.sessions.find(ss => ss.id === this.currentSessionId);
+    return s?.preview_query || null;
+  }
+
   exportarChat(): void {
     if (this.respuestas.length === 0) return;
     const lines: string[] = [];
@@ -227,9 +261,9 @@ export class AsistenteIa implements OnInit, OnDestroy {
     const md = lines.join('\n');
     try {
       navigator.clipboard.writeText(md);
-      this.push('ia', 'Copié la conversación al portapapeles en formato **Markdown**. ¡Asegúrate de tener un título para el archivo!');
+      this.push('ia', 'La conversación se copió al portapapeles en formato Markdown.');
     } catch {
-      this.push('ia', 'No pude copiar la conversación automáticamente. Intenta manualmente.');
+      this.push('ia', 'No pude copiar automáticamente. Intenta manualmente.');
     }
   }
 
@@ -238,14 +272,14 @@ export class AsistenteIa implements OnInit, OnDestroy {
     await this.createAndOpenSession();
   }
 
-  async renameSession(s: ChatSession): Promise<void> {
+  async renameSession(s: SessionWithPreview): Promise<void> {
     const nuevo = prompt('Nuevo título de la conversación', s.title || '');
     if (nuevo === null || nuevo.trim() === '') return;
     this.renamingId = s.id;
     try {
       const upd = await this.iaService.patchSession(s.id, { title: nuevo.trim() }).toPromise();
       if (upd) {
-        this.sessions = this.sessions.map(x => x.id === s.id ? upd : x);
+        this.sessions = this.sessions.map(x => x.id === s.id ? { ...(upd as SessionWithPreview), preview_query: x.preview_query } : x);
         if (this.currentSessionId === s.id) this.currentSession = upd;
       }
     } finally {
@@ -253,22 +287,24 @@ export class AsistenteIa implements OnInit, OnDestroy {
     }
   }
 
-  async toggleArchive(s: ChatSession): Promise<void> {
+  async toggleArchive(s: SessionWithPreview): Promise<void> {
     this.archivingId = s.id;
     try {
       const upd = await this.iaService.patchSession(s.id, { archived: !s.archived }).toPromise();
       if (upd) {
-        this.sessions = this.sessions.map(x => x.id === s.id ? upd : x);
+        const updated = upd as SessionWithPreview;
+        updated.preview_query = s.preview_query;
+        this.sessions = this.sessions.map(x => x.id === s.id ? updated : x);
         if (this.currentSessionId === s.id) this.currentSession = upd;
-        if (this.showArchived !== upd.archived) await this.loadSessions();
+        if (this.showArchived !== (upd as any).archived) await this.loadSessions();
       }
     } finally {
       this.archivingId = null;
     }
   }
 
-  async deleteSession(s: ChatSession): Promise<void> {
-    if (!confirm('¿Eliminar esta conversación? Esta acción no se puede deshacer.')) return;
+  async deleteSession(s: SessionWithPreview): Promise<void> {
+    if (!confirm('¿Eliminar esta conversación?')) return;
     this.deletingId = s.id;
     try {
       await this.iaService.deleteSession(s.id).toPromise();
@@ -286,17 +322,13 @@ export class AsistenteIa implements OnInit, OnDestroy {
   onChatScroll(event?: Event): void {
     const el = this.chatEl?.nativeElement;
     if (!el) return;
-    const distanceToBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
-    this.showScrollToBottom = distanceToBottom > 100;
+    this.showScrollToBottom = (el.scrollHeight - el.scrollTop - el.clientHeight) > 120;
   }
   scrollToBottom(): void {
     this.chatEl?.nativeElement.scrollTo({ top: this.chatEl.nativeElement.scrollHeight, behavior: 'smooth' });
   }
   scrollToBottomSoon(): void {
-    setTimeout(() => {
-      if (!this.loadingMessages && !this.isInitialLoad) this.scrollToBottom();
-      else if (this.isInitialLoad) this.scrollToBottom();
-    }, 50);
+    setTimeout(() => this.scrollToBottom(), 50);
   }
   restoreScrollPosition(): void {
     setTimeout(() => {
@@ -307,132 +339,6 @@ export class AsistenteIa implements OnInit, OnDestroy {
       }
       this.previousScrollHeight = 0;
     }, 0);
-  }
-
-  private isLikelyHtml(text: string): boolean {
-    if (!text) return false;
-    return /<\s*(h[1-6]|p|ul|ol|li|hr|table|thead|tbody|tr|td|th|strong|em|b|i|code|span|a)\b/i.test(text);
-  }
-  private improveMarkdownHeuristics(text: string): string {
-    if (!text || this.isLikelyHtml(text)) return text;
-    let s = text;
-    const starBullets = (s.match(/\*\s/g) || []).length;
-    const breaks = (s.match(/\n/g) || []).length;
-    if (starBullets > 1 && breaks < starBullets) {
-      s = s.replace(/(\S)\s(\*\s)/g, '$1\n$2');
-    }
-    return s;
-  }
-  renderMarkdown(text: string): SafeHtml {
-    if (!text) return this.sanitizer.bypassSecurityTrustHtml('');
-    if (this.isLikelyHtml(text)) {
-      const safeHtml = DOMPurify.sanitize(text);
-      return this.sanitizer.bypassSecurityTrustHtml(safeHtml);
-    }
-    const rawHtml = marked.parse(this.improveMarkdownHeuristics(text)) as string;
-    const safeHtml = DOMPurify.sanitize(rawHtml);
-    return this.sanitizer.bypassSecurityTrustHtml(safeHtml);
-  }
-
-  private async streamAssistantTextIntoPlaceholder(full: string, placeholderT?: number): Promise<void> {
-    if (this.streamTimer) { clearInterval(this.streamTimer); this.streamTimer = null; }
-    if (this.isLikelyHtml(full)) {
-      const idxHtml = this.respuestas.findIndex(r => r.t === placeholderT);
-      const t = Date.now();
-      if (idxHtml >= 0) this.respuestas[idxHtml] = { from: 'ia', text: full, t };
-      else this.respuestas.push({ from: 'ia', text: full, t });
-      this.scrollToBottomSoon();
-      return;
-    }
-    let idx = -1;
-    if (placeholderT) idx = this.respuestas.findIndex(r => r.t === placeholderT);
-    if (idx < 0) {
-      const t = Date.now();
-      this.respuestas.push({ from: 'ia', text: '', t });
-      idx = this.respuestas.findIndex(r => r.t === t);
-    }
-    this.scrollToBottomSoon();
-    let pos = 0;
-    const chunk = Math.max(1, this.streamChunkSize);
-    this.streamTimer = setInterval(() => {
-      if (pos >= full.length) {
-        clearInterval(this.streamTimer);
-        this.streamTimer = null;
-        if (idx >= 0 && this.respuestas[idx]) {
-          this.respuestas[idx] = { ...this.respuestas[idx], text: full };
-        } else {
-          this.respuestas.push({ from: 'ia', text: full, t: Date.now() });
-        }
-        this.scrollToBottomSoon();
-        return;
-      }
-      const next = full.slice(pos, pos + chunk);
-      pos += chunk;
-      if (idx >= 0 && this.respuestas[idx]) {
-        this.respuestas[idx] = { ...this.respuestas[idx], text: (this.respuestas[idx].text || '') + next };
-      }
-      this.scrollToBottomSoon();
-    }, Math.max(4, this.streamSpeedMs));
-  }
-
-  async enviar(): Promise<void> {
-    const msg = this.prompt.trim();
-    if (!msg || this.sending) return;
-
-    if (!this.currentSessionId) {
-      await this.createAndOpenSession();
-    }
-    if (!this.currentSessionId) return;
-
-    this.scrollToBottom();
-    this.push('user', msg);
-    this.prompt = '';
-    const placeholderT = Date.now();
-    this.respuestas.push({ from: 'ia', text: '', t: placeholderT });
-    this.scrollToBottomSoon();
-
-    this.sending = true;
-    this.typing = true;
-
-    try {
-      const resp = await this.iaService.appendMessage(this.currentSessionId, msg).toPromise();
-      const out = (resp?.assistant?.content ?? '').toString().trim();
-
-      if (this.isLikelyHtml(out) || out.length <= 30) {
-        const idx = this.respuestas.findIndex(r => r.t === placeholderT);
-        if (idx >= 0) this.respuestas[idx] = { ...this.respuestas[idx], text: out || 'No tengo información para eso aún. ¿Puedes reformular tu pregunta?' };
-        else this.push('ia', out || 'No tengo información para eso aún. ¿Puedes reformular tu pregunta?');
-      } else if (this.streamEffect) {
-        await this.streamAssistantTextIntoPlaceholder(out, placeholderT);
-      } else {
-        const idx = this.respuestas.findIndex(r => r.t === placeholderT);
-        if (idx >= 0) this.respuestas[idx] = { ...this.respuestas[idx], text: out || 'No tengo información para eso aún. ¿Puedes reformular tu pregunta?' };
-        else this.push('ia', out || 'No tengo información para eso aún. ¿Puedes reformular tu pregunta?');
-      }
-
-      const s = await this.iaService.getSession(this.currentSessionId).toPromise();
-      if (s) {
-        this.currentSession = s;
-        this.sessions = this.sessions.map(x => x.id === s.id ? s : x);
-      }
-    } catch {
-      const idx = this.respuestas.findIndex(r => r.t === placeholderT);
-      if (idx >= 0) {
-        this.respuestas[idx] = { ...this.respuestas[idx], text: 'Hubo un error al consultar la IA. Intenta nuevamente en unos segundos.' };
-      } else {
-        this.push('ia', 'Hubo un error al consultar la IA. Intenta nuevamente en unos segundos.');
-      }
-    } finally {
-      this.sending = false;
-      setTimeout(() => (this.typing = false), 200);
-      this.scrollToBottomSoon();
-    }
-  }
-
-  private push(from: Actor, text: string): void {
-    const t = Date.now();
-    this.respuestas.push({ from, text, t });
-    this.scrollToBottomSoon();
   }
 
   isNewDay(i: number): boolean {
@@ -448,7 +354,6 @@ export class AsistenteIa implements OnInit, OnDestroy {
     return current.from !== prev.from || (current.t - prev.t > 1000 * 60 * 5);
   }
   trackByMsg(index: number, msg: Respuesta): number { return msg.t; }
-
   enviarQuick(msg: string): void {
     if (this.sending) return;
     this.prompt = msg;
@@ -461,12 +366,160 @@ export class AsistenteIa implements OnInit, OnDestroy {
     const user = this.auth.getUser();
     if (!user || !user.nombre) return '?';
     const parts = user.nombre.split(' ').filter(p => p.length > 0);
-    if (parts.length === 0) return '?';
     if (parts.length === 1) return parts[0][0].toUpperCase();
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
 
-  async applyFilters(): Promise<void> {
-    await this.loadSessions();
+  toggleLayoutMode(): void { this.compactMode = !this.compactMode; }
+
+  renderMarkdown(text: string): SafeHtml {
+    if (!text) return this.sanitizer.bypassSecurityTrustHtml('');
+    const safeHtml = DOMPurify.sanitize(marked.parse(text) as string);
+    return this.sanitizer.bypassSecurityTrustHtml(safeHtml);
   }
+
+  expandAll(): void { this.collapsedSections.clear(); }
+  collapseAll(): void {
+    const secs = this.structuredSections(this.latestIaResponseRaw());
+    secs.forEach(s => this.collapsedSections.add(s.id));
+  }
+  toggleCompact(): void { this.compactMode = !this.compactMode; }
+  toggleSection(id: string): void {
+    if (this.collapsedSections.has(id)) this.collapsedSections.delete(id);
+    else this.collapsedSections.add(id);
+  }
+  objectEntries(obj: any): { key: string; value: any }[] {
+    if (!obj) return [];
+    return Object.keys(obj).map(k => ({ key: k, value: obj[k] }));
+  }
+  private latestIaResponseRaw(): string {
+    for (let i = this.respuestas.length - 1; i >= 0; i--) {
+      if (this.respuestas[i].from === 'ia') return this.respuestas[i].text;
+    }
+    return '';
+  }
+
+  structuredSections(htmlOrRaw: string): StructuredSection[] {
+    if (!htmlOrRaw) return [];
+    const scriptMatch = htmlOrRaw.match(/<script id=['"]munaybol-structured['"] type=['"]application\/json['"]>([\s\S]*?)<\/script>/);
+    if (!scriptMatch) return [];
+    let data: any;
+    try { data = JSON.parse(scriptMatch[1]); } catch { return []; }
+
+    const sections: StructuredSection[] = [];
+    if (data.lugares_turisticos && Array.isArray(data.lugares_turisticos)) {
+      sections.push({ id: 'lugares', title: 'Lugares Turísticos', type: 'list', items: data.lugares_turisticos });
+    }
+    if (data.hoteles && Array.isArray(data.hoteles)) {
+      sections.push({ id: 'hoteles', title: 'Hoteles Recomendados', type: 'hoteles', items: data.hoteles });
+    }
+    if (data.gastronomia) {
+      sections.push({
+        id: 'gastronomia',
+        title: 'Gastronomía Típica',
+        type: 'gastronomia',
+        plato_tradicional: data.gastronomia.plato_tradicional,
+        extras: data.gastronomia.extras || []
+      });
+    }
+    if (data.historia_cultura_festividades) {
+      const fest = data.historia_cultura_festividades.festividades || [];
+      sections.push({
+        id: 'historia',
+        title: 'Historia y Festividades',
+        type: 'texto',
+        paragraphs: [
+          `Aniversario: ${data.historia_cultura_festividades.aniversario}`,
+          data.resumen || ''
+        ],
+        list: fest
+      });
+    }
+    if (data.informacion_practica) {
+      const pr = data.informacion_practica;
+      const paras = [];
+      if (pr.clima) paras.push(`Clima: ${pr.clima}`);
+      if (pr.mejor_epoca_visita) paras.push(`Mejor época: ${pr.mejor_epoca_visita}`);
+      sections.push({ id: 'info', title: 'Información Práctica', type: 'texto', paragraphs: paras });
+    }
+    if (data.costos_promedio) {
+      const c = data.costos_promedio;
+      const paras = Object.keys(c).map(k => `${this.humanizeKey(k)}: Bs. ${c[k]}`);
+      sections.push({ id: 'costos', title: 'Costos Promedio', type: 'texto', paragraphs: paras });
+    }
+    if (data.transporte) {
+      const t = data.transporte;
+      const paras = [];
+      if (t.acceso) paras.push(`Acceso: ${t.acceso}`);
+      if (t.movilidad_urbana) paras.push(`Movilidad: ${t.movilidad_urbana}`);
+      sections.push({ id: 'transporte', title: 'Transporte', type: 'texto', paragraphs: paras });
+    }
+    if (data.seguridad) {
+      sections.push({ id: 'seguridad', title: 'Consejos de Seguridad', type: 'texto', paragraphs: [data.seguridad] });
+    }
+    if (data.dato_curioso) {
+      sections.push({ id: 'curioso', title: 'Dato Curioso', type: 'texto', paragraphs: [data.dato_curioso] });
+    }
+
+    return sections;
+  }
+
+  private humanizeKey(k: string): string {
+    return k.replace(/_/g,' ').replace(/bs$/i,'').trim().replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  async enviar(): Promise<void> {
+    const msg = this.prompt.trim();
+    if (!msg || this.sending) return;
+
+    if (!this.currentSessionId) {
+      await this.createAndOpenSession();
+    }
+    if (!this.currentSessionId) return;
+
+    const active = this.sessions.find(x => x.id === this.currentSessionId);
+    if (active) {
+      active.preview_query = msg;
+      this.sessions = this.sessions.map(x => x.id === active.id ? active : x);
+    }
+
+    this.scrollToBottom();
+    this.push('user', msg);
+    this.prompt = '';
+    const placeholderT = Date.now();
+    this.respuestas.push({ from: 'ia', text: '', t: placeholderT });
+
+    this.sending = true;
+    this.typing = true;
+
+    try {
+      const resp = await this.iaService.appendMessage(this.currentSessionId, msg).toPromise();
+      const out = (resp?.assistant?.content ?? '').toString().trim() || 'No hay respuesta disponible.';
+      const idx = this.respuestas.findIndex(r => r.t === placeholderT);
+      if (idx >= 0) {
+        this.respuestas[idx] = { from: 'ia', text: out, t: this.respuestas[idx].t };
+      }
+      const s = await this.iaService.getSession(this.currentSessionId).toPromise();
+      if (s) {
+        this.currentSession = s;
+        this.sessions = this.sessions.map(x => x.id === s.id ? ({ ...(x as SessionWithPreview) }) : x);
+      }
+    } catch {
+      const idx = this.respuestas.findIndex(r => r.t === placeholderT);
+      if (idx >= 0) {
+        this.respuestas[idx] = { from: 'ia', text: 'Error al obtener respuesta. Intenta de nuevo.', t: this.respuestas[idx].t };
+      }
+    } finally {
+      this.sending = false;
+      setTimeout(() => (this.typing = false), 250);
+      this.scrollToBottomSoon();
+    }
+  }
+
+  private push(from: Actor, text: string): void {
+    this.respuestas.push({ from, text, t: Date.now() });
+    this.scrollToBottomSoon();
+  }
+
+  applyFilters(): void { this.loadSessions(); }
 }
