@@ -3,12 +3,17 @@ import re
 import json
 import logging
 import unicodedata
+import requests
 from typing import List, Dict, Any, Tuple, Optional
 
 logger = logging.getLogger(__name__)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_FILE_PATH = os.path.join(BASE_DIR, 'data', 'munaybol_data.json')
+
+# Configuración de Ollama desde variables de entorno
+OLLAMA_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.1:latest")
 
 _DATA: Dict[str, Any] = {}
 _DEPTOS: List[Dict[str, Any]] = []
@@ -314,6 +319,45 @@ def _final_html_polish(html:str)->str:
     s=re.sub(r"</section>\s*<section","</section>\n<section",s)
     return s
 
+def query_ollama(context: str, user_prompt: str, history: List[Dict[str, str]]) -> str:
+    system_msg = (
+        "Eres MunayBol, un asistente turístico experto en Bolivia. "
+        "Tu objetivo es ayudar a los usuarios a descubrir destinos, hoteles y lugares turísticos de Bolivia. "
+        "Usa la siguiente información de contexto (extraída de nuestra base de datos) para responder. "
+        "Si la información no está en el contexto, usa tu conocimiento general pero prioriza el contexto. "
+        "Responde siempre en español, de forma amable y entusiasta. "
+        "IMPORTANTE: Tu respuesta debe estar formateada en HTML simple (sin etiquetas <html> ni <body>, solo <p>, <ul>, <li>, <strong>, <h2>). "
+        "No uses Markdown (no uses **negrita**, usa <strong>). "
+        f"\n\nCONTEXTO:\n{context}"
+    )
+    
+    messages = [{"role": "system", "content": system_msg}]
+    
+    # Add limited history (last 2-3 turns) to maintain context
+    for h in history[-3:]:
+        role = h.get("role", "user")
+        content = h.get("content", "")
+        if role == "user":
+            messages.append({"role": "user", "content": content})
+        elif role == "assistant": 
+             messages.append({"role": "assistant", "content": content})
+
+    messages.append({"role": "user", "content": user_prompt})
+
+    try:
+        payload = {
+            "model": OLLAMA_MODEL,
+            "messages": messages,
+            "stream": False,
+            "options": {"temperature": 0.7}
+        }
+        response = requests.post(f"{OLLAMA_URL}/api/chat", json=payload, timeout=45)
+        response.raise_for_status()
+        return response.json().get("message", {}).get("content", "")
+    except Exception as e:
+        logger.error(f"Ollama Error: {e}")
+        return "<p>Lo siento, no pude procesar tu solicitud en este momento. Por favor intenta más tarde.</p>"
+
 def send_message(
         prompt:str,
         chat_id:str,
@@ -327,172 +371,62 @@ def send_message(
 )->Tuple[str,List[Dict[str,str]]]:
     logger.info("MunayBol Chat %s", chat_id)
 
-    user_name = ""
-    try:
-        if isinstance(usuario, dict):
-            user_name = usuario.get("nombre") or usuario.get("name") or ""
-        else:
-            user_name = getattr(usuario, "nombre", "") or getattr(usuario, "name", "") or ""
-    except:
-        user_name = ""
+    # 1. Detect Context
+    dep_name = _dep_name_from_query(prompt)
+    
+    # Fallback to history if no department detected in current prompt
+    if not dep_name and historial:
+        # Iterate backwards to find the last detected department
+        for h in reversed(historial):
+            if h.get("department_detected"):
+                dep_name = h.get("department_detected")
+                logger.info(f"Context recovered from history: {dep_name}")
+                break
 
-    dep_name=_dep_name_from_query(prompt)
-    dep=_get_dep(dep_name) if dep_name else None
-    hotels=_filter_by_department(_HOTELS, dep.get("nombre") if dep else "", "departamento")
-    places=_filter_by_department(_PLACES, dep.get("nombre") if dep else "", "departamento")
+    dep = _get_dep(dep_name) if dep_name else None
+    
+    # Filter lists based on department if found
+    hotels = _filter_by_department(_HOTELS, dep.get("nombre") if dep else "", "departamento")
+    places = _filter_by_department(_PLACES, dep.get("nombre") if dep else "", "departamento")
 
-    matched_hotels=_match_hotels(prompt)
-    matched_places=_match_places(prompt)
+    # Specific matches
+    matched_hotels = _match_hotels(prompt)
+    matched_places = _match_places(prompt)
 
-    # Saludo natural con nombre y sin tarjetas si no hay dep/hotel/lugar detectado
-    if _is_greeting(prompt) and not dep and not matched_hotels and not matched_places:
-        text = f"¡Hola{', ' + user_name if user_name else ''}! ¿Sobre qué departamento, hotel o lugar turístico de Bolivia te gustaría información? Puedo incluir imágenes y un plan de viaje."
-        history_item={
-            "role":"user","content":prompt,"response_formatted":text,
-            "output_format":"text","format_guard":True,"structured_output":False,
-            "department_detected":"","data_version":(_DATA.get("info_base_datos") or {}).get("version","N/D"),
-            "data_updated_at":(_DATA.get("info_base_datos") or {}).get("ultima_actualizacion","N/D")
-        }
-        return text,[history_item]
+    # 2. Build Structured Data (Context)
+    is_itinerary = _is_itinerary_request(prompt)
+    structured = _build_structured(dep or {}, hotels, places, is_itinerary, matched_hotels, matched_places)
+    
+    # Convert structured data to a string for the LLM
+    context_str = json.dumps(structured, ensure_ascii=False, indent=2)
 
-    is_itinerary=_is_itinerary_request(prompt)
-    structured=_build_structured(dep or {}, hotels, places, is_itinerary, matched_hotels, matched_places)
-
-    sections_html: List[str] = []
-
-    def section(h2_text:str, lines:List[str])->str:
-        html_parts=[]; in_list=False
-        for line in lines:
-            l=line.strip()
-            if not l:
-                if in_list: html_parts.append("</ul>"); in_list=False
-                continue
-            if l.startswith("- "):
-                if not in_list: html_parts.append("<ul>"); in_list=True
-                html_parts.append(f"<li>{l[2:].strip()}</li>")
-            elif l.startswith("  - "):
-                if not in_list: html_parts.append("<ul>"); in_list=True
-                html_parts.append(f"<li>{l[4:].strip()}</li>")
-            else:
-                if in_list: html_parts.append("</ul>"); in_list=False
-                html_parts.append(f"<p>{l}</p>")
-        if in_list: html_parts.append("</ul>")
-        return f"<section aria-labelledby='{re.sub(r'[^a-z0-9]+','-',h2_text.lower())}'><h2>{h2_text}</h2><hr>{''.join(html_parts)}</section>"
-
-    intro_html=""
-    if dep_name or structured.get("hotel_consulta") or structured.get("lugar_consulta"):
-        greeting = f"Hola{', ' + user_name if user_name else ''}."
-        if dep_name:
-            intro = f"{greeting} Aquí tienes información de {dep_name}."
-        elif structured.get("hotel_consulta"):
-            intro = f"{greeting} Te detallo el hotel solicitado."
-        else:
-            intro = f"{greeting} Te detallo el lugar turístico solicitado."
-        intro_html = "<section aria-labelledby='intro'><h2>Conversación</h2><hr><p>"+intro+"</p></section>"
-
-    imgs_block = []
+    # 3. Call LLM
+    llm_response_html = query_ollama(context_str, prompt, historial)
+    
+    # 4. Append Images (Hard to get LLM to do this reliably with local URLs)
+    imgs_html = ""
     img_dep = structured.get("images", {}).get("departamento") or []
     img_hotel = structured.get("images", {}).get("hotel_consulta") or []
     img_lugar = structured.get("images", {}).get("lugar_consulta") or []
-    imgs_any = (img_dep or img_hotel or img_lugar)
-    if imgs_any:
-        imgs_html = []
-        for im in (img_hotel or img_lugar or img_dep):
-            imgs_html.append(f"<figure><img src='{im['url']}' alt='{im['alt']}' loading='lazy'><figcaption>{im['alt']}</figcaption></figure>")
-        sections_html.append("<section aria-labelledby='imagenes'><h2>Imágenes</h2><hr><div class='image-grid'>" + "".join(imgs_html) + "</div></section>")
+    
+    # Prioritize specific images
+    images_to_show = img_hotel or img_lugar or img_dep
+    
+    if images_to_show:
+        imgs_html = "<div class='image-grid'>"
+        for im in images_to_show[:3]: # Limit to 3 images
+             imgs_html += f"<figure><img src='{im['url']}' alt='{im['alt']}' loading='lazy'><figcaption>{im['alt']}</figcaption></figure>"
+        imgs_html += "</div>"
 
-    if structured.get("only_specific"):
-        if structured.get("hotel_consulta"):
-            h=structured["hotel_consulta"]
-            ficha = [
-                f"- Nombre: {h['nombre']}",
-                f"- Departamento: {h['departamento']}" if h.get("departamento") else "",
-                f"- Ubicación: {h['ubicacion']}",
-                f"- Calificación: {h['calificacion']}/5" if h.get("calificacion") is not None else "",
-                f"- Rango precios: {h['rango_precios_bs']}",
-                f"- Nota: {h['descripcion']}"
-            ]
-            sections_html.append(section("🏨 Hotel Consultado", [x for x in ficha if x]))
-        if structured.get("lugar_consulta"):
-            p=structured["lugar_consulta"]
-            costos=p.get("costos") or {}
-            costos_md=", ".join([f"{k}: {v}" for k,v in costos.items()]) if costos else "consultar en sitio"
-            ficha = [
-                f"- Nombre: {p['nombre']}",
-                f"- Departamento: {p['departamento']}" if p.get("departamento") else "",
-                f"- Descripción: {p['descripcion']}",
-                f"- Horario: {p['horario']}",
-                f"- Costos: {costos_md}"
-            ]
-            sections_html.append(section("📍 Lugar Turístico Consultado", [x for x in ficha if x]))
-    else:
-        lines=[]
-        for l in structured["lugares_turisticos"]:
-            lines.append(f"- **{l['nombre']}**: {l['descripcion']}")
-            if l.get("horario"): lines.append(f"  - Horario: {l['horario']}")
-            costos=l.get("costos",{})
-            if costos:
-                first=", ".join([f"{k}: {v}" for k,v in list(costos.items())[:2]])
-                lines.append(f"  - Costos: {first}")
-        sections_html.append(section("📍 Lugares Turísticos", lines or ["- Información en preparación."]))
-        lines=[]
-        if structured["hoteles"]:
-            for h in structured["hoteles"]:
-                precio=f" | {h['rango_precios_bs']}" if h.get("rango_precios_bs") else ""
-                lines.append(f"- **{h['nombre']}** — {h['ubicacion']} (Calificación: {h.get('calificacion','N/D')}/5{precio})")
-        else:
-            lines.append("- Información en preparación.")
-        sections_html.append(section("🏨 Hoteles Recomendados", lines))
-        g=structured["gastronomia"]
-        lines=[f"- Plato tradicional: {g['plato_tradicional']}"] + [f"- {e['nombre']} — Bs. {e['costo_aprox_bs']}" for e in g["extras"]]
-        sections_html.append(section("🍽️ Gastronomía Típica", lines))
-        hc=structured["historia_cultura_festividades"]
-        lines=[f"- Aniversario: {hc['aniversario']}"]
-        if hc["festividades"]:
-            lines.append("- Festividades:")
-            for f in hc["festividades"]:
-                lines.append(f"  - {f}")
-        sections_html.append(section("🏛️ Historia y Festividades", lines))
-        info=structured["informacion_practica"]
-        lines=[]
-        if info.get("clima"): lines.append(f"- Clima: {info['clima']}")
-        if info.get("mejor_epoca_visita"): lines.append(f"- Mejor época de visita: {info['mejor_epoca_visita']}")
-        sections_html.append(section("ℹ️ Información Práctica", lines or ["- Consultar en sitio."]))
-        costos=structured["costos_promedio"]
-        lines=[]
-        if costos:
-            for k,v in costos.items():
-                label=k.replace("_"," ").replace("bs","").strip().capitalize()
-                lines.append(f"- {label}: Bs. {v}")
-        else:
-            lines.append("- Consultar en sitio.")
-        sections_html.append(section("💰 Costos Promedio", lines))
-        tr=structured["transporte"]
-        lines=[]
-        if tr.get("acceso"): lines.append(f"- Acceso: {tr['acceso']}")
-        if tr.get("movilidad_urbana"): lines.append(f"- Movilidad urbana: {tr['movilidad_urbana']}")
-        sections_html.append(section("🚍 Transporte", lines or ["- Consultar en sitio."]))
-        sections_html.append(section("🛡️ Consejos de Seguridad", [f"- {structured['seguridad']}"]))
-        sections_html.append(section("💡 Dato Curioso", [f"- {structured['dato_curioso']}"]))
-        if structured.get("itinerario"):
-            it=structured["itinerario"]
-            lines=[f"- {it['titulo']}"]
-            for d in it["dias"]:
-                lines.append(f"  - Día {d['dia']}: Mañana: {d['maniana']} | Tarde: {d['tarde']}")
-            if it.get("notas"): lines.append(f"  - Notas: {it['notas']}")
-            sections_html.append(section("🗺️ Itinerario Sugerido", lines))
+    # Combine
+    final_html = f"<div class='munaybol-response'>{llm_response_html}{imgs_html}</div>"
+    final_html = _final_html_polish(final_html)
 
-    html_full="<div class='munaybol-response'>" + (intro_html+"\n" if intro_html else "") + "\n".join(sections_html) + "</div>"
-    html_full=_final_html_polish(html_full)
-
-    json_embed=f"<script id='munaybol-structured' type='application/json'>{json.dumps(structured, ensure_ascii=False)}</script>"
-
-    formatted = html_full + json_embed if output_format=="html" else html_full
-
+    # 5. Return
     history_item={
         "role":"user",
         "content":prompt,
-        "response_formatted":formatted,
+        "response_formatted":final_html,
         "output_format":output_format,
         "format_guard":True,
         "structured_output":True,
@@ -500,4 +434,5 @@ def send_message(
         "data_version":structured["meta"]["version_datos"],
         "data_updated_at":structured["meta"]["actualizado"]
     }
-    return formatted,[history_item]
+    
+    return final_html, [history_item]

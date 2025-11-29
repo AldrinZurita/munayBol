@@ -230,7 +230,7 @@ export class AsistenteIa implements OnInit, OnDestroy {
       const pageResp = await this.iaService.listMessages(this.currentSessionId, { page: this.page, limit: this.limit }).toPromise();
       if (!pageResp) return;
       this.totalMessages = pageResp.total || 0;
-      const items = (pageResp.items || []).map((m: ChatMessage) => this.mapToRespuesta(m)).reverse();
+      const items = (pageResp.items || []).map((m: ChatMessage) => this.mapToRespuesta(m));
       if (resetList) this.respuestas = items;
       else this.respuestas = [...items, ...this.respuestas];
       this.hasMore = (this.page * this.limit) < this.totalMessages;
@@ -540,8 +540,7 @@ export class AsistenteIa implements OnInit, OnDestroy {
     this.scrollToBottom();
     this.push('user', msg);
     this.prompt = '';
-    const placeholderT = Date.now();
-    this.respuestas.push({ from: 'ia', text: '', t: placeholderT });
+    const placeholderT = this.push('ia', '');
 
     this.sending = true;
     this.typing = true;
@@ -570,9 +569,15 @@ export class AsistenteIa implements OnInit, OnDestroy {
     }
   }
 
-  private push(from: Actor, text: string): void {
-    this.respuestas.push({ from, text, t: Date.now() });
+  private push(from: Actor, text: string): number {
+    let t = Date.now();
+    if (this.respuestas.length > 0) {
+      const last = this.respuestas[this.respuestas.length - 1].t;
+      if (t <= last) t = last + 1;
+    }
+    this.respuestas.push({ from, text, t });
     this.scrollToBottomSoon();
+    return t;
   }
 
   applyFilters(): void { this.loadSessions(); }

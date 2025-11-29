@@ -18,7 +18,8 @@ services:
       DJANGO_ALLOWED_HOSTS: "localhost 127.0.0.1 backend 0.0.0.0"
       PYTHONPATH: /app
 
-      OLLAMA_BASE_URL: "http://ollama:11434"
+      OLLAMA_BASE_URL: "http://host.docker.internal:11434"
+      #OLLAMA_BASE_URL: 'https://enterologic-jewel-extrajudicially.ngrok-free.dev'
       OLLAMA_MODEL: "llama3.1:latest"
       OLLAMA_NUM_CTX: "4096"
       OLLAMA_MAX_TOKENS: "1500"
@@ -40,9 +41,6 @@ services:
       timeout: 5s
       retries: 12
       start_period: 20s
-    depends_on:
-      ollama:
-        condition: service_healthy
     networks: ["turismo-net"]
     restart: unless-stopped
 
@@ -59,22 +57,22 @@ services:
     networks: ["turismo-net"]
     restart: unless-stopped
 
-  ollama:
-    build: ./ollama
-    environment:
-      OLLAMA_KEEP_ALIVE: "2h"
-      OLLAMA_MODEL: "llama3.1:latest"
-    ports: ["11434:11434"]
-    volumes:
-      - ${OLLAMA_MODELS:-/home/patriot/.ollama/models}:/root/.ollama/models
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/version"]
-      interval: 10s
-      timeout: 10s
-      start_period: 60s
-      retries: 10
-    networks: ["turismo-net"]
-    restart: unless-stopped
+  # ollama:
+  #   build: ./ollama
+  #   environment:
+  #     OLLAMA_KEEP_ALIVE: "2h"
+  #     OLLAMA_MODEL: "llama3.1:latest"
+  #   ports: ["11434:11434"]
+  #   volumes:
+  #     - ${OLLAMA_MODELS:-/home/patriot/.ollama/models}:/root/.ollama/models
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:11434/api/version"]
+  #     interval: 10s
+  #     timeout: 10s
+  #     start_period: 60s
+  #     retries: 10
+  #   networks: ["turismo-net"]
+  #   restart: unless-stopped
 
 networks:
   turismo-net:
