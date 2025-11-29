@@ -77,10 +77,15 @@ CSRF_TRUSTED_ORIGINS = [
     "https://localhost:4200",
     "https://127.0.0.1:4200",
 ]
-# Si estamos en render, confiamos en el host externo
+# Si estamos en Render, añadimos los dominios de producción automáticamente
 if RENDER_EXTERNAL_HOSTNAME:
+    # Confiar en el propio Backend
     CSRF_TRUSTED_ORIGINS.append(f"https://{RENDER_EXTERNAL_HOSTNAME}")
-
+    
+# IMPORTANTE: Intenta leer la URL del Frontend desde una variable de entorno
+FRONTEND_URL = os.environ.get('FRONTEND_URL') # Ej: https://munaybol-frontend.onrender.com
+if FRONTEND_URL:
+    CSRF_TRUSTED_ORIGINS.append(FRONTEND_URL)
 
 ROOT_URLCONF = 'config.urls'
 
@@ -156,10 +161,17 @@ else:
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 GITHUB_CLIENT_ID = os.environ.get('GITHUB_CLIENT_ID')
 GITHUB_CLIENT_SECRET = os.environ.get('GITHUB_CLIENT_SECRET')
-GITHUB_REDIRECT_URI = os.environ.get('GITHUB_REDIRECT_URI', 'https://localhost:4200/login' if DEBUG else 'http://localhost:4200/login')
+
+# Lógica inteligente:
+# 1. Si existe la variable de entorno (Render), úsala.
+# 2. Si no, usa localhost (Tu PC).
+GITHUB_REDIRECT_URI = os.environ.get(
+    'GITHUB_REDIRECT_URI', 
+    'http://localhost:4200/login'
+)
+
 GITHUB_STATE_SALT = os.environ.get('GITHUB_STATE_SALT', 'github-oauth-state')
 GITHUB_STATE_TTL_SECONDS = int(os.environ.get('GITHUB_STATE_TTL_SECONDS', '600'))
-
 # --- ARCHIVOS ESTÁTICOS (MODIFICADO PARA WHITENOISE) ---
 STATIC_URL = 'static/'
 # Carpeta donde se recolectarán los estáticos en producción
