@@ -97,146 +97,148 @@
       </div>
     </aside>
 
-    <main class="chat-panel custom-scroll" #chatScroll (scroll)="onChatScroll($event)" role="main" aria-live="polite" aria-label="Historial del chat">
-      <div class="query-header" *ngIf="lastUserQuery() as q">
-        <div class="query-chip">Consulta</div>
-        <div class="query-text" [title]="q">{{ q }}</div>
-      </div>
-
-      <div class="load-more" *ngIf="hasMore && !loadingMessages">
-        <button class="btn outline" (click)="loadMore()">
-          <span class="material-symbols-outlined">expand_less</span>
-          Cargar anteriores ({{ totalMessages - respuestas.length }})
-        </button>
-      </div>
-      <div class="loading-inline" *ngIf="loadingMessages">
-        <div class="spinner gmeiny">
-          <!-- Logo GMEINY cargando -->
-          <img src="/assets/gmeiny-logo.svg" alt="Gmeiny" />
-        </div>
-        <span>Cargando...</span>
-      </div>
-
-      <div class="welcome" *ngIf="respuestas.length === 0 && !typing && !currentSession?.messages_count">
-        <div class="welcome-card">
-          <h2>Bienvenido 👋</h2>
-          <p>Pide información de un departamento, un hotel o un lugar turístico de Bolivia. Podemos incluir imágenes y un itinerario.</p>
-          <ul>
-            <li>Salar de Uyuni</li>
-            <li>Hotel Los Tajibos</li>
-            <li>Itinerario 3 días en La Paz</li>
-            <li>Recomiéndame lugares en Tarija</li>
-          </ul>
-        </div>
-      </div>
-
-      <ng-container *ngFor="let r of respuestas; let i = index; trackBy: trackByMsg">
-        <div class="day-separator" *ngIf="isNewDay(i)">
-          <span>{{ r.t | date:'fullDate' }}</span>
+    <main class="chat-panel" role="main" aria-live="polite" aria-label="Historial del chat">
+      <div class="chat-scroll-content custom-scroll" #chatScroll (scroll)="onChatScroll($event)">
+        <div class="query-header" *ngIf="lastUserQuery() as q">
+          <div class="query-chip">Consulta</div>
+          <div class="query-text" [title]="q">{{ q }}</div>
         </div>
 
-        <article class="message" [class.ia]="r.from==='ia'" [class.user]="r.from==='user'" [class.group-start]="isGroupStart(i)">
-          <div class="avatar ia" *ngIf="r.from==='ia'">🤖</div>
-          <div class="avatar user" *ngIf="r.from==='user'">
-            <img *ngIf="auth.getUser()?.avatar_url" [src]="auth.getUser()!.avatar_url" [alt]="auth.getUser()?.nombre" />
-            <span *ngIf="!auth.getUser()?.avatar_url">{{ getUserInitials() }}</span>
+        <div class="load-more" *ngIf="hasMore && !loadingMessages">
+          <button class="btn outline" (click)="loadMore()">
+            <span class="material-symbols-outlined">expand_less</span>
+            Cargar anteriores ({{ totalMessages - respuestas.length }})
+          </button>
+        </div>
+        <div class="loading-inline" *ngIf="loadingMessages">
+          <div class="spinner gmeiny">
+            <!-- Logo GMEINY cargando -->
+            <img src="/assets/gmeiny-logo.svg" alt="Gmeiny" />
           </div>
-          <div class="bubble">
-            <header class="bubble-head">
-              <span class="who">{{ r.from==='ia' ? 'Asistente' : 'Tú' }}</span>
-              <time class="when">{{ r.t | date:'shortTime' }}</time>
-              <div class="bubble-actions">
-                <button class="btn icon sm ghost" (click)="copiar(r.text)" aria-label="Copiar" title="Copiar">
-                  <span class="material-symbols-outlined">content_copy</span>
-                </button>
-              </div>
-            </header>
+          <span>Cargando...</span>
+        </div>
 
-            <div class="bubble-content">
-              <!-- Si hay JSON con secciones, las mostramos. Si no, texto natural con posibilidad de imágenes inline -->
-              <ng-container *ngIf="structuredSections(r.text).length > 0; else naturalText">
-                <div class="sections-wrapper">
-                  <div class="sections-controls sticky">
-                    <button class="btn tiny" (click)="expandAll()">
-                      <span class="material-symbols-outlined">unfold_more</span> Expandir
-                    </button>
-                    <button class="btn tiny" (click)="collapseAll()">
-                      <span class="material-symbols-outlined">unfold_less</span> Colapsar
-                    </button>
-                    <button class="btn tiny" (click)="toggleCompact()">
-                      <span class="material-symbols-outlined">{{ compactMode ? 'view_comfy_alt' : 'view_compact' }}</span>
-                      {{ compactMode ? 'Detallada' : 'Compacta' }}
-                    </button>
-                  </div>
-                  <div class="section-grid" [class.compact]="compactMode">
-                    <div class="section-card"
-                         *ngFor="let sec of structuredSections(r.text)"
-                         [class.collapsed]="collapsedSections.has(sec.id)">
-                      <header (click)="toggleSection(sec.id)" [attr.aria-expanded]="!collapsedSections.has(sec.id)">
-                        <h3>{{ sec.title }}</h3>
-                        <span class="toggle-indicator">
-                          <span class="material-symbols-outlined">
-                            {{ collapsedSections.has(sec.id) ? 'expand_more' : 'expand_less' }}
-                          </span>
-                        </span>
-                      </header>
-                      <div class="section-body" *ngIf="!collapsedSections.has(sec.id)">
-                        <ng-container [ngSwitch]="sec.type">
-                          <ul *ngSwitchCase="'list'">
-                            <li *ngFor="let it of sec.items">
-                              <strong *ngIf="it.nombre">{{ it.nombre }}</strong><span *ngIf="it.descripcion">: {{ it.descripcion }}</span>
-                              <div class="submeta" *ngIf="it.horario || it.costos">
-                                <span *ngIf="it.horario">Horario: {{ it.horario }}</span>
-                                <span *ngIf="it.costos">
-                                  <ng-container *ngFor="let kv of objectEntries(it.costos); let last = last">
-                                    {{ kv.key }}: {{ kv.value }}<span *ngIf="!last"> | </span>
-                                  </ng-container>
-                                </span>
-                              </div>
-                            </li>
-                          </ul>
-                          <ul *ngSwitchCase="'hoteles'">
-                            <li *ngFor="let h of sec.items">
-                              <strong>{{ h.nombre }}</strong> — {{ h.ubicacion }}
-                              <div class="submeta">
-                                Calificación: {{ h.calificacion }}/5
-                                <span *ngIf="h.rango_precios_bs"> | Precios: {{ h.rango_precios_bs }}</span>
-                              </div>
-                            </li>
-                          </ul>
-                          <ul *ngSwitchCase="'gastronomia'">
-                            <li class="principal"><strong>Plato tradicional:</strong> {{ sec.plato_tradicional }}</li>
-                            <li *ngFor="let g of sec.extras">
-                              {{ g.nombre }} — Bs. {{ g.costo_aprox_bs }}
-                            </li>
-                          </ul>
-                          <div *ngSwitchCase="'texto'" class="text-block">
-                            <p *ngFor="let p of sec.paragraphs">{{ p }}</p>
-                            <ul *ngIf="sec.list && sec.list.length">
-                              <li *ngFor="let f of sec.list">{{ f }}</li>
-                            </ul>
-                          </div>
-                          <div *ngSwitchDefault class="text-block">
-                            <p>No hay datos para esta sección.</p>
-                          </div>
-                        </ng-container>
-                      </div>
-                    </div>
+        <div class="welcome" *ngIf="respuestas.length === 0 && !typing && !currentSession?.messages_count">
+          <div class="welcome-card">
+            <h2>Bienvenido 👋</h2>
+            <p>Pide información de un departamento, un hotel o un lugar turístico de Bolivia. Podemos incluir imágenes y un itinerario.</p>
+            <ul>
+              <li>Salar de Uyuni</li>
+              <li>Hotel Los Tajibos</li>
+              <li>Itinerario 3 días en La Paz</li>
+              <li>Recomiéndame lugares en Tarija</li>
+            </ul>
+          </div>
+        </div>
 
-                    <!-- Cuando el backend envía imágenes, ya hay un bloque de imágenes arriba -->
-                  </div>
-                </div>
-              </ng-container>
-              <ng-template #naturalText>
-                <div class="prose-text" [innerHTML]="renderMarkdown(r.text)"></div>
-              </ng-template>
+        <ng-container *ngFor="let r of respuestas; let i = index; trackBy: trackByMsg">
+          <div class="day-separator" *ngIf="isNewDay(i)">
+            <span>{{ r.t | date:'fullDate' }}</span>
+          </div>
+
+          <article class="message" [class.ia]="r.from==='ia'" [class.user]="r.from==='user'" [class.group-start]="isGroupStart(i)">
+            <div class="avatar ia" *ngIf="r.from==='ia'">🤖</div>
+            <div class="avatar user" *ngIf="r.from==='user'">
+              <img *ngIf="auth.getUser()?.avatar_url" [src]="auth.getUser()!.avatar_url" [alt]="auth.getUser()?.nombre" />
+              <span *ngIf="!auth.getUser()?.avatar_url">{{ getUserInitials() }}</span>
             </div>
-          </div>
-        </article>
-      </ng-container>
+            <div class="bubble">
+              <header class="bubble-head">
+                <span class="who">{{ r.from==='ia' ? 'Asistente' : 'Tú' }}</span>
+                <time class="when">{{ r.t | date:'shortTime' }}</time>
+                <div class="bubble-actions">
+                  <button class="btn icon sm ghost" (click)="copiar(r.text)" aria-label="Copiar" title="Copiar">
+                    <span class="material-symbols-outlined">content_copy</span>
+                  </button>
+                </div>
+              </header>
 
-      <div class="typing-indicator" *ngIf="typing">
-        <div class="dots"><span></span><span></span><span></span></div>
+              <div class="bubble-content">
+                <!-- Si hay JSON con secciones, las mostramos. Si no, texto natural con posibilidad de imágenes inline -->
+                <ng-container *ngIf="structuredSections(r.text).length > 0; else naturalText">
+                  <div class="sections-wrapper">
+                    <div class="sections-controls sticky">
+                      <button class="btn tiny" (click)="expandAll()">
+                        <span class="material-symbols-outlined">unfold_more</span> Expandir
+                      </button>
+                      <button class="btn tiny" (click)="collapseAll()">
+                        <span class="material-symbols-outlined">unfold_less</span> Colapsar
+                      </button>
+                      <button class="btn tiny" (click)="toggleCompact()">
+                        <span class="material-symbols-outlined">{{ compactMode ? 'view_comfy_alt' : 'view_compact' }}</span>
+                        {{ compactMode ? 'Detallada' : 'Compacta' }}
+                      </button>
+                    </div>
+                    <div class="section-grid" [class.compact]="compactMode">
+                      <div class="section-card"
+                           *ngFor="let sec of structuredSections(r.text)"
+                           [class.collapsed]="collapsedSections.has(sec.id)">
+                        <header (click)="toggleSection(sec.id)" [attr.aria-expanded]="!collapsedSections.has(sec.id)">
+                          <h3>{{ sec.title }}</h3>
+                          <span class="toggle-indicator">
+                            <span class="material-symbols-outlined">
+                              {{ collapsedSections.has(sec.id) ? 'expand_more' : 'expand_less' }}
+                            </span>
+                          </span>
+                        </header>
+                        <div class="section-body" *ngIf="!collapsedSections.has(sec.id)">
+                          <ng-container [ngSwitch]="sec.type">
+                            <ul *ngSwitchCase="'list'">
+                              <li *ngFor="let it of sec.items">
+                                <strong *ngIf="it.nombre">{{ it.nombre }}</strong><span *ngIf="it.descripcion">: {{ it.descripcion }}</span>
+                                <div class="submeta" *ngIf="it.horario || it.costos">
+                                  <span *ngIf="it.horario">Horario: {{ it.horario }}</span>
+                                  <span *ngIf="it.costos">
+                                    <ng-container *ngFor="let kv of objectEntries(it.costos); let last = last">
+                                      {{ kv.key }}: {{ kv.value }}<span *ngIf="!last"> | </span>
+                                    </ng-container>
+                                  </span>
+                                </div>
+                              </li>
+                            </ul>
+                            <ul *ngSwitchCase="'hoteles'">
+                              <li *ngFor="let h of sec.items">
+                                <strong>{{ h.nombre }}</strong> — {{ h.ubicacion }}
+                                <div class="submeta">
+                                  Calificación: {{ h.calificacion }}/5
+                                  <span *ngIf="h.rango_precios_bs"> | Precios: {{ h.rango_precios_bs }}</span>
+                                </div>
+                              </li>
+                            </ul>
+                            <ul *ngSwitchCase="'gastronomia'">
+                              <li class="principal"><strong>Plato tradicional:</strong> {{ sec.plato_tradicional }}</li>
+                              <li *ngFor="let g of sec.extras">
+                                {{ g.nombre }} — Bs. {{ g.costo_aprox_bs }}
+                              </li>
+                            </ul>
+                            <div *ngSwitchCase="'texto'" class="text-block">
+                              <p *ngFor="let p of sec.paragraphs">{{ p }}</p>
+                              <ul *ngIf="sec.list && sec.list.length">
+                                <li *ngFor="let f of sec.list">{{ f }}</li>
+                              </ul>
+                            </div>
+                            <div *ngSwitchDefault class="text-block">
+                              <p>No hay datos para esta sección.</p>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </div>
+
+                      <!-- Cuando el backend envía imágenes, ya hay un bloque de imágenes arriba -->
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-template #naturalText>
+                  <div class="prose-text" [innerHTML]="renderMarkdown(r.text)"></div>
+                </ng-template>
+              </div>
+            </div>
+          </article>
+        </ng-container>
+
+        <div class="typing-indicator" *ngIf="typing">
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
       </div>
 
       <button class="scroll-bottom-btn"
