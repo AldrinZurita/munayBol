@@ -9,13 +9,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ChatMessage, ChatSession } from '../../interfaces/chat.interface';
 import { AuthService } from '../../services/auth.service';
 import { LoadingService } from '../../shared/services/loading';
+
 type Actor = 'user' | 'ia';
 interface Respuesta { from: Actor; text: string; t: number; }
 interface SessionWithPreview extends ChatSession {
   preview_query?: string;
 }
 
-interface SessionGroup<TItem = ChatSession> {
+interface SessionGroup<TItem = SessionWithPreview> {
   label: string;
   items: TItem[];
 }
@@ -124,7 +125,11 @@ export class AsistenteIa implements OnInit, OnDestroy {
   async loadSessions(): Promise<void> {
     this.loadingService.show('Cargando historial...');
     try {
-      const list = await this.iaService.listSessions({ q: this.search.trim() || undefined, archived: this.showArchived }).toPromise();
+      const list = await this.iaService.listSessions({
+        q: this.search.trim() || undefined,
+        archived: this.showArchived
+      }).toPromise();
+
       const raw = (list || []).map(s => ({ ...s })) as ChatSession[];
       const enriched: SessionWithPreview[] = [];
       for (const s of raw) {
@@ -136,7 +141,7 @@ export class AsistenteIa implements OnInit, OnDestroy {
             const m = items[i];
             if (m.role === 'user' && m.content) { preview = m.content; break; }
           }
-        } catch {}
+        } catch { /* ignore preview errors */ }
         enriched.push({ ...(s as SessionWithPreview), preview_query: preview });
       }
       this.sessions = enriched;
@@ -147,13 +152,13 @@ export class AsistenteIa implements OnInit, OnDestroy {
     }
   }
 
-  groupedSessions(): SessionGroup<SessionWithPreview>[] {
+  groupedSessions(): SessionGroup[] {
     const today = new Date();
     const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
     const isToday = (d: Date) => d.toDateString() === today.toDateString();
     const isYesterday = (d: Date) => d.toDateString() === yesterday.toDateString();
 
-    const groups: ChatGroups<SessionWithPreview> = { today: [], yesterday: [], last7: [], last30: [], older: [] };
+    const groups: ChatGroups = { today: [], yesterday: [], last7: [], last30: [], older: [] };
     const sorted = [...this.sessions].sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
 
     for (const s of sorted) {
@@ -166,12 +171,12 @@ export class AsistenteIa implements OnInit, OnDestroy {
       else groups.older.push(s);
     }
 
-    const result: SessionGroup<SessionWithPreview>[] = [];
-    if (groups.today.length)    result.push({ label: 'Hoy', items: groups.today });
+    const result: SessionGroup[] = [];
+    if (groups.today.length)     result.push({ label: 'Hoy', items: groups.today });
     if (groups.yesterday.length) result.push({ label: 'Ayer', items: groups.yesterday });
-    if (groups.last7.length)    result.push({ label: 'Últimos 7 días', items: groups.last7 });
-    if (groups.last30.length)   result.push({ label: 'Últimos 30 días', items: groups.last30 });
-    if (groups.older.length)    result.push({ label: 'Anteriores', items: groups.older });
+    if (groups.last7.length)     result.push({ label: 'Últimos 7 días', items: groups.last7 });
+    if (groups.last30.length)    result.push({ label: 'Últimos 30 días', items: groups.last30 });
+    if (groups.older.length)     result.push({ label: 'Anteriores', items: groups.older });
     return result;
   }
 
@@ -304,7 +309,7 @@ export class AsistenteIa implements OnInit, OnDestroy {
   }
 
   async deleteSession(s: SessionWithPreview): Promise<void> {
-    if (!confirm('¿Eliminar esta conversación?')) return;
+    if (!confirm('¿Eliminar esta conversación? Esta acción es irreversible.')) return;
     this.deletingId = s.id;
     try {
       await this.iaService.deleteSession(s.id).toPromise();
@@ -354,6 +359,7 @@ export class AsistenteIa implements OnInit, OnDestroy {
     return current.from !== prev.from || (current.t - prev.t > 1000 * 60 * 5);
   }
   trackByMsg(index: number, msg: Respuesta): number { return msg.t; }
+
   enviarQuick(msg: string): void {
     if (this.sending) return;
     this.prompt = msg;
@@ -407,58 +413,105 @@ export class AsistenteIa implements OnInit, OnDestroy {
     try { data = JSON.parse(scriptMatch[1]); } catch { return []; }
 
     const sections: StructuredSection[] = [];
-    if (data.lugares_turisticos && Array.isArray(data.lugares_turisticos)) {
-      sections.push({ id: 'lugares', title: 'Lugares Turísticos', type: 'list', items: data.lugares_turisticos });
-    }
-    if (data.hoteles && Array.isArray(data.hoteles)) {
-      sections.push({ id: 'hoteles', title: 'Hoteles Recomendados', type: 'hoteles', items: data.hoteles });
-    }
-    if (data.gastronomia) {
+    const onlySpecific = !!data.only_specific;
+
+    if (data.hotel_consulta) {
+      const h = data.hotel_consulta;
       sections.push({
-        id: 'gastronomia',
-        title: 'Gastronomía Típica',
-        type: 'gastronomia',
-        plato_tradicional: data.gastronomia.plato_tradicional,
-        extras: data.gastronomia.extras || []
-      });
-    }
-    if (data.historia_cultura_festividades) {
-      const fest = data.historia_cultura_festividades.festividades || [];
-      sections.push({
-        id: 'historia',
-        title: 'Historia y Festividades',
+        id: 'hotel_detalle',
+        title: 'Hotel Consultado',
         type: 'texto',
         paragraphs: [
-          `Aniversario: ${data.historia_cultura_festividades.aniversario}`,
-          data.resumen || ''
-        ],
-        list: fest
+          `Nombre: ${h.nombre}`,
+          h.departamento ? `Departamento: ${h.departamento}` : '',
+          `Ubicación: ${h.ubicacion}`,
+          h.calificacion !== undefined ? `Calificación: ${h.calificacion}/5` : '',
+          `Rango precios: ${h.rango_precios_bs}`,
+          h.descripcion
+        ].filter(Boolean)
       });
     }
-    if (data.informacion_practica) {
-      const pr = data.informacion_practica;
-      const paras = [];
-      if (pr.clima) paras.push(`Clima: ${pr.clima}`);
-      if (pr.mejor_epoca_visita) paras.push(`Mejor época: ${pr.mejor_epoca_visita}`);
-      sections.push({ id: 'info', title: 'Información Práctica', type: 'texto', paragraphs: paras });
+
+    if (data.lugar_consulta) {
+      const p = data.lugar_consulta;
+      const costos = p.costos ? Object.keys(p.costos).map((k: string) => `${k}: ${p.costos[k]}`) : [];
+      sections.push({
+        id: 'lugar_detalle',
+        title: 'Lugar Turístico Consultado',
+        type: 'texto',
+        paragraphs: [
+          `Nombre: ${p.nombre}`,
+          p.departamento ? `Departamento: ${p.departamento}` : '',
+          `Descripción: ${p.descripcion}`,
+          `Horario: ${p.horario}`,
+          costos.length ? `Costos: ${costos.join(', ')}` : ''
+        ].filter(Boolean)
+      });
     }
-    if (data.costos_promedio) {
-      const c = data.costos_promedio;
-      const paras = Object.keys(c).map(k => `${this.humanizeKey(k)}: Bs. ${c[k]}`);
-      sections.push({ id: 'costos', title: 'Costos Promedio', type: 'texto', paragraphs: paras });
-    }
-    if (data.transporte) {
-      const t = data.transporte;
-      const paras = [];
-      if (t.acceso) paras.push(`Acceso: ${t.acceso}`);
-      if (t.movilidad_urbana) paras.push(`Movilidad: ${t.movilidad_urbana}`);
-      sections.push({ id: 'transporte', title: 'Transporte', type: 'texto', paragraphs: paras });
-    }
-    if (data.seguridad) {
-      sections.push({ id: 'seguridad', title: 'Consejos de Seguridad', type: 'texto', paragraphs: [data.seguridad] });
-    }
-    if (data.dato_curioso) {
-      sections.push({ id: 'curioso', title: 'Dato Curioso', type: 'texto', paragraphs: [data.dato_curioso] });
+
+    if (!onlySpecific) {
+      if (data.lugares_turisticos && Array.isArray(data.lugares_turisticos)) {
+        sections.push({ id: 'lugares', title: 'Lugares Turísticos', type: 'list', items: data.lugares_turisticos });
+      }
+      if (data.hoteles && Array.isArray(data.hoteles)) {
+        sections.push({ id: 'hoteles', title: 'Hoteles Recomendados', type: 'hoteles', items: data.hoteles });
+      }
+      if (data.gastronomia) {
+        sections.push({
+          id: 'gastronomia',
+          title: 'Gastronomía Típica',
+          type: 'gastronomia',
+          plato_tradicional: data.gastronomia.plato_tradicional,
+          extras: data.gastronomia.extras || []
+        });
+      }
+      if (data.historia_cultura_festividades) {
+        const fest = data.historia_cultura_festividades.festividades || [];
+        sections.push({
+          id: 'historia',
+          title: 'Historia y Festividades',
+          type: 'texto',
+          paragraphs: [
+            `Aniversario: ${data.historia_cultura_festividades.aniversario}`,
+            data.resumen ? `Resumen: ${data.resumen}` : ''
+          ].filter(Boolean),
+          list: fest
+        });
+      }
+      if (data.informacion_practica) {
+        const pr = data.informacion_practica;
+        const paras: string[] = [];
+        if (pr.clima) paras.push(`Clima: ${pr.clima}`);
+        if (pr.mejor_epoca_visita) paras.push(`Mejor época: ${pr.mejor_epoca_visita}`);
+        sections.push({ id: 'info', title: 'Información Práctica', type: 'texto', paragraphs: paras });
+      }
+      if (data.costos_promedio) {
+        const c = data.costos_promedio;
+        const paras = Object.keys(c).map((k: string) => `${this.humanizeKey(k)}: Bs. ${c[k]}`);
+        sections.push({ id: 'costos', title: 'Costos Promedio', type: 'texto', paragraphs: paras });
+      }
+      if (data.transporte) {
+        const t = data.transporte;
+        const paras: string[] = [];
+        if (t.acceso) paras.push(`Acceso: ${t.acceso}`);
+        if (t.movilidad_urbana) paras.push(`Movilidad: ${t.movilidad_urbana}`);
+        sections.push({ id: 'transporte', title: 'Transporte', type: 'texto', paragraphs: paras });
+      }
+      if (data.seguridad) {
+        sections.push({ id: 'seguridad', title: 'Consejos de Seguridad', type: 'texto', paragraphs: [data.seguridad] });
+      }
+      if (data.dato_curioso) {
+        sections.push({ id: 'curioso', title: 'Dato Curioso', type: 'texto', paragraphs: [data.dato_curioso] });
+      }
+      if (data.itinerario) {
+        const it = data.itinerario;
+        const paras: string[] = [it.titulo];
+        for (const d of it.dias || []) {
+          paras.push(`Día ${d.dia}: Mañana -> ${d.maniana}; Tarde -> ${d.tarde}`);
+        }
+        if (it.notas) paras.push(`Notas: ${it.notas}`);
+        sections.push({ id: 'itinerario', title: 'Itinerario Sugerido', type: 'texto', paragraphs: paras });
+      }
     }
 
     return sections;
@@ -477,6 +530,7 @@ export class AsistenteIa implements OnInit, OnDestroy {
     }
     if (!this.currentSessionId) return;
 
+    // Actualizar preview en sidebar en tiempo real
     const active = this.sessions.find(x => x.id === this.currentSessionId);
     if (active) {
       active.preview_query = msg;
@@ -522,4 +576,10 @@ export class AsistenteIa implements OnInit, OnDestroy {
   }
 
   applyFilters(): void { this.loadSessions(); }
+}
+
+declare global { interface String { capitalize?(): string; } }
+if (!String.prototype.capitalize) {
+  // eslint-disable-next-line no-extend-native
+  String.prototype.capitalize = function () { return this.charAt(0).toUpperCase() + this.slice(1); };
 }

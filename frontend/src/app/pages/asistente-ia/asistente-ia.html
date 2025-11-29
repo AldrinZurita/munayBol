@@ -9,33 +9,35 @@
         </div>
       </div>
       <div class="header-actions">
-        <button class="btn ghost" (click)="exportarChat()" [disabled]="respuestas.length===0" aria-label="Exportar conversación">
+        <button class="btn icon ghost" (click)="exportarChat()" [disabled]="respuestas.length===0" aria-label="Exportar conversación" title="Exportar">
           <span class="material-symbols-outlined">download</span>
         </button>
-        <button class="btn ghost" (click)="nuevoChat()" [disabled]="sending" aria-label="Nueva conversación">
+        <button class="btn icon ghost" (click)="nuevoChat()" [disabled]="sending" aria-label="Nueva conversación" title="Nueva conversación">
           <span class="material-symbols-outlined">add_comment</span>
         </button>
-        <button class="btn ghost" (click)="toggleLayoutMode()" aria-label="Cambiar vista">
+        <button class="btn icon ghost" (click)="toggleLayoutMode()" aria-label="Cambiar vista" title="Cambiar vista">
           <span class="material-symbols-outlined">{{ compactMode ? 'view_agenda' : 'view_list' }}</span>
         </button>
-        <button class="btn ghost" (click)="sidebarOpen = !sidebarOpen" aria-expanded="{{sidebarOpen}}" aria-label="Mostrar/ocultar historial">
+        <button class="btn icon ghost" (click)="sidebarOpen = !sidebarOpen" aria-expanded="{{sidebarOpen}}" aria-label="Mostrar/ocultar historial" title="Sidebar">
           <span class="material-symbols-outlined">{{ sidebarOpen ? 'close' : 'view_sidebar' }}</span>
         </button>
       </div>
     </header>
 
-    <aside class="sidebar" [class.closed]="!sidebarOpen" role="complementary" aria-label="Historial">
+    <aside class="sidebar" [class.closed]="!sidebarOpen" role="complementary" aria-label="Historial de conversaciones">
       <div class="sidebar-header">
-        <button class="btn primary full" (click)="nuevoChat()" [disabled]="sending">
+        <button class="btn primary full new-convo" (click)="nuevoChat()" [disabled]="sending">
           <span class="material-symbols-outlined">add</span>
           Nueva conversación
         </button>
+
         <div class="search-box">
           <input type="search" [(ngModel)]="search" (keyup.enter)="applyFilters()" placeholder="Buscar..." aria-label="Buscar conversaciones" />
-          <button class="btn icon" (click)="applyFilters()" aria-label="Buscar">
+          <button class="btn icon search-btn" (click)="applyFilters()" aria-label="Buscar">
             <span class="material-symbols-outlined">search</span>
           </button>
         </div>
+
         <label class="archive-toggle">
           <input type="checkbox" [(ngModel)]="showArchived" (change)="applyFilters()" />
           <span>Mostrar archivadas</span>
@@ -46,36 +48,45 @@
         <ng-container *ngFor="let g of groupedSessions()">
           <div class="group">
             <div class="group-title">{{ g.label }}</div>
-            <button class="session-card"
-                    *ngFor="let s of g.items"
-                    [class.active]="s.id === currentSessionId"
-                    (click)="goToSession(s)">
-              <div class="session-head">
-                <h3>{{ s.title || 'Sin título' }}</h3>
-                <span class="chip" *ngIf="s.archived">Archivada</span>
-              </div>
-              <div class="session-meta">
-                <span>{{ s.updated_at | date:'short' }}</span>
-                <span>💬 {{ s.messages_count }}</span>
-              </div>
-              <div class="session-preview" *ngIf="s.preview_query">
-                <span class="q-label">Consulta:</span>
-                <span class="q-text" [title]="s.preview_query">{{ s.preview_query }}</span>
-              </div>
-              <div class="session-actions" (click)="$event.stopPropagation()">
-                <button class="btn icon sm" [disabled]="renamingId===s.id" (click)="renameSession(s)" aria-label="Renombrar">
+
+            <div class="session-row"
+                 *ngFor="let s of g.items"
+                 [class.active]="s.id === currentSessionId">
+              <button class="session-card" (click)="goToSession(s)" [title]="s.title || 'Sin título'">
+                <div class="session-head">
+                  <h3>{{ s.title || 'Sin título' }}</h3>
+                  <span class="chip" *ngIf="s.archived">ARCH</span>
+                </div>
+                <div class="session-meta">
+                  <span class="time">{{ s.updated_at | date:'short' }}</span>
+                  <span class="count">
+                    <span class="material-symbols-outlined">chat</span>
+                    {{ s.messages_count }}
+                  </span>
+                </div>
+                <div class="session-preview" *ngIf="s.preview_query">
+                  <span class="q-label">Consulta:</span>
+                  <span class="q-text" [title]="s.preview_query">{{ s.preview_query }}</span>
+                </div>
+              </button>
+              <div class="session-actions">
+                <button class="action-btn rename tooltip" (click)="renameSession(s)" [disabled]="renamingId===s.id" aria-label="Renombrar" title="Renombrar">
                   <span class="material-symbols-outlined">edit</span>
+                  <span class="tip">Renombrar</span>
                 </button>
-                <button class="btn icon sm" [disabled]="archivingId===s.id" (click)="toggleArchive(s)" aria-label="Archivar/desarchivar">
+                <button class="action-btn archive tooltip" (click)="toggleArchive(s)" [disabled]="archivingId===s.id" aria-label="Archivar/Desarchivar" title="Archivar">
                   <span class="material-symbols-outlined">{{ s.archived ? 'unarchive' : 'archive' }}</span>
+                  <span class="tip">{{ s.archived ? 'Desarchivar' : 'Archivar' }}</span>
                 </button>
-                <button class="btn icon sm danger" [disabled]="deletingId===s.id" (click)="deleteSession(s)" aria-label="Eliminar">
+                <button class="action-btn delete tooltip" (click)="deleteSession(s)" [disabled]="deletingId===s.id" aria-label="Eliminar" title="Eliminar">
                   <span class="material-symbols-outlined">delete</span>
+                  <span class="tip">Eliminar</span>
                 </button>
               </div>
-            </button>
+            </div>
           </div>
         </ng-container>
+
         <div class="empty" *ngIf="sessions.length === 0">
           <p>No hay conversaciones aún.</p>
           <button class="btn primary" (click)="nuevoChat()">
@@ -86,7 +97,7 @@
       </div>
     </aside>
 
-    <main class="chat-panel custom-scroll" #chatScroll (scroll)="onChatScroll($event)" role="main" aria-live="polite" aria-label="Conversación">
+    <main class="chat-panel custom-scroll" #chatScroll (scroll)="onChatScroll($event)" role="main" aria-live="polite" aria-label="Historial del chat">
       <div class="query-header" *ngIf="lastUserQuery() as q">
         <div class="query-chip">Consulta</div>
         <div class="query-text" [title]="q">{{ q }}</div>
@@ -99,16 +110,21 @@
         </button>
       </div>
       <div class="loading-inline" *ngIf="loadingMessages">
-        <div class="spinner"></div><span>Cargando...</span>
+        <div class="spinner gmeiny">
+          <!-- Logo GMEINY cargando -->
+          <img src="/assets/gmeiny-logo.svg" alt="Gmeiny" />
+        </div>
+        <span>Cargando...</span>
       </div>
 
       <div class="welcome" *ngIf="respuestas.length === 0 && !typing && !currentSession?.messages_count">
         <div class="welcome-card">
           <h2>Bienvenido 👋</h2>
-          <p>Indica un departamento o atractivo y te mostraré información oficial, hoteles y consejos. Ejemplos:</p>
+          <p>Pide información de un departamento, un hotel o un lugar turístico de Bolivia. Podemos incluir imágenes y un itinerario.</p>
           <ul>
-            <li>Quiero viajar a La Paz</li>
-            <li>Necesito información de Potosí</li>
+            <li>Salar de Uyuni</li>
+            <li>Hotel Los Tajibos</li>
+            <li>Itinerario 3 días en La Paz</li>
             <li>Recomiéndame lugares en Tarija</li>
           </ul>
         </div>
@@ -130,91 +146,89 @@
               <span class="who">{{ r.from==='ia' ? 'Asistente' : 'Tú' }}</span>
               <time class="when">{{ r.t | date:'shortTime' }}</time>
               <div class="bubble-actions">
-                <button class="btn icon sm ghost" (click)="copiar(r.text)" aria-label="Copiar">
+                <button class="btn icon sm ghost" (click)="copiar(r.text)" aria-label="Copiar" title="Copiar">
                   <span class="material-symbols-outlined">content_copy</span>
                 </button>
               </div>
             </header>
 
             <div class="bubble-content">
-              <ng-container *ngIf="r.from==='ia'; else plainUser">
-                <ng-container *ngIf="structuredSections(r.text).length > 0; else rawHtml">
-                  <div class="sections-wrapper">
-                    <div class="sections-controls sticky">
-                      <button class="btn tiny" (click)="expandAll()">
-                        <span class="material-symbols-outlined">unfold_more</span> Expandir todo
-                      </button>
-                      <button class="btn tiny" (click)="collapseAll()">
-                        <span class="material-symbols-outlined">unfold_less</span> Colapsar todo
-                      </button>
-                      <button class="btn tiny" (click)="toggleCompact()">
-                        <span class="material-symbols-outlined">{{ compactMode ? 'view_comfy_alt' : 'view_compact' }}</span>
-                        Vista {{ compactMode ? 'detallada' : 'compacta' }}
-                      </button>
-                    </div>
-                    <div class="section-grid" [class.compact]="compactMode">
-                      <div class="section-card"
-                           *ngFor="let sec of structuredSections(r.text)"
-                           [class.collapsed]="collapsedSections.has(sec.id)">
-                        <header (click)="toggleSection(sec.id)" [attr.aria-expanded]="!collapsedSections.has(sec.id)">
-                          <h3>{{ sec.title }}</h3>
-                          <span class="toggle-indicator">
-                            <span class="material-symbols-outlined">
-                              {{ collapsedSections.has(sec.id) ? 'expand_more' : 'expand_less' }}
-                            </span>
+              <!-- Si hay JSON con secciones, las mostramos. Si no, texto natural con posibilidad de imágenes inline -->
+              <ng-container *ngIf="structuredSections(r.text).length > 0; else naturalText">
+                <div class="sections-wrapper">
+                  <div class="sections-controls sticky">
+                    <button class="btn tiny" (click)="expandAll()">
+                      <span class="material-symbols-outlined">unfold_more</span> Expandir
+                    </button>
+                    <button class="btn tiny" (click)="collapseAll()">
+                      <span class="material-symbols-outlined">unfold_less</span> Colapsar
+                    </button>
+                    <button class="btn tiny" (click)="toggleCompact()">
+                      <span class="material-symbols-outlined">{{ compactMode ? 'view_comfy_alt' : 'view_compact' }}</span>
+                      {{ compactMode ? 'Detallada' : 'Compacta' }}
+                    </button>
+                  </div>
+                  <div class="section-grid" [class.compact]="compactMode">
+                    <div class="section-card"
+                         *ngFor="let sec of structuredSections(r.text)"
+                         [class.collapsed]="collapsedSections.has(sec.id)">
+                      <header (click)="toggleSection(sec.id)" [attr.aria-expanded]="!collapsedSections.has(sec.id)">
+                        <h3>{{ sec.title }}</h3>
+                        <span class="toggle-indicator">
+                          <span class="material-symbols-outlined">
+                            {{ collapsedSections.has(sec.id) ? 'expand_more' : 'expand_less' }}
                           </span>
-                        </header>
-                        <div class="section-body" *ngIf="!collapsedSections.has(sec.id)">
-                          <ng-container [ngSwitch]="sec.type">
-                            <ul *ngSwitchCase="'list'">
-                              <li *ngFor="let it of sec.items">
-                                <strong *ngIf="it.nombre">{{ it.nombre }}</strong><span *ngIf="it.descripcion">: {{ it.descripcion }}</span>
-                                <div class="submeta" *ngIf="it.horario || it.costos">
-                                  <span *ngIf="it.horario">Horario: {{ it.horario }}</span>
-                                  <span *ngIf="it.costos">
-                                    <ng-container *ngFor="let kv of objectEntries(it.costos); let last = last">
-                                      {{ kv.key }}: {{ kv.value }}<span *ngIf="!last"> | </span>
-                                    </ng-container>
-                                  </span>
-                                </div>
-                              </li>
+                        </span>
+                      </header>
+                      <div class="section-body" *ngIf="!collapsedSections.has(sec.id)">
+                        <ng-container [ngSwitch]="sec.type">
+                          <ul *ngSwitchCase="'list'">
+                            <li *ngFor="let it of sec.items">
+                              <strong *ngIf="it.nombre">{{ it.nombre }}</strong><span *ngIf="it.descripcion">: {{ it.descripcion }}</span>
+                              <div class="submeta" *ngIf="it.horario || it.costos">
+                                <span *ngIf="it.horario">Horario: {{ it.horario }}</span>
+                                <span *ngIf="it.costos">
+                                  <ng-container *ngFor="let kv of objectEntries(it.costos); let last = last">
+                                    {{ kv.key }}: {{ kv.value }}<span *ngIf="!last"> | </span>
+                                  </ng-container>
+                                </span>
+                              </div>
+                            </li>
+                          </ul>
+                          <ul *ngSwitchCase="'hoteles'">
+                            <li *ngFor="let h of sec.items">
+                              <strong>{{ h.nombre }}</strong> — {{ h.ubicacion }}
+                              <div class="submeta">
+                                Calificación: {{ h.calificacion }}/5
+                                <span *ngIf="h.rango_precios_bs"> | Precios: {{ h.rango_precios_bs }}</span>
+                              </div>
+                            </li>
+                          </ul>
+                          <ul *ngSwitchCase="'gastronomia'">
+                            <li class="principal"><strong>Plato tradicional:</strong> {{ sec.plato_tradicional }}</li>
+                            <li *ngFor="let g of sec.extras">
+                              {{ g.nombre }} — Bs. {{ g.costo_aprox_bs }}
+                            </li>
+                          </ul>
+                          <div *ngSwitchCase="'texto'" class="text-block">
+                            <p *ngFor="let p of sec.paragraphs">{{ p }}</p>
+                            <ul *ngIf="sec.list && sec.list.length">
+                              <li *ngFor="let f of sec.list">{{ f }}</li>
                             </ul>
-                            <ul *ngSwitchCase="'hoteles'">
-                              <li *ngFor="let h of sec.items">
-                                <strong>{{ h.nombre }}</strong> — {{ h.ubicacion }}
-                                <div class="submeta">
-                                  Calificación: {{ h.calificacion }}/5
-                                  <span *ngIf="h.rango_precios_bs"> | Precios: {{ h.rango_precios_bs }}</span>
-                                </div>
-                              </li>
-                            </ul>
-                            <ul *ngSwitchCase="'gastronomia'">
-                              <li class="principal"><strong>Plato tradicional:</strong> {{ sec.plato_tradicional }}</li>
-                              <li *ngFor="let g of sec.extras">
-                                {{ g.nombre }} — Bs. {{ g.costo_aprox_bs }}
-                              </li>
-                            </ul>
-                            <div *ngSwitchCase="'texto'" class="text-block">
-                              <p *ngFor="let p of sec.paragraphs">{{ p }}</p>
-                              <ul *ngIf="sec.list && sec.list.length">
-                                <li *ngFor="let f of sec.list">{{ f }}</li>
-                              </ul>
-                            </div>
-                            <div *ngSwitchDefault class="text-block">
-                              <p>No hay datos para esta sección.</p>
-                            </div>
-                          </ng-container>
-                        </div>
+                          </div>
+                          <div *ngSwitchDefault class="text-block">
+                            <p>No hay datos para esta sección.</p>
+                          </div>
+                        </ng-container>
                       </div>
                     </div>
+
+                    <!-- Cuando el backend envía imágenes, ya hay un bloque de imágenes arriba -->
                   </div>
-                </ng-container>
-                <ng-template #rawHtml>
-                  <div class="prose" [innerHTML]="renderMarkdown(r.text)"></div>
-                </ng-template>
+                </div>
               </ng-container>
-              <ng-template #plainUser>
-                <p class="user-text">{{ r.text }}</p>
+              <ng-template #naturalText>
+                <div class="prose-text" [innerHTML]="renderMarkdown(r.text)"></div>
               </ng-template>
             </div>
           </div>
@@ -228,14 +242,14 @@
       <button class="scroll-bottom-btn"
               *ngIf="showScrollToBottom"
               (click)="scrollToBottom()"
-              aria-label="Ir al último mensaje">
+              aria-label="Ir al último mensaje" title="Ir al último mensaje">
         <span class="material-symbols-outlined">south</span>
       </button>
     </main>
 
     <footer class="composer" aria-label="Enviar mensaje">
       <div class="composer-inner">
-        <button class="btn ghost" (click)="nuevoChat()" [disabled]="sending" aria-label="Nueva conversación">
+        <button class="btn icon ghost" (click)="nuevoChat()" [disabled]="sending" aria-label="Nueva conversación" title="Nueva conversación">
           <span class="material-symbols-outlined">refresh</span>
         </button>
         <input
@@ -243,18 +257,20 @@
           [(ngModel)]="prompt"
           [disabled]="sending"
           (keyup.enter)="enviar()"
-          [placeholder]="sending ? 'Enviando...' : 'Escribe tu consulta (Ej: Itinerario 3 días en La Paz)'"
+          [placeholder]="sending ? 'Enviando...' : 'Escribe tu consulta (Ej: Hotel Los Tajibos, Salar de Uyuni, Itinerario 3 días en La Paz)'"
           autocomplete="off"
           aria-label="Mensaje" />
-        <button class="btn send" (click)="enviar()" [disabled]="sending || !prompt.trim()" aria-label="Enviar">
+        <button class="btn send" (click)="enviar()" [disabled]="sending || !prompt.trim()" aria-label="Enviar" title="Enviar">
           <span class="material-symbols-outlined">send</span>
         </button>
       </div>
       <div class="quick-suggestions">
+        <button class="suggestion" (click)="enviarQuick('Hola')">Hola</button>
+        <button class="suggestion" (click)="enviarQuick('Buenos días')">Buenos días</button>
+        <button class="suggestion" (click)="enviarQuick('Hotel Los Tajibos')">Hotel Los Tajibos</button>
+        <button class="suggestion" (click)="enviarQuick('Salar de Uyuni')">Salar de Uyuni</button>
         <button class="suggestion" (click)="enviarQuick('Itinerario 3 días en La Paz')">Itinerario La Paz</button>
-        <button class="suggestion" (click)="enviarQuick('Recomiéndame lugares en Tarija')">Tarija</button>
-        <button class="suggestion" (click)="enviarQuick('Mejor época para visitar Santa Cruz')">Santa Cruz</button>
-        <button class="suggestion" (click)="enviarQuick('Hoteles recomendados en Cochabamba')">Hoteles Cbba</button>
+        <button class="suggestion" (click)="enviarQuick('Recomiéndame lugares en Tarija')">Lugares Tarija</button>
       </div>
     </footer>
   </div>
