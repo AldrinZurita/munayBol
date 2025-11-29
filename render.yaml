@@ -23,6 +23,7 @@ services:
   # --- FRONTEND ---
   - type: web
     name: munaybol-frontend
+    plan: free
     runtime: docker
     rootDir: ./frontend
     dockerfilePath: ./frontend/Dockerfile.prod
