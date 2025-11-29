@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ChatMessage, ChatSession } from '../../interfaces/chat.interface';
 import { AuthService } from '../../services/auth.service';
 import { LoadingService } from '../../shared/services/loading';
+import { ThemeService } from '../../services/theme.service';
 
 type Actor = 'user' | 'ia';
 interface Respuesta { from: Actor; text: string; t: number; }
@@ -57,6 +58,7 @@ export class AsistenteIa implements OnInit, OnDestroy {
   showScrollToBottom = false;
   sidebarOpen = true;
   compactMode = false;
+  isDarkMode = false;
 
   sessions: SessionWithPreview[] = [];
   search = '';
@@ -84,12 +86,17 @@ export class AsistenteIa implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     public readonly auth: AuthService,
-    private readonly loadingService: LoadingService
+    private readonly loadingService: LoadingService,
+    private readonly themeService: ThemeService
   ) {
     marked.setOptions({ breaks: true, gfm: true });
   }
 
   ngOnInit(): void {
+    this.themeService.theme$.subscribe(theme => {
+      this.isDarkMode = theme === 'dark';
+    });
+
     const token = this.auth.getToken();
     if (!token) {
       this.router.navigate(['/login']);

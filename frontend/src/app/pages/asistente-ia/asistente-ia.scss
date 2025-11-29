@@ -407,3 +407,5 @@
   .sidebar.closed { transform: translateX(-110%); opacity: 1; width: 340px; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+@import './asistente-ia-light.scss';

@@ -1,0 +1,39 @@
+
+.asistente-root.light-theme {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-alt: #f1f5f9;
+  --surface-hover: #e2e8f0;
+  --border: #cbd5e1;
+  --text: #0f172a;
+  --text-soft: #334155;
+  --text-faint: #64748b;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+
+  background: radial-gradient(1200px 600px at 20% 0%, #e0f2fe 30%, var(--bg) 70%) fixed;
+}
+
+.asistente-root.light-theme .app-header,
+.asistente-root.light-theme .sidebar,
+.asistente-root.light-theme .chat-panel,
+.asistente-root.light-theme .composer-inner {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+}
+
+.asistente-root.light-theme .btn.primary {
+  color: #fff;
+}
+
+.asistente-root.light-theme .avatar.user {
+  background: #e0f2fe;
+  color: #0284c7;
+  border-color: #0284c7;
+}
+
+.asistente-root.light-theme .tooltip .tip {
+  background: #1e293b;
+  color: #fff;
+}
