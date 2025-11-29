@@ -8,7 +8,7 @@ $primary-color: #16a34a;
 $accent-color: #0F6BFF;
 $danger-color: #dc2626;
 :root {
-  --color-primary: #0F6BFF;
+  --color-primary: rgba(31, 85, 38, 0.93);
   --color-accent:  #00B894;
   --color-danger:  #E74C3C;
 
@@ -396,14 +396,15 @@ h2 {
       gap: 8px;
 
       &.btn-primary {
-        background: linear-gradient(135deg, var(--color-primary), #0c56d0);
+        background: linear-gradient( 135deg, var(--color-primary), #127b2c);
         color: #fff;
-        box-shadow: 0 6px 16px rgba(15, 107, 255, 0.25);
+        box-shadow: 0 6px 16px rgba(255, 255, 255, 0.25);
 
         &:hover {
-          background: linear-gradient(135deg, #0c56d0, #0a47a8);
+          background: linear-gradient(135deg, rgba(69, 172, 82, 0.78), rgba(87, 198, 100, 0.62));
           transform: translateY(-2px);
-          box-shadow: 0 10px 22px rgba(15, 107, 255, 0.35);
+          color: black;
+          box-shadow: 0 10px 22px rgba(16, 16, 16, 0.35);
         }
       }
     }
@@ -431,7 +432,7 @@ h2 {
   gap: 8px;
 
   &:hover {
-    background: linear-gradient(135deg, #0c56d0, #0a47a8);
+    background: linear-gradient(135deg, rgba(36, 113, 46, 0.84), rgba(31, 85, 38, 0.93));
     transform: translateY(-2px);
     box-shadow: 0 10px 22px rgba(15, 107, 255, 0.35);
   }

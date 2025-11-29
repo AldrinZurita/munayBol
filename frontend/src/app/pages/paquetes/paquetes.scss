@@ -4,7 +4,7 @@ overflow-y: hidden; // ✅ elimina scroll horizontal
  }
 
 :root {
-  --color-primary: #0F6BFF;
+  --color-primary: rgba(36, 113, 46, 0.84);
   --color-accent:  #00B894;
   --color-danger:  #E74C3C;
   --color-secondary: #6C757D;
@@ -127,55 +127,55 @@ body.dark-theme .title-icon { box-shadow:0 10px 24px var(--color-shadow), inset 
    REPLACEMENT FOR ADMIN BUTTONS (Fixes Dark Mode)
    =================================================== */
 
-   .btn-ghost, 
-   .icon-btn { 
-     display: inline-flex; 
-     justify-content: center; 
-     align-items: center; 
-     width: 48px; 
-     height: 48px; 
-     border-radius: 14px; 
-     line-height: 0; 
-     transition: all .15s ease-out; 
-     
+   .btn-ghost,
+   .icon-btn {
+     display: inline-flex;
+     justify-content: center;
+     align-items: center;
+     width: 48px;
+     height: 48px;
+     border-radius: 14px;
+     line-height: 0;
+     transition: all .15s ease-out;
+
      /* THIS IS THE FIX: Use variables instead of hardcoded white */
-     border: 1px solid var(--color-border); 
-     background: var(--color-bg-hover); 
-     box-shadow: none; 
+     border: 1px solid var(--color-border);
+     background: var(--color-bg-hover);
+     box-shadow: none;
    }
-   
+
    /* Specific Icon Colors (Default State) */
-   .icon-btn.btn-edit i-bs[name="pencil"] { 
-     color: #2e7cff; 
-     transition: color .15s ease-out; 
+   .icon-btn.btn-edit i-bs[name="pencil"] {
+     color: #2e7cff;
+     transition: color .15s ease-out;
    }
-   .icon-btn.btn-delete i-bs[name="trash"] { 
-     color: #e74c3c; 
-     transition: color .15s ease-out; 
+   .icon-btn.btn-delete i-bs[name="trash"] {
+     color: #e74c3c;
+     transition: color .15s ease-out;
    }
-   
+
    /* Hover Effects (Generic) */
-   .btn-ghost:hover, 
-   .icon-btn:hover { 
-     transform: translateY(-2px); 
-     filter: saturate(1.05); 
-     border-color: transparent; 
+   .btn-ghost:hover,
+   .icon-btn:hover {
+     transform: translateY(-2px);
+     filter: saturate(1.05);
+     border-color: transparent;
    }
-   
+
    /* Color Backgrounds ONLY on Hover */
-   .icon-btn.btn-edit:hover { 
-     background: linear-gradient(135deg, #2e7cff, #0f6bff); 
-     box-shadow: 0 10px 22px rgba(15, 107, 255, .22); 
+   .icon-btn.btn-edit:hover {
+     background: linear-gradient(135deg, #2e7cff, #0f6bff);
+     box-shadow: 0 10px 22px rgba(15, 107, 255, .22);
    }
-   .icon-btn.btn-delete:hover { 
-     background: linear-gradient(135deg, #ff6a6a, #e74c3c); 
-     box-shadow: 0 10px 22px rgba(231, 76, 60, .22); 
+   .icon-btn.btn-delete:hover {
+     background: linear-gradient(135deg, #ff6a6a, #e74c3c);
+     box-shadow: 0 10px 22px rgba(231, 76, 60, .22);
    }
-   
+
    /* Turn Icons White on Hover */
-   .icon-btn.btn-edit:hover i-bs[name="pencil"], 
-   .icon-btn.btn-delete:hover i-bs[name="trash"] { 
-     color: #fff; 
+   .icon-btn.btn-edit:hover i-bs[name="pencil"],
+   .icon-btn.btn-delete:hover i-bs[name="trash"] {
+     color: #fff;
    }
 
 .card{ background:var(--color-bg-card); border-radius:16px; box-shadow: var(--color-shadow) 0 4px 14px; padding:0; overflow:hidden; border:1px solid var(--color-border); transition: all .25s ease; }
@@ -432,7 +432,7 @@ edit-field{ width:40%; }
     color: var(--color-danger);          // ✅ texto/ícono rojo
     transition: background .25s ease, color .25s ease;
   }
-  
+
   .btn-delete:hover {
     background: linear-gradient(135deg,#ff6a6a,#e74c3c); // ✅ fondo rojo degradado
     filter: saturate(1.05);
