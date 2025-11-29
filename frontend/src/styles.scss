@@ -171,13 +171,8 @@ button:not(:disabled):active {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Cards hover (from main) */
 .card, [class*="card"] {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.card:hover, [class*="card"]:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
 /* Inputs focus (from main; tuned to brand) */
