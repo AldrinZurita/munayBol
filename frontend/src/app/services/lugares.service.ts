@@ -3,6 +3,7 @@ import { HttpClient,HttpHeaders} from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { LugarTuristico } from '../interfaces/lugar-turistico.interface';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment'; // Asegúrate de tener este import
 
 export type CrearLugarDTO = Pick<
   LugarTuristico,
@@ -16,7 +17,7 @@ export type ActualizarLugarDTO = Partial<Pick<
 
 @Injectable({ providedIn: 'root' })
 export class LugaresService {
-  private readonly baseUrl = '/api/lugares/';
+  private readonly baseUrl = `${environment.apiUrl}lugares/`;
 
 
   constructor(

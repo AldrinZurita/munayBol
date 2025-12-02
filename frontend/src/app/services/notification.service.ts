@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Notification } from '../interfaces/notification.interface';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,11 @@ export class NotificationService {
   private readonly notifications = new BehaviorSubject<Notification[]>([]);
   readonly notifications$ = this.notifications.asObservable();
   private ws?: WebSocket;
+  
+  // Usamos environment.apiUrl. Como ya termina en '/api/', concatenamos directo el recurso.
+  // Ejemplo: ...onrender.com/api/ + notifications/
+  private baseUrl = `${environment.apiUrl}notifications/`;
+
   constructor(private readonly http: HttpClient, private readonly auth: AuthService) {
     this.auth.user$.subscribe(user => {
       if (user) {
@@ -28,7 +34,7 @@ export class NotificationService {
   }
 
   fetchNotifications(): Observable<Notification[]> {
-    return this.http.get<any[]>('/api/notifications/', this.authOptions()).pipe(
+    return this.http.get<any[]>(this.baseUrl, this.authOptions()).pipe(
       map(list => list.map(n => ({
         id: n.id,
         title: n.title,
@@ -52,7 +58,7 @@ export class NotificationService {
   }
 
   getUnreadCount(): Observable<number> {
-    return this.http.get<{ unread: number }>('/api/notifications/unread_count/', this.authOptions()).pipe(
+    return this.http.get<{ unread: number }>(`${this.baseUrl}unread_count/`, this.authOptions()).pipe(
       map(r => r.unread),
       catchError((err) => {
         console.error('[NotificationService] Error en getUnreadCount:', err);
@@ -62,7 +68,7 @@ export class NotificationService {
   }
 
   markAsRead(notificationId: number): Observable<any> {
-    return this.http.post(`/api/notifications/${notificationId}/mark_as_read/`, {}, this.authOptions()).pipe(
+    return this.http.post(`${this.baseUrl}${notificationId}/mark_as_read/`, {}, this.authOptions()).pipe(
       tap(() => this.fetchNotifications().subscribe()),
       catchError((err) => {
         console.error('[NotificationService] Error en markAsRead:', err);
@@ -72,7 +78,7 @@ export class NotificationService {
   }
 
   markAllAsRead(): Observable<any> {
-    return this.http.post('/api/notifications/mark_all_as_read/', {}, this.authOptions()).pipe(
+    return this.http.post(`${this.baseUrl}mark_all_as_read/`, {}, this.authOptions()).pipe(
       tap(() => this.fetchNotifications().subscribe()),
       catchError((err) => {
         console.error('[NotificationService] Error en markAllAsRead:', err);
@@ -82,7 +88,7 @@ export class NotificationService {
   }
 
   deleteNotification(notificationId: number): Observable<any> {
-    return this.http.delete(`/api/notifications/${notificationId}/delete_notification/`, this.authOptions()).pipe(
+    return this.http.delete(`${this.baseUrl}${notificationId}/delete_notification/`, this.authOptions()).pipe(
       tap(() => this.fetchNotifications().subscribe()),
       catchError(() => of(null))
     );
@@ -92,11 +98,28 @@ export class NotificationService {
     if (typeof window === 'undefined' || this.ws) return;
     const token = this.auth.getToken();
     if (!token) return;
-    const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const url = `${proto}://${window.location.host}/ws/notifications/?token=${encodeURIComponent(token)}`;
+
+    // LÓGICA DE WEBSOCKET CORREGIDA PARA RENDER
+    // 1. Obtenemos la URL del backend desde el environment
+    let backendUrl = environment.apiUrl; 
+    
+    // 2. Determinamos si es seguro (wss) o no (ws) basado en el backend, no en la ventana actual
+    const isSecure = backendUrl.startsWith('https');
+    const proto = isSecure ? 'wss' : 'ws';
+
+    // 3. Limpiamos la URL para obtener solo el dominio (ej: munaybol-backend.onrender.com)
+    // Quitamos el protocolo
+    let host = backendUrl.replace(/^https?:\/\//, '');
+    // Quitamos el path (/api/)
+    host = host.split('/')[0];
+
+    // 4. Construimos la URL apuntando al Backend
+    const url = `${proto}://${host}/ws/notifications/?token=${encodeURIComponent(token)}`;
+
     try {
       this.ws = new WebSocket(url);
       this.ws.onopen = () => {
+        // console.log('WS Conectado');
         this.fetchNotifications().subscribe();
       };
       this.ws.onmessage = () => {
