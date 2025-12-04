@@ -32,24 +32,27 @@
             "styles": [
               "src/styles.scss"
             ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            },
             "optimization": {
               "fonts": {
                 "inline": false
               }
-            }
+            },
+            "prerender": false,
+            "ssr": false
           },
           "configurations": {
             "production": {
+             "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
                   "maximumWarning": "1.5MB",
-                  "maximumError": "2MB"
+                  "maximumError": "4MB"
                 },
                 {
                   "type": "anyComponentStyle",

@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { forkJoin, of, Observable } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
@@ -65,7 +65,8 @@ export class Perfil implements OnInit, OnDestroy {
     private hotelService: HotelService,
     private paqueteService: PaqueteService,
     private lugaresService: LugaresService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -169,6 +170,8 @@ export class Perfil implements OnInit, OnDestroy {
   closeConfirm(): void {
     this.confirmId = null;
   }
+
+  // **Se eliminó la función 'verDetallePaquete' para usar routerLink en el HTML.**
 
   confirmarCancel(reserva: ReservaEnriquecida): void {
     if (!reserva.estado || this.cancelling.has(reserva.id_reserva)) return;

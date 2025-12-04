@@ -1,6 +1,7 @@
 import os
 from datetime import timedelta
 from pathlib import Path
+import dj_database_url  # <--- NUEVO: Necesario para leer la DB en Render
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '$^%pi-f!4s2z*o!+-um9)n6fe^xh!hf96ql41ml#g-$g%qqgg1')
@@ -94,9 +95,23 @@ DEFAULT_DB_KEEPALIVES_IDLE = int(os.environ.get('DB_KEEPALIVES_IDLE', '30'))
 DEFAULT_DB_KEEPALIVES_INTERVAL = int(os.environ.get('DB_KEEPALIVES_INTERVAL', '10'))
 DEFAULT_DB_KEEPALIVES_COUNT = int(os.environ.get('DB_KEEPALIVES_COUNT', '5'))
 
-USE_NEON = os.environ.get('USE_NEON', 'False') == 'True'
+# --- BASE DE DATOS ---
+# Lógica: 1. Intenta usar DATABASE_URL (Render). 2. Si no, usa configuración manual NEON. 3. Local.
 
-if USE_NEON:
+DEFAULT_CONN_MAX_AGE = int(os.environ.get('DB_CONN_MAX_AGE', '120'))
+
+if os.environ.get('DATABASE_URL'):
+    # CASO 1: RENDER (Automático)
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=os.environ.get('DATABASE_URL'),
+            conn_max_age=DEFAULT_CONN_MAX_AGE,
+            conn_health_checks=True,
+            ssl_require=True
+        )
+    }
+elif os.environ.get('USE_NEON', 'False') == 'True':
+    # CASO 2: NEON MANUAL (Tu config original)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -106,17 +121,11 @@ if USE_NEON:
             'HOST': os.environ.get('NEON_HOST', ''),
             'PORT': os.environ.get('NEON_PORT', '5432'),
             'CONN_MAX_AGE': DEFAULT_CONN_MAX_AGE,
-            'CONN_HEALTH_CHECKS': True,
-            'OPTIONS': {
-                'sslmode': 'require',
-                'keepalives': DEFAULT_DB_KEEPALIVES,
-                'keepalives_idle': DEFAULT_DB_KEEPALIVES_IDLE,
-                'keepalives_interval': DEFAULT_DB_KEEPALIVES_INTERVAL,
-                'keepalives_count': DEFAULT_DB_KEEPALIVES_COUNT,
-            }
+            'OPTIONS': {'sslmode': 'require'}
         }
     }
 else:
+    # CASO 3: DOCKER LOCAL
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -125,17 +134,10 @@ else:
             'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'turismo'),
             'HOST': os.environ.get('POSTGRES_HOST', 'db'),
             'PORT': os.environ.get('POSTGRES_PORT', '5432'),
-            'CONN_MAX_AGE': DEFAULT_CONN_MAX_AGE,
-            'CONN_HEALTH_CHECKS': True,
-            'OPTIONS': {
-                'keepalives': DEFAULT_DB_KEEPALIVES,
-                'keepalives_idle': DEFAULT_DB_KEEPALIVES_IDLE,
-                'keepalives_interval': DEFAULT_DB_KEEPALIVES_INTERVAL,
-                'keepalives_count': DEFAULT_DB_KEEPALIVES_COUNT,
-            }
         }
     }
 
+# --- OAUTH ---
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 GITHUB_CLIENT_ID = os.environ.get('GITHUB_CLIENT_ID')
 GITHUB_CLIENT_SECRET = os.environ.get('GITHUB_CLIENT_SECRET')
@@ -143,6 +145,17 @@ GITHUB_REDIRECT_URI = os.environ.get('GITHUB_REDIRECT_URI', 'https://localhost:4
 GITHUB_STATE_SALT = os.environ.get('GITHUB_STATE_SALT', 'github-oauth-state')
 GITHUB_STATE_TTL_SECONDS = int(os.environ.get('GITHUB_STATE_TTL_SECONDS', '600'))
 
+# Lógica inteligente:
+# 1. Si existe la variable de entorno (Render), úsala.
+# 2. Si no, usa localhost (Tu PC).
+GITHUB_REDIRECT_URI = os.environ.get(
+    'GITHUB_REDIRECT_URI', 
+    'http://localhost:4200/login'
+)
+
+GITHUB_STATE_SALT = os.environ.get('GITHUB_STATE_SALT', 'github-oauth-state')
+GITHUB_STATE_TTL_SECONDS = int(os.environ.get('GITHUB_STATE_TTL_SECONDS', '600'))
+# --- ARCHIVOS ESTÁTICOS (MODIFICADO PARA WHITENOISE) ---
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -155,18 +168,21 @@ STORAGES = {
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'core.Usuario'
 
-SECURE_SSL_REDIRECT = not DEBUG
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SESSION_COOKIE_SECURE = not DEBUG
-SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_HTTPONLY = True
-CSRF_COOKIE_SAMESITE = 'Lax'
+# --- SEGURIDAD SSL ---
 if not DEBUG:
-    SECURE_HSTS_SECONDS = 31536000  # 1 año
+    # Configuraciones estrictas solo para producción (Render maneja SSL automáticamente)
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
-X_FRAME_OPTIONS = 'DENY'
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
+else:
+    # Desarrollo local: relajamos la seguridad para evitar errores con http://
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
