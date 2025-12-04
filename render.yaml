@@ -1,5 +1,4 @@
 services:
-  # --- BACKEND ---
   - type: web
     name: munaybol-backend
     runtime: python
@@ -16,11 +15,9 @@ services:
       - key: WEB_CONCURRENCY
         value: "4"
       - key: OLLAMA_BASE_URL
-        sync: false  # Render te pedirá este valor en el dashboard
+        sync: false
       - key: DATABASE_URL
-        sync: false  # Render te pedirá la string de conexión de Neon
-
-  # --- FRONTEND ---
+        sync: false
   - type: web
     name: munaybol-frontend
     plan: free

@@ -130,9 +130,6 @@
           <span class="material-symbols-outlined" aria-hidden="true">luggage</span>
           Mis Reservas
         </h2>
-        <!-- <button type="button" class="fx-toggle" (click)="triggerFun()" [class.active]="animateFun" title="Ver animación">
-          <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
-        </button> -->
       </div>
       <div *ngIf="errorReservas" class="estado error">
         {{ errorReservas }}
@@ -206,19 +203,27 @@
               </div>
             </div>
             <div class="reserva-footer">
+
               <button type="button" class="btn-detalle"
                       *ngIf="reserva.id_paquete"
-                      [routerLink]="['/paquetes/detalle', reserva.id_paquete]">
+                      [routerLink]="['/paquetes', reserva.id_paquete]">
                 <span class="material-symbols-outlined" aria-hidden="true">explore</span>
                 Ver Paquete
               </button>
+
               <button type="button" class="btn-detalle"
                       *ngIf="!reserva.id_paquete && reserva.hotel"
-                      [routerLink]="['/hoteles/detalle', reserva.hotel.id_hotel]">
+                      [routerLink]="['/hoteles', reserva.hotel.id_hotel]">
                 <span class="material-symbols-outlined" aria-hidden="true">hotel</span>
                 Ver Hotel
               </button>
-              
+
+              <button type="button" class="btn-detalle principal"
+                      [routerLink]="['/reservas', reserva.id_reserva]">
+                <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>
+                Ver Detalle
+              </button>
+
             </div>
           </div>
         </article>

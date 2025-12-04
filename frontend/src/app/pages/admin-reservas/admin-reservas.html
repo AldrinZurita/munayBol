@@ -9,10 +9,10 @@
         Administración de Reservas
       </h1>
 
-      <div class="filters">
+      <div class="filters-grid">
         <div class="field">
-          <label>Estado</label>
-          <select [(ngModel)]="filtroEstado" (change)="cargar()">
+          <label for="filter-state">Estado</label>
+          <select id="filter-state" [(ngModel)]="filtroEstado" (change)="cargar()">
             <option value="todas">Todas</option>
             <option value="activas">Activas</option>
             <option value="canceladas">Canceladas</option>
@@ -20,15 +20,15 @@
         </div>
 
         <div class="field">
-          <label>ID Usuario</label>
-          <input [(ngModel)]="filtroUsuarioId" (keyup.enter)="cargar()" placeholder="Ej: 12" />
+          <label for="filter-user">ID Usuario</label>
+          <input id="filter-user" [(ngModel)]="filtroUsuarioId" (keyup.enter)="cargar()" placeholder="Ej: 12" />
         </div>
 
         <div class="actions">
-          <button class="btn" (click)="cargar()">
+          <button class="btn btn-primary" (click)="cargar()">
             <span class="material-symbols-outlined" aria-hidden="true">refresh</span> Aplicar
           </button>
-          <button class="btn alt" (click)="limpiar()">
+          <button class="btn btn-secondary" (click)="limpiar()">
             <span class="material-symbols-outlined" aria-hidden="true">backspace</span> Limpiar
           </button>
         </div>
@@ -41,57 +41,70 @@
         <span class="material-symbols-outlined" aria-hidden="true">hourglass_empty</span>
         No hay resultados para los filtros actuales.
       </div>
-      <div class="grid" *ngIf="reservas.length > 0 && !error">
-        <article *ngFor="let r of reservas" class="card" [class.cancel]="!r.estado" [class.is-removing]="isRemoving(r.id_reserva)">
+      <div class="reservas-grid" *ngIf="reservas.length > 0 && !error">
+        <article *ngFor="let r of reservas; trackBy: trackByReserva"
+                 class="card"
+                 [class.status-cancel]="!r.estado"
+                 [class.is-removing]="isRemoving(r.id_reserva)">
+
           <header class="card__header">
-            <h3>#{{ r.id_reserva }}</h3>
+            <span class="id-reserva">Reserva #{{ r.id_reserva }}</span>
             <span class="badge" [class.activa]="r.estado" [class.cancelada]="!r.estado">
               {{ r.estado ? 'Activa' : 'Cancelada' }}
             </span>
           </header>
+
           <div class="card__body">
-            <div class="row">
-              <span class="material-symbols-outlined" aria-hidden="true">person</span>
-              <p><strong>Usuario ID:</strong> {{ r.id_usuario }}</p>
+            <!-- Columna 1: Información Principal -->
+            <div class="details-col primary">
+              <div class="detail-row user">
+                <span class="material-symbols-outlined">person</span>
+                <p><strong>Usuario ID:</strong> <span>{{ r.id_usuario }}</span></p>
+              </div>
+              <div class="detail-row type">
+                <span class="material-symbols-outlined">{{ r.id_paquete ? 'flight' : 'hotel' }}</span>
+                <p><strong>Tipo:</strong> <span>{{ r.id_paquete ? 'Paquete Turístico' : 'Solo Hotel' }}</span></p>
+              </div>
             </div>
-            <div class="row">
-              <span class="material-symbols-outlined" aria-hidden="true">hotel</span>
-              <p><strong>Hotel:</strong> {{ r.codigo_hotel }}</p>
-            </div>
-            <div class="row">
-              <span class="material-symbols-outlined" aria-hidden="true">bed</span>
-              <p><strong>Habitación:</strong> {{ r.num_habitacion }}</p>
-            </div>
-            <div class="row">
-              <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
-              <p><strong>Check-in:</strong> {{ r.fecha_reserva | date:'fullDate' }}</p>
-            </div>
-            <div class="row">
-              <span class="material-symbols-outlined" aria-hidden="true">event</span>
-              <p><strong>Check-out:</strong> {{ r.fecha_caducidad | date:'fullDate' }}</p>
+
+            <!-- Columna 2: Fechas y Habitación -->
+            <div class="details-col secondary">
+              <div class="detail-row">
+                <span class="material-symbols-outlined">calendar_month</span>
+                <p><strong>Check-in:</strong> <span>{{ r.fecha_reserva | date:'shortDate' }}</span></p>
+              </div>
+              <div class="detail-row">
+                <span class="material-symbols-outlined">event</span>
+                <p><strong>Check-out:</strong> <span>{{ r.fecha_caducidad | date:'shortDate' }}</span></p>
+              </div>
+              <div class="detail-row">
+                <span class="material-symbols-outlined">key</span>
+                <p><strong>Habitación:</strong> <span>{{ r.num_habitacion || 'N/A' }}</span></p>
+              </div>
             </div>
           </div>
+
           <footer class="card__footer">
-            <a [routerLink]="['/reservas', r.id_reserva]" class="btn small primary">
-              <span class="material-symbols-outlined" aria-hidden="true">visibility</span> Detalle
+            <a [routerLink]="['/reservas', r.id_reserva]" class="btn small btn-link">
+              <span class="material-symbols-outlined">visibility</span> Ver Detalle
             </a>
 
             <div class="actions">
-              <button class="btn small danger"
+              <button class="btn small btn-danger"
                       *ngIf="r.estado"
                       (click)="cancelar(r)"
                       [disabled]="cancelling.has(r.id_reserva)">
                 <span class="spinner" *ngIf="cancelling.has(r.id_reserva)"></span>
-                <span class="material-symbols-outlined" *ngIf="!cancelling.has(r.id_reserva)" aria-hidden="true">cancel</span>
+                <span class="material-symbols-outlined" *ngIf="!cancelling.has(r.id_reserva)">cancel</span>
                 Cancelar
               </button>
 
-              <button class="btn small success"
+              <button class="btn small btn-success"
                       *ngIf="!r.estado"
                       (click)="reactivar(r)"
                       [disabled]="reactivating.has(r.id_reserva)">
                 <span class="spinner green" *ngIf="reactivating.has(r.id_reserva)"></span>
-                <span class="material-symbols-outlined" *ngIf="!reactivating.has(r.id_reserva)" aria-hidden="true">restart_alt</span>
+                <span class="material-symbols-outlined" *ngIf="!reactivating.has(r.id_reserva)">restart_alt</span>
                 Reactivar
               </button>
             </div>

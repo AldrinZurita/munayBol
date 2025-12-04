@@ -1,8 +1,4 @@
-/*
-* NOTA: Este archivo ha sido refactorizado para usar las variables CSS
-* globales definidas en styles.scss. Esto arregla el error de
-* compilación y habilita el modo oscuro.
-*/
+@use 'sass:color';
 :host {
   /* --- Mapeo de variables locales a globales (Modo Claro) --- */
   --bg: var(--color-bg-page);
@@ -18,6 +14,7 @@
   --success: var(--color-primary);
   --success-bg: var(--color-success-bg);
   --danger: var(--color-danger);
+  --danger-bg: var(--color-danger-bg); /* Añadido para consistencia */
   --icon: var(--color-text-secondary);
   --icon-strong: var(--color-text-primary);
   --ring: var(--color-brand-transparent); /* Usando la nueva variable transparente */
@@ -35,11 +32,6 @@
   --confirm-ms: 300ms;
 }
 
-/*
-* NOTA: Este bloque es el que realmente activa el modo oscuro.
-* Cuando el body tiene la clase .dark-theme, estas variables
-* anulan a las de :root, cambiando el tema de la página.
-*/
 body.dark-theme :host {
   --bg: var(--color-bg-page);
   --card: var(--color-bg-card);
@@ -54,14 +46,13 @@ body.dark-theme :host {
   --success: var(--color-primary);
   --success-bg: var(--color-success-bg);
   --danger: var(--color-danger);
+  --danger-bg: var(--color-danger-bg);
   --icon: var(--color-text-secondary);
   --icon-strong: var(--color-text-primary);
-  --ring: var(--color-brand-transparent); /* Usando la nueva variable transparente */
+  --ring: var(--color-brand-transparent);
   --shadow-1: 0 10px 24px var(--color-shadow);
   --shadow-2: 0 18px 36px color.adjust(var(--color-shadow), $alpha: -0.8);
 }
-/* --- FIN DE LA ACTUALIZACIÓN DE VARIABLES --- */
-
 
 :host {
   display: block;
@@ -70,7 +61,6 @@ body.dark-theme :host {
 
 .perfil-root { position: relative; isolation: isolate; }
 
-/* --- FIX: Usando las nuevas variables transparentes de styles.scss --- */
 .bg.fx {
   position: absolute; inset: -20% -10% auto -10%;
   height: 60vmin; opacity: .14; filter: blur(60px) saturate(1.02);
@@ -138,10 +128,9 @@ body.dark-theme :host {
   transition: transform var(--trans-med), box-shadow var(--trans-med), border-color var(--trans-med), filter var(--trans-med);
   color: var(--text-strong);
 }
-.perfil-card:hover { 
-  transform: translateY(-2px); 
+.perfil-card:hover {
+  transform: translateY(-2px);
   box-shadow: var(--shadow-2);
-  /* FIX: Usamos un filtro CSS para oscurecer el borde en hover */
   filter: brightness(0.97);
 }
 
@@ -153,9 +142,9 @@ body.dark-theme :host {
   display: grid; grid-template-columns: auto 1fr auto; align-items: center;
   gap: 24px; padding: 18px 20px;
   border-bottom: 1px solid var(--border);
-  /* FIX: Usamos un color sólido de las variables globales */
   background: var(--color-bg-hover);
 }
+
 .avatar-wrapper { position: relative; }
 .avatar-wrapper.ring::before {
   content: ""; position: absolute; inset: -3px; border-radius: 50%;
@@ -264,6 +253,13 @@ body.dark-theme :host {
   background: var(--brand); color: var(--color-text-inverted) !important; padding: 9px 14px;
   box-shadow: 0 10px 22px var(--color-brand-transparent);
 }
+.btn-detalle.principal {
+  background: var(--accent);
+  box-shadow: 0 10px 22px var(--color-accent-transparent);
+  margin-left: auto;
+}
+.btn-detalle.principal:hover { filter: brightness(1.15); }
+
 .btn-detalle:hover { filter: brightness(1.1); }
 .btn-cancel {
   background: var(--card); border: 1px solid var(--danger); padding: 9px 14px;
@@ -273,344 +269,166 @@ body.dark-theme :host {
 .btn-cancel.is-loading::after {
   content: ""; position: absolute; inset: 50% auto auto 50%;
   width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%;
-  border: 2px solid var(--color-danger-bg); border-top-color: var(--danger); animation: spin .7s linear infinite;
+  border: 3px solid var(--danger); border-top-color: transparent;
+  animation: spin .8s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg) } }
-.btn-danger {
-  background: var(--color-danger-bg); border: 1px solid var(--danger); padding: 8px 12px;
-  color: var(--color-text-danger) !important;
-}
-.btn-danger:hover { filter: brightness(0.95); }
-.btn-link {
-  background: transparent; border: 0; text-decoration: underline; padding: 4px;
-}
-.btn-link:hover { color: var(--brand) !important; }
-.estado {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 32px 16px;
-  text-align: center;
-  border: 1px dashed var(--border);
-  border-radius: var(--radius-md);
-  margin-top: 16px;
-  background: var(--color-bg-hover);
-}
-.estado .material-symbols-outlined {
-  font-size: 36px;
-  color: var(--text-3) !important;
-  margin-bottom: 8px;
-}
-.estado p { margin: 0; font-size: 15px; font-weight: 800; }
-.estado.error {
-  background: var(--color-danger-bg);
-  border-color: var(--danger);
-  color: var(--color-text-danger) !important;
-  font-weight: 900;
-}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
 .reservas-section {
   margin-top: 40px;
 }
-
 .section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
-
-  h2 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 0;
-    font-size: clamp(20px, 2.2vw, 26px);
-    font-weight: 900;
-    color: var(--text-strong);
-    .material-symbols-outlined {
-      color: var(--text-strong) !important;
-      font-size: 28px;
-    }
-  }
+  display: flex; align-items: center; margin-bottom: 20px;
 }
-
-.fx-toggle {
-  background: transparent;
-  border: 0;
-  padding: 4px;
-  border-radius: 50%;
-  cursor: pointer;
-  .material-symbols-outlined {
-    color: var(--text-3) !important;
-    transition: var(--trans-med);
-    transform: scale(0.9);
-  }
-  &:hover .material-symbols-outlined {
-    color: var(--brand) !important;
-    transform: scale(1.1) rotate(15deg);
-  }
-  &.active .material-symbols-outlined {
-    color: var(--accent) !important;
-    transform: scale(1.1) rotate(0deg);
-  }
+.section-header h2 {
+  font-size: clamp(24px, 2vw, 32px); font-weight: 900; letter-spacing: .01em;
+  color: var(--text); display: inline-flex; align-items: center; gap: 10px;
+  margin: 0;
 }
+.section-header .material-symbols-outlined { font-size: 28px; }
 
 .lista-reservas {
   display: grid;
   gap: 24px;
 }
-
 .reserva-card {
-  display: grid;
-  grid-template-columns: 200px 1fr;
+  display: flex;
+  overflow: hidden;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-1);
-  overflow: hidden;
-  transition: var(--trans-slow);
-  transition-property: transform, box-shadow, opacity;
+  transition: transform var(--trans-med), box-shadow var(--trans-med);
+}
+.reserva-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-2);
+}
 
-  &.is-cancelled {
-    opacity: 0.75;
-    background: var(--bg);
-  }
-  &.is-removing {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-2);
-  }
-
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
-  }
+.reserva-card.is-cancelled {
+  opacity: 0.6;
+  filter: grayscale(80%);
+  pointer-events: none;
+}
+.reserva-card.is-removing {
+  transition: all var(--confirm-ms) ease-out;
+  transform: translateX(-100vw);
+  max-height: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  opacity: 0;
 }
 
 .reserva-card__image-wrapper {
-  position: relative;
-  background: var(--bg);
-  min-height: 200px;
-  height: 100%;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .placeholder {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    place-items: center;
-    .material-symbols-outlined {
-      font-size: 64px;
-      color: var(--border) !important;
-    }
-  }
-
-  @media (max-width: 640px) {
-    height: 180px;
-  }
+  flex: 0 0 30%;
+  max-width: 250px;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+.reserva-card__image-wrapper img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.4s ease-out;
+}
+.reserva-card:hover .reserva-card__image-wrapper img {
+  transform: scale(1.05);
+}
+.reserva-card__image-wrapper .placeholder {
+  display: grid; place-items: center; width: 100%; height: 100%;
+  background: var(--color-bg-hover);
+}
+.reserva-card__image-wrapper .placeholder .material-symbols-outlined {
+  font-size: 60px; color: var(--text-3) !important;
 }
 
 .reserva-card__content {
-  display: flex;
-  flex-direction: column;
-  padding: 16px 20px;
+  flex: 1;
+  padding: 20px;
+  display: flex; flex-direction: column;
 }
-
 .reserva-header {
-  padding-bottom: 12px;
-  margin-bottom: 12px;
   border-bottom: 1px solid var(--border);
-
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 10px;
-    border-radius: var(--radius-pill);
-    font-size: 11px;
-    font-weight: 900;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-
-    &.activa {
-      background: var(--success-bg);
-      color: var(--color-text-success) !important;
-      border: 1px solid var(--success);
-      .dot { background: var(--success); }
-    }
-    &.cancelada {
-      background: var(--color-danger-bg);
-      color: var(--color-text-danger) !important;
-      border: 1px solid var(--danger);
-      .dot { background: var(--danger); }
-    }
-    .dot { width: 8px; height: 8px; border-radius: 50%; }
-  }
-
-  .lugar {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    font-weight: 800;
-    color: var(--brand) !important;
-    text-transform: uppercase;
-    margin: 0 0 4px;
-    .material-symbols-outlined {
-      font-size: 16px;
-      color: var(--brand) !important;
-    }
-  }
-
-  .hotel-nombre {
-    font-size: 18px;
-    font-weight: 900;
-    margin: 0;
-    color: var(--text-strong) !important;
-  }
-
-  .reserva-id {
-    font-size: 13px;
-    font-weight: 800;
-    color: var(--text-3) !important;
-    margin: 4px 0 0;
-  }
+  padding-bottom: 15px;
+  margin-bottom: 15px;
 }
+.status-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px; border-radius: var(--radius-pill);
+  font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase;
+}
+.status-badge.activa {
+  background: var(--success-bg); color: var(--color-text-success) !important;
+  border: 1px solid var(--success);
+}
+.status-badge.cancelada {
+  background: var(--danger-bg); color: var(--color-text-danger) !important;
+  border: 1px solid var(--danger);
+}
+.status-badge .dot { width: 8px; height: 8px; border-radius: 50%; }
+.status-badge.activa .dot { background: var(--success); }
+.status-badge.cancelada .dot { background: var(--danger); }
+
+.lugar {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 10px 0 0;
+  font-weight: 600; font-size: 14px; color: var(--text-3) !important;
+}
+.lugar .material-symbols-outlined { font-size: 18px; color: var(--text-3) !important; }
+
+.hotel-paquete {
+  margin: 8px 0 0; font-size: 18px; font-weight: 900;
+  color: var(--text-strong) !important;
+  display: flex; align-items: center; gap: 8px;
+}
+.hotel-paquete .material-symbols-outlined { color: var(--brand) !important; font-size: 20px; }
+
+.fecha-reserva.subtle { font-size: 12px; color: var(--text-3) !important; margin-top: 5px; }
 
 .reserva-body {
   display: grid;
-  gap: 10px;
-  margin-bottom: 16px;
-
-  .detalle-reserva {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    .material-symbols-outlined {
-      font-size: 18px;
-      color: var(--text-3) !important;
-    }
-    p { margin: 0; }
-  }
+  grid-template-columns: repeat(2, 1fr); /* 2 columnas para mejor uso del espacio */
+  gap: 10px 20px;
 }
+.reserva-body .detalle-item {
+  border-bottom: 0;
+  padding: 0;
+}
+.reserva-body .label { font-weight: 600; font-size: 12px; color: var(--text-3) !important; }
+.reserva-body .valor { font-weight: 800; font-size: 14px; color: var(--text-strong) !important; }
 
 .reserva-footer {
+  display: flex;
+  gap: 12px;
+  padding-top: 15px;
+  border-top: 1px dashed var(--border);
   margin-top: auto;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
 }
 
-.reserva-card.skeleton {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  @media (max-width: 640px) { grid-template-columns: 1fr; }
-}
-.reserva-card__image-wrapper.sk-block {
-  min-height: 200px;
-  height: 100%;
-}
-.reserva-card__content {
-  display: flex;
-  flex-direction: column;
-  padding: 16px 20px;
-  .reserva-header, .reserva-body, .reserva-footer {
-    display: grid;
-    gap: 8px;
+@media (max-width: 768px) {
+  .reserva-card {
+    flex-direction: column;
   }
-  .reserva-body { margin: 12px 0; }
+  .reserva-card__image-wrapper {
+    flex: 0 0 auto;
+    max-width: 100%;
+    aspect-ratio: 16/9;
+  }
+  .reserva-body {
+    grid-template-columns: 1fr;
+  }
   .reserva-footer {
-    flex-direction: row;
-    gap: 10px;
-    margin-top: auto;
+    flex-wrap: wrap;
   }
-}
-.sk-block { background: var(--color-bg-hover); animation: pulse 1.5s infinite; }
-.sk-line { height: 16px; border-radius: 6px; background: var(--color-bg-hover); animation: pulse 1.5s infinite; }
-.sk-pill { height: 24px; border-radius: 999px; background: var(--color-bg-hover); animation: pulse 1.5s infinite; }
-.sk-btn { height: 38px; border-radius: var(--radius-sm); background: var(--color-bg-hover); animation: pulse 1.5s infinite; }
-.w-30 { width: 30%; }
-.w-40 { width: 40%; }
-.w-50 { width: 50%; }
-.w-60 { width: 60%; }
-.w-70 { width: 70%; }
-.w-80 { width: 80%; }
-.w-85 { width: 85%; }
-.w-90 { width: 90%; }
-.w-100 { width: 100%; }
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  .btn-detalle.principal {
+    margin-left: 0;
+  }
 }
 
-.confirm-cancel {
-  position: absolute;
-  inset: 0;
-  /* FIX: Usamos un color CSS estándar, no una función Sass */
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(4px);
-  padding: 16px;
-  display: grid;
-  place-items: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--trans-med);
-  z-index: 2;
-
-  &.is-open {
-    opacity: 1;
-    pointer-events: auto;
-  }
+.estado {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 30px; border-radius: var(--radius-md);
+  border: 1px dashed var(--border);
+  color: var(--text-3); font-weight: 800; text-align: center;
 }
-/* Agregamos el fondo oscuro para el modo oscuro */
-body.dark-theme .confirm-cancel {
-  background: rgba(30, 41, 59, 0.85);
-}
-
-.confirm-cancel-box {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 16px;
-  background: var(--card);
-  padding: 20px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-2);
-  max-width: 450px;
-}
-.cc-icon {
-  .material-symbols-outlined {
-    font-size: 36px;
-    color: var(--danger) !important;
-  }
-}
-.cc-content {
-  .cc-title {
-    margin: 0 0 4px;
-    font-size: 16px;
-    font-weight: 900;
-  }
-  .cc-text {
-    margin: 0;
-    font-size: 14px;
-  }
-}
-.cc-actions {
-  grid-column: 1 / -1;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 12px;
-}
+.estado .material-symbols-outlined { font-size: 32px; margin-bottom: 10px; color: var(--text-3) !important; }
+.estado.error { border-color: var(--danger); color: var(--danger); background: var(--danger-bg); }
+.estado.error .material-symbols-outlined { color: var(--danger) !important; }
