@@ -1,0 +1,32 @@
+services:
+  # --- BACKEND ---
+  - type: web
+    name: munaybol-backend
+    runtime: python
+    rootDir: ./backend
+    buildCommand: "./build.sh"
+    startCommand: "daphne -b 0.0.0.0 -p 8000 config.asgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: "4"
+      - key: OLLAMA_BASE_URL
+        sync: false  # Render te pedirá este valor en el dashboard
+      - key: DATABASE_URL
+        sync: false  # Render te pedirá la string de conexión de Neon
+
+  # --- FRONTEND ---
+  - type: web
+    name: munaybol-frontend
+    plan: free
+    runtime: docker
+    rootDir: ./frontend
+    dockerfilePath: Dockerfile.prod
+    envVars:
+      - key: NODE_ENV
+        value: production
