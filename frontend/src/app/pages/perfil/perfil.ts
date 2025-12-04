@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router'; // 👈 Se añadió 'Router' aquí
 import { forkJoin, of, Observable } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
@@ -65,7 +65,8 @@ export class Perfil implements OnInit, OnDestroy {
     private hotelService: HotelService,
     private paqueteService: PaqueteService,
     private lugaresService: LugaresService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private router: Router // 👈 Se inyectó 'Router' aquí
   ) {}
 
   ngOnInit(): void {
@@ -169,6 +170,20 @@ export class Perfil implements OnInit, OnDestroy {
   closeConfirm(): void {
     this.confirmId = null;
   }
+
+  // 🌟 FUNCIÓN AÑADIDA PARA MANEJAR LA NAVEGACIÓN PROGRAMÁTICAMENTE 🌟
+  verDetallePaquete(idPaquete: number | undefined): void {
+    if (idPaquete) {
+      // Navega a la ruta absoluta del detalle del paquete.
+      // Si el error persiste, la ruta 'paquetes/detalle' en tu configuración de routing es incorrecta.
+      this.router.navigate(['/paquetes/detalle', idPaquete]);
+    } else {
+      console.error('Intento de navegar al detalle del paquete sin un ID válido.');
+      // Opcional: Navegar a una página de error o a la lista de paquetes
+      // this.router.navigate(['/paquetes']);
+    }
+  }
+  // ------------------------------------------------------------------
 
   confirmarCancel(reserva: ReservaEnriquecida): void {
     if (!reserva.estado || this.cancelling.has(reserva.id_reserva)) return;
