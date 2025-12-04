@@ -65,10 +65,20 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# --- CORS & CSRF ---
-CORS_ALLOW_ALL_ORIGINS = True # Mantenemos esto para evitar dolores de cabeza en tu entrega
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'x-user-ci',
+]
 
-# Definimos los orígenes confiables para CSRF
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
     "http://127.0.0.1:4200",
@@ -76,6 +86,9 @@ CSRF_TRUSTED_ORIGINS = [
     "http://backend:8000",
     "https://localhost:4200",
     "https://127.0.0.1:4200",
+    # NOTA: En producción con Render, probablemente debas agregar aquí:
+    # "https://munaybol-frontend.onrender.com",
+    # "https://munaybol-backend.onrender.com",
 ]
 # Si estamos en Render, añadimos los dominios de producción automáticamente
 if RENDER_EXTERNAL_HOSTNAME:
