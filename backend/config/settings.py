@@ -4,24 +4,9 @@ from pathlib import Path
 import dj_database_url  # <--- NUEVO: Necesario para leer la DB en Render
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# --- CONFIGURACIÓN DE ENTORNO (DETECTAR RENDER) ---
-# Si existe la variable RENDER, estamos en producción
-RENDER = os.environ.get('RENDER')
-# DEBUG es True por defecto, pero False si estamos en Render
-DEBUG = 'RENDER' not in os.environ
-
-# SECRET_KEY: En producción la toma del entorno, en local usa la insegura por defecto
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '$^%pi-f!4s2z*o!+-um9)n6fe^xh!hf96ql41ml#g-$g%qqgg1')
-
-# --- ALLOWED HOSTS ---
-ALLOWED_HOSTS = []
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
-# Siempre permitimos localhost para desarrollo y conexiones internas
-ALLOWED_HOSTS.extend(['127.0.0.1', 'localhost', 'backend', '0.0.0.0'])
-
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost 127.0.0.1 backend 0.0.0.0').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -33,7 +18,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'rest_framework_simplejwt',
-    'channels',     # Channels para WebSockets
+    'channels',
     'core',
     'corsheaders',
 ]
@@ -54,10 +39,10 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    "whitenoise.middleware.WhiteNoiseMiddleware", # <--- NUEVO: Vital para estilos en Render
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',      # Cors debe ir antes de Common
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -66,39 +51,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-    'x-user-ci',
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:4200",
-    "http://127.0.0.1:4200",
-    "http://frontend:4200",
-    "http://backend:8000",
-    "https://localhost:4200",
-    "https://127.0.0.1:4200",
-    # NOTA: En producción con Render, probablemente debas agregar aquí:
-    # "https://munaybol-frontend.onrender.com",
-    # "https://munaybol-backend.onrender.com",
-]
-# Si estamos en Render, añadimos los dominios de producción automáticamente
-if RENDER_EXTERNAL_HOSTNAME:
-    # Confiar en el propio Backend
-    CSRF_TRUSTED_ORIGINS.append(f"https://{RENDER_EXTERNAL_HOSTNAME}")
-    
-# IMPORTANTE: Intenta leer la URL del Frontend desde una variable de entorno
-FRONTEND_URL = os.environ.get('FRONTEND_URL') # Ej: https://munaybol-frontend.onrender.com
-if FRONTEND_URL:
-    CSRF_TRUSTED_ORIGINS.append(FRONTEND_URL)
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://localhost:4200,https://localhost:4200').split(',')
 
 ROOT_URLCONF = 'config.urls'
 
@@ -121,12 +74,26 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 ASGI_APPLICATION = 'config.asgi.application'
 
-# Channel layers (InMemory para desarrollo y prod simple)
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',
     }
 }
+# Para producción, activa esto:
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             'hosts': [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+#         },
+#     },
+# }
+
+DEFAULT_CONN_MAX_AGE = int(os.environ.get('DB_CONN_MAX_AGE', '120'))
+DEFAULT_DB_KEEPALIVES = int(os.environ.get('DB_KEEPALIVES', '1'))
+DEFAULT_DB_KEEPALIVES_IDLE = int(os.environ.get('DB_KEEPALIVES_IDLE', '30'))
+DEFAULT_DB_KEEPALIVES_INTERVAL = int(os.environ.get('DB_KEEPALIVES_INTERVAL', '10'))
+DEFAULT_DB_KEEPALIVES_COUNT = int(os.environ.get('DB_KEEPALIVES_COUNT', '5'))
 
 # --- BASE DE DATOS ---
 # Lógica: 1. Intenta usar DATABASE_URL (Render). 2. Si no, usa configuración manual NEON. 3. Local.
@@ -174,6 +141,9 @@ else:
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 GITHUB_CLIENT_ID = os.environ.get('GITHUB_CLIENT_ID')
 GITHUB_CLIENT_SECRET = os.environ.get('GITHUB_CLIENT_SECRET')
+GITHUB_REDIRECT_URI = os.environ.get('GITHUB_REDIRECT_URI', 'https://localhost:4200/login' if not DEBUG else 'http://localhost:4200/login')
+GITHUB_STATE_SALT = os.environ.get('GITHUB_STATE_SALT', 'github-oauth-state')
+GITHUB_STATE_TTL_SECONDS = int(os.environ.get('GITHUB_STATE_TTL_SECONDS', '600'))
 
 # Lógica inteligente:
 # 1. Si existe la variable de entorno (Render), úsala.
@@ -187,12 +157,13 @@ GITHUB_STATE_SALT = os.environ.get('GITHUB_STATE_SALT', 'github-oauth-state')
 GITHUB_STATE_TTL_SECONDS = int(os.environ.get('GITHUB_STATE_TTL_SECONDS', '600'))
 # --- ARCHIVOS ESTÁTICOS (MODIFICADO PARA WHITENOISE) ---
 STATIC_URL = 'static/'
-# Carpeta donde se recolectarán los estáticos en producción
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-if not DEBUG:
-    # Compresión y cacheo eficiente para producción
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'core.Usuario'
