@@ -28,11 +28,12 @@ export class AdminReservas implements OnInit, OnDestroy {
   constructor(
     private reservasService: ReservasService,
     private auth: AuthService,
-    private loadingService: LoadingService // <-- 2. INYECTADO
+    private loadingService: LoadingService
   ) {}
 
   ngOnInit(): void {
     const user = this.auth.getUser();
+    // En un sistema real, el guard ya haría esto, pero es bueno tener una doble comprobación.
     if (!user || user.rol !== 'superadmin') {
       this.error = 'Acceso restringido. Se requiere rol superadmin.';
       return;
@@ -55,7 +56,8 @@ export class AdminReservas implements OnInit, OnDestroy {
     const params: AdminReservasParams = {};
     if (this.filtroUsuarioId.trim() !== '') {
       const idNum = Number(this.filtroUsuarioId.trim());
-      if (!Number.isNaN(idNum)) params.id_usuario = idNum;
+      // Solo añade el ID si es un número válido.
+      if (!Number.isNaN(idNum) && idNum > 0) params.id_usuario = idNum;
     }
     if (this.filtroEstado === 'activas') params.estado = 'true';
     if (this.filtroEstado === 'canceladas') params.estado = 'false';
@@ -69,6 +71,7 @@ export class AdminReservas implements OnInit, OnDestroy {
     this.reservasService.listReservasAdmin(params).subscribe({
       next: (data) => {
         this.reservas = [...data].sort((a, b) => {
+          // Ordenar por fecha de reserva (más reciente primero)
           const da = new Date(a.fecha_reserva as any).getTime();
           const db = new Date(b.fecha_reserva as any).getTime();
           return db - da;
@@ -89,6 +92,7 @@ export class AdminReservas implements OnInit, OnDestroy {
     this.cargar();
   }
 
+  // Se mantiene la lógica de cancelación y reactivación con animación de remoción
   cancelar(reserva: Reserva): void {
     if (!reserva.estado || this.cancelling.has(reserva.id_reserva)) return;
     this.cancelling.add(reserva.id_reserva);
@@ -141,7 +145,7 @@ export class AdminReservas implements OnInit, OnDestroy {
       error: (err) => {
         this.reactivating.delete(reserva.id_reserva);
         this.removing.delete(reserva.id_reserva);
-        const msg = err?.error?.error || 'No se pudo reactivar la reserva.';
+        const msg = (err as any)?.error?.error || 'No se pudo reactivar la reserva.';
         alert(msg);
       }
     });
@@ -150,4 +154,6 @@ export class AdminReservas implements OnInit, OnDestroy {
   isRemoving(id: number): boolean {
     return this.removing.has(id);
   }
+
+  trackByReserva = (_: number, item: Reserva) => item.id_reserva;
 }
