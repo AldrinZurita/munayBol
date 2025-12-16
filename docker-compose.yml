@@ -8,6 +8,7 @@ services:
       - .env
     environment:
       USE_NEON: "True"
+
       NEON_DB: "neondb"
       NEON_USER: "neondb_owner"
       NEON_PASSWORD: "npg_crb8OuHVzx5Y"
