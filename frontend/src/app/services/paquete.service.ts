@@ -15,31 +15,30 @@ export class PaqueteService {
   ) {}
 
   private getAuthOptions(): { headers?: HttpHeaders } {
-  const token = this.authService.getToken();
-  console.log('Token enviado en petición:', token);
-  return token
-    ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
-    : {};
-}
-
+    const token = this.authService.getToken();
+    console.log('Token enviado en petición:', token);
+    return token
+      ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
+      : {};
+  }
 
   getPaquetes(): Observable<Paquete[]> {
-    return this.http.get<Paquete[]>(`${this.apiUrl}paquetes/`);
+    return this.http.get<Paquete[]>(`${this.apiUrl}/paquetes/`);
   }
 
   crearPaquete(paquete: Partial<Paquete>): Observable<Paquete> {
-    return this.http.post<Paquete>(`${this.apiUrl}paquetes/`, paquete, this.getAuthOptions());
+    return this.http.post<Paquete>(`${this.apiUrl}/paquetes/`, paquete, this.getAuthOptions());
   }
 
   actualizarPaquete(paquete: Paquete): Observable<Paquete> {
-    return this.http.put<Paquete>(`${this.apiUrl}paquetes/${paquete.id_paquete}/`, paquete, this.getAuthOptions());
+    return this.http.put<Paquete>(`${this.apiUrl}/paquetes/${paquete.id_paquete}/`, paquete, this.getAuthOptions());
   }
 
   eliminarPaquete(id_paquete: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}paquetes/${id_paquete}/`, this.getAuthOptions());
+    return this.http.delete<any>(`${this.apiUrl}/paquetes/${id_paquete}/`, this.getAuthOptions());
   }
 
   getPaqueteById(id: number): Observable<Paquete> {
-    return this.http.get<Paquete>(`${this.apiUrl}paquetes/${id}/`);
+    return this.http.get<Paquete>(`${this.apiUrl}/paquetes/${id}/`);
   }
 }

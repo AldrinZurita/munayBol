@@ -15,25 +15,11 @@ services:
       NEON_PORT: "5432"
       DJANGO_SECRET_KEY: "$$^%pi-f!4s2z*o!+-um9)n6fe^xh!hf96ql41ml#g-$$g%qqgg1"
       DJANGO_DEBUG: "True"
-      DJANGO_ALLOWED_HOSTS: "localhost 127.0.0.1 backend 0.0.0.0"
+      DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1,backend,0.0.0.0,host.docker.internal"
       PYTHONPATH: /app
-
       OLLAMA_BASE_URL: "http://host.docker.internal:11434"
-      #OLLAMA_BASE_URL: 'https://enterologic-jewel-extrajudicially.ngrok-free.dev'
       OLLAMA_MODEL: "llama3.1:latest"
-      OLLAMA_NUM_CTX: "4096"
-      OLLAMA_MAX_TOKENS: "1500"
-      OLLAMA_TEMPERATURE: "0.4"
-      OLLAMA_NUM_THREADS: "4"
-      OLLAMA_TIMEOUT: "300"
-      BACKEND_STREAM: "false"
-
       DB_CONN_MAX_AGE: "120"
-      DB_KEEPALIVES: "1"
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
-      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
 
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz/'); print('ok')\""]
@@ -46,33 +32,12 @@ services:
 
   frontend:
     build: ./frontend
-    command: npx ng serve --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.json --poll=2000
-    ports: ["4200:4200"]
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+    ports: ["4200:80"]
     depends_on:
       backend:
         condition: service_healthy
     networks: ["turismo-net"]
     restart: unless-stopped
-
-  # ollama:
-  #   build: ./ollama
-  #   environment:
-  #     OLLAMA_KEEP_ALIVE: "2h"
-  #     OLLAMA_MODEL: "llama3.1:latest"
-  #   ports: ["11434:11434"]
-  #   volumes:
-  #     - ${OLLAMA_MODELS:-/home/patriot/.ollama/models}:/root/.ollama/models
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://localhost:11434/api/version"]
-  #     interval: 10s
-  #     timeout: 10s
-  #     start_period: 60s
-  #     retries: 10
-  #   networks: ["turismo-net"]
-  #   restart: unless-stopped
 
 networks:
   turismo-net:

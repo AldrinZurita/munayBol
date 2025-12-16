@@ -15,7 +15,7 @@ export interface AdminReservasParams {
 
 @Injectable({ providedIn: 'root' })
 export class ReservasService {
-  private readonly apiUrl = `${environment.apiUrl}reservas/`;
+  private readonly apiUrl = `${environment.apiUrl}/reservas/`;
 
   constructor(
     private readonly http: HttpClient,

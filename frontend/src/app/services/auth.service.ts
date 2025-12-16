@@ -45,28 +45,29 @@ export class AuthService {
   }
 
   login(data: { correo: string; contrasenia: string }): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.baseUrl}usuarios/login/`, data).pipe(
+    return this.http.post<LoginResponse>(`${this.baseUrl}/usuarios/login/`, data).pipe(
       tap(resp => this.persist(resp))
     );
   }
 
   googleLogin(idToken: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.baseUrl}auth/google/`, { token: idToken }).pipe(
+    return this.http.post<LoginResponse>(`${this.baseUrl}/auth/google/`, { token: idToken }).pipe(
       tap(resp => this.persist(resp))
     );
   }
 
   githubLoginUrl(): Observable<GithubLoginUrlResponse> {
-    return this.http.get<GithubLoginUrlResponse>(`${this.baseUrl}auth/github/login-url/`);
+    return this.http.get<GithubLoginUrlResponse>(`${this.baseUrl}/auth/github/login-url/`);
   }
+
   githubExchange(code: string, state: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.baseUrl}auth/github/exchange/`, { code, state }).pipe(
+    return this.http.post<LoginResponse>(`${this.baseUrl}/auth/github/exchange/`, { code, state }).pipe(
       tap(resp => this.persist(resp))
     );
   }
 
   getMe(): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.baseUrl}usuarios/me/`, this.authOptions()).pipe(
+    return this.http.get<Usuario>(`${this.baseUrl}/usuarios/me/`, this.authOptions()).pipe(
       tap(user => {
         if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem('user', JSON.stringify(user));
@@ -77,7 +78,7 @@ export class AuthService {
   }
 
   updateMe(data: Partial<Pick<Usuario, 'nombre' | 'pais' | 'pasaporte' | 'avatar_url'>>): Observable<Usuario> {
-    return this.http.patch<Usuario>(`${this.baseUrl}usuarios/me/`, data, this.authOptions()).pipe(
+    return this.http.patch<Usuario>(`${this.baseUrl}/usuarios/me/`, data, this.authOptions()).pipe(
       tap(user => {
         if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem('user', JSON.stringify(user));

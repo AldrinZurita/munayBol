@@ -7,15 +7,12 @@ RUN npm install
 COPY . .
 RUN npm run build -- --configuration production
 
-FROM node:20-slim
-WORKDIR /app
+FROM nginx:alpine
 
-COPY --from=builder /app/dist/frontend-turismo-hoteleria/browser/ ./browser
-COPY --from=builder /app/dist/frontend-turismo-hoteleria/server/ ./server
-COPY --from=builder /app/node_modules/ ./node_modules
-COPY --from=builder /app/package.json .
+COPY --from=builder /app/dist/frontend-turismo-hoteleria/browser/ /usr/share/nginx/html
 
-RUN npm install --only=production
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 4200
-CMD ["node", "dist/frontend-turismo-hoteleria/server/server.mjs"]
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

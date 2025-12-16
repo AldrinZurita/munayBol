@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient,HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { LugarTuristico } from '../interfaces/lugar-turistico.interface';
 import { AuthService } from './auth.service';
-import { environment } from '../../environments/environment'; // Asegúrate de tener este import
+import { environment } from '../../environments/environment';
 
 export type CrearLugarDTO = Pick<
   LugarTuristico,
@@ -17,16 +17,14 @@ export type ActualizarLugarDTO = Partial<Pick<
 
 @Injectable({ providedIn: 'root' })
 export class LugaresService {
-  private readonly baseUrl = `${environment.apiUrl}lugares/`;
-
+  private readonly baseUrl = `${environment.apiUrl}/lugares/`;
 
   constructor(
     private http: HttpClient,
     private authService: AuthService
-
   ) {}
 
-private getAuthOptions(): { headers?: HttpHeaders } {
+  private getAuthOptions(): { headers?: HttpHeaders } {
     const token = this.authService.getToken();
     console.log('Token enviado en petición:', token);
     return token
@@ -48,15 +46,15 @@ private getAuthOptions(): { headers?: HttpHeaders } {
     return this.http.get<LugarTuristico>(`${this.baseUrl}${id}/`);
   }
 
-  agregarLugar(lugar:Partial<LugarTuristico>): Observable<LugarTuristico> {
-    return this.http.post<LugarTuristico>(this.baseUrl, lugar,this.getAuthOptions());
+  agregarLugar(lugar: Partial<LugarTuristico>): Observable<LugarTuristico> {
+    return this.http.post<LugarTuristico>(this.baseUrl, lugar, this.getAuthOptions());
   }
 
   actualizarLugar(lugar: LugarTuristico): Observable<LugarTuristico> {
-    return this.http.put<LugarTuristico>(`${this.baseUrl}${lugar.id_lugar}/`,lugar,this.getAuthOptions());
+    return this.http.put<LugarTuristico>(`${this.baseUrl}${lugar.id_lugar}/`, lugar, this.getAuthOptions());
   }
 
   eliminarLugar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}${id}/`,this.getAuthOptions());
+    return this.http.delete<void>(`${this.baseUrl}${id}/`, this.getAuthOptions());
   }
 }

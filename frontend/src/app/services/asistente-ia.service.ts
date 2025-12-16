@@ -8,7 +8,9 @@ import { AuthService } from './auth.service';
 @Injectable({ providedIn: 'root' })
 export class AsistenteIaService {
   private baseUrl = environment.apiUrl;
-  private sessionsUrl = `${this.baseUrl}chat/sessions/`;
+
+  // CORRECCIÓN: Se añade "/" al inicio del recurso para evitar errores de concatenación
+  private sessionsUrl = `${this.baseUrl}/chat/sessions/`;
 
   private currentSessionId: string | null = null;
 
@@ -70,7 +72,7 @@ export class AsistenteIaService {
   }
 
   enviarPrompt(prompt: string) {
-    return this.http.post<{ result: string; chat_id?: string }>(`${this.baseUrl}llm/generate/`, { prompt }, this.authHeaders());
+    return this.http.post<{ result: string; chat_id?: string }>(`${this.baseUrl}/llm/generate/`, { prompt }, this.authHeaders());
   }
 
   resetChat() {

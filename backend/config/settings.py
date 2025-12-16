@@ -1,12 +1,18 @@
 import os
 from datetime import timedelta
 from pathlib import Path
-import dj_database_url  # <--- NUEVO: Necesario para leer la DB en Render
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '$^%pi-f!4s2z*o!+-um9)n6fe^xh!hf96ql41ml#g-$g%qqgg1')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost 127.0.0.1 backend 0.0.0.0').split(',')
+
+hosts_raw = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,backend,0.0.0.0,host.docker.internal')
+ALLOWED_HOSTS = [h.strip() for h in hosts_raw.split(',') if h.strip()]
+
+if DEBUG:
+    ALLOWED_HOSTS.append('*')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -51,7 +57,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
-CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://localhost:4200,https://localhost:4200').split(',')
+csrf_raw = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://localhost:4200,https://localhost:4200')
+CSRF_TRUSTED_ORIGINS = [c.strip() for c in csrf_raw.split(',') if c.strip()]
 
 ROOT_URLCONF = 'config.urls'
 
@@ -71,6 +78,7 @@ TEMPLATES = [
     },
 ]
 
+# --- ASGI / WSGI ---
 WSGI_APPLICATION = 'config.wsgi.application'
 ASGI_APPLICATION = 'config.asgi.application'
 
@@ -79,29 +87,10 @@ CHANNEL_LAYERS = {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',
     }
 }
-# Para producción, activa esto:
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-#         'CONFIG': {
-#             'hosts': [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
-#         },
-#     },
-# }
-
-DEFAULT_CONN_MAX_AGE = int(os.environ.get('DB_CONN_MAX_AGE', '120'))
-DEFAULT_DB_KEEPALIVES = int(os.environ.get('DB_KEEPALIVES', '1'))
-DEFAULT_DB_KEEPALIVES_IDLE = int(os.environ.get('DB_KEEPALIVES_IDLE', '30'))
-DEFAULT_DB_KEEPALIVES_INTERVAL = int(os.environ.get('DB_KEEPALIVES_INTERVAL', '10'))
-DEFAULT_DB_KEEPALIVES_COUNT = int(os.environ.get('DB_KEEPALIVES_COUNT', '5'))
-
-# --- BASE DE DATOS ---
-# Lógica: 1. Intenta usar DATABASE_URL (Render). 2. Si no, usa configuración manual NEON. 3. Local.
 
 DEFAULT_CONN_MAX_AGE = int(os.environ.get('DB_CONN_MAX_AGE', '120'))
 
 if os.environ.get('DATABASE_URL'):
-    # CASO 1: RENDER (Automático)
     DATABASES = {
         'default': dj_database_url.config(
             default=os.environ.get('DATABASE_URL'),
@@ -111,7 +100,6 @@ if os.environ.get('DATABASE_URL'):
         )
     }
 elif os.environ.get('USE_NEON', 'False') == 'True':
-    # CASO 2: NEON MANUAL (Tu config original)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -125,7 +113,6 @@ elif os.environ.get('USE_NEON', 'False') == 'True':
         }
     }
 else:
-    # CASO 3: DOCKER LOCAL
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -137,25 +124,13 @@ else:
         }
     }
 
-# --- OAUTH ---
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 GITHUB_CLIENT_ID = os.environ.get('GITHUB_CLIENT_ID')
 GITHUB_CLIENT_SECRET = os.environ.get('GITHUB_CLIENT_SECRET')
-GITHUB_REDIRECT_URI = os.environ.get('GITHUB_REDIRECT_URI', 'https://localhost:4200/login' if not DEBUG else 'http://localhost:4200/login')
+GITHUB_REDIRECT_URI = os.environ.get('GITHUB_REDIRECT_URI', 'http://localhost:4200/login')
 GITHUB_STATE_SALT = os.environ.get('GITHUB_STATE_SALT', 'github-oauth-state')
 GITHUB_STATE_TTL_SECONDS = int(os.environ.get('GITHUB_STATE_TTL_SECONDS', '600'))
 
-# Lógica inteligente:
-# 1. Si existe la variable de entorno (Render), úsala.
-# 2. Si no, usa localhost (Tu PC).
-GITHUB_REDIRECT_URI = os.environ.get(
-    'GITHUB_REDIRECT_URI', 
-    'http://localhost:4200/login'
-)
-
-GITHUB_STATE_SALT = os.environ.get('GITHUB_STATE_SALT', 'github-oauth-state')
-GITHUB_STATE_TTL_SECONDS = int(os.environ.get('GITHUB_STATE_TTL_SECONDS', '600'))
-# --- ARCHIVOS ESTÁTICOS (MODIFICADO PARA WHITENOISE) ---
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -168,11 +143,9 @@ STORAGES = {
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'core.Usuario'
 
-# --- SEGURIDAD SSL ---
 if not DEBUG:
-    # Configuraciones estrictas solo para producción (Render maneja SSL automáticamente)
-    SECURE_SSL_REDIRECT = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_HSTS_SECONDS = 31536000
@@ -182,7 +155,6 @@ if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     X_FRAME_OPTIONS = 'DENY'
 else:
-    # Desarrollo local: relajamos la seguridad para evitar errores con http://
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False

@@ -28,3 +28,4 @@ pydantic==2.12.4
 typing_extensions==4.15.0
 PyYAML==6.0.3
 whitenoise==6.7.0
+dj-database-url

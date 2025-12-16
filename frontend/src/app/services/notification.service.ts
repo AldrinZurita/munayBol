@@ -12,10 +12,8 @@ export class NotificationService {
   private readonly notifications = new BehaviorSubject<Notification[]>([]);
   readonly notifications$ = this.notifications.asObservable();
   private ws?: WebSocket;
-  
-  // Usamos environment.apiUrl. Como ya termina en '/api/', concatenamos directo el recurso.
-  // Ejemplo: ...onrender.com/api/ + notifications/
-  private baseUrl = `${environment.apiUrl}notifications/`;
+
+  private baseUrl = `${environment.apiUrl}/notifications/`;
 
   constructor(private readonly http: HttpClient, private readonly auth: AuthService) {
     this.auth.user$.subscribe(user => {
@@ -99,27 +97,25 @@ export class NotificationService {
     const token = this.auth.getToken();
     if (!token) return;
 
-    // LÓGICA DE WEBSOCKET CORREGIDA PARA RENDER
-    // 1. Obtenemos la URL del backend desde el environment
-    let backendUrl = environment.apiUrl; 
-    
-    // 2. Determinamos si es seguro (wss) o no (ws) basado en el backend, no en la ventana actual
-    const isSecure = backendUrl.startsWith('https');
-    const proto = isSecure ? 'wss' : 'ws';
+    let backendUrl = environment.apiUrl;
 
-    // 3. Limpiamos la URL para obtener solo el dominio (ej: munaybol-backend.onrender.com)
-    // Quitamos el protocolo
-    let host = backendUrl.replace(/^https?:\/\//, '');
-    // Quitamos el path (/api/)
-    host = host.split('/')[0];
+    let proto: string;
+    let host: string;
 
-    // 4. Construimos la URL apuntando al Backend
+    if (backendUrl.startsWith('http')) {
+      const isSecure = backendUrl.startsWith('https');
+      proto = isSecure ? 'wss' : 'ws';
+      host = backendUrl.replace(/^https?:\/\//, '').split('/')[0];
+    } else {
+      proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
+      host = window.location.host;
+    }
+
     const url = `${proto}://${host}/ws/notifications/?token=${encodeURIComponent(token)}`;
 
     try {
       this.ws = new WebSocket(url);
       this.ws.onopen = () => {
-        // console.log('WS Conectado');
         this.fetchNotifications().subscribe();
       };
       this.ws.onmessage = () => {
@@ -129,10 +125,10 @@ export class NotificationService {
         this.ws = undefined;
       };
       this.ws.onerror = (e) => {
-        console.warn('WebSocket error (not critical):', e);
+        console.warn('WebSocket error:', e);
       };
     } catch (e) {
-      console.warn('WebSocket connection error (not critical):', e);
+      console.warn('WebSocket connection error:', e);
     }
   }
 
