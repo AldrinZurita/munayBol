@@ -3,17 +3,21 @@ from datetime import timedelta
 from pathlib import Path
 import dj_database_url
 
+# --- DIRECTORIOS ---
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# --- SEGURIDAD ---
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '$^%pi-f!4s2z*o!+-um9)n6fe^xh!hf96ql41ml#g-$g%qqgg1')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
+# CORRECCIÓN: Separamos por comas y limpiamos espacios para evitar errores de DisallowedHost
 hosts_raw = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,backend,0.0.0.0,host.docker.internal')
 ALLOWED_HOSTS = [h.strip() for h in hosts_raw.split(',') if h.strip()]
 
 if DEBUG:
     ALLOWED_HOSTS.append('*')
 
+# --- APLICACIONES ---
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,6 +33,7 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+# --- REST FRAMEWORK ---
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -44,10 +49,11 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
+# --- MIDDLEWARE ---
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Crítico para archivos estáticos en Render
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -56,12 +62,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# --- CORS & CSRF ---
 CORS_ALLOW_ALL_ORIGINS = True
 csrf_raw = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://localhost:4200,https://localhost:4200')
 CSRF_TRUSTED_ORIGINS = [c.strip() for c in csrf_raw.split(',') if c.strip()]
 
 ROOT_URLCONF = 'config.urls'
 
+# --- TEMPLATES ---
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -78,7 +86,7 @@ TEMPLATES = [
     },
 ]
 
-# --- ASGI / WSGI ---
+# --- ASGI / WSGI / CHANNELS ---
 WSGI_APPLICATION = 'config.wsgi.application'
 ASGI_APPLICATION = 'config.asgi.application'
 
@@ -88,18 +96,22 @@ CHANNEL_LAYERS = {
     }
 }
 
+# --- BASE DE DATOS (Lógica de 3 niveles corregida para Render) ---
 DEFAULT_CONN_MAX_AGE = int(os.environ.get('DB_CONN_MAX_AGE', '120'))
+db_url = os.environ.get('DATABASE_URL')
 
-if os.environ.get('DATABASE_URL'):
+if db_url:
+    # CASO 1: RENDER / PRODUCCIÓN (Solo si la URL existe)
     DATABASES = {
         'default': dj_database_url.config(
-            default=os.environ.get('DATABASE_URL'),
+            default=db_url,
             conn_max_age=DEFAULT_CONN_MAX_AGE,
             conn_health_checks=True,
             ssl_require=True
         )
     }
 elif os.environ.get('USE_NEON', 'False') == 'True':
+    # CASO 2: NEON MANUAL
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -113,17 +125,16 @@ elif os.environ.get('USE_NEON', 'False') == 'True':
         }
     }
 else:
+    # CASO 3: LOCAL DOCKER / FALLBACK SQLITE
+    # Usamos SQLite como fallback para que el comando 'collectstatic' nunca falle
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('POSTGRES_DB', 'turismo'),
-            'USER': os.environ.get('POSTGRES_USER', 'turismo'),
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'turismo'),
-            'HOST': os.environ.get('POSTGRES_HOST', 'db'),
-            'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 
+# --- OAUTH ---
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 GITHUB_CLIENT_ID = os.environ.get('GITHUB_CLIENT_ID')
 GITHUB_CLIENT_SECRET = os.environ.get('GITHUB_CLIENT_SECRET')
@@ -131,6 +142,7 @@ GITHUB_REDIRECT_URI = os.environ.get('GITHUB_REDIRECT_URI', 'http://localhost:42
 GITHUB_STATE_SALT = os.environ.get('GITHUB_STATE_SALT', 'github-oauth-state')
 GITHUB_STATE_TTL_SECONDS = int(os.environ.get('GITHUB_STATE_TTL_SECONDS', '600'))
 
+# --- ARCHIVOS ESTÁTICOS ---
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -140,10 +152,13 @@ STORAGES = {
     },
 }
 
+# --- MODELO DE USUARIO ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'core.Usuario'
 
+# --- SEGURIDAD SSL (PRODUCCIÓN) ---
 if not DEBUG:
+    # Proxy SSL Header es vital para que Django no entre en bucle de redirección en Render
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
